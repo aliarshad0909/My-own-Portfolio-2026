@@ -1,0 +1,48 @@
+/* ───────────────────────────────────────────────
+   Design tokens — the single source of truth.
+   Change a value here and it updates site-wide.
+   ─────────────────────────────────────────────── */
+:root {
+  /* Colour */
+  --bg: #0b0d10;
+  --card: #141d22;
+  --surface: #171a20;
+  --coral: #ff7a5c;
+  --coral-hover: #ff9078;
+  --text: #f9f6f0;
+  --muted: #a9abb2;
+  --border: #30363b;
+  --border-soft: rgba(48, 54, 59, 0.6);
+  --coral-soft: rgba(255, 122, 92, 0.12);
+  --coral-line: rgba(255, 122, 92, 0.45);
+  --on-coral: #14100e;
+  --danger: #ff9a8a;
+  --warn: #f2c66d;
+
+  /* Type */
+  --font-heading: var(--ff-heading, "Space Grotesk"), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body: var(--ff-body, "DM Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fs-hero: clamp(2.5rem, 1.55rem + 4.4vw, 4.75rem); /* 40 → 76px */
+  --fs-page: clamp(2.125rem, 1.5rem + 2.9vw, 3.75rem); /* 34 → 60px */
+  --fs-section: clamp(1.625rem, 1.3rem + 1.4vw, 2.5rem); /* 26 → 40px */
+  --fs-section-sm: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem); /* 22 → 28px */
+  --fs-card: clamp(1.125rem, 1.05rem + 0.3vw, 1.375rem); /* 18 → 22px */
+  --fs-lead: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem); /* 16 → 19px */
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-tiny: 0.8125rem;
+
+  /* Layout */
+  --max: 1240px;
+  --gutter: clamp(1.125rem, 0.6rem + 2.4vw, 2rem);
+  --section: clamp(3.25rem, 2rem + 5vw, 6.5rem); /* 52 → 104px */
+  --section-tight: clamp(1.25rem, 0.9rem + 1.4vw, 1.75rem);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --header-h: 68px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 160ms;
+  --med: 280ms;
+}
