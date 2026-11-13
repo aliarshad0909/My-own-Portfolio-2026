@@ -218,13 +218,37 @@ button {
     animation: enter-portrait 900ms var(--ease) 120ms both;
   }
 
-  /* Progressive enhancement: browsers without scroll-driven animation simply show content. */
+  /*
+   * Progressive enhancement: browsers without scroll-driven animation simply
+   * show content.
+   *
+   * The fill mode is `forwards`, not `both`. With `both`, every element that
+   * had not yet entered the viewport was held at the animation's `from` state
+   * — opacity 0 — which meant anything below the fold was invisible until the
+   * timeline advanced. Real scrolling masked it, but full-page captures,
+   * print-to-PDF and any client where the view timeline never runs rendered
+   * the lower two thirds of every page blank. With `forwards` an element
+   * keeps its natural styles until its entry range begins, which is also the
+   * moment its first pixel becomes visible, so nothing is ever hidden while
+   * it could be seen.
+   */
   @supports (animation-timeline: view()) {
     .reveal {
-      animation: reveal linear both;
+      animation: reveal linear forwards;
       animation-timeline: view();
       animation-range: entry 0px entry 180px;
     }
+  }
+}
+
+/* Print and static renders get the content, never the animation state. */
+@media print {
+  .enter,
+  .enter--portrait,
+  .reveal {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
