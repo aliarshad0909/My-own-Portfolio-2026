@@ -4,7 +4,7 @@ import { featuredProjects } from "@/lib/projects";
 
 export function SelectedWork() {
   const projects = featuredProjects(3);
-  const hasPlaceholders = projects.some((p) => p.status === "placeholder");
+  const hasSampleMedia = projects.some((p) => p.usesSampleMedia === true);
 
   return (
     <section className="section section--tight" aria-labelledby="selected-work-title">
@@ -19,13 +19,13 @@ export function SelectedWork() {
             </div>
             <ArrowLink href="/work">View All Projects</ArrowLink>
           </div>
-          <div className="project-grid">
+          <div className={`project-grid ${projects.length === 1 ? "project-grid--single" : ""}`.trim()}>
             {projects.map((p) => (
-              <ProjectCard key={p.slug} project={p} />
+              <ProjectCard key={p.slug} project={p} sizes={projects.length === 1 ? "(min-width: 900px) 620px, 100vw" : undefined} />
             ))}
           </div>
-          {hasPlaceholders ? (
-            <p className="panel__note">Cards marked &ldquo;Placeholder&rdquo; use sample artwork to preview the layout. Real client projects are being added.</p>
+          {hasSampleMedia ? (
+            <p className="panel__note">Cards marked with sample artwork are previews of the layout, not client work.</p>
           ) : null}
         </div>
       </div>

@@ -278,10 +278,30 @@
   white-space: nowrap;
 }
 
-.badge--placeholder,
 .badge--draft {
   border-color: rgba(242, 198, 109, 0.45);
   color: var(--warn);
+}
+
+.badge--demo {
+  border-color: rgba(137, 196, 244, 0.45);
+  color: #9ec9ee;
+}
+
+.badge--verified,
+.badge--pro {
+  border-color: rgba(126, 211, 160, 0.45);
+  color: #7ed3a0;
+}
+
+.badge--concept {
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.badge--adapted {
+  border-color: rgba(196, 164, 232, 0.45);
+  color: #c4a4e8;
 }
 
 .badge--partner {
@@ -1146,5 +1166,37 @@
   .spinner {
     animation: none !important;
     border-top-color: rgba(20, 16, 14, 0.3);
+  }
+}
+
+/* A single featured project reads as one wide card rather than a lonely tile. */
+@media (min-width: 900px) {
+  .project-grid--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-grid--single .project-card__link {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .project-grid--single .project-card__media {
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+
+  .project-grid--single .project-card__body {
+    justify-content: center;
+    gap: 10px;
+    padding: clamp(20px, 2.4vw, 32px);
+  }
+
+  .project-grid--single .project-card__title {
+    font-size: var(--fs-section-sm);
+  }
+
+  .project-grid--single .project-card__summary {
+    font-size: 1rem;
   }
 }

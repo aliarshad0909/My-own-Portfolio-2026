@@ -8,18 +8,23 @@ One record feeds the homepage, `/work`, `/work/[slug]`, `/case-studies` and `/ca
 
 ```ts
 {
+  id: "p02",
   slug: "brand-launch-film",            // URL: /work/brand-launch-film
   title: "Brand Launch Film",
-  client: "Client name",                // only with the client's permission
+  client: "Client name",                // only with written permission
   categories: ["Creative Production", "3D & Motion"],
   tags: ["Blender", "Motion", "Ad"],
-  year: "2025",
+  year: "2026",
   summary: "One or two sentences on what the project was.",
+  projectType: "Professional Work",     // or "Original Concept" | "Open-Source Adaptation"
+  status: "Verified",                   // Planned | In Development | Demo Ready | Verified | Published
   role: "Creative lead and editor",
   contribution: ["Concept and storyboard", "3D product animation", "Edit and grade"],
-  status: "published",                  // "published" | "draft" | "placeholder"
-  featured: true,                       // first three featured show on the homepage
+  technologies: ["Blender", "After Effects", "Premiere Pro"],
+  featured: true,
   cover: { src: "/images/projects/brand-launch-film.webp", alt: "Describe the image", width: 1600, height: 900 },
+  liveUrl: "https://…",                 // optional; the button only appears when set
+  sourceUrl: "https://github.com/…",    // optional
   previewVideo: "/videos/brand-launch-film-preview.mp4",   // optional
   gallery: [
     { type: "image", src: "/images/projects/blf-01.webp", alt: "…", width: 1600, height: 900 },
@@ -34,18 +39,70 @@ One record feeds the homepage, `/work`, `/work/[slug]`, `/case-studies` and `/ca
 }
 ```
 
-Status rules:
+### `projectType` — how the work came about
 
-- `placeholder` — sample artwork. Labelled on every card and page, hidden from search engines and the sitemap.
-- `draft` — a real project whose write-up is unfinished. Labelled "Draft", not indexed.
-- `published` — verified and approved. Indexed and added to the sitemap.
+| Value | Use it when |
+| --- | --- |
+| `Professional Work` | Paid or employed work you genuinely contributed to. |
+| `Original Concept` | You built it from scratch. The business scenario may be fictional; the software must be real. |
+| `Open-Source Adaptation` | It is built on someone else's project. **An `attribution` block is required** — see below. |
 
-Categories must match the filter list at the top of the file. To add a filter, add it to `PROJECT_CATEGORIES`.
+### `status` — how finished it is
 
-Case-study sections with no text are skipped on the live site. While running `npm run dev`, yellow "Editor note" boxes show what is still missing; they never appear in production.
+| Value | Meaning | Indexed by search engines |
+| --- | --- | --- |
+| `Planned` | Scoped, not started. Put these in `PLANNED` instead. | No |
+| `In Development` | Being built. | No |
+| `Demo Ready` | Builds, tested, deployable. | No |
+| `Verified` | A real engagement confirmed with the client, naming permission included. | No |
+| `Published` | Live, written up, approved for public listing. | Yes |
 
-**Images:** export covers as WebP at 1600×900, put them in `public/images/projects/`, and set the real `width` and `height`.
-**Videos:** put MP4 files in `public/videos/`. Preview clips play muted on hover only, and never for visitors who prefer reduced motion. Keep previews short (under about 3 MB).
+Only set `Demo Ready` once it genuinely works and has been tested, and only
+`Published` once the write-up and any deployment are live. Everything except
+`Published` shows a badge and a short explanatory note on the project page, so
+nothing is mistaken for delivered client work.
+
+Set `usesSampleMedia: true` on any record whose imagery is placeholder artwork
+rather than real project work. The site then says so on the card.
+
+### Attribution for open-source adaptations
+
+Required whenever `projectType` is `"Open-Source Adaptation"`. The project page
+renders it automatically, and a missing block shows an editor warning in
+development.
+
+```ts
+attribution: {
+  project: "Medusa",
+  url: "https://github.com/medusajs/medusa",
+  license: "MIT",
+  licenseUrl: "https://github.com/medusajs/medusa/blob/develop/LICENSE",
+  copyright: "Medusa contributors",
+  originalWork: "Headless commerce backend: inventory, pricing, carts and orders.",
+  modifications: ["Rebuilt the storefront UI", "Added the X integration"],
+}
+```
+
+Keep the upstream LICENSE file in the demo's own directory too. Never remove an
+upstream copyright notice, and never describe adapted work as built from
+scratch. `docs/OPEN_SOURCE_RESEARCH.md` in the repository root records how each
+foundation was assessed.
+
+### Planned projects
+
+Work that is scoped but not built goes in the `PLANNED` array, not `PROJECTS`.
+It is listed as a pipeline on `/work` so the roadmap is visible without
+inflating the project count. Move an entry into `PROJECTS` once it is built and
+tested.
+
+**Images:** export covers as WebP at 1600×900, put them in
+`public/images/projects/`, and set the real `width` and `height`.
+**Videos:** put MP4 files in `public/videos/`. Preview clips play muted on hover
+only, never for visitors who prefer reduced motion. Keep previews under about 3 MB.
+
+Case-study sections with no text are skipped on the live site. While running
+`npm run dev`, yellow "Editor note" boxes show what is still missing; they never
+appear in production.
 
 ## 2. Services — `lib/services.ts`
 

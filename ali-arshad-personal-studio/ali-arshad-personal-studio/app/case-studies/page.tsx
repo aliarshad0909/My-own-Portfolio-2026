@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { StatusBadge } from "@/components/ui/StatusBadge";
+import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { caseStudies } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function CaseStudiesPage() {
   const studies = caseStudies();
-  const hasUnpublished = studies.some((s) => s.status !== "published");
+  const hasDemos = studies.some((s) => s.status === "Demo Ready" || s.status === "In Development");
 
   return (
     <>
@@ -31,9 +31,9 @@ export default function CaseStudiesPage() {
       />
       <section className="section section--flush-top" aria-label="Case studies">
         <div className="container">
-          {hasUnpublished ? (
+          {hasDemos ? (
             <p className="notice notice--wide">
-              Entries marked &ldquo;Placeholder&rdquo; or &ldquo;Draft&rdquo; are not finished case studies. Placeholders use sample artwork and are not client work.
+              Entries marked &ldquo;Demo Ready&rdquo; are working demonstrations built to show capability, not client engagements. Their brands and data are fictional.
             </p>
           ) : null}
           {studies.length > 0 ? (
@@ -51,6 +51,7 @@ export default function CaseStudiesPage() {
                       <span className="project-card__meta">
                         <span>{s.categories.join(" · ")}</span>
                         {s.year ? <span>{s.year}</span> : null}
+                        <TypeBadge type={s.projectType} />
                         <StatusBadge status={s.status} />
                       </span>
                       <span className="case-row__title">{s.title}</span>

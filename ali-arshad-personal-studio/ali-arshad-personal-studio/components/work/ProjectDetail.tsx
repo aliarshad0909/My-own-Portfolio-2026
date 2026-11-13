@@ -4,7 +4,7 @@ import { ContactCTA } from "@/components/sections/ContactCTA";
 import { ArrowLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon } from "@/components/ui/Icon";
-import { StatusBadge } from "@/components/ui/StatusBadge";
+import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { STATUS_NOTE, relatedProjects, type Project } from "@/lib/projects";
@@ -19,9 +19,9 @@ type Props = { project: Project; variant: "project" | "case-study" };
 export function ProjectDetail({ project, variant }: Props) {
   const cs = project.caseStudy;
   const isCaseStudy = variant === "case-study";
-  const isPlaceholder = project.status === "placeholder";
   const related = relatedProjects(project, 2);
   const backHref = isCaseStudy ? "/case-studies" : "/work";
+  const statusNote = STATUS_NOTE[project.status];
 
   return (
     <>
@@ -34,15 +34,32 @@ export function ProjectDetail({ project, variant }: Props) {
             </Link>
             <div className="detail__meta">
               <span className="eyebrow eyebrow--plain">{isCaseStudy ? "Case study" : "Project"}</span>
+              <TypeBadge type={project.projectType} />
               <StatusBadge status={project.status} />
             </div>
             <h1 className="page-title">{project.title}</h1>
             <p className="lead">{project.summary}</p>
-            {project.status !== "published" ? (
+            {statusNote ? (
               <p className="notice">
                 <Icon name="alert" size={18} />
-                <span>{STATUS_NOTE[project.status]}</span>
+                <span>{statusNote}</span>
               </p>
+            ) : null}
+            {project.liveUrl || project.sourceUrl ? (
+              <div className="detail__links">
+                {project.liveUrl ? (
+                  <a className="btn btn--primary btn--md" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                    <span>View live demo</span>
+                    <Icon name="arrow-up-right" size={18} className="btn__icon" />
+                  </a>
+                ) : null}
+                {project.sourceUrl ? (
+                  <a className="btn btn--secondary btn--md" href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
+                    <span>View source code</span>
+                    <Icon name="arrow-up-right" size={18} className="btn__icon" />
+                  </a>
+                ) : null}
+              </div>
             ) : null}
           </div>
         </header>
@@ -68,15 +85,21 @@ export function ProjectDetail({ project, variant }: Props) {
                   </div>
                 ) : null}
                 <div>
+                  <dt>Type</dt>
+                  <dd>{project.projectType}</dd>
+                </div>
+                <div>
                   <dt>Category</dt>
                   <dd>{project.categories.join(", ")}</dd>
                 </div>
-                {!isPlaceholder ? (
-                  <div>
-                    <dt>Role</dt>
-                    <dd>{project.role}</dd>
-                  </div>
-                ) : null}
+                <div>
+                  <dt>Role</dt>
+                  <dd>{project.role}</dd>
+                </div>
+                <div>
+                  <dt>Stack</dt>
+                  <dd>{project.technologies.join(", ")}</dd>
+                </div>
               </dl>
               {project.tags.length > 0 ? (
                 <ul className="tag-list" aria-label="Tags">
@@ -84,12 +107,6 @@ export function ProjectDetail({ project, variant }: Props) {
                     <li key={t}>{t}</li>
                   ))}
                 </ul>
-              ) : null}
-              {project.liveUrl ? (
-                <a className="arrow-link" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                  <span>Visit live project</span>
-                  <Icon name="arrow-up-right" size={18} />
-                </a>
               ) : null}
             </aside>
 
@@ -100,22 +117,6 @@ export function ProjectDetail({ project, variant }: Props) {
                 </h2>
                 <p>{project.summary}</p>
               </section>
-
-              {!isPlaceholder ? (
-                <section aria-labelledby="role-title">
-                  <h2 className="section-title section-title--sm" id="role-title">
-                    My role
-                  </h2>
-                  <p>{project.role}</p>
-                  <ul>
-                    {project.contribution.map((c) => (
-                      <li key={c}>{c}</li>
-                    ))}
-                  </ul>
-                </section>
-              ) : (
-                <EditorNote>Replace this placeholder in lib/projects.ts with a real project: role, contribution, media and case-study text.</EditorNote>
-              )}
 
               {isCaseStudy && cs ? (
                 <>
@@ -139,10 +140,27 @@ export function ProjectDetail({ project, variant }: Props) {
                   ) : (
                     <EditorNote>Add `caseStudy.challenge` — the problem that needed solving.</EditorNote>
                   )}
+                </>
+              ) : null}
+
+              <section aria-labelledby="role-title">
+                <h2 className="section-title section-title--sm" id="role-title">
+                  My role
+                </h2>
+                <p>{project.role}</p>
+                <ul>
+                  {project.contribution.map((c) => (
+                    <li key={c}>{c}</li>
+                  ))}
+                </ul>
+              </section>
+
+              {isCaseStudy && cs ? (
+                <>
                   {cs.approach ? (
                     <section aria-labelledby="approach-title">
                       <h2 className="section-title section-title--sm" id="approach-title">
-                        Strategy and approach
+                        Technical approach
                       </h2>
                       <p>{cs.approach}</p>
                     </section>
@@ -183,11 +201,57 @@ export function ProjectDetail({ project, variant }: Props) {
                           <li key={r}>{r}</li>
                         ))}
                       </ul>
+                      {project.status !== "Verified" && project.status !== "Published" ? (
+                        <p className="fine-print">These are tested capabilities of the demonstration, not commercial outcomes.</p>
+                      ) : null}
                     </section>
                   ) : (
                     <EditorNote>Add `caseStudy.results` only with verified outcomes. Leave empty otherwise.</EditorNote>
                   )}
                 </>
+              ) : null}
+
+              <section aria-labelledby="stack-title">
+                <h2 className="section-title section-title--sm" id="stack-title">
+                  Technology stack
+                </h2>
+                <ul className="tag-list" aria-label="Technology stack">
+                  {project.technologies.map((t) => (
+                    <li key={t}>{t}</li>
+                  ))}
+                </ul>
+              </section>
+
+              {project.attribution ? (
+                <section aria-labelledby="attribution-title">
+                  <h2 className="section-title section-title--sm" id="attribution-title">
+                    Attribution
+                  </h2>
+                  <p>
+                    Built on{" "}
+                    <a href={project.attribution.url} target="_blank" rel="noopener noreferrer">
+                      {project.attribution.project}
+                    </a>
+                    , © {project.attribution.copyright}, used under the{" "}
+                    <a href={project.attribution.licenseUrl} target="_blank" rel="noopener noreferrer">
+                      {project.attribution.license} licence
+                    </a>
+                    .
+                  </p>
+                  <p>
+                    <strong>What the original provides:</strong> {project.attribution.originalWork}
+                  </p>
+                  <p>
+                    <strong>What I changed:</strong>
+                  </p>
+                  <ul>
+                    {project.attribution.modifications.map((m) => (
+                      <li key={m}>{m}</li>
+                    ))}
+                  </ul>
+                </section>
+              ) : project.projectType === "Open-Source Adaptation" ? (
+                <EditorNote>This project is an Open-Source Adaptation but has no `attribution` block. Add one before publishing.</EditorNote>
               ) : null}
 
               {!isCaseStudy && cs ? <ArrowLink href={`/case-studies/${project.slug}`}>Read the case study</ArrowLink> : null}
@@ -197,7 +261,7 @@ export function ProjectDetail({ project, variant }: Props) {
           {project.gallery.length > 0 ? (
             <section className="detail__gallery" aria-labelledby="gallery-title">
               <h2 className="section-title section-title--sm" id="gallery-title">
-                Gallery
+                Screenshots
               </h2>
               <MediaGallery items={project.gallery} />
             </section>

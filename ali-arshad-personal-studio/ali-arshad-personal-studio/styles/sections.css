@@ -933,3 +933,52 @@
 .not-found {
   padding-block: clamp(72px, 12vw, 160px);
 }
+
+/* Project pipeline (planned work listed on /work) */
+.pipeline {
+  display: grid;
+  gap: 0;
+}
+
+.pipeline__item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 4px 12px;
+  padding-block: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.pipeline__item:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.pipeline__num {
+  color: var(--coral);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  line-height: 1.9;
+}
+
+.pipeline__item p {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  max-width: 70ch;
+}
+
+.pipeline__meta {
+  margin-block: 2px 6px;
+  color: #d9d7d2 !important;
+  font-size: var(--fs-tiny) !important;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Live demo / source links on a project detail page */
+.detail__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
