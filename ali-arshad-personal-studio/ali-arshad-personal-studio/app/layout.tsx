@@ -8,6 +8,7 @@ import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/components.css";
 import "@/styles/sections.css";
+import "@/styles/motion.css";
 
 const heading = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--ff-heading", display: "swap" });
 const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--ff-body", display: "swap" });
