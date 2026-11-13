@@ -1,0 +1,11 @@
+{
+  "name": "n8n-lead-automation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Importable n8n workflow for inbound lead qualification, with tests that execute its Code node logic.",
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\""
+  },
+  "engines": { "node": ">=22.18.0" }
+}

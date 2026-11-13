@@ -1,0 +1,13 @@
+{
+  "name": "motion-production",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Video preparation pipeline and case-study templates for motion work.",
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "prepare-media": "node scripts/prepare-media.mjs",
+    "contact-sheet": "node scripts/contact-sheet.mjs"
+  },
+  "engines": { "node": ">=22.18.0" }
+}

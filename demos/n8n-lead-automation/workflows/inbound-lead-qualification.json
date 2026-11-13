@@ -1,0 +1,274 @@
+{
+  "name": "Inbound lead qualification and follow-up",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "inbound-lead",
+        "responseMode": "responseNode",
+        "options": { "rawBody": false }
+      },
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Website inquiry (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-920, 300],
+      "webhookId": "inbound-lead"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate and normalise the inquiry before anything else touches it.\n// Runs once per incoming item; never trusts the caller's shape.\nconst EMAIL = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\nconst DISPOSABLE = ['mailinator.com', 'guerrillamail.com', '10minutemail.com', 'tempmail.com'];\nconst out = [];\n\nfor (const item of $input.all()) {\n  const b = item.json.body ?? item.json;\n  const errors = [];\n\n  const name = String(b.name ?? '').trim();\n  const email = String(b.email ?? '').trim().toLowerCase();\n  const company = String(b.company ?? '').trim();\n  const message = String(b.message ?? b.description ?? '').trim();\n  const service = String(b.service ?? '').trim();\n  const budget = String(b.budget ?? '').trim();\n  const consent = b.consent === true || b.consent === 'true' || b.consent === 'on';\n\n  if (name.length < 2 || name.length > 100) errors.push('name');\n  if (!EMAIL.test(email) || email.length > 200) errors.push('email');\n  if (message.length < 20 || message.length > 4000) errors.push('message');\n  if (!consent) errors.push('consent');\n  if (String(b.website ?? '') !== '') errors.push('honeypot');\n\n  const domain = email.split('@')[1] ?? '';\n  const disposable = DISPOSABLE.includes(domain);\n  const freemail = ['gmail.com', 'outlook.com', 'hotmail.com', 'yahoo.com', 'icloud.com'].includes(domain);\n\n  out.push({\n    json: {\n      valid: errors.length === 0 && !disposable,\n      errors,\n      disposable,\n      lead: {\n        name, email, company, message, service, budget, consent,\n        domain,\n        freemail,\n        receivedAt: new Date().toISOString(),\n        // Stable key for duplicate detection: one person, one open thread.\n        dedupeKey: email,\n        source: String(b.source ?? 'website'),\n      },\n    },\n  });\n}\n\nreturn out;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Validate and normalise",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-700, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "version": 2 },
+          "conditions": [
+            {
+              "id": "valid-check",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Valid inquiry?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-480, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 422,
+        "responseBody": "={{ JSON.stringify({ ok: false, code: 'invalid', errors: $json.errors }) }}",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Reject (422)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-260, 460]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "lead_seen_{{ $json.lead.dedupeKey }}",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000005",
+      "name": "Look up existing lead",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [-260, 180],
+      "notes": "Replace with a real CRM lookup (HubSpot/Pipedrive 'search by email') or a Redis GET. Kept as a No-Op so the workflow imports with no credentials."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Duplicate detection.\n// Swap the static-data store for a CRM search in production; the contract\n// below (isDuplicate + previousCount) is all the rest of the flow needs.\nconst store = $getWorkflowStaticData('global');\nstore.seen = store.seen || {};\nconst out = [];\n\nfor (const item of $input.all()) {\n  const key = item.json.lead.dedupeKey;\n  const prev = store.seen[key];\n  const now = Date.now();\n  const WINDOW_MS = 30 * 24 * 60 * 60 * 1000;\n  const isDuplicate = Boolean(prev && now - prev.lastSeen < WINDOW_MS);\n\n  store.seen[key] = { lastSeen: now, count: (prev?.count ?? 0) + 1 };\n\n  out.push({\n    json: {\n      ...item.json,\n      isDuplicate,\n      previousCount: prev?.count ?? 0,\n    },\n  });\n}\n\nreturn out;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000006",
+      "name": "Detect duplicates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-40, 180]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transparent lead scoring. Every point is recorded with its reason so a\n// human reviewing the lead can see exactly why it scored what it did.\nconst BUDGET_POINTS = {\n  'Under $1,000': 5,\n  '$1,000 – $5,000': 18,\n  '$5,000 – $15,000': 28,\n  '$15,000+': 35,\n  'Prefer to discuss': 10,\n};\nconst HIGH_INTENT = /\\b(quote|proposal|contract|start|deadline|launch|asap|urgent|budget approved)\\b/i;\nconst LOW_INTENT = /\\b(student|thesis|assignment|free|intern|portfolio review|just curious)\\b/i;\n\nreturn $input.all().map((item) => {\n  const { lead, isDuplicate, previousCount } = item.json;\n  let score = 0;\n  const reasons = [];\n\n  const budgetPoints = BUDGET_POINTS[lead.budget] ?? 0;\n  if (budgetPoints) { score += budgetPoints; reasons.push(`Budget \"${lead.budget}\" (+${budgetPoints})`); }\n\n  if (lead.company) { score += 12; reasons.push('Company named (+12)'); }\n  if (!lead.freemail && lead.domain) { score += 15; reasons.push(`Business domain ${lead.domain} (+15)`); }\n  if (lead.service && lead.service !== 'Not sure yet') { score += 10; reasons.push(`Specific service: ${lead.service} (+10)`); }\n  if (lead.message.length > 300) { score += 10; reasons.push('Detailed brief (+10)'); }\n  if (HIGH_INTENT.test(lead.message)) { score += 15; reasons.push('High-intent language (+15)'); }\n  if (LOW_INTENT.test(lead.message)) { score -= 20; reasons.push('Low-intent language (-20)'); }\n  if (isDuplicate) { score -= 10; reasons.push(`Duplicate within 30 days, ${previousCount} previous (-10)`); }\n\n  score = Math.max(0, Math.min(100, score));\n  const band = score >= 60 ? 'hot' : score >= 30 ? 'warm' : 'cold';\n\n  return { json: { ...item.json, score, band, reasons } };\n});"
+      },
+      "id": "a1000000-0000-4000-8000-000000000007",
+      "name": "Qualify lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [180, 180]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "version": 2 },
+                "conditions": [
+                  { "id": "hot", "leftValue": "={{ $json.band }}", "rightValue": "hot", "operator": { "type": "string", "operation": "equals" } }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "hot"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "version": 2 },
+                "conditions": [
+                  { "id": "warm", "leftValue": "={{ $json.band }}", "rightValue": "warm", "operator": { "type": "string", "operation": "equals" } }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "warm"
+            }
+          ]
+        },
+        "fallbackOutput": "extra",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000008",
+      "name": "Route by band",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [400, 180]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.CRM_WEBHOOK_URL }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.CRM_API_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ source: $json.lead.source, email: $json.lead.email, name: $json.lead.name, company: $json.lead.company, service: $json.lead.service, budget: $json.lead.budget, message: $json.lead.message, score: $json.score, band: $json.band, reasons: $json.reasons, isDuplicate: $json.isDuplicate, receivedAt: $json.lead.receivedAt }) }}",
+        "options": {
+          "retry": { "retry": { "maxTries": 3, "waitBetweenTries": 2000 } },
+          "timeout": 10000,
+          "response": { "response": { "neverError": true, "fullResponse": true } }
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000009",
+      "name": "Create CRM record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [620, 180],
+      "onError": "continueErrorOutput",
+      "notes": "Credentials come from environment variables, never from the exported JSON."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: ($json.band === 'hot' ? ':fire: HOT' : ':wave: Warm') + ' lead — ' + $json.lead.name + ' (' + $json.lead.email + ') scored ' + $json.score + '\\n' + $json.reasons.join(' · ') + '\\n> ' + $json.lead.message.slice(0, 280) }) }}",
+        "options": { "retry": { "retry": { "maxTries": 3, "waitBetweenTries": 2000 } }, "timeout": 10000 }
+      },
+      "id": "a1000000-0000-4000-8000-000000000010",
+      "name": "Notify sales (Slack)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [840, 80],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Draft a reply for a human to approve. Composed from fixed fragments —\n// no model is called, so the wording cannot drift and nothing is invented.\nconst OPENERS = {\n  hot: 'Thanks for getting in touch — this sounds like a good fit and I would like to talk properly.',\n  warm: 'Thanks for getting in touch. Happy to help with this.',\n  cold: 'Thanks for getting in touch.',\n};\nconst NEXT = {\n  hot: 'Are you free for a 20-minute call this week? Send me a couple of times that suit and I will confirm.',\n  warm: 'Could you tell me a little more about the timeline and what success would look like?',\n  cold: 'If you can share a bit more detail about scope and timing, I will let you know honestly whether I am the right fit.',\n};\n\nreturn $input.all().map((item) => {\n  const { lead, band, score, reasons } = item.json;\n  const first = lead.name.split(' ')[0];\n  const service = lead.service && lead.service !== 'Not sure yet' ? ` about ${lead.service.toLowerCase()}` : '';\n\n  const draft = [\n    `Hi ${first},`,\n    '',\n    `${OPENERS[band]}`,\n    '',\n    `You wrote${service}:`,\n    `\"${lead.message.slice(0, 400)}${lead.message.length > 400 ? '…' : ''}\"`,\n    '',\n    NEXT[band],\n    '',\n    'Best,',\n    'Ali',\n  ].join('\\n');\n\n  return {\n    json: {\n      ...item.json,\n      approval: {\n        status: 'pending_human_approval',\n        to: lead.email,\n        subject: `Re: your enquiry${service}`,\n        draft,\n        scoreSummary: `${band} (${score}) — ${reasons.join('; ')}`,\n      },\n    },\n  };\n});"
+      },
+      "id": "a1000000-0000-4000-8000-000000000011",
+      "name": "Draft follow-up",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [840, 280]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.APPROVAL_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.approval) }}",
+        "options": { "retry": { "retry": { "maxTries": 3, "waitBetweenTries": 2000 } }, "timeout": 10000 }
+      },
+      "id": "a1000000-0000-4000-8000-000000000012",
+      "name": "Queue for human approval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1060, 280],
+      "onError": "continueRegularOutput",
+      "notes": "Nothing is emailed automatically. A person reads the draft and sends it."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Cold leads are recorded, not chased. They are reviewed in a weekly digest.\nreturn $input.all().map((item) => ({ json: { ...item.json, action: 'logged_for_weekly_review', autoReply: false } }));"
+      },
+      "id": "a1000000-0000-4000-8000-000000000013",
+      "name": "Log cold lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [620, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 200,
+        "responseBody": "={{ JSON.stringify({ ok: true }) }}",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000014",
+      "name": "Accept (200)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1280, 280]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Any step that failed lands here with enough context to retry by hand.\nreturn $input.all().map((item) => ({\n  json: {\n    failedAt: new Date().toISOString(),\n    node: item.json?.error?.node ?? 'unknown',\n    message: item.json?.error?.message ?? 'Downstream call failed',\n    lead: item.json?.lead ?? null,\n  },\n}));"
+      },
+      "id": "a1000000-0000-4000-8000-000000000015",
+      "name": "Record failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [840, 460]
+    }
+  ],
+  "connections": {
+    "Website inquiry (Webhook)": { "main": [[{ "node": "Validate and normalise", "type": "main", "index": 0 }]] },
+    "Validate and normalise": { "main": [[{ "node": "Valid inquiry?", "type": "main", "index": 0 }]] },
+    "Valid inquiry?": {
+      "main": [
+        [{ "node": "Look up existing lead", "type": "main", "index": 0 }],
+        [{ "node": "Reject (422)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Look up existing lead": { "main": [[{ "node": "Detect duplicates", "type": "main", "index": 0 }]] },
+    "Detect duplicates": { "main": [[{ "node": "Qualify lead", "type": "main", "index": 0 }]] },
+    "Qualify lead": { "main": [[{ "node": "Route by band", "type": "main", "index": 0 }]] },
+    "Route by band": {
+      "main": [
+        [{ "node": "Create CRM record", "type": "main", "index": 0 }],
+        [{ "node": "Create CRM record", "type": "main", "index": 0 }],
+        [{ "node": "Log cold lead", "type": "main", "index": 0 }]
+      ]
+    },
+    "Create CRM record": {
+      "main": [
+        [
+          { "node": "Notify sales (Slack)", "type": "main", "index": 0 },
+          { "node": "Draft follow-up", "type": "main", "index": 0 }
+        ],
+        [{ "node": "Record failure", "type": "main", "index": 0 }]
+      ]
+    },
+    "Draft follow-up": { "main": [[{ "node": "Queue for human approval", "type": "main", "index": 0 }]] },
+    "Queue for human approval": { "main": [[{ "node": "Accept (200)", "type": "main", "index": 0 }]] },
+    "Log cold lead": { "main": [[{ "node": "Accept (200)", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "saveManualExecutions": true, "callerPolicy": "workflowsFromSameOwner" },
+  "pinData": {},
+  "meta": { "instanceId": "portfolio-demo" },
+  "tags": [{ "name": "lead-management" }]
+}

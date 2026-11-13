@@ -1,0 +1,26 @@
+# Dependencies and build output
+node_modules/
+dist/
+.next/
+out/
+
+# Environment and secrets — never commit these
+.env
+.env.*
+!.env.example
+
+# Private keys. The self-signed certificates under
+# demos/security-dashboard/fixtures/ are test data with no private key
+# alongside them, so they are committed deliberately.
+*.key
+id_rsa*
+
+# Editor and OS noise
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Test artefacts
+playwright-report/
+test-results/

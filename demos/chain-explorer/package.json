@@ -1,0 +1,26 @@
+{
+  "name": "ledgerlight-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only EVM block explorer with EIP-55 address checksumming, a real JSON-RPC client and honest offline states.",
+  "scripts": {
+    "dev": "node build.mjs --serve",
+    "build": "node build.mjs",
+    "test": "node --test \"tests/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "esbuild": "0.28.2",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}

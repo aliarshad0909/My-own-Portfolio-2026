@@ -1,0 +1,13 @@
+{
+  "body": {
+    "name": "Dana Whitfield",
+    "email": "dana@harlowlogistics.example",
+    "company": "Harlow Logistics",
+    "service": "Web & Software Development",
+    "budget": "$15,000+",
+    "message": "We need a quote for a customer portal to replace a spreadsheet process. Budget approved, and we want to launch before the end of the quarter. Around 40 internal users plus a customer-facing area.",
+    "consent": true,
+    "website": "",
+    "source": "website"
+  }
+}
