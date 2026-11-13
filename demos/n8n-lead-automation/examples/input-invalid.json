@@ -1,0 +1,9 @@
+{
+  "body": {
+    "name": "A",
+    "email": "not-an-email",
+    "message": "too short",
+    "consent": false,
+    "website": "http://spam.example"
+  }
+}

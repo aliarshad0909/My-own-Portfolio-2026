@@ -107,7 +107,13 @@ svg { display: block; }
 .card__body { display: grid; gap: 4px; padding: 14px 16px 16px; }
 .card__cat { color: var(--muted); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .card__title { font-size: 1.15rem; }
-.card__title a { text-decoration: none; }
+.card__title a {
+  /* Padded so the tap target clears 38px without changing the visual rhythm. */
+  display: inline-block;
+  padding-block: 9px;
+  margin-block: -9px;
+  text-decoration: none;
+}
 .card__title a:hover { color: var(--clay); }
 .card__price { font-weight: 600; }
 .tag { position: absolute; left: 10px; top: 10px; padding: 4px 10px; border-radius: 999px; background: var(--forest); color: #fff; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em; }
