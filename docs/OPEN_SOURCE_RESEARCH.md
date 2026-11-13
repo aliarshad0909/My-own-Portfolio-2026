@@ -97,24 +97,62 @@ simulated output clearly separated from real checks.
 **viem** — MIT. **wagmi** — MIT. Both accepted as dependencies for a read-only
 testnet explorer. No real-money transactions, minimal wallet permissions.
 
-## Summary
+## Summary — as built
 
-| Project | Approach | Foundation | Licence | Decision |
-| --- | --- | --- | --- | --- |
-| 01 E-commerce | Original | React + esbuild only | — | **Built** |
-| 02 Analytics | Original | TBD charting library | — | Planned |
-| 03 AI support | Original | Vercel AI SDK | Apache-2.0 | Accept |
-| 04 Voice agent | Original | LiveKit Agents or Pipecat | Apache-2.0 / BSD-2 | Accept |
-| 05 n8n automation | Original workflows | n8n (not bundled) | SUL — see boundary above | Accept with limits |
-| 06 Supply chain | Original | InvenTree as reference only | MIT (not forked) | Reference |
-| 07 Sourcing | Original | — | — | Planned |
-| 08 3D | Original creative | Ali's Blender work | — | Awaiting assets |
-| 09 Motion | Original creative | Ali's footage | — | Awaiting assets |
-| 10 Brand | Original | — | — | Planned |
-| 11 Blockchain | Original | viem / wagmi | MIT | Accept |
-| 12 Security | Original | — | — | Planned |
+Every one of the twelve projects was written from scratch. **None is an
+Open-Source Adaptation**, so no project carries an `attribution` block, because
+none is owed one. Several libraries that were considered during planning were
+not used in the end; the final column records what was actually built against.
 
-No project currently in the repository contains third-party source code beyond
-its declared npm dependencies. If that changes, the adaptation gets an
-`attribution` block in `lib/projects.ts`, which the project page renders
-automatically, and the upstream LICENSE file is kept in the demo directory.
+| Project | Type | Third-party code in the demo | Notes |
+| --- | --- | --- | --- |
+| 01 Tessera Clayworks (e-commerce) | Original Concept | React, esbuild | All product art drawn as SVG; no stock imagery |
+| 02 Northwind (analytics) | Original Concept | React, esbuild | Charting library considered, not used — charts are hand-drawn SVG |
+| 03 Tideline (support agent) | Original Concept | React, esbuild | Vercel AI SDK considered, not used — BM25 implemented directly |
+| 04 Kestrel (voice agent) | Original Concept | React, esbuild | LiveKit/Pipecat considered, not used — browser Web Speech API only |
+| 05 Lead qualification (n8n) | Original Concept | none bundled | Workflow JSON for n8n; n8n itself is not redistributed. See the boundary note above |
+| 06 Meridian (inventory) | Original Concept | React, esbuild | InvenTree read as a reference for domain modelling; no code taken, nothing forked |
+| 07 Lantern (sourcing) | Original Concept | React, esbuild | — |
+| 08 Blender scene system | Original Concept | none | Python against the bpy API. Blender itself is GPL and is not redistributed here |
+| 09 Motion pipeline | Original Concept | none | Invokes ffmpeg as an external binary; ffmpeg is not bundled or redistributed |
+| 10 Halcyon (brand system) | Original Concept | React, esbuild | Fonts loaded from Google Fonts — see the font note below |
+| 11 Ledgerlight (block explorer) | Original Concept | React, esbuild | viem/wagmi/ethers considered, **not used** — Keccak-256 and EIP-55 implemented from the specifications |
+| 12 Sentryline (security) | Original Concept | React, esbuild | node-forge/pkijs considered, not used — ASN.1/DER parser written from the specification. openssl is used only to generate test fixtures, not shipped |
+
+### Shared dependencies
+
+| Package | Licence | Role |
+| --- | --- | --- |
+| React / React DOM | MIT | Runtime, bundled into every demo |
+| esbuild | MIT | Build tool, not shipped |
+| Playwright | Apache-2.0 | Test tool, not shipped |
+
+React is the only third-party code that ships inside a demo bundle. MIT permits
+commercial use, modification and redistribution with the notice preserved;
+bundlers retain the licence header, and no React code has been modified.
+
+### Fonts
+
+Every font used across the demos — Space Grotesk, DM Sans, Instrument Serif,
+Public Sans, JetBrains Mono, Sora, IBM Plex Mono, Inter — is served from Google
+Fonts under the SIL Open Font License 1.1, which permits commercial use and
+embedding. No font file is copied into any repository, and no font is modified
+or redistributed under a new name.
+
+### Non-code assets
+
+There are no stock photographs, no icon libraries and no third-party
+illustrations anywhere in the twelve demos. Every graphic is SVG written for
+this portfolio. The three `placeholder-*.webp` images in the portfolio are
+marked `usesSampleMedia: true` and the cards say so on their face.
+
+### Standing rule
+
+If a future project does build on someone else's work, it gets
+`projectType: "Open-Source Adaptation"` and a complete `attribution` block in
+`lib/projects.ts` — upstream project, URL, SPDX identifier, licence URL,
+copyright holder, what the original does and what was changed. The project page
+renders that block, and the detail view shows an editor warning if an
+adaptation is ever missing one. The upstream LICENSE file is kept in the demo
+directory. Upstream copyright notices are never removed and sole ownership is
+never implied.
