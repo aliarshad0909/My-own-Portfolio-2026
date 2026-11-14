@@ -16,8 +16,10 @@ export function pageMetadata({ title, description, path, index = true }: PageMet
   return {
     title: fullTitle,
     description,
-    // Canonical URLs are only emitted once a real domain is configured.
-    alternates: SITE.url ? { canonical: path } : undefined,
+    // Relative canonical, resolved against metadataBase. On Vercel that base
+    // is the production domain even for preview builds, so previews
+    // canonicalise to production instead of competing with it.
+    alternates: { canonical: path },
     robots: index ? undefined : { index: false, follow: true },
     openGraph: {
       title: fullTitle,

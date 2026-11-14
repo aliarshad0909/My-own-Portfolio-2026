@@ -15,9 +15,9 @@ import { TOOL_GROUPS, toolsInGroup } from "@/lib/expertise";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Experience",
+  title: "Experience & Certifications",
   description:
-    "Ali Arshad's career so far: a BBA in Supply Chain Management, brand management for US brands, creative production, software development and AI automation — and how the four connect.",
+    "Ali Arshad's career so far: a BBA in Supply Chain Management, brand management for US brands, creative production, software development and AI automation — with verified HubSpot Academy and Google Ads (Skillshop) certifications.",
   path: "/experience",
 });
 

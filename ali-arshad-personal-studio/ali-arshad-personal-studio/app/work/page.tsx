@@ -6,7 +6,7 @@ import { PLANNED, PROJECTS } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Work",
+  title: "Work — Web, AI Automation, 3D & Motion Portfolio",
   description: "Portfolio of creative production, 3D and motion, branding, web and software, AI automation and business projects by Ali Arshad.",
   path: "/work",
 });

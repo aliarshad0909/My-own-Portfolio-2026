@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Faq } from "@/components/ui/Faq";
+import type { FaqItem } from "@/lib/structured-data";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
@@ -13,7 +15,7 @@ import { TOOL_GROUPS, toolsInGroup } from "@/lib/expertise";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "About",
+  title: "About the Studio",
   description:
     "Ali Arshad is an independent creative and digital studio of one — a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development and automation.",
   path: "/about",
@@ -68,6 +70,21 @@ const PROCESS = [
   { step: "Create", text: "Design, develop, automate or produce the work itself." },
   { step: "Test & refine", text: "Check functionality, visual quality, accessibility and fit against the brief — then fix what the checks find." },
   { step: "Deliver & support", text: "Hand over with documentation, explain how it works, and agree what ongoing support looks like." },
+];
+
+const FAQ_ITEMS: FaqItem[] = [
+  {
+    q: "Who is Ali Arshad?",
+    a: "An independent designer, developer and creative technologist running a one-person studio — a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development, AI automation and brand work. The three pillars above describe how those disciplines combine on a project.",
+  },
+  {
+    q: "Does Ali provide video editing and 3D visualization?",
+    a: "Yes. Creative production is one of the studio's core services: video editing, motion graphics and Blender 3D product visualization. The Blender product visualization and motion production pipeline entries in the work section show complete demonstration builds of both.",
+  },
+  {
+    q: "Why one studio across several disciplines?",
+    a: "Because projects rarely fail inside one discipline. A product that works but cannot be explained, or a campaign that looks right but ignores the economics, fails all the same. One studio carrying creative perspective, technical execution and commercial understanding means those judgements happen together rather than across three vendors.",
+  },
 ];
 
 export default function AboutPage() {
@@ -323,6 +340,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <Faq id="about-faq" eyebrow="Common questions" title="Asked about the studio" items={FAQ_ITEMS} />
 
       <ContactCTA
         standalone

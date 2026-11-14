@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Faq } from "@/components/ui/Faq";
+import type { FaqItem } from "@/lib/structured-data";
 import Image from "next/image";
 import Link from "next/link";
 import { InquiryForm } from "@/components/contact/InquiryForm";
@@ -9,11 +11,26 @@ import { SERVICES } from "@/lib/services";
 import { SITE, activeSocials } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact",
+  title: "Contact — Start a Project",
   description:
     "Start a project with Ali Arshad. Share what you're building, the budget and timeline if you know them, and get a considered reply on fit, scope and next steps.",
   path: "/contact",
 });
+
+const FAQ_ITEMS: FaqItem[] = [
+  {
+    q: "How do projects begin?",
+    a: "With a message through this page. Every inquiry is read personally — if the project looks like a match, the next step is a short call about the goal, constraints and what success looks like, followed by a plain-language written scope: what will be built, in what order, what it costs and what it depends on from your side.",
+  },
+  {
+    q: "What should the first message include?",
+    a: "A sentence or two on what you are trying to achieve is more useful than a long brief. Budget and timeline help if you know them, but neither is required to start the conversation.",
+  },
+  {
+    q: "Which service should I choose if the problem spans several?",
+    a: "Pick the closest one, or choose \u201cNot sure yet\u201d and describe the problem — working out the right approach is part of the job. For specialist areas such as blockchain or security, qualified partners are brought in and that is said upfront.",
+  },
+];
 
 /** What a sender can expect after pressing send. No turnaround promise is made that cannot be kept. */
 const NEXT_STEPS: { icon: IconName; title: string; text: string }[] = [
@@ -133,6 +150,8 @@ export default function ContactPage() {
           </p>
         </div>
       </section>
+
+      <Faq id="contact-faq" eyebrow="Common questions" title="Before you write" items={FAQ_ITEMS} />
     </>
   );
 }

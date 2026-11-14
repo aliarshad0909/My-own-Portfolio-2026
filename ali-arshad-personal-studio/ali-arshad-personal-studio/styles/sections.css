@@ -3135,3 +3135,79 @@
   padding-block: 10px;
   margin-block: -10px;
 }
+
+/* ───────── FAQ (native disclosure, no JS required) ───────── */
+.faq {
+  max-width: 760px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 60px;
+  padding: 16px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__question::-webkit-details-marker {
+  display: none;
+}
+
+.faq__question:hover .faq__q-text {
+  color: var(--coral);
+}
+
+.faq__question:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.faq__q-text {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: color var(--fast) ease;
+}
+
+/* Plus that becomes a minus, drawn with borders so it needs no icon font. */
+.faq__marker {
+  position: relative;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+
+.faq__marker::before,
+.faq__marker::after {
+  content: "";
+  position: absolute;
+  inset: 8px 0;
+  border-radius: 2px;
+  background: var(--coral);
+  transition: transform var(--med) var(--ease);
+}
+
+.faq__marker::after {
+  transform: rotate(90deg);
+}
+
+.faq__item[open] .faq__marker::after {
+  transform: rotate(0deg);
+}
+
+.faq__answer {
+  max-width: 64ch;
+  padding: 0 0 22px;
+  color: var(--muted);
+  line-height: 1.65;
+}

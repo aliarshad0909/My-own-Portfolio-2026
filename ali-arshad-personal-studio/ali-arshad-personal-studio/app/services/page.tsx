@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { Faq } from "@/components/ui/Faq";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { serviceListSchema, type FaqItem } from "@/lib/structured-data";
 import { FlowDiagram, type FlowStep } from "@/components/services/FlowDiagram";
 import { ServiceNav } from "@/components/services/ServiceNav";
 import { PendingMedia, RelatedProjectList, ServiceShowcase } from "@/components/services/ServiceShowcase";
@@ -10,11 +13,39 @@ import { pageMetadata } from "@/lib/seo";
 import { SERVICES, contactHref, projectsForService, relatedWorkHref, type Service } from "@/lib/services";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Services",
+  title: "Services — Web Development, AI Automation, Video & 3D",
   description:
     "Creative production, web and software development, AI agents and automation, brand management and growth, global sourcing and specialist technical collaboration — six connected service areas from Ali Arshad's independent studio.",
   path: "/services",
 });
+
+/** Grounded in what the service sections and work pages actually say — no claims beyond them. */
+const FAQ_ITEMS: FaqItem[] = [
+  {
+    q: "What services does Ali Arshad offer?",
+    a: "Six connected service areas: creative production (video editing, motion graphics and Blender 3D product visualization), web and software development with Next.js, React and TypeScript, AI agents and workflow automation with n8n, brand management and growth, global sourcing and supply chain coordination, and specialist technical collaboration for work that needs a partner. Each section on this page describes what a typical engagement covers.",
+  },
+  {
+    q: "Can Ali build custom AI agents?",
+    a: "Yes — AI agents and automation is a core service: scoped agents for support, sales and internal operations, with clear hand-offs wherever human judgement matters. The work section includes complete demonstration builds — a customer support agent, a voice-based sales agent and an inbound lead-qualification workflow — each built end to end under a fictional brand and labelled as a demonstration.",
+  },
+  {
+    q: "Can sales workflows be automated with n8n?",
+    a: "Yes. n8n is the main automation tool used here. The inbound lead-qualification demonstration routes a new inquiry through validation, enrichment, scoring and follow-up steps, and the same pattern applies to quoting, onboarding and reporting. Automations are designed so repetitive steps run on their own and judgement calls stay with people.",
+  },
+  {
+    q: "Does Ali develop e-commerce applications?",
+    a: "Yes — custom storefronts and the operational tooling around them: product catalogues with filtering and search, carts and checkout flows, order handling and inventory views. The Tessera Clayworks storefront in the case studies is a complete demonstration build of exactly this kind of project.",
+  },
+  {
+    q: "What is included in a typical development engagement?",
+    a: "A short discovery conversation, then a plain-language written scope: what will be built, in what order, what it costs and what it depends on from your side. Work is delivered in stages, and hand-over includes documentation and an agreement on what ongoing support looks like. Every project is quoted individually — there is no fixed price list.",
+  },
+  {
+    q: "How is specialist collaboration handled?",
+    a: "Some projects need expertise outside my own — blockchain, advanced security or large-scale infrastructure. For those I stay your single point of contact, bring in qualified specialists, and say so upfront rather than presenting their work as mine.",
+  },
+];
 
 /** The inquiry-to-follow-up flow illustrated under AI Agents & Automation. */
 const AUTOMATION_FLOW: FlowStep[] = [
@@ -85,6 +116,7 @@ function ServiceVisual({ service }: { service: Service }) {
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd data={serviceListSchema()} />
       <PageHero
         eyebrow="Services"
         title={
@@ -200,6 +232,8 @@ export default function ServicesPage() {
           </p>
         </div>
       </section>
+
+      <Faq id="services-faq" eyebrow="Common questions" title="Questions clients usually start with" items={FAQ_ITEMS} surface />
 
       <ContactCTA
         standalone

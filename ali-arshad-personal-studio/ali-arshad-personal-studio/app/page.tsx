@@ -6,9 +6,10 @@ import { Hero } from "@/components/sections/Hero";
 import { HowIWork } from "@/components/sections/HowIWork";
 import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
 import { StudioStory } from "@/components/sections/StudioStory";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
-import { SERVICES } from "@/lib/services";
-import { SITE, activeSocials } from "@/lib/site";
+import { personSchema, webSiteSchema } from "@/lib/structured-data";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
   title: `${SITE.name} — ${SITE.role} | ${SITE.descriptor}`,
@@ -17,21 +18,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function HomePage() {
-  const sameAs = activeSocials().map((s) => s.url);
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: SITE.name,
-    jobTitle: SITE.role,
-    description: SITE.description,
-    ...(SITE.url ? { url: SITE.url } : {}),
-    ...(sameAs.length > 0 ? { sameAs } : {}),
-    knowsAbout: SERVICES.map((s) => s.title),
-  };
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <JsonLd data={personSchema()} />
+      <JsonLd data={webSiteSchema()} />
       {/* Who I am → What I do → What I've built → Why trust me → How to work with me */}
       <Hero />
       <ServiceShowcaseHome />

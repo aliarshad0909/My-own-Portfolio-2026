@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 import { servicesForProject } from "@/lib/services";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Case Studies",
+  title: "Case Studies — How Each Project Was Built",
   description:
     "How ideas became working products, creative systems and practical solutions — the challenge, the approach, the engineering decisions and what was verified, across twelve projects.",
   path: "/case-studies",
