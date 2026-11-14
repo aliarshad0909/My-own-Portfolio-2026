@@ -658,7 +658,10 @@
   }
 }
 
-/* Mobile menu */
+/* Mobile menu
+   Rendered into <body> by a portal, never inside .site-header: the header's
+   backdrop-filter makes it the containing block for fixed-position
+   descendants, which collapsed this overlay to the 68px header box. */
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -668,7 +671,11 @@
 .mobile-menu__backdrop {
   position: absolute;
   inset: 0;
+  width: 100%;
+  border: 0;
   background: rgba(5, 6, 8, 0.7);
+  cursor: pointer;
+  appearance: none;
 }
 
 .mobile-menu__panel {
@@ -676,9 +683,11 @@
   inset: 0 0 0 auto;
   display: flex;
   flex-direction: column;
-  width: min(100%, 400px);
-  padding: 12px var(--gutter) 28px;
+  /* Never full-bleed: a strip of the page stays tappable to dismiss. */
+  width: min(88%, 400px);
+  padding: 12px var(--gutter) max(28px, env(safe-area-inset-bottom));
   overflow-y: auto;
+  overscroll-behavior: contain;
   border-left: 1px solid var(--border);
   background: var(--bg);
   animation: menu-in var(--med) var(--ease) both;
@@ -725,6 +734,12 @@
 
 .mobile-menu__cta {
   margin-top: 24px;
+}
+
+@media (min-width: 1100px) {
+  .mobile-menu {
+    display: none;
+  }
 }
 
 /* ───────── Footer ───────── */
