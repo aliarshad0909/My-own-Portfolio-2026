@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { ContactCTA } from "@/components/sections/ContactCTA";
+import { CredentialsPreview } from "@/components/sections/CredentialsPreview";
+import { FeaturedWork } from "@/components/sections/FeaturedWork";
 import { Hero } from "@/components/sections/Hero";
-import { SelectedWork } from "@/components/sections/SelectedWork";
-import { StudioDashboard } from "@/components/sections/StudioDashboard";
+import { HowIWork } from "@/components/sections/HowIWork";
+import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
 import { StudioStory } from "@/components/sections/StudioStory";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES } from "@/lib/services";
@@ -29,10 +32,22 @@ export default function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      {/* Who I am → What I do → What I've built → Why trust me → How to work with me */}
       <Hero />
-      <SelectedWork />
-      <StudioDashboard />
+      <ServiceShowcaseHome />
+      <FeaturedWork />
       <StudioStory />
+      <CredentialsPreview />
+      <HowIWork />
+      <ContactCTA
+        standalone
+        eyebrow="Start here"
+        title="Have something worth building?"
+        text="From your first idea to a working digital product, creative campaign, or automated business process — let's discuss what you need."
+        button="Start a project"
+        secondaryHref="/services"
+        secondaryLabel="View services"
+      />
     </>
   );
 }

@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { CredentialGallery } from "@/components/credentials/CredentialGallery";
 import { ExperienceTimeline } from "@/components/experience/ExperienceTimeline";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { ExpertiseList } from "@/components/sections/StudioDashboard";
+import { ExpertiseList } from "@/components/sections/Expertise";
 import { ButtonLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { visibleCredentials } from "@/lib/credentials";
 import { EXPERIENCE, THREADS } from "@/lib/experience";
 import { TOOL_GROUPS, toolsInGroup } from "@/lib/expertise";
 import { pageMetadata } from "@/lib/seo";
@@ -137,7 +139,29 @@ export default function ExperiencePage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="skills-title">
+      <section className="section" aria-labelledby="creds-title">
+        <div className="container">
+          <div className="section-head reveal">
+            <p className="eyebrow eyebrow--plain">Credentials</p>
+            <h2 className="section-title" id="creds-title">
+              Continuously learning. Practically applying.
+            </h2>
+            <p className="section-sub">
+              Professional certifications, kept separate from employment and formal education. Each card carries the issuer&rsquo;s own title, dates and
+              identifier; where the issuer published a verification page, it is linked.
+            </p>
+          </div>
+          <div className="reveal">
+            <CredentialGallery />
+          </div>
+          <p className="fine-print creds-note">
+            {visibleCredentials().length} active {visibleCredentials().length === 1 ? "certification" : "certifications"}. Degree-level study is listed in
+            the timeline above, not here.
+          </p>
+        </div>
+      </section>
+
+      <section className="section section--surface" aria-labelledby="skills-title">
         <div className="container">
           <div className="section-head reveal">
             <p className="eyebrow eyebrow--plain">Skills &amp; tools</p>

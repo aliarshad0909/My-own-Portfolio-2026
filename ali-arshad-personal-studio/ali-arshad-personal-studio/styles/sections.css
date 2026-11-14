@@ -24,67 +24,65 @@
 }
 
 .hero__title {
-  font-size: var(--fs-hero);
+  /*
+   * Sized so the longest line ("Endless possibilities.", 22 characters) fits
+   * the copy column without wrapping at every breakpoint. The three-line
+   * stack is the composition; a wrapped line turns it into five and the
+   * coral middle line stops reading as emphasis.
+   */
+  font-size: clamp(2rem, 0.6rem + 4.1vw, 3.9rem);
   font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  display: grid;
+  gap: 2px;
 }
 
-.hero__role {
+.hero__line {
   display: block;
-  margin-top: 10px;
-  color: #d5d2cc;
-  font-size: clamp(1.5rem, 1.1rem + 1.9vw, 2.5rem);
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  max-width: 16ch;
+}
+
+/* The middle line carries the coral; the other two stay in the warm off-white,
+   so the accent reads as emphasis rather than decoration. */
+.hero__line--accent {
+  color: var(--coral);
 }
 
 .hero__lead {
-  margin-top: 22px;
+  margin-top: 26px;
   color: #e4e1db;
   font-size: var(--fs-lead);
-  max-width: 54ch;
+  max-width: 50ch;
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
-.hero__points {
-  display: grid;
-  gap: 16px;
-  margin-top: 32px;
-}
-
-.hero__points li {
+/* A single hairline above the discipline row ties the copy block together. */
+.hero__disciplines {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.hero__disciplines li {
+  display: flex;
   align-items: center;
-}
-
-.hero__points svg {
-  flex: none;
-  color: var(--text);
-}
-
-.hero__points span {
-  display: grid;
-  line-height: 1.3;
-}
-
-.hero__points strong {
-  font-size: var(--fs-small);
-  font-weight: 600;
-}
-
-.hero__points small {
+  gap: 8px;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: var(--fs-small);
+}
+
+.hero__disciplines svg {
+  flex: none;
+  color: var(--coral);
 }
 
 .hero__visual {
@@ -129,7 +127,8 @@
 
 @media (min-width: 1024px) {
   .hero__inner {
-    grid-template-columns: minmax(0, 54fr) minmax(0, 46fr);
+    /* The copy column takes the larger share: the headline is the hero. */
+    grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
     align-items: end;
     gap: 24px;
     padding-top: 0;
@@ -2312,4 +2311,827 @@
   .next-steps {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+/* ── Credentials ──────────────────────────────────────────────────────── */
+.cred-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.cred {
+  display: grid;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+  transition: border-color var(--med) var(--ease);
+}
+
+.cred:hover,
+.cred:focus-within {
+  border-color: var(--coral-line);
+}
+
+/* The preview is a button: the certificate opens at full size from it. */
+.cred__preview {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--border-soft);
+  background: #f4f1ec;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cred__thumb {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform var(--med) var(--ease);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cred__preview:hover .cred__thumb {
+    transform: scale(1.02);
+  }
+}
+
+.cred__zoom {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  background: linear-gradient(to top, rgba(11, 13, 16, 0.94), rgba(11, 13, 16, 0.55));
+  color: var(--text);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity var(--fast) var(--ease);
+}
+
+.cred__preview:hover .cred__zoom,
+.cred__preview:focus-visible .cred__zoom {
+  opacity: 1;
+}
+
+/* Touch devices get no hover, so the label stays visible there. */
+@media (hover: none) {
+  .cred__zoom {
+    opacity: 1;
+  }
+}
+
+/* Credential with no certificate image: an issuer monogram instead. */
+/* Matches the certificate thumbnail's ratio so cards in a row line up
+   whether or not a credential has an image. */
+.cred__preview--mark {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  aspect-ratio: 570 / 440;
+  background: linear-gradient(150deg, rgba(255, 122, 92, 0.1), var(--surface));
+  cursor: default;
+}
+
+.cred__mark {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px solid var(--coral-line);
+  color: var(--coral);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cred__issuer-line {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cred__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 22px;
+}
+
+.cred__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.cred__prog {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cred__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-card);
+  line-height: 1.25;
+}
+
+.cred__issuer {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.cred__issuer strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cred__dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 26px;
+  margin-top: 2px;
+}
+
+.cred__dates dt {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cred__dates dd {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+
+.cred__code {
+  flex-basis: 100%;
+  min-width: 0;
+}
+
+.cred__code dd {
+  overflow-wrap: anywhere;
+}
+
+.cred__code code {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.cred__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.cred__skills li {
+  padding: 4px 11px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+.cred__actions {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.cred__verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 2px;
+  min-height: 40px;
+  color: var(--coral);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.cred__verify:hover,
+.cred__verify:focus-visible {
+  color: var(--coral-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cred__noverify {
+  display: block;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  line-height: 1.5;
+}
+
+.cred--compact .cred__body {
+  padding: 16px 18px 18px;
+  gap: 8px;
+}
+
+.cred--compact .cred__title {
+  font-size: 1.0625rem;
+}
+
+@media (min-width: 760px) {
+  .cred-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cred {
+    grid-template-rows: auto 1fr;
+  }
+}
+
+/* ── Certificate dialog ───────────────────────────────────────────────── */
+.cert-dialog {
+  width: min(960px, 94vw);
+  max-height: 92vh;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  overflow: auto;
+}
+
+.cert-dialog::backdrop {
+  background: rgba(7, 8, 10, 0.82);
+  backdrop-filter: blur(3px);
+}
+
+.cert-dialog__inner {
+  display: grid;
+  gap: 0;
+}
+
+.cert-dialog__head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.cert-dialog__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-card);
+  line-height: 1.25;
+}
+
+.cert-dialog__sub {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+.cert-dialog__sub code {
+  font-size: 0.8125rem;
+}
+
+.cert-dialog__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.cert-dialog__close:hover,
+.cert-dialog__close:focus-visible {
+  border-color: var(--coral-line);
+  color: var(--coral);
+}
+
+.cert-dialog__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
+
+.creds-note {
+  margin-top: 20px;
+}
+
+/* ── Home: section head with an inline aside ──────────────────────────── */
+.section-head--row {
+  display: grid;
+  gap: 14px;
+  align-items: end;
+}
+
+.section-sub--inline {
+  max-width: 46ch;
+}
+
+@media (min-width: 900px) {
+  .section-head--row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 36px;
+  }
+
+  .section-head--row .section-sub--inline {
+    text-align: right;
+    justify-self: end;
+  }
+}
+
+/* ── Home: service grid ───────────────────────────────────────────────── */
+.svc-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.svc-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+  transition: border-color var(--med) var(--ease), background var(--med) var(--ease);
+}
+
+.svc-card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background: var(--coral);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--med) var(--ease);
+}
+
+.svc-card:hover,
+.svc-card:focus-within {
+  border-color: var(--coral-line);
+  background: var(--surface);
+}
+
+.svc-card:hover::before,
+.svc-card:focus-within::before {
+  transform: scaleX(1);
+}
+
+.svc-card__link {
+  display: grid;
+  gap: 8px;
+  padding: 24px 22px 22px;
+  color: inherit;
+  text-decoration: none;
+  min-height: 100%;
+}
+
+.svc-card__num {
+  font-family: var(--font-heading);
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--coral);
+}
+
+.svc-card__icon {
+  color: var(--coral);
+  margin-top: 4px;
+}
+
+.svc-card__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-card);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.svc-card__text {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.svc-card__flag {
+  justify-self: start;
+  padding: 3px 10px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+.svc-card__go {
+  margin-top: auto;
+  padding-top: 12px;
+  color: var(--muted);
+  transition: transform var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.svc-card:hover .svc-card__go {
+  color: var(--coral);
+  transform: translateX(3px);
+}
+
+@media (min-width: 640px) {
+  .svc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .svc-card__link {
+    grid-template-rows: auto auto auto 1fr auto;
+  }
+}
+
+@media (min-width: 1040px) {
+  .svc-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ── Home: featured work ──────────────────────────────────────────────── */
+.fw-list {
+  display: grid;
+  gap: 20px;
+}
+
+.fw {
+  position: relative;
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+  transition: border-color var(--med) var(--ease);
+}
+
+.fw:hover,
+.fw:focus-within {
+  border-color: var(--coral-line);
+}
+
+.fw__media {
+  display: block;
+  overflow: hidden;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.fw__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 16 / 10;
+}
+
+.fw__body {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 24px 24px 26px;
+}
+
+.fw__index {
+  font-family: var(--font-heading);
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--coral);
+}
+
+.fw__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fw__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+  line-height: 1.22;
+}
+
+.fw__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Full-card target; the z-index keeps it above later siblings. */
+.fw__title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.fw__title a:hover,
+.fw__title a:focus-visible {
+  color: var(--coral);
+}
+
+.fw__cat {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+.fw__challenge {
+  color: #ded9d2;
+  font-size: 0.9375rem;
+  max-width: 54ch;
+}
+
+.fw__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.fw__stack li {
+  padding: 3px 10px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+.fw__go {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 14px;
+  color: var(--coral);
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+.fw__note {
+  margin-top: 24px;
+  max-width: 78ch;
+}
+
+@media (min-width: 880px) {
+  .fw {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .fw__media {
+    border-bottom: 0;
+    border-right: 1px solid var(--border-soft);
+  }
+
+  .fw__img {
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+
+  /* Alternating rhythm: the image swaps side on every other row. The DOM order
+     stays media-then-copy, which is the sensible reading order. */
+  .fw--reverse .fw__media {
+    order: 2;
+    border-right: 0;
+    border-left: 1px solid var(--border-soft);
+  }
+
+  .fw--reverse .fw__body {
+    order: 1;
+  }
+
+  .fw__body {
+    padding: 30px 30px 32px;
+  }
+}
+
+/* ── Home: personal introduction ──────────────────────────────────────── */
+.intro {
+  display: grid;
+  gap: 28px;
+  align-items: center;
+}
+
+.intro__media {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 380px);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.intro__portrait {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.intro__copy > p {
+  color: var(--muted);
+  margin-top: 14px;
+  max-width: 58ch;
+}
+
+.intro__strands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.intro__strands li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+.intro__strands svg {
+  flex: none;
+  color: var(--coral);
+}
+
+.intro__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+@media (min-width: 880px) {
+  .intro {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 48px;
+  }
+
+  .intro__media {
+    justify-self: start;
+  }
+}
+
+/* ── Home: four-stage workflow ────────────────────────────────────────── */
+.stages {
+  display: grid;
+  gap: 14px;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 26px 22px 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.stage__num {
+  font-family: var(--font-heading);
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--coral);
+}
+
+.stage__icon {
+  color: var(--coral);
+}
+
+.stage__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-card);
+}
+
+.stage__text {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 700px) {
+  .stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1040px) {
+  .stages {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* Connector between stages, read left to right. */
+  .stage:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 44px;
+    right: -13px;
+    width: 13px;
+    height: 1px;
+    background: var(--coral-line);
+  }
+}
+
+/* ── CTA panel: optional second action ────────────────────────────────── */
+.cta-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ── About: credentials strip ─────────────────────────────────────────── */
+.cred-strip {
+  display: grid;
+  gap: 22px;
+  align-items: center;
+}
+
+.cred-strip__list {
+  display: grid;
+  gap: 10px;
+}
+
+.cred-strip__list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+
+.cred-strip__mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--coral-line);
+  color: var(--coral);
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.cred-strip__text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cred-strip__text strong {
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cred-strip__text small {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+@media (min-width: 960px) {
+  .cred-strip {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 36px;
+  }
+}
+
+/* Links in the contact detail list are the only control in their row, so they
+   carry the tap target rather than relying on the row. Negative margin keeps
+   the list rhythm unchanged. */
+.contact__details a {
+  display: inline-block;
+  padding-block: 10px;
+  margin-block: -10px;
 }
