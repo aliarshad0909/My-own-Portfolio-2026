@@ -1,0 +1,176 @@
+/*
+ * Motion layer.
+ *
+ * Every rule here is an enhancement. The page is complete and readable with
+ * this file deleted: nothing starts hidden, nothing depends on JavaScript, and
+ * every scroll-driven animation uses fill-mode `forwards` so an element keeps
+ * its natural styles until the moment it enters view (see base.css for why).
+ *
+ * Reduced motion disables all of it. Browsers without scroll-driven animation
+ * support simply render the resting state.
+ *
+ * Budget: no continuous animation anywhere except a hover response. No
+ * JavaScript, no animation library, no video. If externally produced motion
+ * assets arrive later, they slot into <MotionMedia> (components/ui/MotionMedia.tsx),
+ * which falls back to a still under reduced motion and when autoplay fails.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ── Hero: the eyebrow rule draws in, then the copy enters ─────────── */
+  @keyframes draw-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  .page-hero .eyebrow::before,
+  .hero .eyebrow::before {
+    transform-origin: left center;
+    animation: draw-x 600ms var(--ease) both;
+  }
+
+  /* Cascade the hero's children so the title, lead and actions settle in
+     reading order. This is done with longer durations, not delays: a delay
+     with fill-mode `both` holds the element at opacity 0 until it starts,
+     which is exactly the hidden-content defect this pass removed. With a
+     zero delay every element is moving from the first frame. */
+  .enter > .page-title,
+  .enter > .hero__title {
+    animation: enter 650ms var(--ease) both;
+  }
+  .enter > .lead {
+    animation: enter 850ms var(--ease) both;
+  }
+  .enter > .hero__actions,
+  .enter > .hero-facts {
+    animation: enter 1050ms var(--ease) both;
+  }
+
+  @supports (animation-timeline: view()) {
+    /* ── Experience timeline: rail draws down, dots settle in ─────────── */
+    @keyframes draw-y {
+      from {
+        transform: scaleY(0);
+      }
+    }
+
+    @keyframes settle {
+      from {
+        transform: scale(0.6);
+        opacity: 0;
+      }
+    }
+
+    .xp__connector {
+      transform-origin: top center;
+      animation: draw-y linear forwards;
+      animation-timeline: view();
+      animation-range: entry 0px entry 260px;
+    }
+
+    .xp__dot {
+      animation: settle linear forwards;
+      animation-timeline: view();
+      animation-range: entry 0px entry 120px;
+    }
+
+    /* ── Flow diagrams: steps stagger in, connectors draw after them ─── */
+    @keyframes step-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+
+    .flow__step {
+      animation: step-in linear forwards;
+      animation-timeline: view();
+    }
+
+    /* Each step's range starts a little later, read top to bottom. */
+    .flow__step:nth-child(1) { animation-range: entry 0px entry 120px; }
+    .flow__step:nth-child(2) { animation-range: entry 30px entry 150px; }
+    .flow__step:nth-child(3) { animation-range: entry 60px entry 180px; }
+    .flow__step:nth-child(4) { animation-range: entry 90px entry 210px; }
+    .flow__step:nth-child(5) { animation-range: entry 120px entry 240px; }
+
+    .flow__step:not(:last-child)::after {
+      transform-origin: top center;
+      animation: draw-y linear forwards;
+      animation-timeline: view();
+      animation-range: entry 60px entry 200px;
+    }
+
+    /* ── Narrative arc and process cards: a gentle staggered lift ────── */
+    .arc__item,
+    .process__item,
+    .pillar,
+    .next-step {
+      animation: step-in linear forwards;
+      animation-timeline: view();
+      animation-range: entry 0px entry 160px;
+    }
+
+    .arc__item:nth-child(2),
+    .process__item:nth-child(2),
+    .pillar:nth-child(2),
+    .next-step:nth-child(2) {
+      animation-range: entry 20px entry 180px;
+    }
+
+    .arc__item:nth-child(3),
+    .process__item:nth-child(3),
+    .pillar:nth-child(3),
+    .next-step:nth-child(3) {
+      animation-range: entry 40px entry 200px;
+    }
+
+    .arc__item:nth-child(4),
+    .process__item:nth-child(4) {
+      animation-range: entry 60px entry 220px;
+    }
+
+    .process__item:nth-child(5) {
+      animation-range: entry 80px entry 240px;
+    }
+  }
+
+  /* ── Service showcase: the lead image eases on hover ───────────────── */
+  .showcase__lead .showcase__img {
+    transition: transform 600ms var(--ease);
+  }
+
+  @media (hover: hover) {
+    .showcase__lead:hover .showcase__img,
+    .showcase__lead:focus-visible .showcase__img {
+      transform: scale(1.025);
+    }
+  }
+
+  /* ── Case cards: the image settles slightly on hover ───────────────── */
+  .case-card__media img {
+    transition: transform 700ms var(--ease);
+  }
+
+  @media (hover: hover) {
+    .case-card:hover .case-card__media img {
+      transform: scale(1.03);
+    }
+  }
+}
+
+/* Print: nothing moves and nothing is offset. */
+@media print {
+  .xp__connector,
+  .xp__dot,
+  .flow__step,
+  .flow__step::after,
+  .arc__item,
+  .process__item,
+  .pillar,
+  .next-step {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

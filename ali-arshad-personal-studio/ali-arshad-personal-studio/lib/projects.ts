@@ -66,13 +66,25 @@ export type Attribution = {
   modifications: string[];
 };
 
+/** A decision worth explaining, with the reasoning rather than just the choice. */
+export type Decision = { title: string; text: string };
+
 export type CaseStudy = {
   /** Client or project background. */
   background?: string;
   /** Problem or challenge. */
   challenge?: string;
+  /** What the project set out to do — scope, not outcomes. */
+  objectives?: string[];
   /** Strategy and approach. */
   approach?: string;
+  /** Features that are genuinely implemented and working. Never aspirational. */
+  features?: string[];
+  /**
+   * Engineering and creative decisions: architecture, data modelling, interface
+   * design, error handling, state, accessibility, testing, automation logic.
+   */
+  decisions?: Decision[];
   /** Production or development process — one entry per step. */
   process?: string[];
   /** What was delivered. */
@@ -176,6 +188,38 @@ const COMMERCE: Project = {
     ],
     solution:
       "A static, deployable storefront of roughly 2,400 lines of TypeScript. Filters, cart, checkout, order history and admin all work against the same in-browser state, so an order placed in the shop reduces the stock the admin reports. Nothing is faked at the interface layer: where a real store would call a payment provider, the demo says so plainly instead of showing a false success.",
+    objectives: [
+      "Build the commerce mechanics that portfolio storefronts usually fake: real filtering, real variants, a cart that cannot oversell.",
+      "Keep pricing, promotions, shipping and tax correct under every combination, including a discount that drops an order back below the free-shipping threshold.",
+      "Make the catalogue genuinely editable through an admin, so the data is not a frozen fixture.",
+      "Prove the shopping journeys work end to end rather than asserting they do.",
+    ],
+    features: [
+      "Catalogue with category, glaze and price filters, search and sorting",
+      "Product pages with glaze and size variants that change price, stock and the illustration",
+      "Cart with quantity steppers, stock caps, promotion codes and a live order summary",
+      "Three-step checkout with field-level validation, shipping options and a simulated payment",
+      "Product admin with create, edit, delete, validation, confirm-before-delete and live preview",
+      "Wishlist, order confirmation and an order history view",
+    ],
+    decisions: [
+      {
+        title: "Commerce rules live outside React",
+        text: "Pricing, cart, promotions, shipping, tax and checkout are plain TypeScript modules with no React imports. They can be unit tested directly and handed to a real backend later without rewriting them.",
+      },
+      {
+        title: "Every amount is an integer in cents",
+        text: "Money is never a float. A catalogue price, a percentage discount and a tax estimate all compose without drift, which is why the totals in the tests are exact rather than approximate.",
+      },
+      {
+        title: "Product art is drawn in code",
+        text: "All eight product shapes are parametric SVG tinted at runtime by the selected glaze, so changing a variant visibly changes the product. No stock photography, and no gap between what the data says and what you see.",
+      },
+      {
+        title: "Stock is enforced on the server path too",
+        text: "The checkout re-validates stock at submission rather than trusting the cart, so a quantity edited in another tab cannot oversell.",
+      },
+    ],
     results: [
       "18 unit tests and 38 browser checks pass, covering catalogue, cart, checkout, admin CRUD and keyboard access.",
       "Verified no horizontal overflow at 360, 390, 768, 1024 and 1440 px, with interactive targets at least 40 px.",
@@ -235,6 +279,37 @@ const ANALYTICS: Project = {
     ],
     solution:
       "A dashboard where the headline tiles, charts, breakdowns and product table are all derived from one dataset, so they cannot contradict one another. Changing the period or granularity recomputes everything from source.",
+    objectives: [
+      "Generate a dataset substantial enough that the analytics have something real to be wrong about.",
+      "Make every figure on the page derive from one source, so the headline tiles and the table cannot disagree.",
+      "Compare each period against the correct previous period rather than an arbitrary offset.",
+      "Keep the charts readable without sight of them.",
+    ],
+    features: [
+      "Period selector with correct previous-period comparison and percentage deltas",
+      "Revenue trend chart with day, week and month granularity",
+      "Channel and category breakdowns driven by the same filters",
+      "Sortable product performance table with CSV export",
+      "Hand-drawn SVG charts with a visually hidden data table behind each one",
+    ],
+    decisions: [
+      {
+        title: "A seeded generator, not a fixture file",
+        text: "A linear congruential generator with a fixed seed produces the same ~7,100 orders on every load. That makes exact assertions possible in tests while keeping the data varied enough to exercise the grouping and bucketing code.",
+      },
+      {
+        title: "Pure analytics functions",
+        text: "summarise, delta, previousPeriod, bucketOf, timeSeries, groupBy and productPerformance take data and return data. The interface renders what they return and computes nothing itself, so a disagreement between a tile and a table is impossible by construction.",
+      },
+      {
+        title: "No charting library",
+        text: "The charts are SVG written for this project. It keeps the bundle small, and it means the axis labels and tick spacing are computed from the data rather than from a library's defaults.",
+      },
+      {
+        title: "Every chart has a table",
+        text: "Each chart ships with a visually hidden table of the same figures. A screen reader gets the numbers rather than an alt attribute summarising them.",
+      },
+    ],
     results: [
       "15 unit tests and 14 browser checks pass against the generated dataset.",
       "Testing caught a real generator defect: every customer was created in the first months, so \"new customers\" read 0 and −100% for every later period. Fixed with a customer pool that grows over time.",
@@ -291,6 +366,36 @@ const SUPPORT_AGENT: Project = {
     ],
     solution:
       "An agent that answers in-scope questions with sourced, quoted text, shows which article it used, and escalates rather than guessing when nothing scores highly enough.",
+    objectives: [
+      "Answer in-scope support questions from a knowledge base without inventing policy.",
+      "Know when retrieval has not found the answer, and escalate instead of guessing.",
+      "Make the retrieval inspectable, so a wrong answer can be diagnosed rather than re-prompted.",
+    ],
+    features: [
+      "BM25 retrieval over a 24-article knowledge base with title boosting",
+      "Bidirectional synonym expansion, so 'refund' and 'money back' reach the same articles",
+      "Replies quoted verbatim from the source article, with the article shown alongside",
+      "A confidence floor that routes low-scoring queries to a human hand-off",
+      "Suggested starter questions and a visible knowledge-base panel",
+    ],
+    decisions: [
+      {
+        title: "Lexical retrieval, not a language model",
+        text: "BM25 scores are numbers you can inspect and a floor you can tune. The interface says so plainly, because a visitor should know what they are looking at.",
+      },
+      {
+        title: "The agent can only say what an article says",
+        text: "Sourced replies are verbatim article text. A test asserts this, which removes the failure mode that matters most in support automation: a confident answer that invents policy.",
+      },
+      {
+        title: "Synonyms expand in both directions",
+        text: "The first implementation mapped one way only, so a query using the less common word found nothing. Each group now maps every word to every other.",
+      },
+      {
+        title: "Escalation is a feature, not a fallback",
+        text: "Below the confidence floor the agent hands off rather than returning its best weak match. A system that answers everything answers badly.",
+      },
+    ],
     results: [
       "43 unit tests and 17 browser checks pass, including the verbatim-source assertion and the escalation boundary.",
       "The interface states plainly that this is lexical retrieval, not a language model, so no one mistakes what they are looking at.",
@@ -345,6 +450,36 @@ const VOICE_AGENT: Project = {
     ],
     solution:
       "A qualification flow that completes by voice where speech works and by typing where it does not, and that says which mode it is in instead of pretending.",
+    objectives: [
+      "Qualify an inbound enquiry by filling a small set of slots, by voice where the browser allows it.",
+      "Degrade honestly to typed input where speech is unavailable, rather than appearing to listen.",
+      "Keep the dialogue inspectable and testable without any speech at all.",
+    ],
+    features: [
+      "Deterministic slot-filling state machine with required and optional slots",
+      "Extraction of names, numbers written as words, timeframes and intent phrases",
+      "Speech recognition and synthesis via the Web Speech API, behind capability detection",
+      "An eight-second listening timeout so a silent failure surfaces as a message",
+      "A visible transcript and a live summary of the answers captured so far",
+    ],
+    decisions: [
+      {
+        title: "An explicit state machine",
+        text: "The dialogue is a set of states and transitions rather than emergent behaviour, so it can be driven by text in tests and its paths enumerated.",
+      },
+      {
+        title: "Capability detection checks for voices, not just APIs",
+        text: "Headless Chromium exposes the speech APIs, reports zero voices and never returns a result. Checking that getVoices() is non-empty is what separates 'supported' from 'present but useless'.",
+      },
+      {
+        title: "A loop guard on every slot",
+        text: "An unrecognised answer to an optional slot records 'not given' and moves on; a required slot is re-asked once and then hands off. The first version re-asked for ever.",
+      },
+      {
+        title: "Extraction tested against real phrasings",
+        text: "Four genuine defects came out of this — a greedy pattern matching a bare 'a', 'for now' read as 'immediately', a case-sensitive name pattern, and plurals breaking a word boundary.",
+      },
+    ],
     results: [
       "28 unit tests and 20 browser checks pass.",
       "Testing found four genuine extraction defects: a greedy pattern matching a bare \"a\", \"for now\" being read as \"immediately\", a case-sensitive name pattern missing lowercase \"i'm\", and plurals breaking a word boundary.",
@@ -397,6 +532,31 @@ const N8N: Project = {
     ],
     solution:
       "An importable workflow with its business logic under test, plus example inputs and a diagram.",
+    objectives: [
+      "Show the logic inside an automation, not a screenshot of a canvas with nodes on it.",
+      "Make the Code nodes testable without running the whole workflow against live services.",
+      "Keep credentials out of the exported workflow entirely.",
+    ],
+    features: [
+      "15-node workflow: webhook, validation, normalisation, scoring, deduplication, branch, enrichment, notification and response",
+      "Lead scoring with configurable thresholds and a hot/cold branch",
+      "Deduplication against workflow static data within a time window",
+      "Three example payloads — hot, cold and invalid — with asserted end-to-end outcomes",
+    ],
+    decisions: [
+      {
+        title: "The tests execute the workflow's own JavaScript",
+        text: "The suite reads the workflow JSON, extracts each Code node's source and runs it with $input and $getWorkflowStaticData stubbed. The code under test is the code that would run in n8n, so editing the workflow file is visible to the tests.",
+      },
+      {
+        title: "Validation happens before scoring",
+        text: "An invalid submission is rejected with a reason rather than scored as a zero, which keeps bad data out of the CRM instead of inside it with a low number attached.",
+      },
+      {
+        title: "Credentials are referenced, never embedded",
+        text: "The export names the credentials it needs and contains no values, tokens or endpoints.",
+      },
+    ],
     results: [
       "22 tests pass by executing the workflow's own Code-node JavaScript.",
       "No credentials, tokens or endpoints are present in the exported workflow — only named credential references.",
@@ -451,6 +611,33 @@ const SUPPLY_CHAIN: Project = {
     ],
     solution:
       "A system where the stock figure, the movement history, the purchase orders and the reorder advice are all views of one ledger, so they agree by construction.",
+    objectives: [
+      "Make stock impossible to drift by never storing it as a number.",
+      "Keep purchase orders, receipts and reorder advice consistent with the same record.",
+      "Refuse the operations that corrupt an inventory system rather than recording them.",
+    ],
+    features: [
+      "Append-only movement ledger with reason, reference and timestamp on every entry",
+      "On-hand, on-order and running balances computed from the ledger",
+      "Transfers posted as matched pairs, so stock cannot be created or destroyed",
+      "Purchase orders with partial receipts, status derivation and over-receipt refusal",
+      "Reorder suggestions that account for stock already on order",
+      "Stock valuation and a movement history view per SKU",
+    ],
+    decisions: [
+      {
+        title: "The ledger is the only source of truth",
+        text: "Balance is the sum of movements, never a stored field. Every figure can be explained by replaying its movements, and a failed write cannot leave a quantity that no longer matches reality.",
+      },
+      {
+        title: "The posting gate refuses invalid movements",
+        text: "A movement that would drive stock negative, or that carries the wrong sign for its type, is rejected at the boundary rather than written and corrected later.",
+      },
+      {
+        title: "Reorder advice and the stock table share a calculation",
+        text: "They did not at first: the headline said 'below reorder: 0' while the table flagged an item, because one counted stock on order and the other did not. Both now use the same figure and a test asserts they agree.",
+      },
+    ],
     results: [
       "31 unit tests and 27 browser checks pass.",
       "Testing caught a contradiction the interface was showing: the headline said \"below reorder: 0\" while the table flagged an item. The reorder calculation counted stock on order and the table did not. Both now use the same figure, and a test asserts they agree.",
@@ -504,6 +691,32 @@ const SOURCING: Project = {
     ],
     solution:
       "A comparison where changing quantity or incoterm visibly reorders the suppliers, because the full cost is recomputed rather than the unit price being decorated.",
+    objectives: [
+      "Compare suppliers on landed cost rather than unit price.",
+      "Make the incoterm decide which cost lines the buyer actually pays.",
+      "Score suppliers against each other rather than against an invented ideal.",
+    ],
+    features: [
+      "Landed-cost model across EXW, FOB, CIF and DDP with per-incoterm cost allocation",
+      "Duty lookup by HS code and freight costed on the greater of volumetric and actual weight",
+      "Weighted supplier score across cost, speed, quality, reliability and responsiveness",
+      "Working-day-aware arrival estimates, shipment progress and milestone variance",
+      "Quantity and incoterm controls that visibly reorder the comparison",
+    ],
+    decisions: [
+      {
+        title: "Cost lines are modelled, not approximated",
+        text: "Freight, duty, insurance and handling are separate lines, and the incoterm zeroes the ones the seller already covers. That is what lets changing EXW to DDP reverse a ranking.",
+      },
+      {
+        title: "Relative scoring",
+        text: "Suppliers are scored against each other, so the comparison answers 'which of these' rather than grading everyone against an absolute that nobody set.",
+      },
+      {
+        title: "Integer-cent arithmetic throughout",
+        text: "The same rule as the storefront: money never touches a float, so a landed cost built from six lines across two currencies stays exact.",
+      },
+    ],
     results: [
       "31 unit tests and 21 browser checks pass.",
       "One of my test expectations assumed the cheapest unit price would not also be the cheapest landed — in this dataset it is. The test was rewritten to assert what is actually true: it still loses on the weighted score.",
@@ -555,6 +768,31 @@ const BLENDER: Project = {
     ],
     solution:
       "A complete, tested scene system that will produce the specified shots when run in Blender. The renders themselves do not exist.",
+    objectives: [
+      "Make lighting and camera setups reproducible as code rather than hand-placed per shot.",
+      "Keep the geometry and placement maths verifiable without Blender present.",
+      "Document honestly that nothing has been rendered.",
+    ],
+    features: [
+      "Scene builder with geometry, three material presets and three-point lighting",
+      "Spherical camera placement with six defined product angles",
+      "A 120-frame turntable with configurable frame range",
+      "A bpy fallback so every pure function is importable and testable outside Blender",
+    ],
+    decisions: [
+      {
+        title: "bpy is imported defensively",
+        text: "Outside Blender, bpy falls back to None and the pure functions — camera positions, light positions, frame ranges — remain importable. That is what makes 20 tests possible in an environment with no Blender installed.",
+      },
+      {
+        title: "Cameras are placed on a sphere, not typed in",
+        text: "Angles are computed from azimuth, elevation and radius, so a new shot is three numbers rather than a hand-tuned transform.",
+      },
+      {
+        title: "RENDER_STATUS.md states the gap in its first line",
+        text: "No image in the project has been rendered. Saying so in the repository, on the card and in this case study was the alternative to generating something and implying it came from the scene.",
+      },
+    ],
     results: [
       "20 Python tests pass outside Blender.",
       "**Nothing has been rendered.** The cover image on this card is a placeholder, labelled as sample media, not output from this project.",
@@ -606,6 +844,32 @@ const MOTION: Project = {
     ],
     solution:
       "Two tools that take a master file and produce everything the portfolio needs, including the JSON snippet to paste into this project data file with the poster's real dimensions filled in.",
+    objectives: [
+      "Take a master file to the files a website actually serves, repeatably.",
+      "Get the details right that are invisible until someone complains — faststart, silent previews, even dimensions.",
+      "Verify the output by probing it rather than trusting the flags.",
+    ],
+    features: [
+      "H.264 encode with +faststart and a VP9 alternative",
+      "Silent six-second hover preview, with the audio track dropped rather than failing on silent sources",
+      "Poster extraction a quarter of the way in, with dimensions reported back",
+      "Contact sheets from evenly spaced frames, inset from both ends to skip slates and fade-ups",
+      "A JSON snippet generated for pasting into the project data file",
+    ],
+    decisions: [
+      {
+        title: "Encode decisions come from a real probe",
+        text: "The tool probes the source and refuses to upscale past it, keeps dimensions even for VP9, and drops audio when the source is silent. None of that is assumed from the filename.",
+      },
+      {
+        title: "The tests run ffmpeg",
+        text: "They generate a clip, run the pipeline over it and probe the results. A mocked encoder would have passed with the wrong flags; probing the output cannot.",
+      },
+      {
+        title: "Frames are inset from both ends",
+        text: "A contact sheet sampled from 0% to 100% is mostly slate and fade-up. Insetting gives frames that represent the content.",
+      },
+    ],
     results: [
       "28 tests pass by running ffmpeg and ffprobe for real.",
       "**No finished video is in this repository.** Footage and edits have not been supplied, and nothing has been generated to stand in for them. The cover image here is a placeholder, labelled as sample media.",
@@ -667,6 +931,37 @@ const BRAND_SYSTEM: Project = {
     ],
     solution:
       "A brand system where the accessibility claims are computed in front of you, the type scale is generated rather than listed, and every asset downloads as a real file.",
+    objectives: [
+      "Make the accessibility claims computable rather than asserted.",
+      "Generate the type scale from a ratio so it cannot drift out of step.",
+      "Produce assets that download as real files, and email markup that survives real clients.",
+    ],
+    features: [
+      "Palette with every documented pairing measured live against its WCAG threshold",
+      "A contrast checker for any two colours, graded against AA and AAA",
+      "A modular type scale regenerated from an adjustable base size and ratio",
+      "Mark, three lockups and three social templates, each downloading as a real SVG",
+      "A table-based HTML email with a plain-text alternative, previewed in an iframe",
+      "A landing page built from the same tokens",
+    ],
+    decisions: [
+      {
+        title: "Contrast is computed, not typed in",
+        text: "The WCAG relative-luminance and contrast formulas are implemented, so the table is a measurement that can fail. One test asserts every pairing passes; a second asserts a known-bad pairing fails, so the first cannot pass vacuously.",
+      },
+      {
+        title: "The checker overruled the palette",
+        text: "The original Clay accent measured 3.36:1 on Paper — below the 4.5:1 needed for body text. It was darkened to #A94F30 at 5.12:1, and the palette carries a note recording why.",
+      },
+      {
+        title: "Tables and inline styles for email",
+        text: "Outlook renders mail with the Word engine, so flexbox and grid are unreliable and external stylesheets can be stripped. A 600px table with inline styles is what arrives looking right.",
+      },
+      {
+        title: "Downloads are serialised from the live DOM",
+        text: "What you see is what the file contains, because the SVG is cloned from the rendered element rather than regenerated from a second source.",
+      },
+    ],
     results: [
       "29 unit tests and 21 browser checks pass.",
       "The checker rejected the original Clay accent: #C96F4A measured 3.36:1 on Paper, below the 4.5:1 needed for body text. It was darkened to #A94F30 (5.12:1) and the palette carries a note recording why.",
@@ -729,6 +1024,37 @@ const CHAIN_EXPLORER: Project = {
     ],
     solution:
       "An explorer that reads blocks, transactions, receipts and addresses, decodes calldata selectors and log topics, checksums every address it displays, and tells you plainly whether it is reading a fixture or a live node.",
+    objectives: [
+      "Implement the primitives — hash function, address encoding, RPC protocol — rather than importing them.",
+      "Stay read-only by construction, with no path that could sign or send.",
+      "Never let a fixture be mistaken for a live chain.",
+    ],
+    features: [
+      "Block list with gas usage, base fee and validator, and block, transaction and address views",
+      "Receipts with status, gas used and the fee actually paid",
+      "Calldata selectors and log topics named from a local signature table",
+      "EIP-55 validation that rejects a mixed-case address with a bad checksum and offers the correction",
+      "Read-only EIP-1193 wallet connection with honest states when no wallet is present",
+      "A visible log of every JSON-RPC call the page has made, with outcome and duration",
+    ],
+    decisions: [
+      {
+        title: "Keccak-256, not SHA3-256",
+        text: "Ethereum uses the original Keccak padding (0x01), not NIST's (0x06), and the two produce completely different digests. The suite checks the published vectors and adds an explicit assertion that the output is not SHA3-256.",
+      },
+      {
+        title: "Every quantity is a bigint",
+        text: "A balance in wei overflows a JS number. Formatting truncates rather than rounds, so an explorer never shows more than the chain holds.",
+      },
+      {
+        title: "The fixture is a node, not a mock",
+        text: "It implements the JSON-RPC envelope, returns null for a missing hash and -32601 for an unknown method, and respects the AbortSignal. The client path under test is the real one.",
+      },
+      {
+        title: "Read-only is enforced by a test",
+        text: "The wallet module is asserted never to call eth_sendTransaction, eth_sign, personal_sign, eth_signTypedData_v4 or eth_sendRawTransaction. The network list contains three testnets and no mainnet.",
+      },
+    ],
     results: [
       "62 unit tests and 25 browser checks pass.",
       "The Keccak implementation reproduces every published vector, including the ERC-20 Transfer topic 0xddf252ad… that appears in every such log on every EVM chain.",
@@ -790,6 +1116,37 @@ const SECURITY: Project = {
     ],
     solution:
       "Four views — watchlist, headers, certificate, dependencies — over data the user provides, with every limitation stated where someone would otherwise assume otherwise.",
+    objectives: [
+      "Analyse only data the user supplies, and say why that constraint is technical as well as ethical.",
+      "Implement the parsing so the output can be checked against an independent tool.",
+      "Attach reasoning to every finding rather than emitting a bare score.",
+    ],
+    features: [
+      "Security header grading with CSP parsed directive by directive",
+      "HSTS, cookie, CORS and version-disclosure checks with severity and explanation",
+      "X.509 parsing from a DER/ASN.1 parser: subject, issuer, validity, key size, signature, SANs",
+      "Browser wildcard host matching, so *.example.com does not match a.b.example.com",
+      "npm audit report rollup that walks the effects chain to the direct dependency to upgrade",
+      "A watchlist that tracks a grade over results the user has recorded",
+    ],
+    decisions: [
+      {
+        title: "Nothing is fetched, and the interface says why",
+        text: "A browser cannot read another origin's response headers or inspect a certificate. A page claiming to scan a site from the browser is proxying through a server it has not mentioned. The input is the user's own.",
+      },
+      {
+        title: "The parser is checked against openssl",
+        text: "Eight generated certificates are parsed and compared against what openssl x509 reports for the same files. If the ASN.1 parser drifts, openssl disagrees and the suite fails.",
+      },
+      {
+        title: "Penalties have diminishing returns",
+        text: "The first scoring model summed a penalty per finding, which graded a response with no security headers above one with eight configured badly — the second gave the analyser more to find. Sorting penalties worst-first and decaying them fixed the ordering, and a test now asserts it.",
+      },
+      {
+        title: "Limits are stated in the interface",
+        text: "It cannot verify a signature chain, reach a root store or check revocation. Those need a TLS client, and the certificate panel says so above the result.",
+      },
+    ],
     results: [
       "57 unit tests and 23 browser checks pass. The certificate tests fail if the parser ever disagrees with openssl.",
       "The first scoring model was wrong, and testing showed it: summing a penalty per finding graded a response with no security headers above one with eight headers configured badly, because the second gave the analyser more to find. Replaced with diminishing returns, and a test now asserts the ordering.",

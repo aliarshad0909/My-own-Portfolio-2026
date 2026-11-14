@@ -7,9 +7,21 @@ import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
-import { STATUS_NOTE, relatedProjects, type Project } from "@/lib/projects";
+import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
+import { servicesForProject } from "@/lib/services";
 
 type Props = { project: Project; variant: "project" | "case-study" };
+
+/** Previous and next entries in the case-study order, wrapping at the ends. */
+function neighbours(slug: string) {
+  const all = caseStudies();
+  const i = all.findIndex((p) => p.slug === slug);
+  if (i === -1 || all.length < 2) return { prev: undefined, next: undefined };
+  return {
+    prev: all[(i - 1 + all.length) % all.length],
+    next: all[(i + 1) % all.length],
+  };
+}
 
 /**
  * Shared layout for /work/[slug] and /case-studies/[slug].
@@ -22,6 +34,8 @@ export function ProjectDetail({ project, variant }: Props) {
   const related = relatedProjects(project, 2);
   const backHref = isCaseStudy ? "/case-studies" : "/work";
   const statusNote = STATUS_NOTE[project.status];
+  const services = servicesForProject(project.slug);
+  const { prev, next } = isCaseStudy ? neighbours(project.slug) : { prev: undefined, next: undefined };
 
   return (
     <>
@@ -100,6 +114,19 @@ export function ProjectDetail({ project, variant }: Props) {
                   <dt>Stack</dt>
                   <dd>{project.technologies.join(", ")}</dd>
                 </div>
+                {services.length > 0 ? (
+                  <div>
+                    <dt>Service</dt>
+                    <dd>
+                      {services.map((s, i) => (
+                        <span key={s.id}>
+                          {i > 0 ? ", " : ""}
+                          <Link href={`/services#${s.id}`}>{s.title}</Link>
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                ) : null}
               </dl>
               {project.tags.length > 0 ? (
                 <ul className="tag-list" aria-label="Tags">
@@ -140,6 +167,18 @@ export function ProjectDetail({ project, variant }: Props) {
                   ) : (
                     <EditorNote>Add `caseStudy.challenge` — the problem that needed solving.</EditorNote>
                   )}
+                  {cs.objectives && cs.objectives.length > 0 ? (
+                    <section aria-labelledby="objectives-title">
+                      <h2 className="section-title section-title--sm" id="objectives-title">
+                        Objectives
+                      </h2>
+                      <ul>
+                        {cs.objectives.map((o) => (
+                          <li key={o}>{o}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null}
                 </>
               ) : null}
 
@@ -167,6 +206,21 @@ export function ProjectDetail({ project, variant }: Props) {
                   ) : (
                     <EditorNote>Add `caseStudy.approach` — the strategy chosen and why.</EditorNote>
                   )}
+                  {cs.features && cs.features.length > 0 ? (
+                    <section aria-labelledby="features-title">
+                      <h2 className="section-title section-title--sm" id="features-title">
+                        What is implemented
+                      </h2>
+                      <ul className="check-list check-list--spaced">
+                        {cs.features.map((f) => (
+                          <li key={f}>
+                            <Icon name="check" size={16} />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null}
                   {cs.process && cs.process.length > 0 ? (
                     <section aria-labelledby="process-title">
                       <h2 className="section-title section-title--sm" id="process-title">
@@ -181,6 +235,21 @@ export function ProjectDetail({ project, variant }: Props) {
                   ) : (
                     <EditorNote>Add `caseStudy.process` — the production or development steps.</EditorNote>
                   )}
+                  {cs.decisions && cs.decisions.length > 0 ? (
+                    <section aria-labelledby="decisions-title">
+                      <h2 className="section-title section-title--sm" id="decisions-title">
+                        Engineering and creative decisions
+                      </h2>
+                      <ul className="decisions">
+                        {cs.decisions.map((d) => (
+                          <li key={d.title}>
+                            <h3 className="decisions__title">{d.title}</h3>
+                            <p>{d.text}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null}
                   {cs.solution ? (
                     <section aria-labelledby="solution-title">
                       <h2 className="section-title section-title--sm" id="solution-title">
@@ -261,8 +330,13 @@ export function ProjectDetail({ project, variant }: Props) {
           {project.gallery.length > 0 ? (
             <section className="detail__gallery" aria-labelledby="gallery-title">
               <h2 className="section-title section-title--sm" id="gallery-title">
-                Screenshots
+                {isCaseStudy ? "Visual demonstration" : "Screenshots"}
               </h2>
+              {isCaseStudy ? (
+                <p className="fine-print detail__gallery-note">
+                  Captured from the running application{project.usesSampleMedia ? ", except where a card is marked as sample artwork" : ""}.
+                </p>
+              ) : null}
               <MediaGallery items={project.gallery} />
             </section>
           ) : (
@@ -270,6 +344,38 @@ export function ProjectDetail({ project, variant }: Props) {
           )}
         </div>
       </article>
+
+      {isCaseStudy && (prev || next) ? (
+        <nav className="case-nav" aria-label="Case study navigation">
+          <div className="container case-nav__inner">
+            {prev ? (
+              <Link href={`/case-studies/${prev.slug}`} className="case-nav__link case-nav__link--prev">
+                <span className="case-nav__label">
+                  <Icon name="arrow-right" size={15} className="flip" />
+                  Previous
+                </span>
+                <span className="case-nav__title">{prev.title}</span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            <Link href="/case-studies" className="case-nav__all">
+              All case studies
+            </Link>
+            {next ? (
+              <Link href={`/case-studies/${next.slug}`} className="case-nav__link case-nav__link--next">
+                <span className="case-nav__label">
+                  Next
+                  <Icon name="arrow-right" size={15} />
+                </span>
+                <span className="case-nav__title">{next.title}</span>
+              </Link>
+            ) : (
+              <span />
+            )}
+          </div>
+        </nav>
+      ) : null}
 
       {related.length > 0 ? (
         <section className="section section--tight" aria-labelledby="related-title">

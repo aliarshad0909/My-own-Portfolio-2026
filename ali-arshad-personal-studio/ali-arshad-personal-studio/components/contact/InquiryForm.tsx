@@ -104,6 +104,9 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
         <div>
           <h3 className="card-title">Inquiry sent</h3>
           <p>Thank you. Your message has been delivered, and I&rsquo;ll reply to the email address you provided.</p>
+          <p className="form-status__next">
+            While you wait, the <a href="/case-studies">case studies</a> show how I approach a project from brief to delivery.
+          </p>
           <button type="button" className="btn btn--secondary btn--sm" onClick={() => setStatus({ kind: "idle" })}>
             <span>Send another inquiry</span>
           </button>
@@ -181,13 +184,28 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
 
       <div className="field">
         <label htmlFor="description">Project description *</label>
-        <textarea id="description" name="description" rows={6} required maxLength={LIMITS.description} value={values.description} onChange={(e) => set("description", e.target.value)} aria-invalid={errors.description ? true : undefined} aria-describedby={describedBy("description", "description-hint")} />
-        <p className="field__hint" id="description-hint">
-          What are you building, who is it for, and what does success look like?
-        </p>
+        <textarea id="description" name="description" rows={6} required maxLength={LIMITS.description} value={values.description} onChange={(e) => set("description", e.target.value)} aria-invalid={errors.description ? true : undefined} aria-describedby={describedBy("description", "description-hint description-count")} />
+        <div className="field__meta">
+          <p className="field__hint" id="description-hint">
+            What are you building, who is it for, and what does success look like?
+          </p>
+          <p
+            className={`field__count ${values.description.length > 0 && values.description.length < LIMITS.descriptionMin ? "is-short" : ""}`.trim()}
+            id="description-count"
+            aria-live="polite"
+          >
+            {values.description.length < LIMITS.descriptionMin
+              ? `${LIMITS.descriptionMin - values.description.length} more to go`
+              : `${values.description.length.toLocaleString()} / ${LIMITS.description.toLocaleString()}`}
+          </p>
+        </div>
         {err("description")}
       </div>
 
+      <fieldset className="form__fieldset">
+        <legend className="form__legend">
+          Optional — helps me reply with a realistic scope
+        </legend>
       <div className="form__row">
         <div className="field">
           <label htmlFor="budget">
@@ -218,6 +236,7 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
           {err("timeline")}
         </div>
       </div>
+      </fieldset>
 
       {/* Honeypot: hidden from people and assistive tech; bots tend to fill it. */}
       <div className="form__trap" aria-hidden="true">
