@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { ArrowLink } from "@/components/ui/Button";
 import { ButtonLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { visibleCredentials } from "@/lib/credentials";
 import { EXPERIENCE } from "@/lib/experience";
 import { TOOL_GROUPS, toolsInGroup } from "@/lib/expertise";
 import { pageMetadata } from "@/lib/seo";
@@ -251,6 +253,36 @@ export default function AboutPage() {
                 See how collaboration works
               </ButtonLink>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="about-creds-title">
+        <div className="container">
+          <div className="panel panel--lg cred-strip reveal">
+            <div>
+              <p className="eyebrow eyebrow--plain">Credentials</p>
+              <h2 className="section-title section-title--sm" id="about-creds-title">
+                Certified where it counts
+              </h2>
+              <p className="section-sub">
+                Professional certifications in the areas I practise, kept current. Each one links to the issuer&rsquo;s record where a public one exists.
+              </p>
+            </div>
+            <ul className="cred-strip__list">
+              {visibleCredentials().map((c) => (
+                <li key={c.id}>
+                  <span className="cred-strip__mark" aria-hidden="true">
+                    {c.mark}
+                  </span>
+                  <span className="cred-strip__text">
+                    <strong>{c.title}</strong>
+                    <small>{c.issuer}</small>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <ArrowLink href="/experience#creds-title">See all credentials</ArrowLink>
           </div>
         </div>
       </section>

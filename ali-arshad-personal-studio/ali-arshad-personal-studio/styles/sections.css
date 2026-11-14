@@ -2313,3 +2313,390 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* ── Credentials ──────────────────────────────────────────────────────── */
+.cred-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.cred {
+  display: grid;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+  transition: border-color var(--med) var(--ease);
+}
+
+.cred:hover,
+.cred:focus-within {
+  border-color: var(--coral-line);
+}
+
+/* The preview is a button: the certificate opens at full size from it. */
+.cred__preview {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--border-soft);
+  background: #f4f1ec;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cred__thumb {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform var(--med) var(--ease);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cred__preview:hover .cred__thumb {
+    transform: scale(1.02);
+  }
+}
+
+.cred__zoom {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  background: linear-gradient(to top, rgba(11, 13, 16, 0.94), rgba(11, 13, 16, 0.55));
+  color: var(--text);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity var(--fast) var(--ease);
+}
+
+.cred__preview:hover .cred__zoom,
+.cred__preview:focus-visible .cred__zoom {
+  opacity: 1;
+}
+
+/* Touch devices get no hover, so the label stays visible there. */
+@media (hover: none) {
+  .cred__zoom {
+    opacity: 1;
+  }
+}
+
+/* Credential with no certificate image: an issuer monogram instead. */
+/* Matches the certificate thumbnail's ratio so cards in a row line up
+   whether or not a credential has an image. */
+.cred__preview--mark {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  aspect-ratio: 570 / 440;
+  background: linear-gradient(150deg, rgba(255, 122, 92, 0.1), var(--surface));
+  cursor: default;
+}
+
+.cred__mark {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px solid var(--coral-line);
+  color: var(--coral);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cred__issuer-line {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cred__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 22px;
+}
+
+.cred__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.cred__prog {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cred__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-card);
+  line-height: 1.25;
+}
+
+.cred__issuer {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.cred__issuer strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cred__dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 26px;
+  margin-top: 2px;
+}
+
+.cred__dates dt {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cred__dates dd {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+
+.cred__code {
+  flex-basis: 100%;
+  min-width: 0;
+}
+
+.cred__code dd {
+  overflow-wrap: anywhere;
+}
+
+.cred__code code {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.cred__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.cred__skills li {
+  padding: 4px 11px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+.cred__actions {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.cred__verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 2px;
+  min-height: 40px;
+  color: var(--coral);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.cred__verify:hover,
+.cred__verify:focus-visible {
+  color: var(--coral-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cred__noverify {
+  display: block;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  line-height: 1.5;
+}
+
+.cred--compact .cred__body {
+  padding: 16px 18px 18px;
+  gap: 8px;
+}
+
+.cred--compact .cred__title {
+  font-size: 1.0625rem;
+}
+
+@media (min-width: 760px) {
+  .cred-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cred {
+    grid-template-rows: auto 1fr;
+  }
+}
+
+/* ── Certificate dialog ───────────────────────────────────────────────── */
+.cert-dialog {
+  width: min(960px, 94vw);
+  max-height: 92vh;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  overflow: auto;
+}
+
+.cert-dialog::backdrop {
+  background: rgba(7, 8, 10, 0.82);
+  backdrop-filter: blur(3px);
+}
+
+.cert-dialog__inner {
+  display: grid;
+  gap: 0;
+}
+
+.cert-dialog__head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.cert-dialog__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-card);
+  line-height: 1.25;
+}
+
+.cert-dialog__sub {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+.cert-dialog__sub code {
+  font-size: 0.8125rem;
+}
+
+.cert-dialog__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.cert-dialog__close:hover,
+.cert-dialog__close:focus-visible {
+  border-color: var(--coral-line);
+  color: var(--coral);
+}
+
+.cert-dialog__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
+
+.creds-note {
+  margin-top: 20px;
+}
+
+/* ── About: credentials strip ─────────────────────────────────────────── */
+.cred-strip {
+  display: grid;
+  gap: 22px;
+  align-items: center;
+}
+
+.cred-strip__list {
+  display: grid;
+  gap: 10px;
+}
+
+.cred-strip__list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+
+.cred-strip__mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--coral-line);
+  color: var(--coral);
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.cred-strip__text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cred-strip__text strong {
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cred-strip__text small {
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+}
+
+@media (min-width: 960px) {
+  .cred-strip {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 36px;
+  }
+}
+
