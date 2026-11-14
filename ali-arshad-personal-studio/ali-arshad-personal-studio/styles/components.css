@@ -1319,3 +1319,49 @@
   height: 100%;
   object-fit: cover;
 }
+
+/* Signature 3D mark in the homepage CTA: pure black render, screen-blended
+   so the obsidian background disappears into the panel gradient. Decorative
+   only — hidden from AT, absent on narrow screens, still-only under reduced
+   motion (MotionMedia handles that). */
+.cta-panel--signature .cta-panel__content {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-panel__mark {
+  position: absolute;
+  top: 50%;
+  right: clamp(-40px, 2vw, 56px);
+  display: none;
+  width: clamp(300px, 30vw, 430px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.cta-panel__mark .motion-media,
+.cta-panel__mark img,
+.cta-panel__mark video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The slot's card chrome would screen-blend as a grey square; strip it here. */
+.cta-panel__mark .motion-media {
+  border-radius: 0;
+  background: transparent;
+}
+
+.cta-panel__mark video {
+  position: absolute;
+  inset: 0;
+}
+
+@media (min-width: 900px) {
+  .cta-panel__mark {
+    display: block;
+  }
+}

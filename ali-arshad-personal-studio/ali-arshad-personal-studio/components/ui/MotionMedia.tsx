@@ -15,6 +15,8 @@ type Props = {
   className?: string;
   /** Hover-to-play rather than autoplay; sensible for previews in a grid. */
   playOnHover?: boolean;
+  /** Only mount the <video> at or above this viewport width; below it the still shows and nothing is downloaded. */
+  minWidth?: number;
 };
 
 /**
@@ -30,19 +32,24 @@ type Props = {
  * Keep clips short (under ~6s), silent, encoded with faststart, and sized to
  * the slot. The motion-production pipeline in demos/ produces exactly that.
  */
-export function MotionMedia({ still, sources, label, className, playOnHover = false }: Props) {
+export function MotionMedia({ still, sources, label, className, playOnHover = false, minWidth }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [canMove, setCanMove] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     if (!sources || sources.length === 0) return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setCanMove(!mq.matches);
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const wide = minWidth ? window.matchMedia(`(min-width: ${minWidth}px)`) : null;
+    const update = () => setCanMove(!motion.matches && (!wide || wide.matches));
     update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, [sources]);
+    motion.addEventListener("change", update);
+    wide?.addEventListener("change", update);
+    return () => {
+      motion.removeEventListener("change", update);
+      wide?.removeEventListener("change", update);
+    };
+  }, [sources, minWidth]);
 
   useEffect(() => {
     const video = videoRef.current;

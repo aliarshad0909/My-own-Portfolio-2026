@@ -31,6 +31,7 @@ export default function HomePage() {
       <HowIWork />
       <ContactCTA
         standalone
+        signature
         eyebrow="Start here"
         title="Have something worth building?"
         text="From your first idea to a working digital product, creative campaign, or automated business process — let's discuss what you need."
