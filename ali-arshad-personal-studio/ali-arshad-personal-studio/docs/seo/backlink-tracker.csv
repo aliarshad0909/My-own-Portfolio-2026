@@ -1,0 +1,12 @@
+target,type,destination_url,contribution,method,status,submitted_date,live_url,verified_date,notes
+GitHub repo About field,profile,https://my-own-portfolio-2026.vercel.app/,Set website on repo + README links per demo,repo settings,Planned,,,,
+LinkedIn profile website,profile,https://my-own-portfolio-2026.vercel.app/,Website field + Featured entries,profile edit,Planned,,,,requires profile confirmation
+Behance — Blender visualisation,showcase,https://my-own-portfolio-2026.vercel.app/case-studies/blender-product-visualisation,Render showcase project,project upload,Planned,,,,profile URL empty in lib/site.ts
+Behance — Halcyon brand system,showcase,https://my-own-portfolio-2026.vercel.app/case-studies/halcyon-brand-system,Brand system showcase,project upload,Planned,,,,
+credential.net profile,profile,https://my-own-portfolio-2026.vercel.app/experience,Portfolio URL on credential profile,profile edit,Planned,,,,
+n8n community forum,community,https://my-own-portfolio-2026.vercel.app/case-studies/inbound-lead-qualification-workflow,Workflow write-up + exported JSON,forum post,Planned,,,,participate before posting
+Blender Artists — Finished Projects,community,https://my-own-portfolio-2026.vercel.app/case-studies/blender-product-visualisation,Finished render post,forum post,Planned,,,,
+dev.to — SVG charts tutorial,article,https://my-own-portfolio-2026.vercel.app/case-studies/northwind-analytics-dashboard,Tutorial: hand-drawn SVG charts with table fallback,publish article,Planned,,,,
+dev.to — keccak checksum tutorial,article,https://my-own-portfolio-2026.vercel.app/case-studies/ledgerlight-block-explorer,Tutorial: EIP-55 checksums from scratch,publish article,Planned,,,,
+Smashing/CSS-Tricks pitch,editorial,https://my-own-portfolio-2026.vercel.app/,Article pitch: fixed overlays vs backdrop-filter containing blocks,editorial pitch,Planned,,,,
+React Status / Next.js Weekly,newsletter,article URL once live,Submit published tutorial,submission form,Planned,,,,depends on articles above

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { ProjectDetail } from "@/components/work/ProjectDetail";
+import { breadcrumbSchema, creativeWorkSchema } from "@/lib/structured-data";
 import { PROJECTS, isIndexable } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 
@@ -31,5 +33,17 @@ export default async function Page({ params }: Props) {
   const { slug } = await params;
   const project = records().find((p) => p.slug === slug);
   if (!project) notFound();
-  return <ProjectDetail project={project} variant="project" />;
+  return (
+    <>
+      <JsonLd data={creativeWorkSchema(project, "project")} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Work", path: "/work" },
+          { name: project.title, path: `/work/${project.slug}` },
+        ])}
+      />
+      <ProjectDetail project={project} variant="project" />
+    </>
+  );
 }

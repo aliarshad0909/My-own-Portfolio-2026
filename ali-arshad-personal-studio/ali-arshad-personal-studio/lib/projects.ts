@@ -1187,7 +1187,14 @@ export const featuredProjects = (count = 3) => PROJECTS.filter((p) => p.featured
 export const caseStudies = () => PROJECTS.filter((p) => p.caseStudy !== undefined);
 
 /** Only fully published work is indexed by search engines and listed in the sitemap. */
-export const isIndexable = (p: Project) => p.status === "Published";
+/**
+ * Indexable work: published projects, and finished demonstration builds.
+ * Demo pages are the site's most substantial original content and every one
+ * carries its status note ("a working demonstration, not a client engagement;
+ * the brand and data are fictional"), so indexing them makes no false claim.
+ * Planned and in-development entries stay out of the index and the sitemap.
+ */
+export const isIndexable = (p: Project) => p.status === "Published" || p.status === "Demo Ready";
 
 /** Statuses that are safe to show in the public gallery. */
 export const isLive = (p: Project) => p.status === "Demo Ready" || p.status === "Verified" || p.status === "Published";

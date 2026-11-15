@@ -658,7 +658,10 @@
   }
 }
 
-/* Mobile menu */
+/* Mobile menu
+   Rendered into <body> by a portal, never inside .site-header: the header's
+   backdrop-filter makes it the containing block for fixed-position
+   descendants, which collapsed this overlay to the 68px header box. */
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -668,7 +671,11 @@
 .mobile-menu__backdrop {
   position: absolute;
   inset: 0;
+  width: 100%;
+  border: 0;
   background: rgba(5, 6, 8, 0.7);
+  cursor: pointer;
+  appearance: none;
 }
 
 .mobile-menu__panel {
@@ -676,9 +683,11 @@
   inset: 0 0 0 auto;
   display: flex;
   flex-direction: column;
-  width: min(100%, 400px);
-  padding: 12px var(--gutter) 28px;
+  /* Never full-bleed: a strip of the page stays tappable to dismiss. */
+  width: min(88%, 400px);
+  padding: 12px var(--gutter) max(28px, env(safe-area-inset-bottom));
   overflow-y: auto;
+  overscroll-behavior: contain;
   border-left: 1px solid var(--border);
   background: var(--bg);
   animation: menu-in var(--med) var(--ease) both;
@@ -725,6 +734,12 @@
 
 .mobile-menu__cta {
   margin-top: 24px;
+}
+
+@media (min-width: 1100px) {
+  .mobile-menu {
+    display: none;
+  }
 }
 
 /* ───────── Footer ───────── */
@@ -1303,4 +1318,50 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Signature 3D mark in the homepage CTA: pure black render, screen-blended
+   so the obsidian background disappears into the panel gradient. Decorative
+   only — hidden from AT, absent on narrow screens, still-only under reduced
+   motion (MotionMedia handles that). */
+.cta-panel--signature .cta-panel__content {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-panel__mark {
+  position: absolute;
+  top: 50%;
+  right: clamp(-40px, 2vw, 56px);
+  display: none;
+  width: clamp(300px, 30vw, 430px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.cta-panel__mark .motion-media,
+.cta-panel__mark img,
+.cta-panel__mark video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The slot's card chrome would screen-blend as a grey square; strip it here. */
+.cta-panel__mark .motion-media {
+  border-radius: 0;
+  background: transparent;
+}
+
+.cta-panel__mark video {
+  position: absolute;
+  inset: 0;
+}
+
+@media (min-width: 900px) {
+  .cta-panel__mark {
+    display: block;
+  }
 }

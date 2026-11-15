@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
+import { Faq } from "@/components/ui/Faq";
+import type { FaqItem } from "@/lib/structured-data";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { ArrowLink } from "@/components/ui/Button";
 import { ButtonLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { visibleCredentials } from "@/lib/credentials";
 import { EXPERIENCE } from "@/lib/experience";
 import { TOOL_GROUPS, toolsInGroup } from "@/lib/expertise";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "About",
+  title: "About the Studio",
   description:
     "Ali Arshad is an independent creative and digital studio of one — a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development and automation.",
   path: "/about",
@@ -66,6 +70,21 @@ const PROCESS = [
   { step: "Create", text: "Design, develop, automate or produce the work itself." },
   { step: "Test & refine", text: "Check functionality, visual quality, accessibility and fit against the brief — then fix what the checks find." },
   { step: "Deliver & support", text: "Hand over with documentation, explain how it works, and agree what ongoing support looks like." },
+];
+
+const FAQ_ITEMS: FaqItem[] = [
+  {
+    q: "Who is Ali Arshad?",
+    a: "An independent designer, developer and creative technologist running a one-person studio — a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development, AI automation and brand work. The three pillars above describe how those disciplines combine on a project.",
+  },
+  {
+    q: "Does Ali provide video editing and 3D visualization?",
+    a: "Yes. Creative production is one of the studio's core services: video editing, motion graphics and Blender 3D product visualization. The Blender product visualization and motion production pipeline entries in the work section show complete demonstration builds of both.",
+  },
+  {
+    q: "Why one studio across several disciplines?",
+    a: "Because projects rarely fail inside one discipline. A product that works but cannot be explained, or a campaign that looks right but ignores the economics, fails all the same. One studio carrying creative perspective, technical execution and commercial understanding means those judgements happen together rather than across three vendors.",
+  },
 ];
 
 export default function AboutPage() {
@@ -255,6 +274,36 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="section" aria-labelledby="about-creds-title">
+        <div className="container">
+          <div className="panel panel--lg cred-strip reveal">
+            <div>
+              <p className="eyebrow eyebrow--plain">Credentials</p>
+              <h2 className="section-title section-title--sm" id="about-creds-title">
+                Certified where it counts
+              </h2>
+              <p className="section-sub">
+                Professional certifications in the areas I practise, kept current. Each one links to the issuer&rsquo;s record where a public one exists.
+              </p>
+            </div>
+            <ul className="cred-strip__list">
+              {visibleCredentials().map((c) => (
+                <li key={c.id}>
+                  <span className="cred-strip__mark" aria-hidden="true">
+                    {c.mark}
+                  </span>
+                  <span className="cred-strip__text">
+                    <strong>{c.title}</strong>
+                    <small>{c.issuer}</small>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <ArrowLink href="/experience#creds-title">See all credentials</ArrowLink>
+          </div>
+        </div>
+      </section>
+
       <section className="section section--surface" aria-labelledby="tools-title">
         <div className="container">
           <div className="section-head reveal">
@@ -291,6 +340,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <Faq id="about-faq" eyebrow="Common questions" title="Asked about the studio" items={FAQ_ITEMS} />
 
       <ContactCTA
         standalone
