@@ -135,7 +135,7 @@ export type Project = {
 const COMMERCE: Project = {
   id: "p01",
   slug: "tessera-clayworks-storefront",
-  title: "Tessera Clayworks — E-Commerce Storefront",
+  title: "Tessera Clayworks: E-Commerce Storefront",
   categories: ["Web & Software", "Branding & Marketing"],
   tags: ["Storefront", "Cart & checkout", "Admin CRUD", "TypeScript", "Accessibility"],
   year: "2026",
@@ -150,7 +150,7 @@ const COMMERCE: Project = {
     "Implemented the cart, promotions, shipping rules and tax estimate in integer cents",
     "Built the simulated checkout with client and server-grade validation and stock enforcement",
     "Built the product admin with create, edit and delete, validation and live preview",
-    "Drew every product illustration in code as SVG — no stock photography",
+    "Drew every product illustration in code as SVG, with no stock photography",
     "Wrote 18 unit tests and a 38-check browser suite covering the shopping journeys",
   ],
   technologies: ["TypeScript", "React 19", "esbuild", "CSS", "Node.js test runner", "Playwright"],
@@ -180,7 +180,7 @@ const COMMERCE: Project = {
     process: [
       "Modelled the domain: products, glaze and size variants, per-variant stock, cart lines, promotions and orders.",
       "Wrote the pricing and cart rules first, with 18 unit tests covering stock caps, discount interaction with the free-shipping threshold, and order creation.",
-      "Designed a brand distinct from this portfolio — warm paper, forest green and terracotta — so the demo reads as its own business.",
+      "Designed a brand distinct from this portfolio, using warm paper, forest green and terracotta, so the demo reads as its own business.",
       "Drew all 8 product shapes as parametric SVG, tinted at runtime by the selected glaze, so changing a variant visibly changes the product.",
       "Built the storefront: catalogue, filters, search, sort, product pages, wishlist, cart and a three-step checkout.",
       "Built the product admin so the catalogue is genuinely editable, with validation, confirm-before-delete and a live preview.",
@@ -223,7 +223,7 @@ const COMMERCE: Project = {
     results: [
       "18 unit tests and 38 browser checks pass, covering catalogue, cart, checkout, admin CRUD and keyboard access.",
       "Verified no horizontal overflow at 360, 390, 768, 1024 and 1440 px, with interactive targets at least 40 px.",
-      "Testing caught two genuine defects — a hidden-label rule that widened the page on mobile, and colour swatches that rendered blank — both fixed and now covered by tests.",
+      "Testing caught two genuine defects: a hidden-label rule that widened the page on mobile, and colour swatches that rendered blank. Both were fixed and are now covered by tests.",
       "Production bundle is 240 KB of JavaScript and 14 KB of CSS, with no UI framework, icon library or image dependencies.",
     ],
   },
@@ -233,7 +233,7 @@ const COMMERCE: Project = {
 const ANALYTICS: Project = {
   id: "p02",
   slug: "northwind-analytics-dashboard",
-  title: "Northwind — Revenue Analytics Dashboard",
+  title: "Northwind: Revenue Analytics Dashboard",
   categories: ["Web & Software", "Business Solutions"],
   tags: ["Analytics", "Data visualisation", "SVG charts", "CSV export", "TypeScript"],
   year: "2026",
@@ -243,7 +243,7 @@ const ANALYTICS: Project = {
   status: "Demo Ready",
   role: "Sole designer and developer",
   contribution: [
-    "Wrote the deterministic data generator — 24 products and roughly 7,100 orders across 18 months, seeded so every run produces the same figures",
+    "Wrote the deterministic data generator: 24 products and roughly 7,100 orders across 18 months, seeded so every run produces the same figures",
     "Built the analytics layer: period summaries, previous-period comparison, time bucketing, grouping and product performance",
     "Drew the revenue chart, breakdown bars and sparklines as SVG by hand, with no charting library",
     "Gave every chart a visually hidden data table, so the figures are available to screen readers rather than locked in a picture",
@@ -272,7 +272,7 @@ const ANALYTICS: Project = {
       "A seeded linear congruential generator produces the orders, so the dataset is identical on every load and tests can assert exact values against it. The analytics functions are pure and separately testable; the interface only renders what they return.",
     process: [
       "Built the generator with a fixed seed, modelling seasonality, channel mix and a customer base that grows month over month.",
-      "Wrote the analytics layer — summarise, delta, previousPeriod, bucketOf, timeSeries, groupBy, productPerformance — with unit tests asserting exact figures.",
+      "Wrote the analytics layer (summarise, delta, previousPeriod, bucketOf, timeSeries, groupBy, productPerformance) with unit tests asserting exact figures.",
       "Drew the chart components as SVG, sizing and labelling axes from the data rather than from fixed pixel values.",
       "Added a visually hidden table alongside every chart so the same figures are reachable without sight of the graphic.",
       "Wrote the browser suite, which caught the generator defect described below.",
@@ -313,7 +313,7 @@ const ANALYTICS: Project = {
     results: [
       "15 unit tests and 14 browser checks pass against the generated dataset.",
       "Testing caught a real generator defect: every customer was created in the first months, so \"new customers\" read 0 and −100% for every later period. Fixed with a customer pool that grows over time.",
-      "Several of my own test expectations were wrong and the application was right — the dataset is 7,146 orders, not the 8,000+ I had assumed. The tests were corrected to the real figures rather than the figures being nudged to fit.",
+      "Several of my own test expectations were wrong, and the application was right: the dataset is 7,146 orders, not the 8,000+ I had assumed. The tests were corrected to the real figures rather than the figures being nudged to fit.",
       "No charting library: the production bundle carries no chart dependency at all.",
     ],
   },
@@ -322,7 +322,7 @@ const ANALYTICS: Project = {
 const SUPPORT_AGENT: Project = {
   id: "p03",
   slug: "tideline-support-agent",
-  title: "Tideline — Knowledge-Base Support Agent",
+  title: "Tideline: Knowledge-Base Support Agent",
   categories: ["AI Automation", "Web & Software"],
   tags: ["Retrieval", "BM25", "Knowledge base", "Escalation", "TypeScript"],
   year: "2026",
@@ -355,7 +355,7 @@ const SUPPORT_AGENT: Project = {
     background:
       "Tideline is an invented outdoor-equipment retailer. The agent exists to show retrieval and escalation behaviour, which is where most support automation actually succeeds or fails.",
     challenge:
-      "The failure mode that matters in support automation is a confident wrong answer. A system that answers everything will answer badly; a system that answers nothing is useless. The real work is the boundary — knowing when retrieval has not found the answer.",
+      "The failure mode that matters in support automation is a confident wrong answer. A system that answers everything will answer badly; a system that answers nothing is useless. The real work is the boundary: knowing when retrieval has not found the answer.",
     approach:
       "Lexical retrieval rather than a language model, deliberately: BM25 scores are inspectable, the confidence floor is a number you can tune, and the agent can only ever say what an article says, because replies are quoted from the source. Where the score is below the floor, it escalates instead of improvising.",
     process: [
@@ -407,7 +407,7 @@ const SUPPORT_AGENT: Project = {
 const VOICE_AGENT: Project = {
   id: "p04",
   slug: "kestrel-voice-sales-agent",
-  title: "Kestrel — Voice Qualification Agent",
+  title: "Kestrel: Voice Qualification Agent",
   categories: ["AI Automation", "Business Solutions"],
   tags: ["Web Speech API", "Dialogue state machine", "Slot filling", "Accessibility"],
   year: "2026",
@@ -419,7 +419,7 @@ const VOICE_AGENT: Project = {
   contribution: [
     "Designed the dialogue as an explicit state machine with required and optional slots, so its behaviour is inspectable rather than emergent",
     "Wrote the extraction layer: names, numbers written as words, timeframes, and intent phrases",
-    "Added a loop guard — an unrecognised answer to an optional slot records \"not given\" and moves on; a required slot is re-asked once, then hands off",
+    "Added a loop guard: an unrecognised answer to an optional slot records \"not given\" and moves on, while a required slot is re-asked once, then hands off",
     "Integrated the Web Speech API with capability detection, a listening timeout and voice-count checks",
     "Made the interface degrade honestly to typed input when speech is unavailable, rather than appearing to listen and never responding",
     "Wrote 28 unit tests and 20 browser checks",
@@ -439,7 +439,7 @@ const VOICE_AGENT: Project = {
     background:
       "Kestrel is an invented fleet-services company. The agent qualifies an inbound enquiry by filling a small set of slots: who is calling, fleet size, what they need, and how soon.",
     challenge:
-      "Browser speech support is inconsistent and fails in ways that look like nothing happening. Headless Chromium, for example, exposes the speech APIs, reports zero voices and never returns a recognition result — an interface that trusts the capability check will simply hang.",
+      "Browser speech support is inconsistent and fails in ways that look like nothing happening. Headless Chromium, for example, exposes the speech APIs, reports zero voices and never returns a recognition result: an interface that trusts the capability check will simply hang.",
     approach:
       "The dialogue is deterministic and fully testable without any speech at all; speech is an input and output layer on top of it. Capability detection checks for a non-empty voice list, not merely for the API's existence, and recognition has an eight-second timeout so a silent failure surfaces as a message rather than a hang.",
     process: [
@@ -477,7 +477,7 @@ const VOICE_AGENT: Project = {
       },
       {
         title: "Extraction tested against real phrasings",
-        text: "Four genuine defects came out of this — a greedy pattern matching a bare 'a', 'for now' read as 'immediately', a case-sensitive name pattern, and plurals breaking a word boundary.",
+        text: "Four genuine defects came out of this: a greedy pattern matching a bare 'a', 'for now' read as 'immediately', a case-sensitive name pattern, and plurals breaking a word boundary.",
       },
     ],
     results: [
@@ -492,7 +492,7 @@ const VOICE_AGENT: Project = {
 const N8N: Project = {
   id: "p05",
   slug: "inbound-lead-qualification-workflow",
-  title: "Inbound Lead Qualification — n8n Workflow",
+  title: "Inbound Lead Qualification: n8n Workflow",
   categories: ["AI Automation", "Business Solutions"],
   tags: ["n8n", "Workflow automation", "Lead scoring", "Deduplication"],
   year: "2026",
@@ -523,11 +523,11 @@ const N8N: Project = {
     challenge:
       "n8n Code nodes are JavaScript strings inside a JSON document. They are easy to get wrong and, in the usual workflow, untestable short of running the whole automation against live services.",
     approach:
-      "The test suite parses the workflow JSON, pulls each Code node's source and runs it in a function with `$input` and `$getWorkflowStaticData` stubbed. The code under test is literally the code that would run in n8n — if the workflow file changes, the tests see the change.",
+      "The test suite parses the workflow JSON, pulls each Code node's source and runs it in a function with `$input` and `$getWorkflowStaticData` stubbed. The code under test is literally the code that would run in n8n, so if the workflow file changes, the tests see the change.",
     process: [
       "Modelled the pipeline: webhook, validation, normalisation, scoring, deduplication against workflow static data, branch, enrichment, notification, and a response.",
       "Wrote the Code nodes, then the harness that executes them.",
-      "Built three example payloads — hot, cold and invalid — and asserted the end-to-end outcome for each.",
+      "Built three example payloads (hot, cold and invalid) and asserted the end-to-end outcome for each.",
       "Documented required credentials by name, with no values anywhere in the repository.",
     ],
     solution:
@@ -541,7 +541,7 @@ const N8N: Project = {
       "15-node workflow: webhook, validation, normalisation, scoring, deduplication, branch, enrichment, notification and response",
       "Lead scoring with configurable thresholds and a hot/cold branch",
       "Deduplication against workflow static data within a time window",
-      "Three example payloads — hot, cold and invalid — with asserted end-to-end outcomes",
+      "Three example payloads (hot, cold and invalid) with asserted end-to-end outcomes",
     ],
     decisions: [
       {
@@ -559,7 +559,7 @@ const N8N: Project = {
     ],
     results: [
       "22 tests pass by executing the workflow's own Code-node JavaScript.",
-      "No credentials, tokens or endpoints are present in the exported workflow — only named credential references.",
+      "No credentials, tokens or endpoints are present in the exported workflow, only named credential references.",
       "The workflow has not been run inside an n8n instance; the logic is verified, the orchestration is not.",
     ],
   },
@@ -568,7 +568,7 @@ const N8N: Project = {
 const SUPPLY_CHAIN: Project = {
   id: "p06",
   slug: "meridian-inventory-operations",
-  title: "Meridian — Inventory & Purchasing Operations",
+  title: "Meridian: Inventory & Purchasing Operations",
   categories: ["Business Solutions", "Web & Software"],
   tags: ["Inventory", "Append-only ledger", "Purchasing", "Reorder logic", "TypeScript"],
   year: "2026",
@@ -578,7 +578,7 @@ const SUPPLY_CHAIN: Project = {
   status: "Demo Ready",
   role: "Sole designer and developer",
   contribution: [
-    "Designed the ledger as the single source of truth — balances are computed, never written",
+    "Designed the ledger as the single source of truth: balances are computed, never written",
     "Built the posting gate that refuses movements which would drive stock negative or carry the wrong sign",
     "Implemented transfers as matched movement pairs, so a transfer can never create or destroy stock",
     "Built purchase orders with status derivation, over-receipt refusal and partial receipts",
@@ -604,7 +604,7 @@ const SUPPLY_CHAIN: Project = {
     approach:
       "An append-only ledger. Every change is a movement with a reason, a reference and a timestamp; on-hand is the sum. Nothing can silently change a balance, and every balance can be explained by replaying its movements.",
     process: [
-      "Built the ledger primitives — post, transfer, balances, running balance, valuation — with the posting gate refusing invalid movements.",
+      "Built the ledger primitives (post, transfer, balances, running balance, valuation) with the posting gate refusing invalid movements.",
       "Built purchasing on top: orders, partial receipts, status derivation and over-receipt refusal.",
       "Added reorder suggestions, then found the inconsistency described below.",
       "Wrote the browser suite over the real interface.",
@@ -641,7 +641,7 @@ const SUPPLY_CHAIN: Project = {
     results: [
       "31 unit tests and 27 browser checks pass.",
       "Testing caught a contradiction the interface was showing: the headline said \"below reorder: 0\" while the table flagged an item. The reorder calculation counted stock on order and the table did not. Both now use the same figure, and a test asserts they agree.",
-      "My own seed-size expectation was wrong — the fixture holds 1,265 movements, not the 1,500+ I had assumed — and the test was corrected to the real number.",
+      "My own seed-size expectation was wrong: the fixture holds 1,265 movements, not the 1,500+ I had assumed. The test was corrected to the real number.",
     ],
   },
 };
@@ -649,7 +649,7 @@ const SUPPLY_CHAIN: Project = {
 const SOURCING: Project = {
   id: "p07",
   slug: "lantern-sourcing-platform",
-  title: "Lantern — Supplier Sourcing & Landed Cost",
+  title: "Lantern: Supplier Sourcing & Landed Cost",
   categories: ["Business Solutions", "Web & Software"],
   tags: ["Landed cost", "Incoterms", "Supplier scoring", "Shipment tracking", "TypeScript"],
   year: "2026",
@@ -680,7 +680,7 @@ const SOURCING: Project = {
     background:
       "Lantern is an invented sourcing desk. The tool addresses the mistake that costs importers the most money: choosing a supplier on unit price.",
     challenge:
-      "Unit price is a small part of landed cost. Freight, duty, insurance and the incoterm can reverse a ranking entirely — and the arithmetic is fiddly enough that spreadsheets get it wrong.",
+      "Unit price is a small part of landed cost. Freight, duty, insurance and the incoterm can reverse a ranking entirely, and the arithmetic is fiddly enough that spreadsheets get it wrong.",
     approach:
       "Model the cost lines explicitly and let the incoterm decide which ones the buyer pays. Score suppliers relatively across five weighted factors, so the comparison answers \"which of these\" rather than scoring against an invented ideal.",
     process: [
@@ -719,7 +719,7 @@ const SOURCING: Project = {
     ],
     results: [
       "31 unit tests and 21 browser checks pass.",
-      "One of my test expectations assumed the cheapest unit price would not also be the cheapest landed — in this dataset it is. The test was rewritten to assert what is actually true: it still loses on the weighted score.",
+      "One of my test expectations assumed the cheapest unit price would not also be the cheapest landed; in this dataset it is. The test was rewritten to assert what is actually true: it still loses on the weighted score.",
       "A long select option stretched the layout to 448px inside a 360px viewport; found by the layout sweep and fixed.",
     ],
   },
@@ -728,7 +728,7 @@ const SOURCING: Project = {
 const BLENDER: Project = {
   id: "p08",
   slug: "blender-product-visualisation",
-  title: "Product Visualisation — Blender Scene System",
+  title: "Product Visualisation: Blender Scene System",
   categories: ["3D & Motion"],
   tags: ["Blender", "Python", "bpy", "Three-point lighting", "Turntable"],
   year: "2026",
@@ -738,7 +738,7 @@ const BLENDER: Project = {
   status: "In Development",
   role: "Sole author",
   contribution: [
-    "Wrote the scene builder in Python against the bpy API — geometry, materials, three-point lighting, camera placement on a sphere and a 120-frame turntable",
+    "Wrote the scene builder in Python against the bpy API: geometry, materials, three-point lighting, camera placement on a sphere and a 120-frame turntable",
     "Structured it so every function is importable without Blender present, with bpy stubbed, making the maths testable",
     "Wrote 20 tests covering camera placement, light positioning, preset application and frame ranges",
     "Wrote the product specification and a render status document stating plainly that nothing has been rendered",
@@ -747,7 +747,7 @@ const BLENDER: Project = {
   featured: false,
   cover: {
     src: "/images/projects/placeholder-interior.webp",
-    alt: "Placeholder image — no render exists for this project",
+    alt: "Placeholder image: no render exists for this project",
     width: 1600,
     height: 900,
   },
@@ -761,7 +761,7 @@ const BLENDER: Project = {
     approach:
       "Write the builder so its geometry and placement maths can be verified without Blender: bpy is imported defensively and falls back to None, and the functions that compute camera positions, light positions and frame ranges are pure.",
     process: [
-      "Wrote the product specification first — dimensions, materials, the shots required.",
+      "Wrote the product specification first: dimensions, materials, the shots required.",
       "Built the scene functions: geometry, three presets, three-point lighting, spherical camera placement, six angles and the turntable.",
       "Wrote 20 tests over the computable parts and ran them.",
       "Wrote RENDER_STATUS.md, which states in its first line that no image in the project has been rendered.",
@@ -782,7 +782,7 @@ const BLENDER: Project = {
     decisions: [
       {
         title: "bpy is imported defensively",
-        text: "Outside Blender, bpy falls back to None and the pure functions — camera positions, light positions, frame ranges — remain importable. That is what makes 20 tests possible in an environment with no Blender installed.",
+        text: "Outside Blender, bpy falls back to None and the pure functions (camera positions, light positions, frame ranges) remain importable. That is what makes 20 tests possible in an environment with no Blender installed.",
       },
       {
         title: "Cameras are placed on a sphere, not typed in",
@@ -796,7 +796,7 @@ const BLENDER: Project = {
     results: [
       "20 Python tests pass outside Blender.",
       "**Nothing has been rendered.** The cover image on this card is a placeholder, labelled as sample media, not output from this project.",
-      "This project is listed as In Development rather than Demo Ready, because the thing it is for — images — has not been produced.",
+      "This project is listed as In Development rather than Demo Ready, because the thing it is for (images) has not been produced.",
     ],
   },
 };
@@ -804,7 +804,7 @@ const BLENDER: Project = {
 const MOTION: Project = {
   id: "p09",
   slug: "motion-production-pipeline",
-  title: "Motion Production — Media Pipeline",
+  title: "Motion Production: Media Pipeline",
   categories: ["3D & Motion", "Creative Production"],
   tags: ["ffmpeg", "H.264", "VP9", "Contact sheets", "Node.js"],
   year: "2026",
@@ -824,7 +824,7 @@ const MOTION: Project = {
   featured: false,
   cover: {
     src: "/images/projects/placeholder-travel.webp",
-    alt: "Placeholder image — no finished film exists for this project",
+    alt: "Placeholder image: no finished film exists for this project",
     width: 1600,
     height: 900,
   },
@@ -836,17 +836,17 @@ const MOTION: Project = {
     challenge:
       "The details that matter in web video are easy to get wrong and invisible until someone complains: a file without faststart will not begin playing until it has largely downloaded, a hover preview with audio is a bug, and an odd pixel dimension makes VP9 fail outright.",
     approach:
-      "Encode decisions are made from a real probe of the source rather than from assumptions, and the tests invoke ffmpeg rather than mocking it — so if an encoder flag is wrong, the test sees the wrong output.",
+      "Encode decisions are made from a real probe of the source rather than from assumptions, and the tests invoke ffmpeg rather than mocking it, so if an encoder flag is wrong, the test sees the wrong output.",
     process: [
       "Wrote the probe and the argument builders for each output.",
-      "Wrote tests that generate a clip with ffmpeg, run the pipeline over it and probe the results — faststart present, preview silent, poster dimensions correct, no upscaling.",
+      "Wrote tests that generate a clip with ffmpeg, run the pipeline over it and probe the results: faststart present, preview silent, poster dimensions correct, no upscaling.",
       "Built the contact-sheet tool and tested the frame timestamps and grid geometry.",
     ],
     solution:
       "Two tools that take a master file and produce everything the portfolio needs, including the JSON snippet to paste into this project data file with the poster's real dimensions filled in.",
     objectives: [
       "Take a master file to the files a website actually serves, repeatably.",
-      "Get the details right that are invisible until someone complains — faststart, silent previews, even dimensions.",
+      "Get the details right that are invisible until someone complains: faststart, silent previews, even dimensions.",
       "Verify the output by probing it rather than trusting the flags.",
     ],
     features: [
@@ -881,7 +881,7 @@ const MOTION: Project = {
 const BRAND_SYSTEM: Project = {
   id: "p10",
   slug: "halcyon-brand-system",
-  title: "Halcyon — Brand System & Campaign",
+  title: "Halcyon: Brand System & Campaign",
   categories: ["Branding & Marketing", "Creative Production"],
   tags: ["Design system", "WCAG contrast", "Type scale", "HTML email", "SVG"],
   year: "2026",
@@ -892,7 +892,7 @@ const BRAND_SYSTEM: Project = {
   role: "Sole designer and developer",
   contribution: [
     "Implemented the WCAG 2.2 relative-luminance and contrast formulas, so every documented pairing is measured on render rather than asserted in a document",
-    "Built the type scale as a generated modular scale — changing the base size or ratio regenerates every step",
+    "Built the type scale as a generated modular scale, so changing the base size or ratio regenerates every step",
     "Drew the mark, three lockups and three social templates as SVG, serialised to real downloadable files from the live DOM",
     "Wrote a table-based HTML email with inline styles, an Outlook conditional, a hidden preheader and a plain-text alternative",
     "Wrote 29 unit tests and 21 browser checks",
@@ -921,10 +921,10 @@ const BRAND_SYSTEM: Project = {
     challenge:
       "Brand guidelines usually assert accessibility rather than demonstrate it. A contrast ratio typed into a document is a claim; a contrast ratio computed from the palette is a fact that can fail.",
     approach:
-      "Implement the WCAG formulas, compute every documented pairing on render, and put a test in the suite asserting they all pass — plus a second test asserting that a known-bad pairing fails, so the first test cannot pass vacuously over an empty set.",
+      "Implement the WCAG formulas, compute every documented pairing on render, and put a test in the suite asserting they all pass, plus a second test asserting that a known-bad pairing fails, so the first test cannot pass vacuously over an empty set.",
     process: [
       "Wrote the colour maths and the type scale generator, tested against the WCAG reference values and the ratio.",
-      "Chose the palette, then let the checker judge it — which forced the change described below.",
+      "Chose the palette, then let the checker judge it, which forced the change described below.",
       "Drew the mark, lockups and social templates as SVG, with download serialised from the live DOM.",
       "Wrote the email template to the constraints email clients actually impose, and previewed it by rendering the generated HTML in an iframe.",
       "Built the landing page from the same tokens.",
@@ -951,7 +951,7 @@ const BRAND_SYSTEM: Project = {
       },
       {
         title: "The checker overruled the palette",
-        text: "The original Clay accent measured 3.36:1 on Paper — below the 4.5:1 needed for body text. It was darkened to #A94F30 at 5.12:1, and the palette carries a note recording why.",
+        text: "The original Clay accent measured 3.36:1 on Paper, below the 4.5:1 needed for body text. It was darkened to #A94F30 at 5.12:1, and the palette carries a note recording why.",
       },
       {
         title: "Tables and inline styles for email",
@@ -966,7 +966,7 @@ const BRAND_SYSTEM: Project = {
       "29 unit tests and 21 browser checks pass.",
       "The checker rejected the original Clay accent: #C96F4A measured 3.36:1 on Paper, below the 4.5:1 needed for body text. It was darkened to #A94F30 (5.12:1) and the palette carries a note recording why.",
       "The browser suite found a real crash: the contrast checker called the parser before validating input, so typing a non-colour unmounted the React tree and left a blank page. Now guarded, with the test kept as a regression check.",
-      "No campaign has run. The campaign section lists what would be measured and says there are no results — a test asserts the copy contains no results language.",
+      "No campaign has run. The campaign section lists what would be measured and says there are no results, and a test asserts the copy contains no results language.",
     ],
   },
 };
@@ -974,7 +974,7 @@ const BRAND_SYSTEM: Project = {
 const CHAIN_EXPLORER: Project = {
   id: "p11",
   slug: "ledgerlight-block-explorer",
-  title: "Ledgerlight — EVM Block Explorer",
+  title: "Ledgerlight: EVM Block Explorer",
   categories: ["Web & Software"],
   tags: ["Keccak-256", "EIP-55", "JSON-RPC", "EIP-1193", "TypeScript"],
   year: "2026",
@@ -984,10 +984,10 @@ const CHAIN_EXPLORER: Project = {
   status: "Demo Ready",
   role: "Sole designer and developer",
   contribution: [
-    "Implemented Keccak-256 from the permutation, with the original 0x01 padding rather than NIST SHA3's — tested against the published Ethereum vectors",
+    "Implemented Keccak-256 from the permutation, with the original 0x01 padding rather than NIST SHA3's, tested against the published Ethereum vectors",
     "Implemented EIP-55 checksum encoding and validation, tested against all four vectors in the specification",
     "Wrote the JSON-RPC 2.0 client with timeouts and typed failures for unreachable, timed out, RPC error, malformed and not-found",
-    "Built a fixture node that implements the same JSON-RPC envelope — including null results and -32601 for unknown methods — so the client code under test is the real one",
+    "Built a fixture node that implements the same JSON-RPC envelope, including null results and -32601 for unknown methods, so the client code under test is the real one",
     "Implemented EIP-1193 wallet connection, read-only, with a test asserting it never calls any signing or sending method",
     "Held every quantity as a bigint, with formatting that truncates rather than rounds",
     "Wrote 62 unit tests and 25 browser checks",
@@ -1010,9 +1010,9 @@ const CHAIN_EXPLORER: Project = {
   ],
   caseStudy: {
     background:
-      "A block explorer is a good test of whether someone understands a chain or merely uses a library for it. This one implements the primitives — the hash function, the address encoding, the RPC protocol — rather than importing ethers or viem.",
+      "A block explorer is a good test of whether someone understands a chain or merely uses a library for it. This one implements the primitives (the hash function, the address encoding, the RPC protocol) rather than importing ethers or viem.",
     challenge:
-      "Two things are easy to get wrong and easy to hide. The first is Keccak-256: it is not SHA3-256, the padding differs, and a wrong implementation produces plausible-looking hashes. The second is honesty about data source — a demo with no network access can quietly serve fixtures while claiming to be live.",
+      "Two things are easy to get wrong and easy to hide. The first is Keccak-256: it is not SHA3-256, the padding differs, and a wrong implementation produces plausible-looking hashes. The second is honesty about data source: a demo with no network access can quietly serve fixtures while claiming to be live.",
     approach:
       "Test the cryptography against published vectors, including an explicit assertion that the output is not SHA3-256. For the data source, build the fixture as a real JSON-RPC node rather than a mock, and make the interface state which source it is using in a banner that cannot be missed.",
     process: [
@@ -1025,7 +1025,7 @@ const CHAIN_EXPLORER: Project = {
     solution:
       "An explorer that reads blocks, transactions, receipts and addresses, decodes calldata selectors and log topics, checksums every address it displays, and tells you plainly whether it is reading a fixture or a live node.",
     objectives: [
-      "Implement the primitives — hash function, address encoding, RPC protocol — rather than importing them.",
+      "Implement the primitives (hash function, address encoding, RPC protocol) rather than importing them.",
       "Stay read-only by construction, with no path that could sign or send.",
       "Never let a fixture be mistaken for a live chain.",
     ],
@@ -1058,9 +1058,9 @@ const CHAIN_EXPLORER: Project = {
     results: [
       "62 unit tests and 25 browser checks pass.",
       "The Keccak implementation reproduces every published vector, including the ERC-20 Transfer topic 0xddf252ad… that appears in every such log on every EVM chain.",
-      "A browser test aborts the connection to a live endpoint and asserts the real error appears with no fixture rows behind it — so the \"live\" mode cannot silently fall back.",
+      "A browser test aborts the connection to a live endpoint and asserts the real error appears with no fixture rows behind it, so the \"live\" mode cannot silently fall back.",
       "**The live-network path has never reached a real node.** The environment this was built in blocks outbound requests to public RPC endpoints. The code and its failure handling are tested; the success path against a real chain is not.",
-      "No ethers, viem, web3.js or js-sha3 — the cryptography and encoding are in the source.",
+      "No ethers, viem, web3.js or js-sha3: the cryptography and encoding are in the source.",
     ],
   },
 };
@@ -1068,7 +1068,7 @@ const CHAIN_EXPLORER: Project = {
 const SECURITY: Project = {
   id: "p12",
   slug: "sentryline-security-posture",
-  title: "Sentryline — Web Security Posture",
+  title: "Sentryline: Web Security Posture",
   categories: ["Web & Software", "Business Solutions"],
   tags: ["Security headers", "X.509", "ASN.1", "CSP", "npm audit"],
   year: "2026",
@@ -1078,7 +1078,7 @@ const SECURITY: Project = {
   status: "Demo Ready",
   role: "Sole designer and developer",
   contribution: [
-    "Wrote the DER/ASN.1 parser and X.509 reader — subject, issuer, validity, key algorithm and size, signature algorithm, subjectAltName and basic constraints",
+    "Wrote the DER/ASN.1 parser and X.509 reader: subject, issuer, validity, key algorithm and size, signature algorithm, subjectAltName and basic constraints",
     "Verified the parser against openssl: the test suite asserts the subject, validity window and SAN list match `openssl x509` for eight generated certificates",
     "Built the header rule engine: CSP parsed directive by directive, HSTS, cookies, X-Frame-Options conflicts, wildcard CORS and version disclosure",
     "Implemented browser wildcard host matching, so *.example.com does not match a.b.example.com or the bare domain",
@@ -1104,18 +1104,18 @@ const SECURITY: Project = {
     background:
       "Security tooling is the area where a demo is most tempting to fake, because the output looks authoritative whether or not anything was checked. This one is built so that every claim can be traced to data the user supplied and logic that is tested.",
     challenge:
-      "A browser cannot read another origin's response headers, and cannot inspect a TLS certificate at all. Any page claiming to scan a site from the browser is proxying through a server it has not mentioned. The honest design has to make the input the user's own — and say why.",
+      "A browser cannot read another origin's response headers, and cannot inspect a TLS certificate at all. Any page claiming to scan a site from the browser is proxying through a server it has not mentioned. The honest design has to make the input the user's own, and say why.",
     approach:
       "Analyse only what is pasted in: a response head from curl, a PEM certificate from openssl, an audit report from npm. State the scope in the interface, in the footer and in the README. Implement the parsing rather than importing it, so the analysis can be verified against an independent tool.",
     process: [
       "Wrote the ASN.1/DER parser and the X.509 reader.",
-      "Generated eight test certificates with openssl and Python's cryptography library — valid, wildcard, 1024-bit, SHA-1, ECDSA, over-long lifetime, no SAN and genuinely expired.",
+      "Generated eight test certificates with openssl and Python's cryptography library: valid, wildcard, 1024-bit, SHA-1, ECDSA, over-long lifetime, no SAN and genuinely expired.",
       "Wrote tests that compare the parser's output against `openssl x509` for every one of them.",
       "Built the header rule engine, with the reasoning attached to each finding rather than a bare score.",
       "Built the npm audit reader and the watchlist, which records results the user has run so a grade can be tracked over time.",
     ],
     solution:
-      "Four views — watchlist, headers, certificate, dependencies — over data the user provides, with every limitation stated where someone would otherwise assume otherwise.",
+      "Four views (watchlist, headers, certificate, dependencies) over data the user provides, with every limitation stated where someone would otherwise assume otherwise.",
     objectives: [
       "Analyse only data the user supplies, and say why that constraint is technical as well as ethical.",
       "Implement the parsing so the output can be checked against an independent tool.",
@@ -1140,7 +1140,7 @@ const SECURITY: Project = {
       },
       {
         title: "Penalties have diminishing returns",
-        text: "The first scoring model summed a penalty per finding, which graded a response with no security headers above one with eight configured badly — the second gave the analyser more to find. Sorting penalties worst-first and decaying them fixed the ordering, and a test now asserts it.",
+        text: "The first scoring model summed a penalty per finding, which graded a response with no security headers above one with eight configured badly. The second gave the analyser more to find. Sorting penalties worst-first and decaying them fixed the ordering, and a test now asserts it.",
       },
       {
         title: "Limits are stated in the interface",
@@ -1150,7 +1150,7 @@ const SECURITY: Project = {
     results: [
       "57 unit tests and 23 browser checks pass. The certificate tests fail if the parser ever disagrees with openssl.",
       "The first scoring model was wrong, and testing showed it: summing a penalty per finding graded a response with no security headers above one with eight headers configured badly, because the second gave the analyser more to find. Replaced with diminishing returns, and a test now asserts the ordering.",
-      "The interface states what it cannot do — verify a signature chain, reach a root store, check revocation — rather than leaving the impression that it did.",
+      "The interface states what it cannot do (verify a signature chain, reach a root store, check revocation) rather than leaving the impression that it did.",
       "No node-forge, pkijs or header-scanner library: the ASN.1 parser, CSP parser and rule engine are in the source.",
     ],
   },

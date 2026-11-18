@@ -10,7 +10,7 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="container site-footer__inner">
-        <Link href="/" className="brand brand--footer" aria-label={`${SITE.name} — ${SITE.descriptor}, home`}>
+        <Link href="/" className="brand brand--footer" aria-label={`${SITE.name}, ${SITE.descriptor}, home`}>
           <BrandMark size={34} />
           <span className="brand__stack">
             <span className="brand__name">{SITE.name}</span>

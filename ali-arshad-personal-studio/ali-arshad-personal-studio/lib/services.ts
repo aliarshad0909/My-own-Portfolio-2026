@@ -45,7 +45,7 @@ export const SERVICES: Service[] = [
     icon: "clapperboard",
     summary: "3D, video, motion and graphic design",
     description:
-      "Visual content that makes a product easy to understand and hard to scroll past — from 3D product renders in Blender to edited video, motion graphics and campaign-ready graphics.",
+      "Visual content that makes a product easy to understand and hard to scroll past, from 3D product renders in Blender to edited video, motion graphics and campaign-ready graphics.",
     capabilities: [
       "Blender 3D visualization",
       "Product visualization",
@@ -82,7 +82,7 @@ export const SERVICES: Service[] = [
     icon: "code",
     summary: "Websites, dashboards and business apps",
     description:
-      "Fast, maintainable websites and web applications built around how your business actually works — with clean frontends, dependable backends and the integrations that connect them.",
+      "Fast, maintainable websites and web applications built around how your business actually works, with clean frontends, dependable backends and the integrations that connect them.",
     capabilities: [
       "Responsive websites",
       "Frontend development",
@@ -120,7 +120,7 @@ export const SERVICES: Service[] = [
     icon: "bot",
     summary: "n8n workflows, AI agents and CRM automation",
     description:
-      "Automation that removes repetitive work from sales, support and operations — designed around your existing tools, with clear hand-offs to people where judgement matters.",
+      "Automation that removes repetitive work from sales, support and operations, designed around your existing tools, with clear hand-offs to people where judgement matters.",
     capabilities: [
       "n8n workflows",
       "Custom AI agents",
@@ -158,7 +158,7 @@ export const SERVICES: Service[] = [
     icon: "trending",
     summary: "Brand strategy, social, email and content",
     description:
-      "Hands-on brand management that keeps messaging consistent and marketing moving — strategy, content and the day-to-day coordination that turns plans into published work.",
+      "Hands-on brand management that keeps messaging consistent and marketing moving: strategy, content and the day-to-day coordination that turns plans into published work.",
     capabilities: [
       "Brand strategy",
       "Social media management",
@@ -170,7 +170,7 @@ export const SERVICES: Service[] = [
     ],
     clients: ["Brands entering or growing in the US market", "Founders who need a marketing lead without a full team", "Businesses relaunching their positioning"],
     positioning:
-      "Consistent brand execution — strategy, creative and the coordination that gets work published.",
+      "Consistent brand execution: strategy, creative and the coordination that gets work published.",
     problems: [
       "Our brand looks different on every channel",
       "We have a plan but nothing ships on schedule",
@@ -194,7 +194,7 @@ export const SERVICES: Service[] = [
     icon: "globe",
     summary: "Supplier discovery and logistics coordination",
     description:
-      "Practical sourcing support grounded in supply chain management — finding and vetting suppliers in China, coordinating samples and orders, and keeping shipments on track.",
+      "Practical sourcing support grounded in supply chain management: finding and vetting suppliers in China, coordinating samples and orders, and keeping shipments on track.",
     capabilities: [
       "China-based supplier discovery",
       "Product sourcing coordination",

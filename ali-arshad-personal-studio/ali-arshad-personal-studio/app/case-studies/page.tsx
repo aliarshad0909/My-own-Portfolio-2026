@@ -10,9 +10,9 @@ import { pageMetadata } from "@/lib/seo";
 import { servicesForProject } from "@/lib/services";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Case Studies — How Each Project Was Built",
+  title: "Case Studies: How Each Project Was Built",
   description:
-    "How ideas became working products, creative systems and practical solutions — the challenge, the approach, the engineering decisions and what was verified, across twelve projects.",
+    "How ideas became working products, creative systems and practical solutions: the challenge, the approach, the engineering decisions and what was verified, across twelve projects.",
   path: "/case-studies",
 });
 
@@ -122,7 +122,7 @@ export default function CaseStudiesPage() {
             The thinking <span className="accent">behind the work</span>
           </>
         }
-        lead="An inside look at how ideas become working products, creative systems and practical solutions — from the initial challenge to the final implementation, including the decisions that turned out to be wrong."
+        lead="An inside look at how ideas become working products, creative systems and practical solutions, from the initial challenge to the final implementation, including the decisions that turned out to be wrong."
       />
 
       <section className="section section--flush-top" aria-labelledby="featured-title">
@@ -166,7 +166,7 @@ export default function CaseStudiesPage() {
                 The rest of the collection
               </h2>
               <p className="section-sub">
-                Same depth, different disciplines — automation, voice, sourcing, 3D and production tooling. Two of these are in development rather than
+                Same depth, different disciplines: automation, voice, sourcing, 3D and production tooling. Two of these are in development rather than
                 demo ready, and say so.
               </p>
             </div>

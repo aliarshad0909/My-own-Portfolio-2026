@@ -24,7 +24,7 @@ export function Hero() {
       <div className="hero__accent" aria-hidden="true" />
       <div className="container hero__inner">
         <div className="hero__copy enter">
-          <p className="eyebrow">{SITE.name} — Personal Studio</p>
+          <p className="eyebrow">{SITE.name}, Personal Studio</p>
 
           <h1 className="hero__title" id="hero-title">
             <span className="hero__line">One studio.</span>
@@ -33,7 +33,7 @@ export function Hero() {
           </h1>
 
           <p className="hero__lead">
-            Creative production, software development, AI automation, and business strategy — brought together through one independent personal studio.
+            One independent studio handling the full arc of a project: brand, interface, and the code and automation that run it.
           </p>
 
           <div className="hero__actions">

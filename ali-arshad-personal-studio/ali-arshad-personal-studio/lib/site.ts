@@ -18,7 +18,7 @@ export const SITE = {
   role: "Designer, Developer & Creative Technologist",
   tagline: "Creative thinking. Technical execution. Business understanding.",
   description:
-    "Ali Arshad is an independent designer, developer and creative technologist — custom web applications built with Next.js, AI agents and n8n workflow automation, video editing, motion graphics and Blender 3D product visualization, grounded in brand management and supply chain experience.",
+    "Ali Arshad is an independent designer, developer and creative technologist. He builds custom web applications with Next.js, AI agents and n8n workflow automation, produces video editing, motion graphics and Blender 3D product visualization, and brings brand management and supply chain experience to every project.",
   /** Production URL, e.g. https://aliarshad.studio — set NEXT_PUBLIC_SITE_URL. */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, ""),
   /** Public contact email — set NEXT_PUBLIC_CONTACT_EMAIL. Hidden when empty. */

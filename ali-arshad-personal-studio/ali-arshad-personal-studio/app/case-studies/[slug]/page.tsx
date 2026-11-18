@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = records().find((p) => p.slug === slug);
   if (!project) return {};
   return pageMetadata({
-    title: `${project.title} — Case Study`,
+    title: `${project.title} (Case Study)`,
     description: project.summary,
     path: `/case-studies/${project.slug}`,
     index: isIndexable(project),

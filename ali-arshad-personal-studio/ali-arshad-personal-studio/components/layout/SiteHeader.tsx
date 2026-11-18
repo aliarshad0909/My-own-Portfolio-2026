@@ -39,7 +39,7 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="container site-header__inner">
-        <Link href="/" className="brand" aria-label={`${SITE.name} — ${SITE.descriptor}, home`}>
+        <Link href="/" className="brand" aria-label={`${SITE.name}, ${SITE.descriptor}, home`}>
           <BrandMark size={30} />
           <span className="brand__name">{SITE.name}</span>
           <span className="brand__descriptor">{SITE.descriptor}</span>

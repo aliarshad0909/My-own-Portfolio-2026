@@ -8,13 +8,13 @@ export const SERVICE_OPTIONS = [...SERVICES.map((s) => s.title), "Not sure yet"]
 
 export const BUDGET_OPTIONS = [
   "Under $1,000",
-  "$1,000 – $5,000",
-  "$5,000 – $15,000",
+  "$1,000 to $5,000",
+  "$5,000 to $15,000",
   "$15,000+",
   "Prefer to discuss",
 ];
 
-export const TIMELINE_OPTIONS = ["As soon as possible", "Within 1 month", "1 – 3 months", "3+ months", "Flexible"];
+export const TIMELINE_OPTIONS = ["As soon as possible", "Within 1 month", "1 to 3 months", "3+ months", "Flexible"];
 
 export const LIMITS = {
   name: 100,

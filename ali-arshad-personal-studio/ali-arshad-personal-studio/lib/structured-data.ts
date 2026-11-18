@@ -39,7 +39,7 @@ export function webSiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": abs("/#website"),
-    name: `${SITE.name} — ${SITE.descriptor}`,
+    name: `${SITE.name}: ${SITE.descriptor}`,
     url: abs("/"),
     description: SITE.description,
     author: { "@id": abs("/#person") },

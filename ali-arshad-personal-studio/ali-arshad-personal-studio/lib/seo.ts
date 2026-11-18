@@ -12,7 +12,7 @@ type PageMeta = {
 
 /** Consistent per-page metadata: title, description, canonical and social cards. */
 export function pageMetadata({ title, description, path, index = true }: PageMeta): Metadata {
-  const fullTitle = path === "/" ? title : `${title} — ${SITE.name}`;
+  const fullTitle = path === "/" ? title : `${title}: ${SITE.name}`;
   return {
     title: fullTitle,
     description,
@@ -25,7 +25,7 @@ export function pageMetadata({ title, description, path, index = true }: PageMet
       title: fullTitle,
       description,
       url: path,
-      siteName: `${SITE.name} — ${SITE.descriptor}`,
+      siteName: `${SITE.name}: ${SITE.descriptor}`,
       type: "website",
       locale: "en_US",
     },

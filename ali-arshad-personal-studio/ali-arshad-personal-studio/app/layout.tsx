@@ -15,9 +15,9 @@ const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variab
 
 export const metadata: Metadata = {
   metadataBase: siteBaseUrl(),
-  title: { default: `${SITE.name} — ${SITE.role}`, template: "%s" },
+  title: { default: `${SITE.name}: ${SITE.role}`, template: "%s" },
   description: SITE.description,
-  applicationName: `${SITE.name} — ${SITE.descriptor}`,
+  applicationName: `${SITE.name}: ${SITE.descriptor}`,
   authors: [{ name: SITE.name }],
   creator: SITE.name,
   formatDetection: { telephone: false },

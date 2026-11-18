@@ -11,13 +11,12 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { visibleCredentials } from "@/lib/credentials";
 import { EXPERIENCE } from "@/lib/experience";
-import { TOOL_GROUPS, toolsInGroup } from "@/lib/expertise";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "About the Studio",
   description:
-    "Ali Arshad is an independent creative and digital studio of one — a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development and automation.",
+    "Ali Arshad is an independent creative and digital studio of one: a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development and automation.",
   path: "/about",
 });
 
@@ -27,7 +26,7 @@ const PILLARS: { icon: IconName; title: string; lead: string; text: string; proo
     icon: "clapperboard",
     title: "Creative perspective",
     lead: "Communicating an idea so it lands.",
-    text: "Visual storytelling, design and content that make a product easy to understand — 3D visualization, video, motion and graphics.",
+    text: "Visual storytelling, design and content that make a product easy to understand: 3D visualization, video, motion and graphics.",
     proof: "See the brand system",
     href: "/case-studies/halcyon-brand-system",
   },
@@ -64,18 +63,10 @@ const JOURNEY = [
   { id: "software-development", label: "Software and automation" },
 ] as const;
 
-const PROCESS = [
-  { step: "Discover", text: "Understand the business, the constraints and what the project actually has to achieve." },
-  { step: "Plan", text: "Turn that into scope, milestones and a practical execution strategy you can hold me to." },
-  { step: "Create", text: "Design, develop, automate or produce the work itself." },
-  { step: "Test & refine", text: "Check functionality, visual quality, accessibility and fit against the brief — then fix what the checks find." },
-  { step: "Deliver & support", text: "Hand over with documentation, explain how it works, and agree what ongoing support looks like." },
-];
-
 const FAQ_ITEMS: FaqItem[] = [
   {
     q: "Who is Ali Arshad?",
-    a: "An independent designer, developer and creative technologist running a one-person studio — a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development, AI automation and brand work. The three pillars above describe how those disciplines combine on a project.",
+    a: "An independent designer, developer and creative technologist running a one-person studio: a BBA in Supply Chain Management turned multidisciplinary practice across creative production, software development, AI automation and brand work. The three pillars above describe how those disciplines combine on a project.",
   },
   {
     q: "Does Ali provide video editing and 3D visualization?",
@@ -97,7 +88,7 @@ export default function AboutPage() {
             The person <span className="accent">behind the studio</span>
           </>
         }
-        lead="Creative thinking. Technical execution. Business understanding. I'm Ali Arshad — I run an independent studio where those three come from the same person rather than three different vendors."
+        lead="Creative thinking. Technical execution. Business understanding. I run an independent studio where those three come from the same person rather than three different vendors."
         aside={
           <div className="portrait-frame portrait-frame--about enter enter--portrait">
             <Image
@@ -130,7 +121,7 @@ export default function AboutPage() {
           <div className="prose reveal">
             <p>
               My background began in business. I studied for a Bachelor of Business Administration with a major in Supply Chain Management at Bahria
-              University Islamabad, where the subject was how organisations move resources, information and money through a process — and where those
+              University Islamabad, where the subject was how organisations move resources, information and money through a process, and where those
               processes get stuck.
             </p>
             <p>
@@ -221,30 +212,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section section--surface" aria-labelledby="process-title">
-        <div className="container">
-          <div className="section-head reveal">
-            <p className="eyebrow eyebrow--plain">How I work</p>
-            <h2 className="section-title" id="process-title">
-              Five stages, every project
-            </h2>
-            <p className="section-sub">Small projects move through these quickly. Large ones move through them carefully. None of them skip a stage.</p>
-          </div>
-          <ol className="process">
-            {PROCESS.map((p, i) => (
-              <li key={p.step} className="process__item reveal">
-                <span className="process__num" aria-hidden="true">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="process__title">{p.step}</h3>
-                <p className="process__text">{p.text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="collab-title">
+      <section className="section section--surface" aria-labelledby="collab-title">
         <div className="container">
           <div className="panel panel--lg collab reveal">
             <div>
@@ -255,7 +223,7 @@ export default function AboutPage() {
             </div>
             <div className="prose">
               <p>
-                I lead projects within my own capabilities personally — you talk to the person doing the work, not to an account manager relaying it.
+                I lead projects within my own capabilities personally: you talk to the person doing the work, not to an account manager relaying it.
               </p>
               <p>
                 When a project needs expertise outside mine, such as blockchain development or a security review, I bring in trusted professionals and
@@ -300,43 +268,6 @@ export default function AboutPage() {
               ))}
             </ul>
             <ArrowLink href="/experience#creds-title">See all credentials</ArrowLink>
-          </div>
-        </div>
-      </section>
-
-      <section className="section section--surface" aria-labelledby="tools-title">
-        <div className="container">
-          <div className="section-head reveal">
-            <p className="eyebrow eyebrow--plain">Tools &amp; technologies</p>
-            <h2 className="section-title" id="tools-title">
-              What I actually work in
-            </h2>
-            <p className="section-sub">
-              Tools I use, grouped by what they are for. A technology appearing in one demonstration does not make it a specialism, so this list stays
-              shorter than the stack lists on individual projects.
-            </p>
-          </div>
-          <div className="tool-groups">
-            {TOOL_GROUPS.map((group) => {
-              const tools = toolsInGroup(group);
-              if (tools.length === 0) return null;
-              return (
-                <div key={group} className="tool-group reveal">
-                  <h3 className="label">{group}</h3>
-                  <ul className="tool-chips">
-                    {tools.map((t) => (
-                      <li key={t.name} className="tool-chip">
-                        <span className="tool-chip__mark" aria-hidden="true">
-                          {t.mark}
-                        </span>
-                        <span>{t.name}</span>
-                        {t.conceptOnly ? <span className="tool-chip__qualifier">concept work</span> : null}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>
