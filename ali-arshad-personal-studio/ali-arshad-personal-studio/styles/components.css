@@ -1392,3 +1392,277 @@
     display: block;
   }
 }
+
+/* ── Location directory & utilities ─────────────────────────────────────── */
+
+/* Constrain prose to a comfortable reading measure. */
+.measure {
+  max-width: var(--measure);
+}
+.measure + .measure {
+  margin-top: 1rem;
+}
+
+/* Secondary text / not-yet-live location names (rendered as plain text, not
+   links, so the directory never points at a page that would 404). */
+.muted {
+  color: var(--muted);
+}
+
+/* Responsive list of state / city links. Collapses to one column on phones. */
+.location-grid {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem 1.5rem;
+}
+.location-grid li {
+  padding-block: 0.35rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.location-grid a {
+  color: var(--text);
+  text-decoration: none;
+}
+.location-grid a:hover {
+  color: var(--coral);
+}
+
+/* ── Service hub pages ──────────────────────────────────────────────────── */
+
+.hub-problems {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+  max-width: var(--measure);
+}
+.hub-problems li {
+  padding: 0.85rem 1.1rem;
+  background: var(--tint);
+  border-left: 3px solid var(--coral-line);
+  border-radius: var(--radius-sm);
+  font-style: italic;
+  color: var(--text);
+}
+
+.hub-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 0.6rem 1.5rem;
+  max-width: 60rem;
+}
+.hub-list li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: start;
+  color: var(--muted);
+}
+.hub-list svg {
+  color: var(--coral);
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+}
+
+.hub-steps {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 1rem;
+  counter-reset: step;
+}
+.hub-steps li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
+.hub-steps__n {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--coral-soft);
+  color: var(--coral);
+  font-weight: 600;
+  font-size: var(--fs-small);
+}
+.hub-steps__label {
+  font-weight: 600;
+  color: var(--text);
+}
+.hub-steps__detail {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.hub-links {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* ── Interactive calculators ────────────────────────────────────────────── */
+
+.calc {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  max-width: 62rem;
+}
+@media (min-width: 720px) {
+  .calc {
+    grid-template-columns: 1.3fr 1fr;
+    align-items: start;
+  }
+}
+.calc__fields {
+  display: grid;
+  gap: 1.1rem;
+}
+.calc__field {
+  display: grid;
+  gap: 0.4rem;
+  font-size: var(--fs-small);
+}
+.calc__field > span,
+.calc__field > legend {
+  color: var(--muted);
+}
+.calc__suffix {
+  color: var(--muted);
+}
+.calc__field select,
+.calc__field input[type="number"] {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border-field);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.calc__field input[type="range"] {
+  width: 100%;
+  accent-color: var(--coral);
+}
+.calc__field:focus-within > span {
+  color: var(--text);
+}
+.calc__choices {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.calc__choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--border-field);
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.calc__choice.is-on {
+  border-color: var(--coral-line);
+  background: var(--coral-soft);
+  color: var(--text);
+}
+.calc__choice input {
+  accent-color: var(--coral);
+}
+.calc__out {
+  display: block;
+  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  position: sticky;
+  top: calc(var(--header-h) + 1rem);
+}
+.calc__out-label {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  margin: 0;
+}
+.calc__out-value {
+  font-family: var(--font-heading);
+  font-size: var(--fs-section);
+  color: var(--coral);
+  margin: 0.25rem 0 0.5rem;
+  line-height: 1.1;
+}
+.calc__out-sub {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  margin: 0.25rem 0 0;
+}
+
+/* ── Resource & article pages ───────────────────────────────────────────── */
+
+.resource-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.75rem;
+}
+.article-body > * {
+  margin-top: 1rem;
+}
+.article-body h2 {
+  margin-top: 2rem;
+}
+.article-list {
+  max-width: var(--measure);
+  margin-top: 0.75rem;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.4rem;
+  color: var(--muted);
+}
+.article-related {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-soft);
+  color: var(--muted);
+}
+
+/* ── Testimonials (render only when real, consented quotes exist) ───────── */
+
+.testimonial-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+.testimonial {
+  padding: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+}
+.testimonial blockquote {
+  margin: 0;
+  color: var(--text);
+}
+.testimonial__by {
+  margin: 1rem 0 0;
+  font-size: var(--fs-small);
+}

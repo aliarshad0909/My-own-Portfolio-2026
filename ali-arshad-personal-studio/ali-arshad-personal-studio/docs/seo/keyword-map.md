@@ -29,11 +29,19 @@ queries each page is *about*.
 
 ## Regional intent
 
-The services travel globally (remote work), so pages target the service
-query itself, not invented city pages. No "web developer in <city>" landing
-pages exist or should be added: Google treats doorway pages as spam, and no
-physical office exists to claim. If a real business location is ever
-published on the site, `/contact` is the only page that should carry it.
+The services travel (remote work), so the default target is the service query
+itself, not an invented city page. Google treats doorway pages as spam, and no
+physical office exists to claim.
+
+The location architecture (`lib/geo/*`, `/locations`) exists to make nationwide
+coverage *scalable without publishing doorway pages*. Every US state, D.C. and
+the pilot cities are typed records, but each starts as `NeedsEvidence`: the
+route does not render in production and is never indexed. A state or city page
+is published only when it earns the right to exist — a real client in that
+market, or a genuinely committed service area — and its templated copy has been
+rewritten into something unique. The `/locations` directory advertises the real
+remote, US-wide availability and links only pages that are actually live, so
+production never links to an empty page. See `docs/seo/ARCHITECTURE.md`.
 
 ## Rules this map follows
 
