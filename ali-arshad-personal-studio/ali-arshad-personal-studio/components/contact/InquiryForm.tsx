@@ -204,7 +204,7 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
 
       <fieldset className="form__fieldset">
         <legend className="form__legend">
-          Optional — helps me reply with a realistic scope
+          Optional, helps me reply with a realistic scope
         </legend>
       <div className="form__row">
         <div className="field">
@@ -254,7 +254,7 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
         <div className={`form-status ${status.setup ? "form-status--setup" : "form-status--error"}`} role="alert" tabIndex={-1} ref={statusRef}>
           <Icon name="alert" size={22} />
           <div>
-            <h3 className="card-title">{status.setup ? "Not sent — form not connected" : "Your inquiry was not sent"}</h3>
+            <h3 className="card-title">{status.setup ? "Not sent: form not connected" : "Your inquiry was not sent"}</h3>
             <p>{status.message}</p>
           </div>
         </div>

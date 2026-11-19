@@ -11,7 +11,7 @@ import { SERVICES } from "@/lib/services";
 import { SITE, activeSocials } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact — Start a Project",
+  title: "Contact: Start a Project",
   description:
     "Start a project with Ali Arshad. Share what you're building, the budget and timeline if you know them, and get a considered reply on fit, scope and next steps.",
   path: "/contact",
@@ -19,22 +19,18 @@ export const metadata: Metadata = pageMetadata({
 
 const FAQ_ITEMS: FaqItem[] = [
   {
-    q: "How do projects begin?",
-    a: "With a message through this page. Every inquiry is read personally — if the project looks like a match, the next step is a short call about the goal, constraints and what success looks like, followed by a plain-language written scope: what will be built, in what order, what it costs and what it depends on from your side.",
-  },
-  {
     q: "What should the first message include?",
     a: "A sentence or two on what you are trying to achieve is more useful than a long brief. Budget and timeline help if you know them, but neither is required to start the conversation.",
   },
   {
     q: "Which service should I choose if the problem spans several?",
-    a: "Pick the closest one, or choose \u201cNot sure yet\u201d and describe the problem — working out the right approach is part of the job. For specialist areas such as blockchain or security, qualified partners are brought in and that is said upfront.",
+    a: "Pick the closest one, or choose \u201cNot sure yet\u201d and describe the problem: working out the right approach is part of the job. For specialist areas such as blockchain or security, qualified partners are brought in and that is said upfront.",
   },
 ];
 
 /** What a sender can expect after pressing send. No turnaround promise is made that cannot be kept. */
 const NEXT_STEPS: { icon: IconName; title: string; text: string }[] = [
-  { icon: "mail", title: "I read it myself", text: "Every inquiry lands with me, not a form queue. A sentence or two on what you are trying to achieve is more useful than a long brief." },
+  { icon: "mail", title: "I read it myself", text: "Every inquiry lands with me personally, not a support queue." },
   { icon: "users", title: "A short call if it fits", text: "If the project looks like a match, I will suggest a call to understand the goal, constraints and what success looks like." },
   { icon: "briefcase", title: "A written scope", text: "You get a plain-language proposal: what will be built, in what order, what it costs and what it depends on from your side." },
 ];
@@ -54,8 +50,8 @@ export default function ContactPage() {
               Let&rsquo;s talk about <span className="accent">your project</span>
             </h1>
             <p className="lead">
-              Tell me what you&rsquo;re building, what&rsquo;s in the way, and when you need it. I reply with honest thoughts on fit, scope and next steps
-              — including when the right answer is a smaller project than you had in mind.
+              Tell me what you&rsquo;re building, what&rsquo;s in the way, and when you need it. I reply with honest thoughts on fit, scope and next steps,
+              including when the right answer is a smaller project than you had in mind.
             </p>
 
             <ul className="contact__details">
@@ -145,7 +141,7 @@ export default function ContactPage() {
             ))}
           </ol>
           <p className="fine-print contact__fine">
-            Not sure which service you need? Choose &ldquo;Not sure yet&rdquo; and describe the problem — working out the right approach is part of the job. For
+            Not sure which service you need? Choose &ldquo;Not sure yet&rdquo; and describe the problem: working out the right approach is part of the job. For
             specialist areas such as blockchain or security, I coordinate with qualified partners and say so upfront.
           </p>
         </div>

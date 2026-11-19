@@ -17,7 +17,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Experience & Certifications",
   description:
-    "Ali Arshad's career so far: a BBA in Supply Chain Management, brand management for US brands, creative production, software development and AI automation — with verified HubSpot Academy and Google Ads (Skillshop) certifications.",
+    "Ali Arshad's career so far: a BBA in Supply Chain Management, brand management for US brands, creative production, software development and AI automation, with verified HubSpot Academy and Google Ads (Skillshop) certifications.",
   path: "/experience",
 });
 
@@ -26,12 +26,12 @@ const ARC: { thread: keyof typeof THREADS; icon: IconName; story: string }[] = [
   {
     thread: "business",
     icon: "globe",
-    story: "It started with a business degree focused on supply chain — how resources, information and money move through an organisation, and where they stall.",
+    story: "It started with a business degree focused on supply chain: how resources, information and money move through an organisation, and where they stall.",
   },
   {
     thread: "creative",
     icon: "clapperboard",
-    story: "Brand management for US brands turned that into practice: content, campaigns and the production work — video, motion, 3D — needed to ship them.",
+    story: "Brand management for US brands turned that into practice: content, campaigns and the production work (video, motion, 3D) needed to ship them.",
   },
   {
     thread: "software",
@@ -41,7 +41,7 @@ const ARC: { thread: keyof typeof THREADS; icon: IconName; story: string }[] = [
   {
     thread: "automation",
     icon: "bot",
-    story: "The newest strand, and a direct consequence of the others — once you have built the systems, the repetitive work between them is obvious and automatable.",
+    story: "The newest strand, and a direct consequence of the others: once you have built the systems, the repetitive work between them is obvious and automatable.",
   },
 ];
 
@@ -61,7 +61,7 @@ export default function ExperiencePage() {
             One career, <span className="accent">four threads</span>
           </>
         }
-        lead="Business education, brand management, creative production, software and automation — not a list of unrelated jobs, but a sequence where each one made the next possible."
+        lead="Business education, brand management, creative production, software and automation: not a list of unrelated jobs, but a sequence where each one made the next possible."
         aside={
           <div className="portrait-frame portrait-frame--experience enter enter--portrait">
             <Image
@@ -200,7 +200,7 @@ export default function ExperiencePage() {
                 })}
               </div>
               <p className="fine-print">
-                The full stack behind each project is listed on its own page — see <Link href="/case-studies">the case studies</Link>.
+                The full stack behind each project is listed on its own page: see <Link href="/case-studies">the case studies</Link>.
               </p>
             </div>
           </div>

@@ -4,26 +4,28 @@
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 14px;
   color: var(--muted);
-  font-size: var(--fs-tiny);
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
 }
 
+/* The drawn rule belongs to the two hero compositions (motion.css animates it);
+   every section eyebrow uses --plain and carries no rule. */
 .eyebrow::before {
   content: "";
-  width: 34px;
+  width: 28px;
   height: 1px;
   background: var(--coral);
 }
 
 .eyebrow--plain {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: var(--coral);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
 }
 
 .eyebrow--plain::before {
@@ -33,11 +35,15 @@
 /* Headings */
 .page-title {
   font-size: var(--fs-page);
+  line-height: 1.05;
+  letter-spacing: -0.032em;
   max-width: 18ch;
 }
 
 .section-title {
   font-size: var(--fs-section);
+  line-height: 1.08;
+  letter-spacing: -0.026em;
 }
 
 .section-title--sm {
@@ -50,18 +56,19 @@
 }
 
 .section-sub {
-  margin-top: 8px;
+  margin-top: 10px;
   color: var(--muted);
   font-size: 0.9375rem;
-  max-width: 60ch;
+  line-height: 1.65;
+  max-width: var(--measure-sm);
 }
 
 .lead {
   margin-top: 20px;
   color: var(--muted);
   font-size: var(--fs-lead);
-  line-height: 1.6;
-  max-width: 58ch;
+  line-height: 1.65;
+  max-width: var(--measure-sm);
 }
 
 .label {
@@ -70,7 +77,7 @@
   font-family: var(--font-body);
   font-size: var(--fs-tiny);
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -78,14 +85,16 @@
   margin-top: 24px;
 }
 
+/* 80ch was over twice the comfortable measure for a 14px note. */
 .fine-print {
   color: var(--muted);
   font-size: var(--fs-small);
-  max-width: 80ch;
+  line-height: 1.6;
+  max-width: var(--measure);
 }
 
 .section-head {
-  margin-bottom: clamp(24px, 3vw, 40px);
+  margin-bottom: clamp(28px, 3.4vw, 52px);
 }
 
 /* Buttons */
@@ -195,16 +204,17 @@
 }
 
 /* Panels & cards */
+/* A panel is a fill. The outline around the fill was the second edge. */
 .panel {
   position: relative;
-  padding: clamp(18px, 2.2vw, 26px);
-  border: 1px solid var(--border);
+  padding: clamp(20px, 2.4vw, 30px);
+  border: 0;
   border-radius: var(--radius);
   background: var(--card);
 }
 
 .panel--lg {
-  padding: clamp(18px, 2.6vw, 34px);
+  padding: clamp(22px, 2.8vw, 40px);
 }
 
 .panel__head {
@@ -263,50 +273,52 @@
 }
 
 /* Badges, tags, chips */
+/*
+ * Status and type badges stay — they are the disclosure that a project is a
+ * demonstration rather than client work — but they drop their outlines. Six
+ * differently coloured rings on one card read as a control panel; one quiet
+ * fill with a tinted label reads as a note. Every variant colour below clears
+ * 5.6:1 against the composited fill, so the softening costs no contrast.
+ */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 9px;
-  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border: 0;
   border-radius: 999px;
+  background: var(--tint);
   color: var(--muted);
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1.5;
+  letter-spacing: 0.09em;
+  line-height: 1.45;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .badge--draft {
-  border-color: rgba(242, 198, 109, 0.45);
   color: var(--warn);
 }
 
 .badge--demo {
-  border-color: rgba(137, 196, 244, 0.45);
   color: #9ec9ee;
 }
 
 .badge--verified,
 .badge--pro {
-  border-color: rgba(126, 211, 160, 0.45);
   color: #7ed3a0;
 }
 
 .badge--concept {
-  border-color: var(--border);
   color: var(--muted);
 }
 
 .badge--adapted {
-  border-color: rgba(196, 164, 232, 0.45);
   color: #c4a4e8;
 }
 
 .badge--partner {
   margin-top: 8px;
-  border-color: var(--coral-line);
   color: var(--coral);
 }
 
@@ -318,8 +330,9 @@
 
 .tag-list li {
   padding: 3px 10px;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 999px;
+  background: var(--tint);
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.5;
@@ -370,18 +383,25 @@
 }
 
 /* Notices */
+/*
+ * Disclaimers are informational and stay, but a boxed-and-tinted warning
+ * panel is the loudest thing on a page that is mostly dark surfaces. A single
+ * amber rule on the leading edge says the same thing at a tenth the weight.
+ */
 .notice {
   display: flex;
   gap: 10px;
   align-items: flex-start;
   margin-block: 18px;
-  padding: 12px 14px;
-  border: 1px solid rgba(242, 198, 109, 0.3);
-  border-radius: var(--radius-sm);
-  background: rgba(242, 198, 109, 0.06);
+  padding: 2px 0 2px 16px;
+  border: 0;
+  border-left: 2px solid rgba(242, 198, 109, 0.4);
+  border-radius: 0;
+  background: none;
   color: #e6dcc6;
   font-size: var(--fs-small);
-  max-width: 70ch;
+  line-height: 1.6;
+  max-width: var(--measure);
 }
 
 .notice svg {
@@ -399,11 +419,12 @@
 
 .editor-note {
   margin-block: 14px;
-  padding: 10px 14px;
-  border: 1px dashed rgba(242, 198, 109, 0.5);
-  border-radius: var(--radius-sm);
+  padding: 2px 0 2px 16px;
+  border: 0;
+  border-left: 2px solid rgba(242, 198, 109, 0.4);
   color: var(--warn);
   font-size: var(--fs-tiny);
+  line-height: 1.6;
 }
 
 .empty-state {
@@ -469,10 +490,11 @@
 
 .prose {
   display: grid;
-  gap: 16px;
+  gap: 18px;
   color: #d9d7d2;
   font-size: var(--fs-lead);
-  max-width: 68ch;
+  line-height: 1.7;
+  max-width: var(--measure);
 }
 
 .prose ul,
@@ -798,9 +820,10 @@
 }
 
 /* ───────── Project cards ───────── */
+/* Wider gutters are what turn a grid of tiles into a gallery. */
 .project-grid {
   display: grid;
-  gap: clamp(14px, 1.6vw, 20px);
+  gap: clamp(18px, 2.4vw, 34px);
 }
 
 @media (min-width: 640px) {
@@ -819,23 +842,27 @@
   }
 }
 
+/*
+ * The surface fill already separates the card from the page, and the cover
+ * image draws its own top edge, so the resting outline was a third statement
+ * of the same boundary. The border is kept but transparent: it costs nothing
+ * at rest and is still there to carry the hover and focus state.
+ */
 .project-card {
   display: flex;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   background: var(--surface);
   overflow: hidden;
   transition:
     border-color var(--med) ease,
-    transform var(--med) var(--ease),
-    box-shadow var(--med) ease;
+    transform var(--med) var(--ease);
 }
 
 .project-card:hover,
 .project-card:focus-within {
   border-color: var(--coral-line);
-  transform: translateY(-4px);
-  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.9);
+  transform: translateY(-2px);
 }
 
 .project-card__link {
@@ -868,15 +895,15 @@
 
 .project-card:hover .project-card__image,
 .project-card:hover .project-card__video {
-  transform: scale(1.035);
+  transform: scale(1.02);
 }
 
 .project-card__body {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px 18px 18px;
+  gap: 9px;
+  padding: 18px 20px 20px;
 }
 
 .project-card__meta {
@@ -913,19 +940,19 @@
   transform: translate(2px, -2px);
 }
 
-.project-card__summary,
-.project-card__role {
+.project-card__summary {
   color: var(--muted);
   font-size: 0.9375rem;
 }
 
 .project-card__role {
-  color: #d9d7d2;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
 }
 
 .project-card .tag-list {
   margin-top: auto;
-  padding-top: 8px;
+  padding-top: 12px;
 }
 
 /* ───────── CTA panel ───────── */
@@ -934,8 +961,8 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding: clamp(24px, 3.4vw, 44px);
-  border: 1px solid var(--coral-line);
+  padding: clamp(28px, 3.8vw, 52px);
+  border: 0;
   border-radius: var(--radius);
   background: linear-gradient(120deg, #3a211c 0%, #6a362b 55%, #8d4636 100%);
 }
@@ -944,7 +971,7 @@
   position: absolute;
   inset: 0;
   background: url("/images/backgrounds/cta-wave.webp") 40% center / 135% 135% no-repeat;
-  opacity: 0.4;
+  opacity: 0.3;
   mix-blend-mode: screen;
   -webkit-mask-image: linear-gradient(90deg, transparent 20%, #000 80%);
   mask-image: linear-gradient(90deg, transparent 20%, #000 80%);
@@ -1010,7 +1037,7 @@
   width: 100%;
   min-height: 48px;
   padding: 11px 14px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-field);
   border-radius: var(--radius-sm);
   background: var(--bg);
   color: var(--text);
@@ -1035,7 +1062,7 @@
 .field input:hover,
 .field select:hover,
 .field textarea:hover {
-  border-color: #4a5258;
+  border-color: #7b848b;
 }
 
 .field input:focus-visible,

@@ -6,7 +6,7 @@ import { PLANNED, PROJECTS } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Work — Web, AI Automation, 3D & Motion Portfolio",
+  title: "Work: Web, AI Automation, 3D & Motion Portfolio",
   description: "Portfolio of creative production, 3D and motion, branding, web and software, AI automation and business projects by Ali Arshad.",
   path: "/work",
 });
@@ -22,7 +22,7 @@ export default function WorkPage() {
             Projects across <span className="accent">creative, technical and business</span> work
           </>
         }
-        lead="Browse by discipline. Each project states how it came about — client work, an original build, or an adaptation of someone else's open-source project — and what I personally did."
+        lead="Browse by discipline. Each project states how it came about (client work, an original build, or an adaptation of someone else's open-source project) and what I personally did."
       />
       <section className="section section--flush-top" aria-label="Projects">
         <div className="container">

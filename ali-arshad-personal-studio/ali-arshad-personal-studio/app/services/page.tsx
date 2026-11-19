@@ -13,9 +13,9 @@ import { pageMetadata } from "@/lib/seo";
 import { SERVICES, contactHref, projectsForService, relatedWorkHref, type Service } from "@/lib/services";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Services — Web Development, AI Automation, Video & 3D",
+  title: "Services: Web Development, AI Automation, Video & 3D",
   description:
-    "Creative production, web and software development, AI agents and automation, brand management and growth, global sourcing and specialist technical collaboration — six connected service areas from Ali Arshad's independent studio.",
+    "Creative production, web and software development, AI agents and automation, brand management and growth, global sourcing and specialist technical collaboration: six connected service areas from Ali Arshad's independent studio.",
   path: "/services",
 });
 
@@ -27,7 +27,7 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "Can Ali build custom AI agents?",
-    a: "Yes — AI agents and automation is a core service: scoped agents for support, sales and internal operations, with clear hand-offs wherever human judgement matters. The work section includes complete demonstration builds — a customer support agent, a voice-based sales agent and an inbound lead-qualification workflow — each built end to end under a fictional brand and labelled as a demonstration.",
+    a: "Yes. AI agents and automation is a core service: scoped agents for support, sales and internal operations, with clear hand-offs wherever human judgement matters. The work section includes complete demonstration builds, including a customer support agent, a voice-based sales agent and an inbound lead-qualification workflow, each built end to end under a fictional brand and labelled as a demonstration.",
   },
   {
     q: "Can sales workflows be automated with n8n?",
@@ -35,15 +35,15 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "Does Ali develop e-commerce applications?",
-    a: "Yes — custom storefronts and the operational tooling around them: product catalogues with filtering and search, carts and checkout flows, order handling and inventory views. The Tessera Clayworks storefront in the case studies is a complete demonstration build of exactly this kind of project.",
+    a: "Yes. Custom storefronts and the operational tooling around them: product catalogues with filtering and search, carts and checkout flows, order handling and inventory views. The Tessera Clayworks storefront in the case studies is a complete demonstration build of exactly this kind of project.",
   },
   {
     q: "What is included in a typical development engagement?",
-    a: "A short discovery conversation, then a plain-language written scope: what will be built, in what order, what it costs and what it depends on from your side. Work is delivered in stages, and hand-over includes documentation and an agreement on what ongoing support looks like. Every project is quoted individually — there is no fixed price list.",
+    a: "A short discovery conversation, then a plain-language written scope: what will be built, in what order, what it costs and what it depends on from your side. Work is delivered in stages, and hand-over includes documentation and an agreement on what ongoing support looks like. Every project is quoted individually, and there is no fixed price list.",
   },
   {
     q: "How is specialist collaboration handled?",
-    a: "Some projects need expertise outside my own — blockchain, advanced security or large-scale infrastructure. For those I stay your single point of contact, bring in qualified specialists, and say so upfront rather than presenting their work as mine.",
+    a: "Some projects need expertise outside my own, such as blockchain, advanced security or large-scale infrastructure. For those I stay your single point of contact, bring in qualified specialists, and say so upfront rather than presenting their work as mine.",
   },
 ];
 
@@ -238,7 +238,7 @@ export default function ServicesPage() {
       <ContactCTA
         standalone
         title="Not sure where to start? Let's work backward from your goal."
-        text="Tell me what you're trying to build, improve or automate. I'll help identify the right technical and creative approach — even if that means a smaller project than you expected."
+        text="Tell me what you're trying to build, improve or automate. I'll help identify the right technical and creative approach, even if that means a smaller project than you expected."
         button="Start a conversation"
       />
     </>

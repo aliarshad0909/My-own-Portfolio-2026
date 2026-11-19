@@ -23,7 +23,7 @@ export function ProjectCard({
   const href = linkTo === "case-study" ? `/case-studies/${project.slug}` : `/work/${project.slug}`;
   return (
     <article className="project-card">
-      <Link href={href} className="project-card__link" aria-label={`${project.title} — view project`}>
+      <Link href={href} className="project-card__link" aria-label={`${project.title}, view project`}>
         <ProjectMedia project={project} sizes={sizes ?? "(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"} />
         <div className="project-card__body">
           <div className="project-card__meta">

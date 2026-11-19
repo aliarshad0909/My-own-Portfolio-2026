@@ -19,7 +19,7 @@ export function ServiceShowcase({ projects, serviceTitle }: { projects: Project[
 
   return (
     <div className="showcase">
-      <Link href={`/work/${lead.slug}`} className="showcase__lead" aria-label={`${lead.title} — view project`}>
+      <Link href={`/work/${lead.slug}`} className="showcase__lead" aria-label={`${lead.title}, view project`}>
         <Image
           src={lead.cover.src}
           alt={lead.cover.alt}
@@ -38,7 +38,7 @@ export function ServiceShowcase({ projects, serviceTitle }: { projects: Project[
         <ul className="showcase__row">
           {rest.slice(0, 2).map((p) => (
             <li key={p.slug}>
-              <Link href={`/work/${p.slug}`} className="showcase__thumb" aria-label={`${p.title} — view project`}>
+              <Link href={`/work/${p.slug}`} className="showcase__thumb" aria-label={`${p.title}, view project`}>
                 <Image src={p.cover.src} alt={p.cover.alt} width={p.cover.width} height={p.cover.height} sizes="(min-width: 1024px) 270px, 46vw" />
               </Link>
             </li>

@@ -2,7 +2,7 @@
  * Experience timeline.
  *
  * Only publish what is verified. Fields left empty are simply not rendered:
- *   - `period`        e.g. "2023 — Present". Omit until dates are confirmed.
+ *   - `period`        e.g. "2023 to Present". Omit until dates are confirmed.
  *   - `organization`  Only set once naming permission is confirmed.
  *   - `title`         Use the exact job title once confirmed.
  *
@@ -48,7 +48,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
     id: "brand-management",
     area: "Brand Management",
     summary:
-      "More than two years managing brand work for US-based brands — keeping content, campaigns and communication consistent and moving.",
+      "More than two years managing brand work for US-based brands, keeping content, campaigns and communication consistent and moving.",
     highlights: ["Brand and content management", "Social media and email marketing", "Campaign and advertising coordination"],
     kind: "work",
     thread: "creative",
@@ -77,7 +77,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     id: "sales-internship",
     area: "Sales Internship",
-    summary: "Hands-on sales experience — working with prospects and supporting the path from first conversation to close.",
+    summary: "Hands-on sales experience, working with prospects and supporting the path from first conversation to close.",
     highlights: ["Prospect communication", "Sales support"],
     kind: "internship",
     thread: "business",

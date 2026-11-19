@@ -11,9 +11,16 @@
   position: absolute;
   inset: 0;
   background: url("/images/backgrounds/hero-accent.webp") right center / cover no-repeat;
-  opacity: 0.5;
-  filter: blur(18px);
+  opacity: 0.44;
+  filter: blur(14px);
   pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .hero__accent {
+    filter: none;
+    opacity: 0.34;
+  }
 }
 
 .hero__inner {
@@ -49,17 +56,18 @@
 }
 
 .hero__lead {
-  margin-top: 26px;
+  margin-top: 24px;
   color: #e4e1db;
   font-size: var(--fs-lead);
-  max-width: 50ch;
+  line-height: 1.65;
+  max-width: 48ch;
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 30px;
+  margin-top: 28px;
 }
 
 /* A single hairline above the discipline row ties the copy block together. */
@@ -70,6 +78,22 @@
   margin-top: 34px;
   padding-top: 22px;
   border-top: 1px solid var(--border-soft);
+}
+
+@media (max-width: 639px) {
+  .hero__lead {
+    margin-top: 18px;
+  }
+
+  .hero__actions {
+    margin-top: 22px;
+  }
+
+  .hero__disciplines {
+    gap: 8px 18px;
+    margin-top: 26px;
+    padding-top: 18px;
+  }
 }
 
 .hero__disciplines li {
@@ -135,7 +159,7 @@
   }
 
   .hero__copy {
-    padding-block: clamp(48px, 5.5vw, 84px);
+    padding-block: clamp(56px, 6.2vw, 104px);
   }
 
   .hero__visual {
@@ -151,7 +175,7 @@
 /* Inner page hero */
 .page-hero {
   position: relative;
-  padding-block: clamp(40px, 6vw, 84px) clamp(32px, 4.5vw, 60px);
+  padding-block: clamp(48px, 6.6vw, 104px) clamp(36px, 4.8vw, 72px);
 }
 
 .page-hero__inner {
@@ -363,7 +387,7 @@
 .expertise__tools li {
   padding: 1px 8px;
   border-radius: 999px;
-  background: rgba(249, 246, 240, 0.06);
+  background: var(--tint);
   color: #d9d7d2;
   font-size: 0.75rem;
 }
@@ -375,12 +399,13 @@
   margin-top: 20px;
 }
 
+/* A bordered tile around a bordered mark was two frames for one logo. */
 .tool {
   display: grid;
   justify-items: center;
   gap: 8px;
   padding: 14px 6px 12px;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--radius-sm);
   background: rgba(11, 13, 16, 0.45);
   text-align: center;
@@ -391,8 +416,9 @@
   place-items: center;
   width: 38px;
   height: 38px;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 9px;
+  background: var(--tint);
   font-family: var(--font-heading);
   font-size: 0.9375rem;
   font-weight: 600;
@@ -400,7 +426,7 @@
 }
 
 .tool--creative .tool__mark {
-  border-color: var(--coral-line);
+  background: var(--coral-soft);
   color: var(--coral);
 }
 
@@ -597,7 +623,7 @@
 
 .service-stack {
   display: grid;
-  gap: calc(var(--section) * 0.85);
+  gap: calc(var(--section) * 0.62);
 }
 
 .service-block {
@@ -736,7 +762,7 @@
   display: block;
   border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   background: var(--card);
 }
 
@@ -781,7 +807,7 @@
   display: block;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   background: var(--card);
 }
 
@@ -859,7 +885,7 @@
 /* Flow diagram */
 .flow {
   margin: 0;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--radius);
   background: var(--card);
   padding: 22px 20px;
@@ -972,7 +998,7 @@
   flex-wrap: wrap;
   padding: 13px 15px;
   min-height: 44px;
-  border: 1px solid var(--border-soft);
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
   background: var(--card);
   color: var(--text);
@@ -1012,12 +1038,12 @@
 /* ── Case study index ─────────────────────────────────────────────────── */
 .case-grid {
   display: grid;
-  gap: 18px;
+  gap: clamp(18px, 2.4vw, 32px);
 }
 
 .case-card {
   display: grid;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
@@ -1031,7 +1057,7 @@
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .case-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
 }
 
@@ -1040,7 +1066,6 @@
   position: relative;
   overflow: hidden;
   background: var(--surface);
-  border-bottom: 1px solid var(--border-soft);
 }
 
 .case-card__media img {
@@ -1121,8 +1146,9 @@
 
 .case-card__tags li {
   padding: 3px 10px;
-  border: 1px solid var(--border-soft);
+  border: 0;
   border-radius: 999px;
+  background: var(--tint);
   color: var(--muted);
   font-size: var(--fs-tiny);
 }
@@ -1164,8 +1190,9 @@
   color: var(--muted);
   font-size: var(--fs-tiny);
   text-decoration: none;
-  border: 1px solid var(--border-soft);
+  border: 0;
   border-radius: 999px;
+  background: var(--tint);
   padding: 10px 14px;
   min-height: 40px;
   display: inline-flex;
@@ -1175,7 +1202,7 @@
 .case-card__service:hover,
 .case-card__service:focus-visible {
   color: var(--coral);
-  border-color: var(--coral-line);
+  background: var(--coral-soft);
 }
 
 @media (min-width: 760px) {
@@ -1188,11 +1215,6 @@
     grid-column: 1 / -1;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
     align-items: stretch;
-  }
-
-  .case-card--lead .case-card__media {
-    border-bottom: 0;
-    border-right: 1px solid var(--border-soft);
   }
 
   .case-card--lead .case-card__media img {
@@ -1231,7 +1253,7 @@
   display: grid;
   gap: 5px;
   padding: 14px 16px;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
   background: var(--card);
   color: var(--text);
@@ -1305,7 +1327,7 @@
    since each decision is a card rather than a list item in running text. */
 .decisions li {
   padding: 18px 20px;
-  border: 1px solid var(--border-soft);
+  border: 0;
   border-left: 2px solid var(--coral-line);
   border-radius: var(--radius-sm);
   background: var(--surface);
@@ -1355,7 +1377,7 @@
 
 .detail__cover {
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--radius);
   background: #0f1317;
 }
@@ -1414,13 +1436,13 @@
 
 .media-gallery {
   display: grid;
-  gap: 16px;
-  margin-top: 20px;
+  gap: clamp(16px, 2vw, 26px);
+  margin-top: 24px;
 }
 
 .media-gallery__item {
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--radius);
 }
 
@@ -1617,7 +1639,7 @@
 /* ── About: pillars ───────────────────────────────────────────────────── */
 .pillars {
   display: grid;
-  gap: 16px;
+  gap: clamp(16px, 2vw, 26px);
 }
 
 .pillar {
@@ -1625,7 +1647,7 @@
   display: grid;
   gap: 0;
   padding: 28px 24px 24px;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
@@ -1849,7 +1871,7 @@
   align-items: center;
   gap: 9px;
   padding: 9px 14px 9px 9px;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 999px;
   background: var(--card);
   font-size: var(--fs-small);
@@ -1911,7 +1933,7 @@
 /* ── Experience: narrative arc ────────────────────────────────────────── */
 .arc {
   display: grid;
-  gap: 14px;
+  gap: clamp(14px, 1.8vw, 22px);
   counter-reset: arc;
 }
 
@@ -1920,7 +1942,7 @@
   display: grid;
   gap: 8px;
   padding: 24px 22px 22px;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
@@ -1978,7 +2000,7 @@
 @media (min-width: 1100px) {
   .arc {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    gap: 18px;
   }
 
   /* A hairline joining each card to the next, read left to right. */
@@ -1986,8 +2008,8 @@
     content: "";
     position: absolute;
     top: 38px;
-    right: -13px;
-    width: 13px;
+    right: -18px;
+    width: 18px;
     height: 1px;
     background: var(--border);
   }
@@ -2077,7 +2099,7 @@
 }
 
 .xp__card {
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
@@ -2266,18 +2288,18 @@
 /* ── Contact: what happens next ───────────────────────────────────────── */
 .next-steps {
   display: grid;
-  gap: 14px;
+  gap: 18px;
 }
 
 .next-step {
   position: relative;
   display: grid;
   gap: 8px;
-  padding: 24px 22px 22px;
-  border: 1px solid var(--border);
-  border-top: 2px solid var(--coral-line);
-  border-radius: var(--radius);
-  background: var(--card);
+  padding: 22px 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
 }
 
 .next-step__num {
@@ -2285,7 +2307,7 @@
   font-size: var(--fs-tiny);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--coral);
+  color: var(--muted);
 }
 
 .next-step__icon {
@@ -2310,18 +2332,19 @@
 @media (min-width: 760px) {
   .next-steps {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 44px);
   }
 }
 
 /* ── Credentials ──────────────────────────────────────────────────────── */
 .cred-grid {
   display: grid;
-  gap: 18px;
+  gap: clamp(18px, 2.4vw, 32px);
 }
 
 .cred {
   display: grid;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
@@ -2501,8 +2524,9 @@
 
 .cred__skills li {
   padding: 4px 11px;
-  border: 1px solid var(--border-soft);
+  border: 0;
   border-radius: 999px;
+  background: var(--tint);
   color: var(--muted);
   font-size: var(--fs-tiny);
 }
@@ -2663,41 +2687,30 @@
 }
 
 /* ── Home: service grid ───────────────────────────────────────────────── */
+/* Six cards in a row want air between them more than they want outlines. */
 .svc-grid {
   display: grid;
-  gap: 14px;
+  gap: clamp(14px, 1.8vw, 26px);
 }
 
+/*
+ * Hover used to fire three signals at once: a coral rule drawing across the
+ * top, the border turning coral and the fill lifting. One is an invitation;
+ * three is a notification. The fill and the border carry it now.
+ */
 .svc-card {
   position: relative;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
   transition: border-color var(--med) var(--ease), background var(--med) var(--ease);
 }
 
-.svc-card::before {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: 2px;
-  background: var(--coral);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--med) var(--ease);
-}
-
 .svc-card:hover,
 .svc-card:focus-within {
   border-color: var(--coral-line);
   background: var(--surface);
-}
-
-.svc-card:hover::before,
-.svc-card:focus-within::before {
-  transform: scaleX(1);
 }
 
 .svc-card__link {
@@ -2737,8 +2750,9 @@
 .svc-card__flag {
   justify-self: start;
   padding: 3px 10px;
-  border: 1px solid var(--border-soft);
+  border: 0;
   border-radius: 999px;
+  background: var(--tint);
   color: var(--muted);
   font-size: var(--fs-tiny);
 }
@@ -2772,16 +2786,18 @@
 }
 
 /* ── Home: featured work ──────────────────────────────────────────────── */
+/* Four full-width rows read as a sequence, not a stack, once the gutter
+   between them is larger than the padding inside them. */
 .fw-list {
   display: grid;
-  gap: 20px;
+  gap: clamp(20px, 2.8vw, 40px);
 }
 
 .fw {
   position: relative;
   display: grid;
   gap: 0;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
@@ -2797,7 +2813,6 @@
   display: block;
   overflow: hidden;
   background: var(--surface);
-  border-bottom: 1px solid var(--border-soft);
 }
 
 .fw__img {
@@ -2811,8 +2826,8 @@
 .fw__body {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  padding: 24px 24px 26px;
+  gap: 10px;
+  padding: 26px 26px 28px;
 }
 
 .fw__index {
@@ -2861,22 +2876,26 @@
 .fw__challenge {
   color: #ded9d2;
   font-size: 0.9375rem;
-  max-width: 54ch;
+  line-height: 1.6;
+  max-width: 50ch;
 }
 
 .fw__stack {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 2px;
+  gap: 0 10px;
+  margin-top: 4px;
 }
 
 .fw__stack li {
-  padding: 3px 10px;
-  border: 1px solid var(--border-soft);
-  border-radius: 999px;
   color: var(--muted);
   font-size: var(--fs-tiny);
+}
+
+.fw__stack li + li::before {
+  content: "·";
+  margin-right: 10px;
+  color: rgba(249, 246, 240, 0.28);
 }
 
 .fw__go {
@@ -2891,19 +2910,13 @@
 }
 
 .fw__note {
-  margin-top: 24px;
-  max-width: 78ch;
+  margin-top: clamp(24px, 3vw, 40px);
 }
 
 @media (min-width: 880px) {
   .fw {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     align-items: stretch;
-  }
-
-  .fw__media {
-    border-bottom: 0;
-    border-right: 1px solid var(--border-soft);
   }
 
   .fw__img {
@@ -2915,8 +2928,6 @@
      stays media-then-copy, which is the sensible reading order. */
   .fw--reverse .fw__media {
     order: 2;
-    border-right: 0;
-    border-left: 1px solid var(--border-soft);
   }
 
   .fw--reverse .fw__body {
@@ -2924,7 +2935,7 @@
   }
 
   .fw__body {
-    padding: 30px 30px 32px;
+    padding: clamp(30px, 3.2vw, 44px);
   }
 }
 
@@ -2941,7 +2952,7 @@
   width: min(100%, 380px);
   border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 0;
 }
 
 .intro__portrait {
@@ -2952,8 +2963,9 @@
 
 .intro__copy > p {
   color: var(--muted);
-  margin-top: 14px;
-  max-width: 58ch;
+  margin-top: 16px;
+  line-height: 1.68;
+  max-width: var(--measure-sm);
 }
 
 .intro__strands {
@@ -2968,9 +2980,9 @@
   align-items: center;
   gap: 8px;
   padding: 7px 13px;
-  border: 1px solid var(--border-soft);
+  border: 0;
   border-radius: 999px;
-  background: var(--card);
+  background: var(--tint);
   color: var(--muted);
   font-size: var(--fs-tiny);
 }
@@ -2990,7 +3002,7 @@
 @media (min-width: 880px) {
   .intro {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    gap: 48px;
+    gap: clamp(48px, 5.5vw, 80px);
   }
 
   .intro__media {
@@ -3001,25 +3013,28 @@
 /* ── Home: four-stage workflow ────────────────────────────────────────── */
 .stages {
   display: grid;
-  gap: 14px;
+  gap: clamp(20px, 2.4vw, 30px);
 }
 
 .stage {
   position: relative;
   display: grid;
   gap: 8px;
-  padding: 26px 22px 24px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
+  padding: 22px 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
 }
 
+/* The ordinal is reference, the icon is the accent. Both in coral was two
+   accents competing inside a four-word item. */
 .stage__num {
   font-family: var(--font-heading);
   font-size: var(--fs-tiny);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--coral);
+  color: var(--muted);
 }
 
 .stage__icon {
@@ -3045,18 +3060,7 @@
 @media (min-width: 1040px) {
   .stages {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  /* Connector between stages, read left to right. */
-  .stage:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    top: 44px;
-    right: -13px;
-    width: 13px;
-    height: 1px;
-    background: var(--coral-line);
+    gap: clamp(24px, 2.8vw, 40px);
   }
 }
 
@@ -3084,7 +3088,7 @@
   align-items: center;
   gap: 12px;
   padding: 13px 15px;
-  border: 1px solid var(--border-soft);
+  border: 0;
   border-radius: var(--radius-sm);
   background: var(--card);
 }

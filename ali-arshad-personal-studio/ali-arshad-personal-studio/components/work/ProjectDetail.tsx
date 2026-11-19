@@ -138,13 +138,6 @@ export function ProjectDetail({ project, variant }: Props) {
             </aside>
 
             <div className="detail__content prose">
-              <section aria-labelledby="overview-title">
-                <h2 className="section-title section-title--sm" id="overview-title">
-                  Project overview
-                </h2>
-                <p>{project.summary}</p>
-              </section>
-
               {isCaseStudy && cs ? (
                 <>
                   {cs.background ? (
@@ -155,7 +148,7 @@ export function ProjectDetail({ project, variant }: Props) {
                       <p>{cs.background}</p>
                     </section>
                   ) : (
-                    <EditorNote>Add `caseStudy.background` — who the client is and what the project was for.</EditorNote>
+                    <EditorNote>Add `caseStudy.background`: who the client is and what the project was for.</EditorNote>
                   )}
                   {cs.challenge ? (
                     <section aria-labelledby="challenge-title">
@@ -165,7 +158,7 @@ export function ProjectDetail({ project, variant }: Props) {
                       <p>{cs.challenge}</p>
                     </section>
                   ) : (
-                    <EditorNote>Add `caseStudy.challenge` — the problem that needed solving.</EditorNote>
+                    <EditorNote>Add `caseStudy.challenge`: the problem that needed solving.</EditorNote>
                   )}
                   {cs.objectives && cs.objectives.length > 0 ? (
                     <section aria-labelledby="objectives-title">
@@ -204,7 +197,7 @@ export function ProjectDetail({ project, variant }: Props) {
                       <p>{cs.approach}</p>
                     </section>
                   ) : (
-                    <EditorNote>Add `caseStudy.approach` — the strategy chosen and why.</EditorNote>
+                    <EditorNote>Add `caseStudy.approach`: the strategy chosen and why.</EditorNote>
                   )}
                   {cs.features && cs.features.length > 0 ? (
                     <section aria-labelledby="features-title">
@@ -233,7 +226,7 @@ export function ProjectDetail({ project, variant }: Props) {
                       </ol>
                     </section>
                   ) : (
-                    <EditorNote>Add `caseStudy.process` — the production or development steps.</EditorNote>
+                    <EditorNote>Add `caseStudy.process`: the production or development steps.</EditorNote>
                   )}
                   {cs.decisions && cs.decisions.length > 0 ? (
                     <section aria-labelledby="decisions-title">
@@ -258,7 +251,7 @@ export function ProjectDetail({ project, variant }: Props) {
                       <p>{cs.solution}</p>
                     </section>
                   ) : (
-                    <EditorNote>Add `caseStudy.solution` — what was delivered.</EditorNote>
+                    <EditorNote>Add `caseStudy.solution`: what was delivered.</EditorNote>
                   )}
                   {cs.results && cs.results.length > 0 ? (
                     <section aria-labelledby="results-title">

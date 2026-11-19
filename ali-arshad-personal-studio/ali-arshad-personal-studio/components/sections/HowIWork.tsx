@@ -3,7 +3,7 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 const STAGES: { icon: IconName; step: string; text: string }[] = [
   { icon: "lightbulb", step: "Discover", text: "Understand the business, the constraint and what the project actually has to achieve." },
   { icon: "layers", step: "Design", text: "Turn that into a scope, a shape and a plan you can hold me to." },
-  { icon: "code", step: "Build", text: "Produce the work — designed, developed, automated or filmed." },
+  { icon: "code", step: "Build", text: "Produce the work: designed, developed, automated or filmed." },
   { icon: "check", step: "Deliver", text: "Hand over tested, documented and explained, with support agreed." },
 ];
 

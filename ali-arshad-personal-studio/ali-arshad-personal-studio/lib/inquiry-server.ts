@@ -58,7 +58,7 @@ async function sendEmail(inquiry: InquiryInput, meta: { receivedAt: string }) {
       from: env("INQUIRY_FROM_EMAIL"),
       to: [env("INQUIRY_TO_EMAIL")],
       reply_to: inquiry.email,
-      subject: `New inquiry — ${inquiry.name} (${inquiry.service})`,
+      subject: `New inquiry: ${inquiry.name} (${inquiry.service})`,
       html,
       text,
     }),

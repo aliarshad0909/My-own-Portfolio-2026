@@ -28,12 +28,12 @@ export function StudioStory() {
         </div>
 
         <div className="intro__copy reveal">
-          <p className="eyebrow eyebrow--plain">Who I am</p>
+          <p className="eyebrow eyebrow--plain">Why work with me</p>
           <h2 className="section-title" id="studio-title">
             Business-minded. Creatively driven. Technically equipped.
           </h2>
           <p>
-            I&rsquo;m Ali Arshad. I started in business — a BBA in Supply Chain Management — and moved outward from there into brand management, creative
+            I started in business, with a BBA in Supply Chain Management, and moved outward from there into brand management, creative
             production, software development and automation. Each discipline arrived because the one before it needed it.
           </p>
           <p>

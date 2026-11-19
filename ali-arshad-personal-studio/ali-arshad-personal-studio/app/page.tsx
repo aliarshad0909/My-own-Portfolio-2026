@@ -12,7 +12,7 @@ import { personSchema, webSiteSchema } from "@/lib/structured-data";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: `${SITE.name} — ${SITE.role} | ${SITE.descriptor}`,
+  title: `${SITE.name}: ${SITE.role} | ${SITE.descriptor}`,
   description: SITE.description,
   path: "/",
 });
@@ -34,7 +34,7 @@ export default function HomePage() {
         signature
         eyebrow="Start here"
         title="Have something worth building?"
-        text="From your first idea to a working digital product, creative campaign, or automated business process — let's discuss what you need."
+        text="From your first idea to a working digital product, creative campaign, or automated business process, let's discuss what you need."
         button="Start a project"
         secondaryHref="/services"
         secondaryLabel="View services"

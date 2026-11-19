@@ -5,7 +5,7 @@ import { SERVICES } from "@/lib/services";
 /**
  * The six services as an editorial card grid.
  *
- * Each card carries the benefit line rather than the capability list — the
+ * Each card carries the benefit line rather than the capability list; the
  * full detail lives on /services, which each card links into by anchor.
  * Partner-delivered services keep their label here, as everywhere else.
  */
@@ -21,7 +21,7 @@ export function ServiceShowcaseHome() {
             </h2>
           </div>
           <p className="section-sub section-sub--inline">
-            One point of contact across creative, technical and commercial work — so nothing is lost in the hand-off between them.
+            One point of contact across creative, technical and commercial work, so nothing is lost in the hand-off between them.
           </p>
         </div>
 

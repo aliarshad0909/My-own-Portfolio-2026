@@ -8,19 +8,15 @@ import { PROJECTS, type Project } from "@/lib/projects";
 /**
  * Alternating large project previews.
  *
- * The order is explicit so the strongest demonstration leads; the records
- * themselves come from lib/projects.ts, so status, type and imagery can never
- * drift from the project pages. No live-demo link is rendered, because no
- * project has a verified deployment yet — `liveUrl` is unset on all twelve.
+ * Deliberately capped below the full twelve-project collection, so the
+ * homepage leads with a few strong, diverse demonstrations rather than
+ * competing for attention; the full set lives on /work. The order is
+ * explicit so the strongest demonstration leads; the records themselves
+ * come from lib/projects.ts, so status, type and imagery can never drift
+ * from the project pages. No live-demo link is rendered, because no
+ * project has a verified deployment yet, `liveUrl` is unset on all twelve.
  */
-const FEATURED = [
-  "tessera-clayworks-storefront",
-  "northwind-analytics-dashboard",
-  "tideline-support-agent",
-  "meridian-inventory-operations",
-  "lantern-sourcing-platform",
-  "halcyon-brand-system",
-];
+const FEATURED = ["tessera-clayworks-storefront", "northwind-analytics-dashboard", "tideline-support-agent", "halcyon-brand-system"];
 
 /** First sentence of the case-study challenge, which is the one-line hook. */
 function challengeLine(p: Project): string {
@@ -93,7 +89,7 @@ export function FeaturedWork() {
         </div>
 
         <p className="fine-print fw__note">
-          Every project above is an original concept built to demonstrate capability — the brands and data in them are fictional, and none is publicly
+          Every project above is an original concept built to demonstrate capability: the brands and data in them are fictional, and none is publicly
           deployed, so there are no live demo links.
           {hasSample ? " Cards marked as sample artwork are layout previews, not output from the project." : ""}
         </p>
