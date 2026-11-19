@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Google Workspace automation architecture in n8n: schedule or event trigger, JavaScript schema validation, parallel updates to Google Sheets, Drive, Docs and Gmail drafts, human review approval gate, and dedicated error alert workflow.">
+  <title>Google Workspace Automation Architecture with n8n</title>
+  <defs>
+    <linearGradient id="bg-gw" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arrow-gw" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrow-coral" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" rx="16" fill="url(#bg-gw)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="56" y="66" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">N8N ARCHITECTURE · GOOGLE WORKSPACE</text>
+  <text x="56" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="30" font-weight="600" fill="#f9f6f0">Scheduled Sync, Drive Provisioning &amp; Gmail Drafts</text>
+  <line x1="56" y1="134" x2="1144" y2="134" stroke="#1e2830" stroke-width="1.5"/>
+
+  <!-- Stage 1: Triggers -->
+  <g transform="translate(56, 178)">
+    <rect width="230" height="236" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">01 · TRIGGER</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Event or Cron</text>
+
+    <rect x="20" y="92" width="190" height="36" rx="7" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="115" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#d9d7d2">Weekly / daily cron</text>
+
+    <rect x="20" y="138" width="190" height="36" rx="7" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="161" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#d9d7d2">Stripe / CRM webhook</text>
+
+    <rect x="20" y="184" width="190" height="36" rx="7" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="207" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#d9d7d2">Shared Gmail intake</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M286 296 H338" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arrow-gw)"/>
+
+  <!-- Stage 2: Code Guard -->
+  <g transform="translate(346, 178)">
+    <rect width="236" height="236" rx="12" fill="#141d22" stroke="#354652" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">02 · JS CODE NODE</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Validate &amp; Normalise</text>
+
+    <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">• Verify expected columns</text>
+    <text x="20" y="136" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">• Normalise currency/dates</text>
+    <text x="20" y="166" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">• Deduplicate row keys</text>
+    <text x="20" y="196" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#a9abb2">• Protect master formulas</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 (split into 3 workspace targets) -->
+  <path d="M582 296 H616 V214 H648" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arrow-gw)"/>
+  <path d="M582 296 H648" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arrow-gw)"/>
+  <path d="M582 296 H616 V378 H648" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arrow-gw)"/>
+
+  <!-- Stage 3: Workspace Outputs -->
+  <g transform="translate(656, 178)">
+    <rect width="234" height="72" rx="10" fill="#171e25" stroke="#2b3842" stroke-width="1.5"/>
+    <text x="18" y="30" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Google Sheets</text>
+    <text x="18" y="54" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Append clean raw-data tab</text>
+
+    <rect y="82" width="234" height="72" rx="10" fill="#171e25" stroke="#2b3842" stroke-width="1.5"/>
+    <text x="18" y="112" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Drive &amp; Docs</text>
+    <text x="18" y="136" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Folders, ACLs &amp; templates</text>
+
+    <rect y="164" width="234" height="72" rx="10" fill="#171e25" stroke="#2b3842" stroke-width="1.5"/>
+    <text x="18" y="194" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Gmail Drafts</text>
+    <text x="18" y="218" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Queue reply · never auto-send</text>
+  </g>
+
+  <!-- Arrow 3 -> 4 -->
+  <path d="M890 296 H932" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrow-coral)"/>
+
+  <!-- Stage 4: Human Gate -->
+  <g transform="translate(940, 178)">
+    <rect width="204" height="236" rx="12" fill="#1c1818" stroke="#ff7a5c" stroke-width="1.8" stroke-dasharray="6 4"/>
+    <text x="20" y="38" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">04 · HUMAN GATE</text>
+    <text x="20" y="72" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Team Review</text>
+    <text x="20" y="110" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#e6dedb">Inspects Slack digest</text>
+    <text x="20" y="136" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#e6dedb">and approves Gmail</text>
+    <text x="20" y="162" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#e6dedb">drafts before sending.</text>
+    <rect x="20" y="186" width="164" height="32" rx="16" fill="#ff7a5c" fill-opacity="0.16"/>
+    <text x="36" y="207" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#ff7a5c">Scoped OAuth only</text>
+  </g>
+
+  <!-- Error Branch from Code Node -->
+  <path d="M464 414 V488" stroke="#ff7a5c" stroke-width="1.8" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow-coral)"/>
+  <text x="480" y="458" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#ff7a5c">Schema mismatch or API failure</text>
+
+  <!-- Bottom Safety Strip -->
+  <g transform="translate(56, 496)">
+    <rect width="1088" height="164" rx="12" fill="#12181e" stroke="#26323b" stroke-width="1.5"/>
+    <text x="28" y="42" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="1.6" fill="#ff7a5c">GUARDRAILS &amp; OBSERVABILITY</text>
+    <text x="28" y="76" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Dedicated n8n Error Workflow + Bounded Retries</text>
+    <text x="28" y="110" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" fill="#a9abb2">Invalid payloads halt before writing to master spreadsheets. Transient Google API rate limits retry cleanly;</text>
+    <text x="28" y="136" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" fill="#a9abb2">persistent failures log full context to Slack or an ops table so silent macro breakage never happens.</text>
+  </g>
+</svg>
+

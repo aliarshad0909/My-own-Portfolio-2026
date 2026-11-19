@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -26,6 +27,55 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
     .filter((p): p is Project => p !== undefined);
   const siblings = hub.spokes.filter((s) => s.slug !== spoke.slug && shouldRender(s.publicationState));
 
+  const heroVisual = spoke.heroVisual;
+  const linkedProject = heroVisual?.projectSlug ? getProject(heroVisual.projectSlug) : undefined;
+  const linkedHref = linkedProject
+    ? linkedProject.caseStudy
+      ? `/case-studies/${linkedProject.slug}`
+      : `/work/${linkedProject.slug}`
+    : undefined;
+
+  const frameClass = [
+    "hub-hero-card__frame",
+    heroVisual?.diagram ? "hub-hero-card__frame--diagram" : "",
+    heroVisual?.darkDiagram ? "hub-hero-card__frame--dark-diagram" : "",
+    heroVisual?.lightCard ? "hub-hero-card__frame--light" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const heroAside = heroVisual ? (
+    <div className="hub-hero-card">
+      {linkedHref && linkedProject ? (
+        <Link href={linkedHref} className={frameClass} aria-label={`${linkedProject.title}, view case study`}>
+          <Image
+            src={heroVisual.src}
+            alt={heroVisual.alt}
+            width={heroVisual.width}
+            height={heroVisual.height}
+            priority
+            sizes="(min-width: 1024px) 520px, 92vw"
+          />
+        </Link>
+      ) : (
+        <div className={frameClass}>
+          <Image
+            src={heroVisual.src}
+            alt={heroVisual.alt}
+            width={heroVisual.width}
+            height={heroVisual.height}
+            priority
+            sizes="(min-width: 1024px) 520px, 92vw"
+          />
+        </div>
+      )}
+      <div className="hub-hero-card__caption">
+        <span>{heroVisual.caption}</span>
+        {linkedHref ? <Link href={linkedHref}>Inspect demo</Link> : null}
+      </div>
+    </div>
+  ) : undefined;
+
   return (
     <>
       <JsonLd
@@ -45,7 +95,7 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
         ]}
       />
 
-      <PageHero eyebrow={hub.h1} title={spoke.h1} lead={spoke.lead}>
+      <PageHero eyebrow={hub.h1} title={spoke.h1} lead={spoke.lead} aside={heroAside}>
         <div className="hero__actions">
           <ButtonLink href={contactHref}>Discuss {spoke.h1.toLowerCase()}</ButtonLink>
           <ButtonLink href={`/services/${hub.slug}`} variant="secondary" icon={null}>

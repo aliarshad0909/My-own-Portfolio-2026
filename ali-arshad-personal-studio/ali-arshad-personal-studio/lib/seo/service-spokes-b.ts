@@ -192,6 +192,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Brand Identity Design & Visual Systems",
       h1: "Brand identity design",
       lead: "Complete visual identity systems — logotypes, marks, WCAG-verified colour palettes, modular typography and usable SVG kits built to hold up on real websites.",
+      heroVisual: {
+        src: "/images/projects/brand-system/assets.webp",
+        alt: "Halcyon brand system demonstration showing vector brand mark, horizontal and stacked lockups with direct SVG downloads",
+        width: 1600,
+        height: 1075,
+        caption: "Demo build: Halcyon vector mark & SVG lockup kit",
+        projectSlug: "halcyon-brand-system",
+      },
       body: [
         "Most startups outgrow a cheap standalone logo within three months because nobody defined the colour contrast rules, type hierarchy, spacing or applied templates around it.",
         "Demonstrated in the Halcyon Brand System (50 automated checks including live WCAG 2.2 luminance calculations and real downloadable SVGs), I design brand identities as practical, developer-ready systems.",
@@ -233,6 +241,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Social Media Management & Channel Operations",
       h1: "Social media management",
       lead: "Consistent, brand-aligned social media strategy, template systems and publishing coordination — backed by 2+ years managing US-based brands and HubSpot Social Media Certification.",
+      heroVisual: {
+        src: "/images/credentials/hubspot-social-media-certified.webp",
+        alt: "HubSpot Academy Social Media Certification awarded to Ali Arshad, valid through December 2028",
+        width: 1140,
+        height: 880,
+        caption: "Verified credential: HubSpot Academy Social Media Certification",
+        lightCard: true,
+      },
       body: [
         "Most small brands oscillate between bursts of daily posting and six weeks of silence. Consistency breaks down when strategy, visual templates and publishing coordination sit in different hands.",
         "Grounded in over two years of hands-on brand management for US-based brands and active HubSpot Academy Social Media Certification, I bring structured content pillars, reusable brand templates and steady publishing operations.",
@@ -274,6 +290,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Email Marketing Strategy & Custom HTML Email Templates",
       h1: "Email marketing",
       lead: "Lifecycle flows, campaign calendars and dependable table-based HTML email templates that render cleanly in Gmail, Apple Mail and Outlook.",
+      heroVisual: {
+        src: "/images/projects/brand-system/email.webp",
+        alt: "Halcyon brand system demonstration previewing a 600px table-based HTML email template with inline CSS and plain-text fallback",
+        width: 1600,
+        height: 1075,
+        caption: "Demo build: Halcyon 600px table-based HTML email preview",
+        projectSlug: "halcyon-brand-system",
+      },
       body: [
         "Email remains one of the highest-ownership marketing channels a business has — yet most lists sit dormant or send cluttered drag-and-drop blasts that break in Outlook and land poorly on mobile.",
         "Demonstrated in the Halcyon Brand System (which builds a real 600px table-based HTML email with inline styles, Outlook conditional comments, hidden preheader and plain-text fallback), I combine clear lifecycle strategy with dependable email engineering.",
@@ -315,6 +339,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Content Strategy & Editorial Systems for Brands",
       h1: "Content strategy",
       lead: "Practical editorial strategy that connects search intent, brand positioning, social distribution and conversion pages into one coherent publishing system.",
+      heroVisual: {
+        src: "/images/projects/brand-system/type.webp",
+        alt: "Halcyon brand system demonstration displaying a modular editorial typography scale with heading hierarchy and adjustable ratio controls",
+        width: 1600,
+        height: 1075,
+        caption: "Demo build: Halcyon editorial type scale & voice hierarchy",
+        projectSlug: "halcyon-brand-system",
+      },
       body: [
         "Publishing random articles or social posts without an underlying architecture wastes effort. Effective content strategy maps what buyers actually ask before hiring or buying, pairs each topic with one canonical destination, and reuses core insights cleanly across channels.",
         "This studio's own SEO and resource architecture — evidence-gated topic clusters, zero duplicate intent and clear internal linking — is a living example of that discipline.",
@@ -356,6 +388,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Paid Advertising Support & Campaign Landing Pages",
       h1: "Paid advertising support",
       lead: "Coordinated paid-campaign support, ad-ready creative and fast conversion landing pages — grounded in active Google Ads AI-Powered Performance Ads Certification.",
+      heroVisual: {
+        src: "/images/projects/brand-system/landing.webp",
+        alt: "Halcyon brand system demonstration showing a message-matched campaign landing page built from the same colour and typography tokens",
+        width: 1600,
+        height: 1075,
+        caption: "Demo build: Halcyon token-matched campaign landing page",
+        projectSlug: "halcyon-brand-system",
+      },
       body: [
         "Paid campaigns frequently leak budget in the gap between the ad account and the destination page: ad creative promises one thing, the landing page loads slowly or changes the message, and tracking fails to connect back to real inquiries.",
         "Backed by active Google Ads AI-Powered Performance Ads Certification (publicly verifiable via Skillshop/Credential.net) plus hands-on brand, web and creative production skills, I align campaign setup, ad creative and landing pages as one system.",
@@ -400,6 +440,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Supplier Research & Procurement Shortlisting",
       h1: "Supplier research",
       lead: "Structured supplier discovery, standardised RFQs and direct-contact shortlists — built so product brands evaluate real manufacturers on clear facts.",
+      heroVisual: {
+        src: "/images/projects/sourcing-platform/cover.webp",
+        alt: "Lantern sourcing platform demonstration displaying shortlisted suppliers, unit tiers, incoterm toggles and landed-cost comparison",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Lantern supplier shortlisting & quote desk",
+        projectSlug: "lantern-sourcing-platform",
+      },
       body: [
         "Typing a product name into a B2B directory produces hundreds of nearly identical listings, half of them trading intermediaries quoting incompatible terms. Good supplier research starts with a tight specification so every response can be verified fairly.",
         "Grounded in a BBA in Supply Chain Management and backed by the Lantern sourcing demonstration, I build structured supplier shortlists with transparent MOQ, lead-time and responsiveness notes that your business owns outright.",
@@ -487,6 +535,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Supplier Comparison & Weighted Scoring Frameworks",
       h1: "Supplier comparison",
       lead: "Compare candidate suppliers fairly on all-in landed cost, lead time, quality signals, reliability and responsiveness — instead of guessing from raw unit prices.",
+      heroVisual: {
+        src: "/images/projects/sourcing-platform/cover.webp",
+        alt: "Lantern supplier comparison demonstration showing relative weighted scores across landed cost, lead time, quality, reliability and responsiveness",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Lantern weighted relative supplier scorecard",
+        projectSlug: "lantern-sourcing-platform",
+      },
       body: [
         "Most procurement mistakes happen because teams compare suppliers in an ad-hoc spreadsheet where one factory quotes EXW, another quotes CIF, and nobody weights a three-week lead-time penalty against a 40-cent unit discount.",
         "Demonstrated in Lantern: Supplier Sourcing & Landed Cost (31 unit tests + 21 browser checks), relative weighted scoring ranks suppliers transparently against each other and visibly reorders the ranking whenever quantity or incoterm changes.",
@@ -529,6 +585,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Landed-Cost Analysis & Import Margin Modelling",
       h1: "Landed-cost analysis",
       lead: "Calculate the true all-in cost of getting products to your warehouse — goods, volumetric freight, estimated tariffs, insurance and fees — before committing inventory capital.",
+      heroVisual: {
+        src: "/images/diagrams/landed-cost-waterfall.svg",
+        alt: "Diagram illustrating the five additive landed-cost lines — goods value, volumetric freight, estimated import duty, insurance and fees — plus per-unit landed cost, uplift multiplier and EXW/FOB/CIF/DDP allocation",
+        width: 1200,
+        height: 720,
+        caption: "Landed-cost components, incoterm allocation & uplift factor",
+        darkDiagram: true,
+      },
       body: [
         "The number on a supplier's pro-forma invoice is only the starting line. Between factory gate and warehouse shelf sit ocean or air freight (charged on whichever is greater of actual or volumetric weight), import tariffs, marine insurance, brokerage and port handling.",
         "Grounded in a Supply Chain Management BBA and proven in both the Lantern sourcing platform and this site's free Landed Cost Calculator, I build clear landed-cost models and uplift multipliers so your retail pricing protects real margin.",

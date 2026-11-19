@@ -1,5 +1,18 @@
 import type { PublicationState } from "@/lib/seo/publication";
 
+export type ArticleFigure = {
+  type: "figure";
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption: string;
+  diagram?: boolean;
+  darkDiagram?: boolean;
+  href?: string;
+  linkLabel?: string;
+};
+
 export type ArticleBlock =
   | { type: "p"; text: string }
   | { type: "h2"; text: string }
@@ -8,7 +21,8 @@ export type ArticleBlock =
   | { type: "ol"; items: string[] }
   | { type: "callout"; title: string; text: string }
   | { type: "table"; headers: string[]; rows: string[][] }
-  | { type: "code"; text: string };
+  | { type: "code"; text: string }
+  | ArticleFigure;
 
 export type ResourceCategory =
   | "AI & Automation"
@@ -39,4 +53,5 @@ export const ol = (items: string[]): ArticleBlock => ({ type: "ol", items });
 export const callout = (title: string, text: string): ArticleBlock => ({ type: "callout", title, text });
 export const table = (headers: string[], rows: string[][]): ArticleBlock => ({ type: "table", headers, rows });
 export const code = (text: string): ArticleBlock => ({ type: "code", text });
+export const figure = (opts: Omit<ArticleFigure, "type">): ArticleBlock => ({ type: "figure", ...opts });
 

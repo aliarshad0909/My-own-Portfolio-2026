@@ -1,4 +1,4 @@
-import { callout, code, h2, ol, p, table, ul, type Resource } from "@/lib/content/resource-types";
+import { callout, code, figure, h2, ol, p, table, ul, type Resource } from "@/lib/content/resource-types";
 
 export const RESOURCES_A: Resource[] = [
   {
@@ -90,6 +90,16 @@ export const RESOURCES_A: Resource[] = [
       p("At its simplest, n8n connects the apps your business already uses — forms, CRMs, Gmail, Google Sheets, Slack, Stripe, databases and AI APIs — into repeatable workflows triggered by webhooks or schedules."),
       p("What separates n8n from purely no-code connectors is how gracefully it handles real engineering requirements: complex branching, looping over arrays, writing unit-testable JavaScript in Code nodes, dedicated error workflows and running on your own infrastructure."),
       h2("How an n8n workflow is structured"),
+      figure({
+        src: "/images/projects/n8n-lead-automation/workflow-diagram.svg",
+        alt: "Architecture diagram of a 15-node n8n inbound lead qualification workflow showing validation, 30-day deduplication, 0-100 scoring, CRM routing, Slack alerts and human reply approval",
+        width: 1180,
+        height: 560,
+        caption: "Demonstration build: 15-node inbound lead qualification workflow (22 local Code-node tests).",
+        diagram: true,
+        href: "/case-studies/inbound-lead-qualification-workflow",
+        linkLabel: "Inspect workflow case study",
+      }),
       ol([
         "Trigger node: starts the run from a webhook POST, schedule (cron), incoming email or CRM event.",
         "Validation & logic nodes: clean fields, reject malformed payloads, check for duplicates and score or classify records.",
@@ -177,6 +187,15 @@ export const RESOURCES_A: Resource[] = [
       ),
       h2("Why the escalation boundary matters more than the model"),
       p("A support system that tries to answer 100% of questions will inevitably invent refund exceptions or wrong timelines. A trustworthy system knows its confidence floor: when retrieval scores well, it cites the source; when confidence drops, it escalates to a human with the full transcript."),
+      figure({
+        src: "/images/projects/support-agent/conversation.webp",
+        alt: "Tideline support agent demonstration showing a refund policy answer quoted verbatim alongside the cited knowledge-base article",
+        width: 1500,
+        height: 1055,
+        caption: "Demonstration build (Tideline): grounded BM25 retrieval citing the exact policy document instead of guessing.",
+        href: "/case-studies/tideline-support-agent",
+        linkLabel: "Inspect Tideline case study",
+      }),
       callout(
         "See both patterns working",
         "Inspect Tideline (BM25 lexical retrieval with verbatim policy quoting and a tuned confidence floor) and Kestrel (deterministic voice/text slot-filling qualification) in the Case Studies archive.",
@@ -203,6 +222,15 @@ export const RESOURCES_A: Resource[] = [
     body: [
       p("Small teams do not have dedicated ML safety engineers to babysit open-ended agents. The highest-return AI deployments for lean companies share three traits: a narrow job, grounded internal knowledge, and a clean hand-off to a person."),
       h2("Four use cases that hold up in production"),
+      figure({
+        src: "/images/projects/voice-sales-agent/cover.webp",
+        alt: "Kestrel voice qualification agent demonstration showing live slot capture, conversation transcript and explicit speech or text mode status",
+        width: 1500,
+        height: 1055,
+        caption: "Demonstration build (Kestrel): scoped slot-filling qualification with live structured brief capture.",
+        href: "/case-studies/kestrel-voice-sales-agent",
+        linkLabel: "Inspect Kestrel case study",
+      }),
       ul([
         "First-line policy support: answer shipping, warranty, onboarding and sizing questions directly from your help articles with source citations and instant escalation on edge cases.",
         "After-hours sales qualification: capture caller or visitor name, company context, core need and timeline over voice or chat, then pass a structured brief into your CRM.",
