@@ -18,6 +18,7 @@
 
 import { PROJECTS, caseStudies } from "@/lib/projects";
 import { KEYWORD_REGISTRY } from "@/lib/seo/keyword-registry";
+import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 
@@ -44,8 +45,15 @@ export function knownRoutes(): Set<string> {
   for (const p of PROJECTS) routes.add(`/work/${p.slug}`);
   for (const p of caseStudies()) routes.add(`/case-studies/${p.slug}`);
 
-  // Registry primaryUrls define the hub/spoke/tool/resource/industry pages.
+  // Registry primaryUrls define the tool/resource/industry pages and hub spokes.
   for (const k of KEYWORD_REGISTRY) routes.add(k.primaryUrl);
+
+  // Service hubs and their specialism spokes (hub roots are not all registry
+  // primaryUrls, so add them from the hub data directly).
+  for (const h of SERVICE_HUBS) {
+    routes.add(`/services/${h.slug}`);
+    for (const s of h.spokes) routes.add(`/services/${h.slug}/${s.slug}`);
+  }
 
   for (const s of US_STATES) routes.add(`/locations/${s.slug}`);
   for (const c of PILOT_CITIES) routes.add(`/locations/${c.stateSlug}/${c.slug}`);

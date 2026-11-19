@@ -1429,3 +1429,88 @@
 .location-grid a:hover {
   color: var(--coral);
 }
+
+/* ── Service hub pages ──────────────────────────────────────────────────── */
+
+.hub-problems {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+  max-width: var(--measure);
+}
+.hub-problems li {
+  padding: 0.85rem 1.1rem;
+  background: var(--tint);
+  border-left: 3px solid var(--coral-line);
+  border-radius: var(--radius-sm);
+  font-style: italic;
+  color: var(--text);
+}
+
+.hub-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 0.6rem 1.5rem;
+  max-width: 60rem;
+}
+.hub-list li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: start;
+  color: var(--muted);
+}
+.hub-list svg {
+  color: var(--coral);
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+}
+
+.hub-steps {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 1rem;
+  counter-reset: step;
+}
+.hub-steps li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
+.hub-steps__n {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--coral-soft);
+  color: var(--coral);
+  font-weight: 600;
+  font-size: var(--fs-small);
+}
+.hub-steps__label {
+  font-weight: 600;
+  color: var(--text);
+}
+.hub-steps__detail {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.hub-links {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}

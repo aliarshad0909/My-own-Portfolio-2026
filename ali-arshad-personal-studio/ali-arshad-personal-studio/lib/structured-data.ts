@@ -98,6 +98,25 @@ export function creativeWorkSchema(project: Project, variant: "project" | "case-
   };
 }
 
+/**
+ * A single Service node for a dedicated service-hub page. Honest provider is a
+ * Person (the studio is one person); no ratings, no aggregate claims, no area
+ * served asserted beyond a remote offering.
+ */
+export function singleServiceSchema(input: { name: string; description: string; path: string; serviceType?: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: input.name,
+    description: input.description,
+    serviceType: input.serviceType ?? input.name,
+    provider: { "@type": "Person", name: SITE.name, url: abs("/") },
+    url: abs(input.path),
+    areaServed: { "@type": "Country", name: "United States" },
+    availableChannel: { "@type": "ServiceChannel", serviceUrl: abs("/contact") },
+  };
+}
+
 export type FaqItem = { q: string; a: string };
 
 export function faqSchema(items: FaqItem[]) {

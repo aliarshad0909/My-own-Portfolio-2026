@@ -5,11 +5,15 @@ import {
   duplicateKeywords,
   duplicatePrimaryUrls,
   evidenceGaps,
+  getKeyword,
 } from "@/lib/seo/keyword-registry";
 import { PUBLICATION_STATES, isIndexable } from "@/lib/seo/publication";
 import { brokenLinks, isKnownRoute } from "@/lib/seo/routes";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES, orphanCities } from "@/lib/geo/cities";
+import { SERVICE_HUBS, allSpokes } from "@/lib/seo/service-hubs";
+import { getProject } from "@/lib/projects";
+import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 
 describe("keyword registry: no self-competition", () => {
   it("has no two rows chasing the exact same keyword", () => {
@@ -107,5 +111,64 @@ describe("location architecture", () => {
     const indexableCities = PILOT_CITIES.filter((c) => isIndexable(c.publicationState));
     assert.deepEqual(indexableStates.map((s) => s.slug), [], "a state is indexable by default");
     assert.deepEqual(indexableCities.map((c) => c.slug), [], "a city is indexable by default");
+  });
+});
+
+describe("service hubs", () => {
+  it("gives every hub a unique slug and a registry entry", () => {
+    const slugs = SERVICE_HUBS.map((h) => h.slug);
+    assert.equal(new Set(slugs).size, slugs.length, "duplicate hub slugs");
+    for (const h of SERVICE_HUBS) {
+      assert.ok(getKeyword(h.keywordId), `${h.slug}: unknown keywordId ${h.keywordId}`);
+    }
+  });
+
+  it("only cites project slugs that exist", () => {
+    for (const h of SERVICE_HUBS) {
+      for (const slug of h.projectSlugs) {
+        assert.ok(getProject(slug), `${h.slug} cites missing project ${slug}`);
+      }
+    }
+    for (const { hub, spoke } of allSpokes()) {
+      for (const slug of spoke.projectSlugs) {
+        assert.ok(getProject(slug), `${hub.slug}/${spoke.slug} cites missing project ${slug}`);
+      }
+    }
+  });
+
+  it("never publishes a hub with no evidencing build", () => {
+    for (const h of SERVICE_HUBS) {
+      if (isIndexable(h.publicationState)) {
+        assert.ok(h.projectSlugs.length > 0, `${h.slug} is Published with no demonstration build`);
+      }
+    }
+  });
+
+  it("points every hub internal link at a known route", () => {
+    for (const h of SERVICE_HUBS) {
+      const broken = brokenLinks([...h.relatedTools, ...h.relatedHubs]);
+      assert.deepEqual(broken, [], `${h.slug} has broken links: ${broken.join(", ")}`);
+    }
+  });
+});
+
+describe("sitemap", () => {
+  it("lists only known routes", () => {
+    const broken = brokenLinks(indexableSeoRoutes());
+    assert.deepEqual(broken, [], `sitemap references unknown routes: ${broken.join(", ")}`);
+  });
+
+  it("never lists a noindex service hub or spoke", () => {
+    const listed = new Set(indexableSeoRoutes());
+    for (const h of SERVICE_HUBS) {
+      if (!isIndexable(h.publicationState)) {
+        assert.ok(!listed.has(`/services/${h.slug}`), `${h.slug} is noindex but in the sitemap`);
+      }
+      for (const s of h.spokes) {
+        if (!isIndexable(s.publicationState)) {
+          assert.ok(!listed.has(`/services/${h.slug}/${s.slug}`), `${h.slug}/${s.slug} noindex but in sitemap`);
+        }
+      }
+    }
   });
 });

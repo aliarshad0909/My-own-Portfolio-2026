@@ -6,11 +6,15 @@ import { serviceListSchema, type FaqItem } from "@/lib/structured-data";
 import { FlowDiagram, type FlowStep } from "@/components/services/FlowDiagram";
 import { ServiceNav } from "@/components/services/ServiceNav";
 import { PendingMedia, RelatedProjectList, ServiceShowcase } from "@/components/services/ServiceShowcase";
-import { ButtonLink } from "@/components/ui/Button";
+import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES, contactHref, projectsForService, relatedWorkHref, type Service } from "@/lib/services";
+import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { isIndexable } from "@/lib/seo/publication";
+
+const PUBLISHED_HUBS = SERVICE_HUBS.filter((h) => isIndexable(h.publicationState));
 
 export const metadata: Metadata = pageMetadata({
   title: "Services: Web Development, AI Automation, Video & 3D",
@@ -231,6 +235,22 @@ export default function ServicesPage() {
             goals, scope and timeline.
           </p>
         </div>
+      </section>
+
+      <section className="container section--tight" aria-label="In-depth service pages">
+        <h2 className="section-title">Go deeper on a specific service</h2>
+        <p className="measure">
+          Each core service has its own page with the problems it solves, what a
+          typical engagement includes, how the work runs and the demonstration
+          builds behind it.
+        </p>
+        <ul className="hub-links">
+          {PUBLISHED_HUBS.map((h) => (
+            <li key={h.slug}>
+              <ArrowLink href={`/services/${h.slug}`}>{h.h1}</ArrowLink>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <Faq id="services-faq" eyebrow="Common questions" title="Questions clients usually start with" items={FAQ_ITEMS} surface />
