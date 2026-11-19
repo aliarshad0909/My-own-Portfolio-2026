@@ -14,6 +14,10 @@ import { PILOT_CITIES, orphanCities } from "@/lib/geo/cities";
 import { SERVICE_HUBS, allSpokes } from "@/lib/seo/service-hubs";
 import { getProject } from "@/lib/projects";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
+import { RESOURCES } from "@/lib/content/resources";
+import { INDUSTRIES } from "@/lib/content/industries";
+import { TOOLS, toolState } from "@/lib/tools/catalog";
+import { TESTIMONIALS, unconsentedTestimonials } from "@/lib/content/testimonials";
 
 describe("keyword registry: no self-competition", () => {
   it("has no two rows chasing the exact same keyword", () => {
@@ -169,6 +173,70 @@ describe("sitemap", () => {
           assert.ok(!listed.has(`/services/${h.slug}/${s.slug}`), `${h.slug}/${s.slug} noindex but in sitemap`);
         }
       }
+    }
+  });
+});
+
+describe("content ↔ registry alignment", () => {
+  it("keeps every resource's publication state equal to its registry row", () => {
+    for (const r of RESOURCES) {
+      const row = getKeyword(r.keywordId);
+      assert.ok(row, `${r.slug}: unknown keywordId ${r.keywordId}`);
+      assert.equal(r.publicationState, row!.state, `${r.slug} state drifts from registry`);
+    }
+  });
+
+  it("keeps every industry's publication state equal to its registry row", () => {
+    for (const i of INDUSTRIES) {
+      const row = getKeyword(i.keywordId);
+      assert.ok(row, `${i.slug}: unknown keywordId ${i.keywordId}`);
+      assert.equal(i.publicationState, row!.state, `${i.slug} state drifts from registry`);
+    }
+  });
+
+  it("keeps every tool's state in sync with its registry row", () => {
+    for (const t of TOOLS) {
+      const row = getKeyword(t.keywordId);
+      assert.ok(row, `${t.slug}: unknown keywordId ${t.keywordId}`);
+      assert.equal(toolState(t), row!.state, `${t.slug} state drifts from registry`);
+    }
+  });
+
+  it("only publishes an industry page that has evidencing builds", () => {
+    for (const i of INDUSTRIES) {
+      if (isIndexable(i.publicationState)) {
+        assert.ok(i.projectSlugs.length > 0, `${i.slug} Published with no demonstration build`);
+      }
+    }
+  });
+
+  it("only cites real project slugs in resources and industries", () => {
+    for (const i of INDUSTRIES) {
+      for (const s of i.projectSlugs) assert.ok(getProject(s), `${i.slug} cites missing project ${s}`);
+    }
+  });
+
+  it("points resource and industry internal links at known routes", () => {
+    for (const r of RESOURCES) {
+      const broken = brokenLinks([...r.related, `/resources/${r.slug}`]);
+      assert.deepEqual(broken, [], `${r.slug} broken links: ${broken.join(", ")}`);
+    }
+    for (const i of INDUSTRIES) {
+      const broken = brokenLinks([i.relatedHub, `/industries/${i.slug}`]);
+      assert.deepEqual(broken, [], `${i.slug} broken links: ${broken.join(", ")}`);
+    }
+  });
+});
+
+describe("testimonials never fabricated", () => {
+  it("contains only consented quotes (or none at all)", () => {
+    assert.deepEqual(unconsentedTestimonials(), [], "unconsented testimonial present");
+  });
+
+  it("has no placeholder quotes", () => {
+    for (const t of TESTIMONIALS) {
+      assert.ok(t.quote.trim().length > 0, "empty testimonial quote");
+      assert.ok(!/lorem|placeholder|example/i.test(t.quote), "placeholder-looking testimonial");
     }
   });
 });

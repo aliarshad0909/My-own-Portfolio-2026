@@ -12,14 +12,19 @@ import { isIndexable } from "@/lib/seo/publication";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
+import { RESOURCES } from "@/lib/content/resources";
+import { INDUSTRIES } from "@/lib/content/industries";
+import { TOOLS, toolState } from "@/lib/tools/catalog";
+import { getKeyword } from "@/lib/seo/keyword-registry";
 
 export function indexableSeoRoutes(): string[] {
   const out: string[] = [];
 
-  // Section index pages that exist and are genuinely useful (not doorway
-  // pages). Others (/tools, /resources, /industries) are added as their index
-  // pages are built.
-  out.push("/locations", "/services");
+  // Section index pages — real, useful landing pages (not doorway pages).
+  out.push("/locations", "/services", "/tools", "/resources", "/industries");
+  if (isIndexable(getKeyword("net-studio-network")?.state ?? "Researched")) {
+    out.push("/studio-network");
+  }
 
   // Dedicated service hubs and their specialisms.
   for (const h of SERVICE_HUBS) {
@@ -27,6 +32,21 @@ export function indexableSeoRoutes(): string[] {
     for (const s of h.spokes) {
       if (isIndexable(s.publicationState)) out.push(`/services/${h.slug}/${s.slug}`);
     }
+  }
+
+  // Tools (functional calculators) — all Published today.
+  for (const t of TOOLS) {
+    if (isIndexable(toolState(t))) out.push(`/tools/${t.slug}`);
+  }
+
+  // Resource guides that are fully written and Published.
+  for (const r of RESOURCES) {
+    if (isIndexable(r.publicationState)) out.push(`/resources/${r.slug}`);
+  }
+
+  // Industry pages that are Published (real demo evidence + unique copy).
+  for (const i of INDUSTRIES) {
+    if (isIndexable(i.publicationState)) out.push(`/industries/${i.slug}`);
   }
 
   // Location pages — only ones that have been earned (currently none).
@@ -37,6 +57,5 @@ export function indexableSeoRoutes(): string[] {
     if (isIndexable(c.publicationState)) out.push(`/locations/${c.stateSlug}/${c.slug}`);
   }
 
-  // De-duplicate while preserving order.
   return [...new Set(out)];
 }
