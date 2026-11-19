@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { EditorNote } from "@/components/ui/EditorNote";
+import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { breadcrumbSchema } from "@/lib/structured-data";
-import { SITE, siteBaseUrl } from "@/lib/site";
-import { pageMetadata } from "@/lib/seo";
 import { RESOURCES, getResource } from "@/lib/content/resources";
+import { getProject } from "@/lib/projects";
+import { pageMetadata } from "@/lib/seo";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
+import { getHub, getSpoke } from "@/lib/seo/service-hubs";
+import { SITE, siteBaseUrl } from "@/lib/site";
+import { TOOLS } from "@/lib/tools/catalog";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -44,22 +48,57 @@ function articleSchema(slug: string, title: string, description: string) {
   };
 }
 
+function resolveRelated(href: string): { kind: string; title: string; description: string } {
+  if (href.startsWith("/tools/")) {
+    const tool = TOOLS.find((t) => `/tools/${t.slug}` === href);
+    if (tool) return { kind: "Tool", title: tool.h1, description: tool.lead };
+  }
+  if (href.startsWith("/resources/")) {
+    const res = getResource(href.slice("/resources/".length));
+    if (res) return { kind: "Guide", title: res.title, description: res.description };
+  }
+  if (href.startsWith("/work/")) {
+    const proj = getProject(href.slice("/work/".length));
+    if (proj) return { kind: "Demonstration", title: proj.title, description: proj.summary };
+  }
+  if (href.startsWith("/services/")) {
+    const parts = href.slice("/services/".length).split("/");
+    if (parts.length === 2) {
+      const sp = getSpoke(parts[0], parts[1]);
+      if (sp) return { kind: "Specialization", title: sp.h1, description: sp.lead };
+    }
+    const hub = getHub(parts[0]);
+    if (hub) return { kind: "Service", title: hub.h1, description: hub.lead };
+  }
+  if (href === "/services") return { kind: "Services", title: "All Studio Services", description: "Six connected creative, engineering and automation service areas." };
+  if (href === "/studio-network") return { kind: "Studio Network", title: "The Studio Network", description: "How specialist partner capabilities are coordinated transparently." };
+  if (href === "/contact") return { kind: "Contact", title: "Start a Conversation", description: "Discuss scope, timelines and options directly with Ali." };
+  return { kind: "Related", title: href.replace(/^\//, "").replace(/-/g, " "), description: "" };
+}
+
 export default async function ResourcePage({ params }: Props) {
   const { slug } = await params;
   const r = getResource(slug);
   if (!r || !shouldRender(r.publicationState)) notFound();
 
+  const relatedCards = r.related.map((href) => ({ href, ...resolveRelated(href) }));
+
   return (
     <>
       <JsonLd data={articleSchema(r.slug, r.title, r.description)} />
-      <JsonLd
-        data={breadcrumbSchema([
+      <Breadcrumbs
+        items={[
           { name: "Home", path: "/" },
           { name: "Resources", path: "/resources" },
           { name: r.title, path: `/resources/${r.slug}` },
-        ])}
+        ]}
       />
-      <PageHero eyebrow="Guide" title={r.title} lead={r.lead} />
+      <PageHero eyebrow={r.category} title={r.title} lead={r.lead}>
+        <div className="article-meta">
+          <span className="article-meta__pill">{r.readMinutes} min read</span>
+          <span>Written by {SITE.name}</span>
+        </div>
+      </PageHero>
 
       {!isIndexable(r.publicationState) ? (
         <EditorNote>
@@ -70,8 +109,17 @@ export default async function ResourcePage({ params }: Props) {
 
       <article className="container section article-body">
         {r.body.map((block, i) => {
-          if (block.type === "h2") return <h2 key={i} className="section-title section-title--sm">{block.text}</h2>;
-          if (block.type === "ul")
+          if (block.type === "h2") {
+            return (
+              <h2 key={i} className="section-title section-title--sm">
+                {block.text}
+              </h2>
+            );
+          }
+          if (block.type === "h3") {
+            return <h3 key={i}>{block.text}</h3>;
+          }
+          if (block.type === "ul") {
             return (
               <ul key={i} className="article-list">
                 {block.items.map((it) => (
@@ -79,23 +127,100 @@ export default async function ResourcePage({ params }: Props) {
                 ))}
               </ul>
             );
-          return <p key={i} className="measure">{block.text}</p>;
+          }
+          if (block.type === "ol") {
+            return (
+              <ol key={i} className="article-list">
+                {block.items.map((it) => (
+                  <li key={it}>{it}</li>
+                ))}
+              </ol>
+            );
+          }
+          if (block.type === "callout") {
+            return (
+              <aside key={i} className="article-callout">
+                <p className="article-callout__title">{block.title}</p>
+                <p>{block.text}</p>
+              </aside>
+            );
+          }
+          if (block.type === "code") {
+            return (
+              <pre key={i} className="article-code">
+                <code>{block.text}</code>
+              </pre>
+            );
+          }
+          if (block.type === "table") {
+            return (
+              <div key={i} className="decision-table-wrap" style={{ maxWidth: "58rem" }}>
+                <table className="decision-table">
+                  <thead>
+                    <tr>
+                      {block.headers.map((h) => (
+                        <th key={h} scope="col">
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {block.rows.map((row, ri) => (
+                      <tr key={ri}>
+                        <th scope="row">{row[0]}</th>
+                        {row.slice(1).map((cell, ci) => (
+                          <td key={ci}>{cell}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          }
+          return (
+            <p key={i} className="measure">
+              {block.text}
+            </p>
+          );
         })}
-
-        {r.related.length > 0 ? (
-          <p className="measure article-related">
-            Related:{" "}
-            {r.related.map((href, i) => (
-              <span key={href}>
-                {i > 0 ? " · " : ""}
-                <Link href={href}>{href.replace(/^\/(services|tools)\//, "").replace(/-/g, " ")}</Link>
-              </span>
-            ))}
-          </p>
-        ) : null}
       </article>
 
-      <ContactCTA />
+      {relatedCards.length > 0 ? (
+        <section className="section section--tight section--surface" aria-labelledby="resource-related">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow eyebrow--plain">Next steps</p>
+              <h2 className="section-title section-title--sm" id="resource-related">
+                Related services, tools and demonstrations
+              </h2>
+            </div>
+            <ul className="hub-card-grid">
+              {relatedCards.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="hub-link-card">
+                    <span className="hub-link-card__kind">{item.kind}</span>
+                    <span className="hub-link-card__title">
+                      <span>{item.title}</span>
+                      <Icon name="arrow-up-right" size={16} />
+                    </span>
+                    {item.description ? <span className="hub-link-card__desc">{item.description}</span> : null}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      <ContactCTA
+        standalone
+        eyebrow="Apply this to your project"
+        title="Want an honest second opinion on your scope?"
+        text="Share what you are planning to build, automate or source. I will walk you through trade-offs and realistic options."
+        button="Start a conversation"
+      />
     </>
   );
 }
