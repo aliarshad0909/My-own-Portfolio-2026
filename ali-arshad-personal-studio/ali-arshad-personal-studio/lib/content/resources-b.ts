@@ -1,0 +1,237 @@
+import { callout, code, h2, ol, p, table, ul, type Resource } from "@/lib/content/resource-types";
+
+export const RESOURCES_B: Resource[] = [
+  {
+    slug: "what-is-landed-cost",
+    keywordId: "res-landed-cost",
+    category: "Creative & Sourcing",
+    readMinutes: 5,
+    title: "What Is Landed Cost? (And How to Calculate It)",
+    description:
+      "Landed cost is the true all-in cost of getting a product to your door. Learn the five cost lines, incoterm allocation and uplift multiplier.",
+    lead: "The unit price on a factory invoice is not what a product costs you. Landed cost is — and pricing off anything less erodes margin silently.",
+    publicationState: "Published",
+    related: ["/tools/landed-cost-calculator", "/services/global-sourcing", "/services/global-sourcing/landed-cost-analysis"],
+    body: [
+      p("Landed cost is the complete sum required to buy a product, ship it across borders, clear customs and place it ready to sell in your warehouse. Two factories quoting the exact same $8.00 unit price can land at $10.40 and $12.90 once carton dimensions, incoterms and duties are included."),
+      h2("The five core cost lines"),
+      ul([
+        "Goods value: factory unit price multiplied by order quantity.",
+        "Freight: ocean, air or road shipping — billed on the greater of actual gross weight and volumetric (dimensional) weight.",
+        "Import duty & tariffs: percentage of customs value determined by the product's HS classification code.",
+        "Insurance: marine or cargo coverage protecting the shipment in transit.",
+        "Brokerage & handling fees: customs broker filing, port terminal charges, documentation and last-mile drayage.",
+      ]),
+      h2("Formula & uplift multiplier"),
+      code("Total landed cost = Goods + Freight + Duty + Insurance + Fees\nPer-unit landed cost = Total landed cost ÷ Order quantity\nUplift multiplier = Total landed cost ÷ Goods value"),
+      p("The uplift multiplier is the fastest sanity check for retail pricing. A multiplier of 1.32× means every $10 of factory invoice really costs $13.20 at your warehouse door."),
+      h2("How incoterms change what you pay"),
+      table(
+        ["Incoterm", "What supplier covers", "What buyer still pays"],
+        [
+          ["EXW (Ex Works)", "Goods packed at factory gate only", "Origin pickup, export, main freight, insurance, duty & delivery"],
+          ["FOB (Free on Board)", "Goods loaded onto vessel at origin port", "Main freight, insurance, import duty, brokerage & local delivery"],
+          ["CIF (Cost, Insurance, Freight)", "Goods, marine insurance & main freight to destination port", "Destination port fees, import duty, brokerage & local delivery"],
+          ["DDP (Delivered Duty Paid)", "All-in through customs to your named place", "Verify who acts as importer of record and check hidden margin"],
+        ],
+      ),
+      callout(
+        "Broker confirmation required",
+        "Use the free Landed Cost Calculator on this site for margin planning, and always confirm binding HS codes and import regulations with a licensed customs broker before booking a shipment.",
+      ),
+    ],
+  },
+  {
+    slug: "shopify-vs-custom-ecommerce",
+    keywordId: "res-shopify-vs-custom",
+    category: "Ecommerce & Brand",
+    readMinutes: 6,
+    title: "Shopify vs Custom Ecommerce: An Honest Decision Guide",
+    description:
+      "When standard Shopify is the smartest choice for a brand, and the concrete operational signals that justify a custom or headless storefront.",
+    lead: "Shopify is the right call for most early-stage stores. Custom engineering earns its cost only when specific UX or operational limits appear.",
+    publicationState: "Published",
+    related: ["/services/ecommerce-development", "/work/tessera-clayworks-storefront", "/tools/web-project-estimator"],
+    body: [
+      p("Agency pitches often push custom headless storefronts to brands that would be far better off on a fast, restrained Shopify theme. Conversely, established brands sometimes stack twelve conflicting apps onto Shopify when a clean custom build would cost less to run and convert better."),
+      h2("Where each option genuinely wins"),
+      table(
+        ["Factor", "Standard Shopify", "Custom / Headless Next.js"],
+        [
+          ["Time to launch", "Shorter setup when standard checkout and themes fit", "Longer upfront build for tailored catalogue, rules and QA"],
+          ["Monthly app creep", "Apps for bundles, custom pricing, filters and ERP sync add up fast", "Core rules live cleanly in your own tested TypeScript"],
+          ["Variant & cart edge cases", "Great for standard size/colour SKUs; complex discount/shipping rules get brittle", "Exact integer-cent math, stock re-validation and bespoke UX"],
+          ["Core Web Vitals & brand feel", "Clean on minimal themes; degrades rapidly as third-party scripts stack up", "Complete control over performance, layout, typography and motion"],
+        ],
+      ),
+      h2("Stay on Shopify if:"),
+      ul([
+        "You are validating a new product line and want to test demand with minimal upfront engineering.",
+        "Your variants, shipping tiers and fulfilment workflows fit Shopify's native model cleanly.",
+        "You have no engineering budget for ongoing feature iterations.",
+      ]),
+      h2("Move to custom or headless Next.js if:"),
+      ul([
+        "Your storefront needs bespoke product configuration, live visual previews or B2B tiered ordering.",
+        "Third-party theme scripts have slowed mobile pages enough to hurt browsing and paid-ad conversion.",
+        "Your storefront must tie tightly into a custom inventory ledger, purchasing desk or back-office portal.",
+      ]),
+    ],
+  },
+  {
+    slug: "freelancer-vs-agency",
+    keywordId: "res-hire-freelance-vs-agency",
+    category: "Web Engineering",
+    readMinutes: 5,
+    title: "Independent Studio vs Agency: Making the Right Hire",
+    description:
+      "A clear-eyed breakdown of cost structure, communication speed, accountability and when a multidisciplinary studio of one beats an agency — and when it does not.",
+    lead: "Neither model is universally better. Each wins for a very different kind of project and team.",
+    publicationState: "Published",
+    related: ["/services", "/studio-network", "/contact"],
+    body: [
+      p("Choosing between an independent studio and a full-service agency is mostly a question of communication overhead versus parallel headcount."),
+      h2("How the two models compare in practice"),
+      table(
+        ["Dimension", "Independent Studio (of one)", "Traditional Agency"],
+        [
+          ["Who does the work", "The person you speak with on discovery designs and builds the project", "Senior partner pitches; junior team often executes"],
+          ["Speed & alignment", "Zero telephone game between design, code, SEO and automation", "Account managers coordinate across separate departments"],
+          ["Overhead & budget", "Lean — your budget goes directly into production work", "Higher retainers covering office, sales and account layers"],
+          ["Parallel capacity", "Best for focused, sequential milestones (or coordinated via Studio Network)", "Better when you need 5+ full-time specialists sprinting simultaneously"],
+        ],
+      ),
+      h2("When an agency is genuinely the better choice"),
+      p("If you are an enterprise brand running a 12-person parallel launch across TV, global localization, PR and heavy legacy ERP migration on a fixed six-week deadline, you need an agency's bench strength."),
+      h2("When an independent multidisciplinary studio shines"),
+      p("If you are a founder, ecommerce brand or lean operations team who wants brand, Next.js engineering, technical SEO and n8n automation speaking the exact same language — with one accountable person and partner specialists brought in transparently only where needed — a studio of one keeps coordination direct and overhead lean."),
+    ],
+  },
+  {
+    slug: "website-redesign-checklist",
+    keywordId: "res-website-redesign-checklist",
+    category: "Web Engineering",
+    readMinutes: 6,
+    title: "Website Redesign Checklist: Protecting SEO & Conversion",
+    description:
+      "A step-by-step pre-launch, build and post-launch checklist so your website redesign improves conversion without losing hard-earned organic traffic.",
+    lead: "Most website redesigns lose traffic not because the new design is bad, but because redirects, metadata and content intent were treated as afterthoughts.",
+    publicationState: "Published",
+    related: ["/services/web-development", "/resources/nextjs-seo", "/tools/web-project-estimator"],
+    body: [
+      p("A visual refresh feels exciting right up until launch week reveals broken old URLs, dropped service pages and an avoidable drop in organic inquiries. Run through this checklist before touching a single page layout."),
+      h2("Phase 1: Before designing anything"),
+      ol([
+        "Export every current indexed URL and top landing page from Google Search Console and analytics.",
+        "Identify which existing pages drive qualified inquiries — never delete or merge a ranking page without a deliberate redirect plan.",
+        "Map one primary search intent per new page so commercial services, guides and case studies do not cannibalise each other.",
+        "Audit real buyer objections from recent sales calls so new copy answers concrete questions.",
+      ]),
+      h2("Phase 2: During design & development"),
+      ol([
+        "Build a 1-to-1 permanent (301) redirect map for every URL whose slug changes.",
+        "Verify WCAG colour contrast, heading hierarchy (one H1 per page, logical H2/H3s) and mobile layouts down to 360px.",
+        "Keep staging/preview deployments strictly `noindex` and disallowed in `robots.txt`.",
+        "Test contact forms, CRM webhooks, confirmation states and error messages end to end.",
+      ]),
+      h2("Phase 3: Launch week QA"),
+      ol([
+        "Confirm canonical tags resolve to your exact production domain (`https://yourdomain.com`, consistent www/non-www).",
+        "Submit your updated `sitemap.xml` in Search Console and crawl all internal links to confirm zero 404s.",
+        "Check Core Web Vitals on real mobile devices and verify analytics / conversion events fire cleanly.",
+      ]),
+    ],
+  },
+  {
+    slug: "brand-style-guide",
+    keywordId: "res-brand-guidelines",
+    category: "Ecommerce & Brand",
+    readMinutes: 5,
+    title: "What Is a Brand Style Guide? (And What Makes One Usable)",
+    description:
+      "Why static logo PDFs gather dust, and the six practical ingredients of a modern brand style guide that designers, marketers and developers actually use.",
+    lead: "A logo is one asset. A brand style guide is the operating system that keeps your website, emails, ads and product visually coherent.",
+    publicationState: "Published",
+    related: ["/services/branding", "/services/branding/identity", "/work/halcyon-brand-system"],
+    body: [
+      p("Many companies pay for a brand deck once and stop opening it a month later. Usually it is because the document lists abstract mood adjectives while omitting the exact rules developers and marketers need every Tuesday: readable colour pairings, heading ratios, SVG lockups and email-safe fallbacks."),
+      h2("Six things a usable brand style guide must include"),
+      ul([
+        "Logo lockup family & clearspace: horizontal, stacked and mark-only SVGs for dark and light surfaces.",
+        "WCAG-tested colour palette: exact hex/CSS tokens paired with measured contrast ratios so body text and buttons never fail legibility.",
+        "Modular type scale: defined heading, lead, body and caption sizes that scale predictably across mobile and desktop.",
+        "Voice & phrasing boundaries: concrete before/after examples showing how your brand writes (and clichés it avoids).",
+        "Applied digital templates: real examples of a landing hero, social graphic and HTML email proving the rules hold together.",
+        "Developer-ready tokens: clean CSS custom properties so the website never drifts from the brand book.",
+      ]),
+      callout(
+        "See a live verifiable brand guide",
+        "Inspect the Halcyon Brand System demonstration in the portfolio: every colour pairing is mathematically checked against WCAG 2.2 luminance formulas on render, and every SVG asset downloads directly from the live DOM.",
+      ),
+    ],
+  },
+  {
+    slug: "motion-graphics-pricing",
+    keywordId: "res-motion-graphics-pricing",
+    category: "Creative & Sourcing",
+    readMinutes: 5,
+    title: "Motion Graphics Pricing: What Actually Drives Cost",
+    description:
+      "Why runtime is the least useful way to price motion graphics and video editing — and how asset complexity, style frames and deliverables shape budget.",
+    lead: "Asking for a 'per-minute rate' on motion graphics is like pricing a building by floor height alone. Complexity and asset creation drive almost all of the effort.",
+    publicationState: "Published",
+    related: ["/services/creative-production", "/services/creative-production/motion", "/services/creative-production/video-editing"],
+    body: [
+      p("A 20-second bespoke UI product animation with custom illustrated components, sound design and three aspect-ratio exports often takes twice as long as a 60-second typographic edit built over clean founder footage. Knowing the four real cost drivers helps you brief cleanly and protect budget."),
+      h2("What moves motion graphics & editing budgets"),
+      table(
+        ["Cost driver", "Lower complexity", "Higher complexity"],
+        [
+          ["Visual assets", "Supplied brand SVGs, clean footage or simple typography", "Custom illustrations, detailed UI recreation or 3D Blender scenes"],
+          ["Animation density", "Clean editorial cuts, lower-thirds and smooth transitions", "Frame-by-frame choreography, kinetic type and multi-layer compositing"],
+          ["Channel deliverables", "Single 16:9 web or YouTube master", "Dedicated 16:9, 4:5 and 9:16 re-framed cuts + multiple ad hooks"],
+          ["Script & revision depth", "Locked brief and two focused feedback rounds", "Open-ended concept exploration and late script rewrites"],
+        ],
+      ),
+      h2("How to get better creative output for the same budget"),
+      ol([
+        "Lock the script and key message before animation starts — changing a sentence in Google Docs takes two minutes; changing it after animation takes hours.",
+        "Share your brand kit (SVG logo, fonts, colour tokens) on day one so style frames match your site immediately.",
+        "Plan cutdowns upfront: designing scenes with 9:16 and 4:5 safe zones in mind from frame one makes multi-channel exports far cheaper.",
+      ]),
+    ],
+  },
+  {
+    slug: "3d-renders-for-ecommerce",
+    keywordId: "res-blender-ecommerce",
+    category: "Creative & Sourcing",
+    readMinutes: 5,
+    title: "3D Product Renders for Ecommerce: When CGI Beats a Photo Shoot",
+    description:
+      "How Blender 3D product visualisation helps product brands generate consistent angles, colourways and turntables without repeated studio shoots.",
+    lead: "Once a product exists as a calibrated 3D scene, every new colourway, angle or packaging tweak costs a render instead of another studio booking.",
+    publicationState: "Published",
+    related: ["/services/creative-production", "/services/ecommerce-development", "/services/branding"],
+    body: [
+      p("Physical product photography is still hard to beat for messy organic food, apparel drape or live lifestyle scenes with real people. For hard goods, packaging, electronics, ceramics, cosmetics and modular hardware, however, 3D product visualisation solves four expensive bottlenecks."),
+      h2("Where 3D product visualisation outperforms photography"),
+      ul([
+        "Multi-variant catalogues: swap matte ceramic glazes, anodized metals or label artwork inside the exact same lighting rig so every SKU lines up identically on collection grids.",
+        "Pre-production launches: produce clean hero stills and 360-degree turntables from CAD dimensions months before mass production arrives from the factory.",
+        "Hard-to-photograph views: clean cross-sections, floating exploded components and macro material details without fighting studio dust or reflections.",
+        "Reproducible camera systems: scripting camera spheres and three-point lighting in Blender (Python/bpy) guarantees next year's new SKU matches today's catalogue pixel for pixel.",
+      ]),
+      h2("What you need to prepare for a 3D product render"),
+      ol([
+        "CAD files (STEP/OBJ/FBX) if available, or exact physical dimensions plus clear straight-on reference photos.",
+        "Material and finish references (Pantone/hex colours, matte vs satin roughness, packaging artwork PDF/SVG).",
+        "A clear shot list: hero angle, detail crops, scale context and whether you need a turntable loop.",
+      ]),
+      callout(
+        "Honest studio note",
+        "My Blender/bpy scene builder (three material presets, six spherical camera angles and a 120-frame turntable, covered by 20 unit tests) is documented openly as In Development because no standalone portfolio image has been rendered in this repository yet. Client renders are produced per engagement on a Blender workstation.",
+      ),
+    ],
+  },
+];
+

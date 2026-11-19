@@ -45,6 +45,21 @@ export function SiteFooter() {
           </Link>
         )}
       </div>
+      <div className="container site-footer__explore" aria-label="Explore services and resources">
+        <span className="site-footer__explore-label">Explore</span>
+        <Link href="/services/n8n-automation">n8n Automation</Link>
+        <Link href="/services/web-development">Web Development</Link>
+        <Link href="/services/ai-agents">AI Agents</Link>
+        <Link href="/services/ecommerce-development">Ecommerce</Link>
+        <Link href="/services/business-dashboards">Dashboards</Link>
+        <Link href="/services/branding">Branding</Link>
+        <Link href="/services/global-sourcing">Global Sourcing</Link>
+        <Link href="/tools">Tools</Link>
+        <Link href="/resources">Resources</Link>
+        <Link href="/industries">Industries</Link>
+        <Link href="/locations">US Coverage</Link>
+        <Link href="/studio-network">Studio Network</Link>
+      </div>
       <div className="container site-footer__base">
         <p>
           © {year} {SITE.name}. {SITE.positioning}.

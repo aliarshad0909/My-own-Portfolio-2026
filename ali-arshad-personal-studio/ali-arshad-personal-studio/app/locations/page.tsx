@@ -1,102 +1,216 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LocationsBrowser } from "@/components/locations/LocationsBrowser";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { JsonLd } from "@/components/seo/JsonLd";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { breadcrumbSchema } from "@/lib/structured-data";
-import { pageMetadata } from "@/lib/seo";
-import { US_REGIONS, US_STATES, statesInRegion } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
+import { US_REGIONS, US_STATES } from "@/lib/geo/states";
+import { pageMetadata } from "@/lib/seo";
 import { shouldRender } from "@/lib/seo/publication";
+import { NATIONWIDE_SERVICES, serviceAreaMatrix } from "@/lib/seo/service-areas";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Where I Work: Remote Studio Serving the United States",
+  title: "Where I Work: Remote Digital Studio Serving All 50 US States",
   description:
-    "An independent studio working remotely with businesses across all 50 US states. Web development, AI automation and creative production, delivered wherever you are.",
+    "An independent remote studio partnering with businesses across all 50 US states and D.C. Web development, n8n automation, AI agents, branding and sourcing — with zero fabricated local offices.",
   path: "/locations",
 });
 
-/** A state links to its own page only when that page is actually live. */
-function StateItem({ slug, name, live }: { slug: string; name: string; live: boolean }) {
-  if (live) {
-    return (
-      <li>
-        <Link href={`/locations/${slug}`}>{name}</Link>
-      </li>
-    );
-  }
-  return <li className="muted">{name}</li>;
-}
+const REMOTE_PRINCIPLES = [
+  {
+    icon: "globe" as const,
+    title: "Remote nationwide — no fake offices",
+    detail: "This is an independent remote studio. There are no rented virtual mailboxes and no fabricated city addresses — just transparent remote delivery.",
+  },
+  {
+    icon: "clock" as const,
+    title: "Overlap across US time zones",
+    detail: "Discovery calls, live demos and milestone reviews schedule cleanly across Eastern, Central, Mountain and Pacific working hours.",
+  },
+  {
+    icon: "layers" as const,
+    title: "Written scope & staged async updates",
+    detail: "Every build runs on clear written specs, preview URLs and async video/text check-ins so progress never stalls waiting for unnecessary meetings.",
+  },
+  {
+    icon: "check" as const,
+    title: "Earned local pages only",
+    detail: "A dedicated state or service-location page enters the search index only when genuine local evidence and distinct geographic content exist.",
+  },
+];
 
 export default function LocationsPage() {
+  const statesForBrowser = US_STATES.map((s) => ({
+    slug: s.slug,
+    name: s.name,
+    code: s.code,
+    region: s.region,
+    largestMetro: s.largestMetro,
+    live: shouldRender(s.publicationState),
+  }));
+
+  const matrixCount = serviceAreaMatrix().length;
+  const pillarServices = NATIONWIDE_SERVICES.filter((s) => s.tier === "pillar");
+  const specializedServices = NATIONWIDE_SERVICES.filter((s) => s.tier === "seo-specialization");
+
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
+      <Breadcrumbs
+        items={[
           { name: "Home", path: "/" },
           { name: "Locations", path: "/locations" },
-        ])}
+        ]}
       />
       <PageHero
-        eyebrow="Coverage"
-        title="A remote studio, working across the United States"
-        lead="The work travels. I partner with founders and teams in every US state, delivered remotely with clear scope, timezone overlap and staged hand-off. This page is a map of intent, not a wall of near-identical landing pages."
+        eyebrow="US Coverage · Remote Studio"
+        title="Working remotely across all 50 US states"
+        lead="Web engineering, n8n workflow automation, AI agents, brand systems and sourcing coordination delivered remotely — with one accountable point of contact wherever your team sits."
       />
 
-      <section className="container section">
-        <p className="lead measure">
-          There is no physical office to claim, so you will not find a separate
-          &ldquo;web developer in your city&rdquo; page for every town. A state or
-          city page appears here only when there is a real reason for it — a
-          client in that market, or a service area I have genuinely committed to.
-          Everywhere else, the honest answer is the same: remote, nationwide,
-          one point of contact.
-        </p>
-      </section>
-
-      {US_REGIONS.map((region) => (
-        <section key={region} className="container section--tight">
-          <h2 className="section-title">{region}</h2>
-          <ul className="location-grid">
-            {statesInRegion(region).map((s) => (
-              <StateItem
-                key={s.slug}
-                slug={s.slug}
-                name={s.name}
-                live={shouldRender(s.publicationState)}
-              />
+      <section className="section section--tight" aria-labelledby="remote-model">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow eyebrow--plain">How remote delivery works</p>
+            <h2 className="section-title section-title--sm" id="remote-model">
+              Transparent national coverage without doorway spam
+            </h2>
+            <p className="section-sub">
+              Most agencies spin up hundreds of near-identical &ldquo;developer in [city]&rdquo; doorway pages. Here, the nationwide architecture ({matrixCount} planned service × state combinations across all direct business pillars and SEO specializations) stays strictly unpublished until each page has a real local signal and passes editorial review for locally differentiated content.
+            </p>
+          </div>
+          <ul className="hub-deliverables">
+            {REMOTE_PRINCIPLES.map((p) => (
+              <li key={p.title} className="hub-deliverable">
+                <div className="hub-deliverable__head">
+                  <span className="hub-deliverable__icon" aria-hidden="true">
+                    <Icon name={p.icon} size={18} />
+                  </span>
+                  <h3 className="hub-deliverable__title">{p.title}</h3>
+                </div>
+                <p className="hub-deliverable__detail">{p.detail}</p>
+              </li>
             ))}
           </ul>
-        </section>
-      ))}
+        </div>
+      </section>
 
-      <section className="container section--tight">
-        <h2 className="section-title">Pilot metros</h2>
-        <p className="measure">
-          A small set of high-intent cities where a dedicated page could be
-          justified first. Listed for transparency; each goes live only when it
-          is earned.
-        </p>
-        <ul className="location-grid">
-          {PILOT_CITIES.map((c) => {
-            const live = shouldRender(c.publicationState);
-            const href = `/locations/${c.stateSlug}/${c.slug}`;
-            return live ? (
-              <li key={href}>
-                <Link href={href}>{c.name}</Link>
+      <section className="section section--surface" aria-labelledby="states-directory">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow eyebrow--plain">50 states + D.C.</p>
+            <h2 className="section-title section-title--sm" id="states-directory">
+              Browse coverage by region or state
+            </h2>
+            <p className="section-sub">
+              Every state below is served remotely today. Individual state pages become clickable only when published with real local context.
+            </p>
+          </div>
+          <LocationsBrowser regions={US_REGIONS} states={statesForBrowser} />
+        </div>
+      </section>
+
+      <section className="section section--tight" aria-labelledby="pilot-metros">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow eyebrow--plain">Pilot metros</p>
+            <h2 className="section-title section-title--sm" id="pilot-metros">
+              Twelve priority US metros tracked for future local depth
+            </h2>
+            <p className="section-sub">
+              Listed openly as part of the studio&apos;s expansion architecture; each metro page remains unindexed until genuine regional engagement warrants a dedicated page.
+            </p>
+          </div>
+          <ul className="location-grid">
+            {PILOT_CITIES.map((c) => {
+              const live = shouldRender(c.publicationState);
+              const href = `/locations/${c.stateSlug}/${c.slug}`;
+              return (
+                <li key={href} className="loc-state-card">
+                  <div>
+                    {live ? (
+                      <Link href={href}>
+                        <strong>{c.name}</strong>
+                      </Link>
+                    ) : (
+                      <span>{c.name}</span>
+                    )}
+                    <div className="loc-state-card__meta">{c.primaryService}</div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section section--tight section--surface" aria-labelledby="nationwide-services">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow eyebrow--plain">Available nationwide</p>
+            <h2 className="section-title section-title--sm" id="nationwide-services">
+              Primary business pillars &amp; focused SEO specializations
+            </h2>
+            <p className="section-sub">
+              All five direct studio pillars—including Creative Production and Brand &amp; Growth—plus focused technical specializations are delivered remotely nationwide. Partner-delivered specialist work is coordinated transparently through the Studio Network.
+            </p>
+          </div>
+          <p className="label" style={{ marginTop: "1rem" }}>Primary business pillars</p>
+          <ul className="hub-card-grid">
+            {pillarServices.map((s) => (
+              <li key={s.slug}>
+                <Link href={`/services/${s.slug}`} className="hub-link-card">
+                  <span className="hub-link-card__kind">Primary pillar · Remote</span>
+                  <span className="hub-link-card__title">
+                    <span>{s.label}</span>
+                    <Icon name="arrow-up-right" size={16} />
+                  </span>
+                  <span className="hub-link-card__desc">
+                    Explore scope, deliverables, demonstrations and FAQs.
+                  </span>
+                </Link>
               </li>
-            ) : (
-              <li key={href} className="muted">
-                {c.name}
+            ))}
+            <li>
+              <Link href="/studio-network" className="hub-link-card">
+                <span className="hub-link-card__kind">Partner pillar · Coordinated</span>
+                <span className="hub-link-card__title">
+                  <span>Specialist technical collaboration</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </span>
+                <span className="hub-link-card__desc">
+                  Partner-delivered security, blockchain and specialist engineering coordinated under one contact.
+                </span>
+              </Link>
+            </li>
+          </ul>
+          <p className="label" style={{ marginTop: "2rem" }}>Focused SEO specializations</p>
+          <ul className="hub-card-grid">
+            {specializedServices.map((s) => (
+              <li key={s.slug}>
+                <Link href={`/services/${s.slug}`} className="hub-link-card">
+                  <span className="hub-link-card__kind">Specialization hub · Remote</span>
+                  <span className="hub-link-card__title">
+                    <span>{s.label}</span>
+                    <Icon name="arrow-up-right" size={16} />
+                  </span>
+                  <span className="hub-link-card__desc">
+                    Dedicated deep-dive page with architecture, workflows and FAQs.
+                  </span>
+                </Link>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <ContactCTA
-        title="Wherever you are, start the same way"
-        text="Tell me what you are building. A short discovery call is the fastest path, from any US state."
+        standalone
+        eyebrow="Work together remotely"
+        title="Wherever your team is based, start the same way"
+        text="Tell me what you are building or automating. A short discovery call followed by a clear written scope works cleanly from any US time zone."
+        button="Start a conversation"
       />
     </>
   );

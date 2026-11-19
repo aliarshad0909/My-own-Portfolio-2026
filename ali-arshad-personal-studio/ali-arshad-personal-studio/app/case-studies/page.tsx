@@ -166,8 +166,8 @@ export default function CaseStudiesPage() {
                 The rest of the collection
               </h2>
               <p className="section-sub">
-                Same depth, different disciplines: automation, voice, sourcing, 3D and production tooling. Two of these are in development rather than
-                demo ready, and say so.
+                Same depth, different disciplines: automation, voice, sourcing, 3D and production tooling. Projects still in development or without
+                rendered media state that plainly.
               </p>
             </div>
             <div className="case-grid case-grid--rest">

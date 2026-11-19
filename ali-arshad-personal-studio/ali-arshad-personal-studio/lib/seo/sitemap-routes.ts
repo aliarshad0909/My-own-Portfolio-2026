@@ -10,6 +10,7 @@
 
 import { isIndexable } from "@/lib/seo/publication";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { cityServiceAreas, serviceAreaMatrix } from "@/lib/seo/service-areas";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 import { RESOURCES } from "@/lib/content/resources";
@@ -55,6 +56,15 @@ export function indexableSeoRoutes(): string[] {
   }
   for (const c of PILOT_CITIES) {
     if (isIndexable(c.publicationState)) out.push(`/locations/${c.stateSlug}/${c.slug}`);
+  }
+
+  // Service-area matrix (306 state × service + selected city × service) — only
+  // earned, Published combinations enter the sitemap (currently 0).
+  for (const a of serviceAreaMatrix()) {
+    if (isIndexable(a.publicationState)) out.push(a.url);
+  }
+  for (const ca of cityServiceAreas()) {
+    if (isIndexable(ca.publicationState)) out.push(ca.url);
   }
 
   return [...new Set(out)];

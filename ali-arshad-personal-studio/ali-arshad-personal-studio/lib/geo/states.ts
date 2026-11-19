@@ -18,6 +18,14 @@ import type { PublicationState } from "@/lib/seo/publication";
 
 export type UsRegion = "Northeast" | "Midwest" | "South" | "West";
 
+export type EditorialReviewGate = {
+  /** Must be set true by a human reviewer confirming locally differentiated content. */
+  reviewed: boolean;
+  /** True only once templated scaffold copy is replaced with bespoke geographic copy. */
+  hasCustomContent: boolean;
+  reviewerNote?: string;
+};
+
 export type UsState = {
   /** USPS two-letter code. */
   code: string;
@@ -32,11 +40,15 @@ export type UsState = {
   evidenceRequired: string[];
   /** What is true today. Published requires this to cover evidenceRequired. */
   evidenceHave: string[];
+  /** Mandatory editorial review gate before any location page may publish. */
+  editorialReview: EditorialReviewGate;
 };
 
 const LOCAL_SIGNAL =
   "A genuine local signal exists (client in region, or stated service area)";
 const UNIQUE_COPY = "Page has unique, substantial copy (not templated boilerplate)";
+export const EDITORIAL_REVIEW =
+  "Editorial review completed confirming meaningful, locally differentiated content (non-templated)";
 
 /** [code, name, region, largestMetro] — defaults applied by `state()`. */
 type Row = [code: string, name: string, region: UsRegion, metro: string];
@@ -53,8 +65,9 @@ function state([code, name, region, largestMetro]: Row): UsState {
     largestMetro,
     // Nationwide architecture starts un-published. Earn each page.
     publicationState: "NeedsEvidence",
-    evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY],
+    evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY, EDITORIAL_REVIEW],
     evidenceHave: [],
+    editorialReview: { reviewed: false, hasCustomContent: false },
   };
 }
 

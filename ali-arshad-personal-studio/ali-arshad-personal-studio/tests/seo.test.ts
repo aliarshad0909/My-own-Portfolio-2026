@@ -12,13 +12,28 @@ import { brokenLinks, isKnownRoute } from "@/lib/seo/routes";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES, orphanCities } from "@/lib/geo/cities";
 import { SERVICE_HUBS, allSpokes } from "@/lib/seo/service-hubs";
-import { getProject } from "@/lib/projects";
+import { ALL_HUB_ENRICHMENTS } from "@/lib/seo/service-enrichment";
+import {
+  BUSINESS_PILLARS,
+  NATIONWIDE_SERVICES,
+  blockingIntentConflicts,
+  coreServiceAreaMatrix,
+  serviceAreaMatrix,
+} from "@/lib/seo/service-areas";
+import { PROJECTS, getProject } from "@/lib/projects";
+import { SERVICES } from "@/lib/services";
+import { SERVICE_OPTIONS } from "@/lib/inquiry";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { RESOURCES } from "@/lib/content/resources";
 import { INDUSTRIES } from "@/lib/content/industries";
 import { TOOLS, toolState } from "@/lib/tools/catalog";
 import { TESTIMONIALS, unconsentedTestimonials } from "@/lib/content/testimonials";
-import { evidenceViolations, publishedWithoutLiveEvidence } from "@/lib/seo/evidence";
+import {
+  evidenceTierOf,
+  evidenceViolations,
+  publishedWithoutLiveEvidence,
+  unreviewedPublishedLocations,
+} from "@/lib/seo/evidence";
 
 describe("keyword registry: no self-competition", () => {
   it("has no two rows chasing the exact same keyword", () => {
@@ -254,5 +269,72 @@ describe("evidence integrity (declarations cannot bypass reality)", () => {
 
   it("requires every Published hub/industry to cite at least one live demo", () => {
     assert.deepEqual(publishedWithoutLiveEvidence(), [], "Published page with no live evidencing build");
+  });
+});
+describe("service-area matrix, pillar reconciliation & evidence tiers", () => {
+  it("reconciles all 6 original business pillars and includes Creative Production & Brand & Growth nationwide", () => {
+    assert.equal(BUSINESS_PILLARS.length, SERVICES.length, "pillar count matches lib/services.ts");
+    for (const s of SERVICES) {
+      assert.ok(
+        BUSINESS_PILLARS.some((p) => p.pillarId === s.id),
+        `original business pillar ${s.id} missing from BUSINESS_PILLARS`,
+      );
+    }
+    const slugs = new Set(NATIONWIDE_SERVICES.map((s) => s.slug));
+    assert.ok(slugs.has("creative-production"), "creative-production must be in nationwide architecture");
+    assert.ok(slugs.has("branding"), "branding (Brand & Growth) must be in nationwide architecture");
+  });
+
+  it("models 408 nationwide combinations (incl. 306 engineering/sourcing subset) with 0 published", () => {
+    const matrix = serviceAreaMatrix();
+    assert.equal(matrix.length, 408, "expected 8 nationwide commercial tracks × 51 jurisdictions");
+    assert.equal(coreServiceAreaMatrix().length, 306, "expected 6 core engineering/sourcing tracks × 51 jurisdictions");
+    const published = matrix.filter((a) => isIndexable(a.publicationState));
+    assert.deepEqual(published.map((a) => a.url), [], "service-area page published without local evidence");
+    assert.deepEqual(unreviewedPublishedLocations(), [], "location page published without editorial review");
+  });
+
+  it("never equates locally tested Demo Ready projects with publicly deployed demos", () => {
+    for (const p of PROJECTS) {
+      if (p.status === "Demo Ready" && !p.liveUrl) {
+        assert.equal(
+          evidenceTierOf(p),
+          "locally-tested-demo",
+          `${p.slug} has no liveUrl so must classify as locally-tested-demo`,
+        );
+      }
+    }
+  });
+
+  it("has zero blocking duplicate-intent conflicts across matrix and registry", () => {
+    assert.deepEqual(
+      blockingIntentConflicts().map((c) => c.signature),
+      [],
+      "two publishable URLs compete for the same intent signature",
+    );
+  });
+
+  it("keeps every specialization spoke aligned with its keyword-registry state", () => {
+    for (const { hub, spoke } of allSpokes()) {
+      const row = getKeyword(spoke.keywordId);
+      assert.ok(row, `${hub.slug}/${spoke.slug}: unknown keywordId ${spoke.keywordId}`);
+      assert.equal(spoke.publicationState, row!.state, `${hub.slug}/${spoke.slug} state drifts from registry`);
+    }
+  });
+
+  it("points every enriched hub internal link at a known route and valid /contact service option", () => {
+    for (const [slug, enrich] of Object.entries(ALL_HUB_ENRICHMENTS)) {
+      const hrefs = [
+        ...enrich.relatedLinks.map((l) => l.href),
+        ...(enrich.heroSecondary ? [enrich.heroSecondary.href] : []),
+        ...(enrich.toolCallout ? [enrich.toolCallout.href] : []),
+        ...enrich.industries.flatMap((i) => (i.href ? [i.href] : [])),
+      ];
+      assert.deepEqual(brokenLinks(hrefs), [], `enrichment:${slug} has broken internal links`);
+      assert.ok(
+        SERVICE_OPTIONS.includes(enrich.contactServiceTitle),
+        `enrichment:${slug} CTA service "${enrich.contactServiceTitle}" is not in SERVICE_OPTIONS`,
+      );
+    }
   });
 });

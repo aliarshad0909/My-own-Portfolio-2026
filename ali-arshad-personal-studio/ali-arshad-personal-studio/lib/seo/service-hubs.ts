@@ -16,17 +16,15 @@
 import type { FaqItem } from "@/lib/structured-data";
 import type { IconName } from "@/components/ui/Icon";
 import type { PublicationState } from "@/lib/seo/publication";
+import type { ServiceSpoke } from "@/lib/seo/service-spoke-types";
+import { SPOKES_AI_AND_WEB } from "@/lib/seo/service-spokes-a";
+import { SPOKES_CREATIVE_BRAND_SOURCING } from "@/lib/seo/service-spokes-b";
 
-export type ServiceSpoke = {
-  /** Last path segment: /services/<hubSlug>/<slug>. */
-  slug: string;
-  keywordId: string;
-  title: string;
-  h1: string;
-  lead: string;
-  body: string[];
-  projectSlugs: string[];
-  publicationState: PublicationState;
+export type { ServiceSpoke } from "@/lib/seo/service-spoke-types";
+
+const ALL_SPOKES: Record<string, ServiceSpoke[]> = {
+  ...SPOKES_AI_AND_WEB,
+  ...SPOKES_CREATIVE_BRAND_SOURCING,
 };
 
 export type ServiceStep = { label: string; detail: string };
@@ -35,6 +33,10 @@ export type ServiceHub = {
   /** /services/<slug>. Matches a primaryUrl in the keyword registry. */
   slug: string;
   keywordId: string;
+  /** Parent business pillar id matching lib/services.ts. */
+  pillarId: string;
+  /** Clearly distinguishes primary business-pillar hubs from focused SEO specializations. */
+  hubTier: "pillar" | "seo-specialization";
   icon: IconName;
   title: string; // <title> / metadata
   h1: string;
@@ -61,6 +63,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "web-development",
     keywordId: "hub-web-development",
+    pillarId: "web-development",
+    hubTier: "pillar",
     icon: "code",
     title: "Freelance Web Development Services (Next.js, React, TypeScript)",
     h1: "Web and application development",
@@ -92,55 +96,38 @@ export const SERVICE_HUBS: ServiceHub[] = [
     faqs: [
       {
         q: "What stack do you build on?",
-        a: "Next.js, React and TypeScript, deployed on Vercel. The portfolio itself and every interactive demo are built this way, so the stack is not theoretical — it is what the work pages run on.",
+        a: "Next.js (App Router), React and TypeScript, typically deployed on Vercel. This portfolio, its technical SEO architecture and the locally tested demonstration builds in the work archive run on the same stack.",
       },
       {
-        q: "Can you take over an existing codebase?",
-        a: "Often, yes, provided it is a stack I work in and the code is accessible. The honest answer depends on the state of what exists, which is what the discovery conversation is for.",
+        q: "Can you take over an existing React or Next.js codebase?",
+        a: "Often, yes, provided the repository is accessible and runs on a stack I work in. Discovery starts with an honest audit of what exists so you know whether refactoring or rebuilding saves more time.",
       },
       {
         q: "How much does a custom web application cost?",
-        a: "Every project is quoted individually; there is no fixed price list. The web project estimator on this site gives an honest range from a few inputs, and a written scope follows discovery.",
+        a: "Every build is scoped and quoted individually rather than from a rigid price sheet. Use the Web Project Estimator on this site for an illustrative planning range, followed by a plain-language written scope after discovery.",
+      },
+      {
+        q: "Do we own the source code, domain and hosting accounts?",
+        a: "Yes. The Git repository, deployment account and third-party credentials live directly under your ownership with clear documentation at hand-off.",
+      },
+      {
+        q: "How do you handle technical SEO and Core Web Vitals?",
+        a: "Semantic headings, unique metadata, canonical URLs, dynamic sitemaps, accurate JSON-LD structured data and lean asset sizing are built into the architecture from day one rather than patched on after launch.",
       },
     ],
     publicationState: "Published",
-    spokes: [
-      {
-        slug: "nextjs",
-        keywordId: "spec-nextjs-developer",
-        title: "Hire a Next.js Developer",
-        h1: "Next.js development",
-        lead: "App Router, server components and the modern Next.js stack, used in production on this very site.",
-        body: [
-          "Next.js is the framework this studio builds on daily. The portfolio you are reading, its sitemap, structured data and every demo run on the App Router with TypeScript.",
-          "This page is being expanded with specific Next.js engagement detail. Until then, the web development hub covers the full offering.",
-        ],
-        projectSlugs: ["tessera-clayworks-storefront"],
-        publicationState: "Drafted",
-      },
-      {
-        slug: "mvp",
-        keywordId: "spec-saas-mvp",
-        title: "MVP Development for Startups",
-        h1: "MVP development",
-        lead: "A working first version you can show users and investors, scoped to prove one thing well.",
-        body: [
-          "An MVP is not a smaller version of everything — it is a complete version of the one thing that matters. The job is to find that thing with you and build it so it holds up to real use.",
-          "This spoke page is drafted and will carry startup-specific detail before it is published.",
-        ],
-        projectSlugs: ["northwind-analytics-dashboard"],
-        publicationState: "Drafted",
-      },
-    ],
+    spokes: ALL_SPOKES["web-development"] ?? [],
   },
   {
     slug: "n8n-automation",
     keywordId: "hub-n8n-automation",
+    pillarId: "ai-automation",
+    hubTier: "seo-specialization",
     icon: "bot",
-    title: "n8n Workflow Automation Services",
+    title: "n8n Workflow Automation Services & Custom Integrations",
     h1: "n8n workflow automation",
-    lead: "Business processes automated with n8n, so repetitive steps run themselves and your team keeps the judgement calls.",
-    intent: "For teams drowning in manual steps — lead handling, onboarding, reporting — who want automation that is reliable and that they can actually see working.",
+    lead: "Replace repetitive copy-paste work and per-task SaaS bills with self-hostable n8n workflows — engineered with validation, deduplication, retries and human approval where judgement counts.",
+    intent: "For founder-led, sales and operations teams who need lead qualification, CRM sync, Google Workspace reporting and cross-app pipelines they can actually inspect and own.",
     problems: [
       "Our team copies data between tools all day",
       "Leads slip through the cracks before anyone follows up",
@@ -148,41 +135,56 @@ export const SERVICE_HUBS: ServiceHub[] = [
       "We tried Zapier and hit its limits",
     ],
     includes: [
-      "Mapping the current process before automating anything",
-      "n8n workflow design, build and testing",
-      "Integrations across CRMs, inboxes, sheets and APIs",
-      "Clear hand-offs where a human should stay in the loop",
-      "Documentation so the workflow is not a black box",
+      "Process mapping and edge-case specification before building",
+      "Modular n8n workflow architecture, webhooks and branching",
+      "Tested JavaScript Code nodes for scoring, normalisation and transforms",
+      "CRM, Google Workspace, Slack and custom REST API integrations",
+      "Dedicated error workflows, retry policies and human approval gates",
+      "Exportable JSON, credential checklist and operator documentation",
     ],
     process: [
-      { label: "Map", detail: "The real process, step by step" },
-      { label: "Design", detail: "What to automate, what stays human" },
-      { label: "Build", detail: "Workflows built and tested in n8n" },
-      { label: "Hand-off", detail: "Documented, monitored, yours to own" },
+      { label: "Process audit", detail: "The real workflow, exceptions and edge cases mapped" },
+      { label: "Architecture", detail: "Triggers, branches, credentials and human gates" },
+      { label: "Build & test", detail: "Workflows built in n8n with verified Code-node logic" },
+      { label: "Hand-off", detail: "Deployed, documented and yours to own" },
     ],
     projectSlugs: ["inbound-lead-qualification-workflow"],
     relatedTools: ["/tools/automation-roi-calculator"],
-    relatedHubs: ["/services/ai-agents", "/services/business-dashboards"],
+    relatedHubs: ["/services/ai-agents", "/services/business-dashboards", "/services/web-development"],
     faqs: [
       {
-        q: "Why n8n rather than Zapier or Make?",
-        a: "n8n is self-hostable, handles complex branching cleanly and does not bill per task, which matters once volume grows. The inbound lead-qualification demonstration on this site is built in n8n end to end.",
+        q: "Why choose n8n rather than Zapier or Make?",
+        a: "n8n can be self-hosted on your own infrastructure, supports full JavaScript and Python Code nodes for non-trivial logic, and does not charge per individual task step. That keeps complex multi-step workflows affordable and inspectable as volume grows.",
       },
       {
-        q: "What can realistically be automated?",
-        a: "Anything repetitive and rule-based: validation, enrichment, routing, scoring, notifications, reporting. Decisions that need human judgement are kept with people, by design.",
+        q: "Do we own the workflows and where are they hosted?",
+        a: "Yes. Every workflow is handed over as clean, exportable JSON with zero vendor lock-in. You can run it on n8n Cloud or on your own self-hosted Docker server under your own credentials and data boundary.",
       },
       {
-        q: "How do you measure whether it was worth it?",
-        a: "Hours saved against build cost. The automation ROI calculator on this site estimates that from your own numbers.",
+        q: "How do you prevent silent failures or bad data entering our CRM?",
+        a: "Validation runs at the entry gate so malformed submissions return a clear error rather than polluting your CRM. Downstream API calls use bounded retries, and a dedicated error workflow logs context and alerts your team if a dependency stays down.",
+      },
+      {
+        q: "Can n8n combine deterministic rules with AI models safely?",
+        a: "Yes — and the split matters. Schema checks, deduplication, routing thresholds and formatting stay in deterministic code, while LLM steps are scoped to narrow tasks like summarisation or draft preparation with human review before external sends.",
+      },
+      {
+        q: "What can realistically be automated — and what stays human?",
+        a: "Repetitive, rule-based steps automate cleanly: webhook intake, enrichment, lead scoring, CRM updates, Google Sheets reporting and Slack alerts. Pricing exceptions, relationship replies and final approvals stay with people by design.",
+      },
+      {
+        q: "How do you decide whether an automation is worth building?",
+        a: "Compare weekly manual hours saved (at a realistic automation share, never 100%) against the build cost. The Automation ROI Calculator on this site models payback period from your own numbers before any commitment.",
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["n8n-automation"] ?? [],
   },
   {
     slug: "ai-agents",
     keywordId: "hub-ai-agents",
+    pillarId: "ai-automation",
+    hubTier: "seo-specialization",
     icon: "bot",
     title: "AI Agent Development Services",
     h1: "AI agent development",
@@ -212,51 +214,34 @@ export const SERVICE_HUBS: ServiceHub[] = [
     relatedHubs: ["/services/n8n-automation", "/services/web-development"],
     faqs: [
       {
-        q: "Will the agent make things up?",
-        a: "The design goal is the opposite: answers are retrieved from your own content, the agent is scoped to a defined job, and anything outside that is handed to a person. The support-agent demonstration shows this pattern working.",
+        q: "How do you stop an AI agent from hallucinating policies or prices?",
+        a: "By narrowing the job and grounding every response in your own versioned documents. In the Tideline support-agent demonstration, replies are retrieved via inspectable BM25 scoring, quoted verbatim from the source article, and escalated whenever confidence falls below a tuned floor.",
       },
       {
-        q: "What is the difference between an AI agent and a chatbot?",
-        a: "A chatbot follows a script; an agent retrieves, reasons over context and takes a defined action, with guardrails. The resources section explains this in plain terms.",
+        q: "What is the practical difference between an AI agent and a chatbot?",
+        a: "A basic chatbot walks a brittle decision tree; a well-designed agent retrieves context from your knowledge base, extracts structured slots or triggers defined actions (like creating a CRM ticket) and escalates cleanly when outside its boundary.",
       },
       {
-        q: "Can an agent qualify sales leads?",
-        a: "Yes — the voice sales-agent demonstration captures answers and qualifies against criteria, then hands the real conversation to a human.",
+        q: "Can an agent qualify sales leads over voice or chat?",
+        a: "Yes. The Kestrel voice qualification demonstration captures caller name, fleet size, need and timeline via an explicit state machine — using browser speech where available and degrading honestly to typed chat where it is not.",
+      },
+      {
+        q: "Does every agent require an expensive LLM API?",
+        a: "Not always. When deterministic retrieval (BM25) or an explicit slot-filling state machine solves the job with higher auditability and verbatim policy quoting, I recommend that first and reserve LLMs for tasks where language reasoning genuinely helps.",
+      },
+      {
+        q: "How does human hand-off work when the agent cannot answer?",
+        a: "The full transcript, captured fields and escalation reason pass into your CRM, helpdesk or Slack channel (often via n8n) so a person picks up with complete context instead of asking the customer to repeat themselves.",
       },
     ],
     publicationState: "Published",
-    spokes: [
-      {
-        slug: "support",
-        keywordId: "spec-support-agent",
-        title: "AI Customer Support Agent",
-        h1: "AI customer support agents",
-        lead: "An agent that answers from your own knowledge base and escalates cleanly when it should.",
-        body: [
-          "The Tideline support-agent demonstration shows the shape of this work: grounded answers, a visible confidence signal and a hand-off to a person when the question is out of scope.",
-          "This spoke is drafted; the support hub above covers the full offering today.",
-        ],
-        projectSlugs: ["tideline-support-agent"],
-        publicationState: "Drafted",
-      },
-      {
-        slug: "sales",
-        keywordId: "spec-ai-sales-agent",
-        title: "AI Sales Agent Development",
-        h1: "AI sales agents",
-        lead: "Qualify and route inbound interest around the clock, then hand the real conversation to a human.",
-        body: [
-          "The Kestrel voice sales-agent demonstration captures a prospect's answers, scores them and passes a qualified, summarised lead onward.",
-          "This spoke is drafted; the AI agents hub covers the full offering today.",
-        ],
-        projectSlugs: ["kestrel-voice-sales-agent"],
-        publicationState: "Drafted",
-      },
-    ],
+    spokes: ALL_SPOKES["ai-agents"] ?? [],
   },
   {
     slug: "ecommerce-development",
     keywordId: "hub-ecommerce",
+    pillarId: "web-development",
+    hubTier: "seo-specialization",
     icon: "layers",
     title: "Ecommerce Website Development",
     h1: "Ecommerce development",
@@ -286,12 +271,24 @@ export const SERVICE_HUBS: ServiceHub[] = [
     relatedHubs: ["/services/web-development", "/services/business-dashboards"],
     faqs: [
       {
-        q: "Shopify or custom?",
-        a: "Whichever genuinely fits. Shopify is right for many brands; custom earns its cost when operations or experience need something a template cannot do. The resources section has an honest comparison.",
+        q: "Should we use Shopify or build a custom storefront?",
+        a: "Whichever genuinely fits your stage and operations. Standard Shopify is faster and cheaper for straightforward catalogues; custom or headless Next.js earns its cost when variant logic, speed, editorial presentation or back-office rules outgrow templates.",
       },
       {
-        q: "Is there a real example?",
-        a: "The Tessera Clayworks storefront is a complete demonstration build — catalogue, cart, checkout and admin — under a fictional brand, labelled as a demonstration.",
+        q: "How do you prevent overselling or discount calculation bugs?",
+        a: "Pricing, promotions, shipping thresholds and tax run in integer cents inside unit-tested TypeScript modules outside the UI, and stock is re-validated on submission rather than trusting a stale browser cart.",
+      },
+      {
+        q: "Can we manage products and inventory without touching code?",
+        a: "Yes — either via a clean custom product admin (as shown in the Tessera Clayworks build) or by connecting a headless CMS, Shopify backend or ERP API so your team edits catalogues directly.",
+      },
+      {
+        q: "How are payments and security handled?",
+        a: "Card processing always stays with established providers like Stripe or Shopify Checkout rather than rolling custom payment handling. Your custom build owns the shopping experience, rules and post-purchase webhooks.",
+      },
+      {
+        q: "Is there a complete demonstration build to inspect?",
+        a: "Yes — Tessera Clayworks is a complete demonstration storefront under a fictional ceramics brand covering catalogue filtering, variant previews, cart, three-step simulated checkout and product admin CRUD, backed by 56 automated tests.",
       },
     ],
     publicationState: "Published",
@@ -300,6 +297,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "business-dashboards",
     keywordId: "hub-dashboards",
+    pillarId: "web-development",
+    hubTier: "seo-specialization",
     icon: "trending",
     title: "Business Dashboard Development",
     h1: "Dashboards and data visualisation",
@@ -329,20 +328,34 @@ export const SERVICE_HUBS: ServiceHub[] = [
     relatedHubs: ["/services/web-development", "/services/global-sourcing"],
     faqs: [
       {
-        q: "Can you work with our existing data?",
-        a: "Usually yes — from databases, APIs, exports or sheets. The discovery step establishes what is available and how reliable it is.",
+        q: "Can you build a dashboard on top of our existing databases or spreadsheets?",
+        a: "Usually yes — PostgreSQL, Supabase, REST APIs, Shopify, Stripe, HubSpot or structured exports. Discovery audits where the data lives today and how cleanly it reconciles before designing the interface.",
       },
       {
-        q: "Is there an example?",
-        a: "The Northwind analytics dashboard and the Meridian inventory-operations tooling are both complete demonstration builds of exactly this kind of work.",
+        q: "How do you make sure KPI cards and tables never contradict each other?",
+        a: "Every headline figure, chart series and table row derives from one shared pure-TypeScript analytics layer. Because the UI computes nothing independently, contradictions are ruled out by construction and verified by unit tests.",
+      },
+      {
+        q: "Why use an append-only ledger for inventory operations?",
+        a: "Storing a mutable quantity column leads to silent drift whenever a double-click, failed write or partial receipt happens. Recording every receipt, shipment and transfer as an immutable movement makes every balance auditable.",
+      },
+      {
+        q: "Are the charts accessible and exportable?",
+        a: "Yes. Charts are rendered as crisp custom SVG paired with visually hidden data tables for screen readers, and operational tables support exact CSV export from the active filtered view.",
+      },
+      {
+        q: "Are there live demonstration builds to review?",
+        a: "Yes — Northwind (revenue analytics over 7,146 generated orders) and Meridian (append-only inventory and purchasing operations over 1,265 movements) both demonstrate this architecture end to end.",
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["business-dashboards"] ?? [],
   },
   {
     slug: "branding",
     keywordId: "hub-branding",
+    pillarId: "brand-growth",
+    hubTier: "pillar",
     icon: "lightbulb",
     title: "Brand Identity Design Services",
     h1: "Brand and identity systems",
@@ -371,20 +384,34 @@ export const SERVICE_HUBS: ServiceHub[] = [
     relatedHubs: ["/services/web-development", "/services/ecommerce-development"],
     faqs: [
       {
-        q: "Do I get more than a logo?",
-        a: "Yes — a system: colour, type, logo and the rules that keep them consistent. The Halcyon brand-system demonstration shows the deliverable.",
+        q: "Do I get more than a logo file?",
+        a: "Yes — a usable brand system: lockups, WCAG-checked colour palette, modular typography, usage rules and real applied templates across web, social and email, as demonstrated in the Halcyon Brand System build.",
       },
       {
-        q: "Can you build the website too?",
-        a: "Yes. Brand and build under one roof is the point of a studio of one — the identity and the site stay in sync.",
+        q: "Can you handle ongoing social media, email and content coordination?",
+        a: "Yes. Alongside visual systems, I bring over two years of hands-on brand management for US-based brands, plus active HubSpot Social Media and Google Ads AI-Powered Performance Ads certifications.",
+      },
+      {
+        q: "Why do you measure WCAG colour contrast during branding?",
+        a: "Brand colours often look great on a pitch deck and fail legibility once placed on a website or email. Measuring relative luminance upfront ensures your palette works for real readers and developers.",
+      },
+      {
+        q: "Can you build the website and HTML email templates too?",
+        a: "Yes. Brand systems, Next.js web builds and client-safe HTML email templates sit in the same studio so your design tokens stay aligned from launch day onward.",
+      },
+      {
+        q: "Do you guarantee specific ad ROAS or follower counts?",
+        a: "No — honest marketing work never promises fixed algorithm or ad outcomes. What I deliver is disciplined brand positioning, clean creative execution, consistent publishing and transparent reporting.",
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["branding"] ?? [],
   },
   {
     slug: "global-sourcing",
     keywordId: "hub-sourcing",
+    pillarId: "global-sourcing",
+    hubTier: "pillar",
     icon: "briefcase",
     title: "Global Sourcing and Supply Chain Coordination",
     h1: "Global sourcing coordination",
@@ -413,25 +440,39 @@ export const SERVICE_HUBS: ServiceHub[] = [
     relatedHubs: ["/services/business-dashboards"],
     faqs: [
       {
-        q: "Are you a customs broker?",
-        a: "No. This is sourcing coordination and tooling — research, comparison and cost modelling. Customs clearance and legal import duties stay with a licensed broker, and I say so upfront.",
+        q: "Are you a licensed customs broker or freight forwarder?",
+        a: "No. This service covers sourcing coordination, supplier research, comparison frameworks and landed-cost modelling. Legal HS classification, import compliance and customs clearance always remain with a licensed broker.",
       },
       {
-        q: "What background is this based on?",
-        a: "A BBA in Supply Chain Management plus the Lantern sourcing-platform demonstration, which models supplier comparison and landed cost directly.",
+        q: "What supply-chain background is this grounded in?",
+        a: "A Bachelor of Business Administration (BBA) specializing in Supply Chain Management, supported directly by the Lantern supplier-sourcing and Meridian inventory-operations software demonstrations.",
+      },
+      {
+        q: "Why compare suppliers on landed cost instead of unit price?",
+        a: "Unit price excludes freight (often billed on volumetric weight), import duty, insurance and port handling. Changing an order from EXW to DDP or adjusting carton volume can completely reverse which supplier is cheapest.",
+      },
+      {
+        q: "Do I keep direct relationships with the suppliers?",
+        a: "Yes. Every shortlist includes direct contact details, structured quote comparisons and transparent scoring so your business owns the supplier relationship rather than paying hidden brokerage markups.",
+      },
+      {
+        q: "Can you also build custom procurement or inventory tracking software?",
+        a: "Yes — if your SKU count has outgrown spreadsheets, I can build a custom Next.js/TypeScript comparison or inventory ledger tool tailored to your exact workflows.",
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["global-sourcing"] ?? [],
   },
   {
     slug: "creative-production",
-    keywordId: "spec-blender-viz",
+    keywordId: "hub-creative-production",
+    pillarId: "creative-production",
+    hubTier: "pillar",
     icon: "clapperboard",
-    title: "Creative Production: Video, Motion and 3D",
+    title: "Creative Production Services: Video Editing, Motion & 3D",
     h1: "Creative production",
-    lead: "3D product visualisation, video editing and motion graphics that make a product easy to understand and hard to scroll past.",
-    intent: "For brands and founders who need launch-ready visual content without an agency's turnaround or price.",
+    lead: "Video editing, motion graphics, social advertising creatives and scripted Blender 3D product visualisation — delivered channel-ready and web-optimised.",
+    intent: "For product brands and founders who need clear, brand-consistent visual content without agency turnaround or bloated media files.",
     problems: [
       "Our product is hard to explain in a photo",
       "We need launch content fast",
@@ -439,10 +480,11 @@ export const SERVICE_HUBS: ServiceHub[] = [
       "We have no product photography",
     ],
     includes: [
+      "Video editing and short-form social ad cutdowns (9:16, 4:5, 16:9)",
+      "Motion graphics, product explainers and animated brand assets",
       "Blender 3D product visualisation, built as reproducible scene code",
-      "Video editing and motion graphics",
-      "Short-form social video",
-      "Campaign-ready graphics",
+      "Web video preparation (H.264 +faststart, VP9, silent hover previews, posters)",
+      "Channel-formatted campaign graphics aligned with your brand tokens",
     ],
     process: [
       { label: "Brief", detail: "Product, message, channels" },
@@ -455,43 +497,28 @@ export const SERVICE_HUBS: ServiceHub[] = [
     relatedHubs: ["/services/branding", "/services/ecommerce-development"],
     faqs: [
       {
-        q: "Can you produce 3D product visuals instead of a photo shoot?",
-        a: "Yes — rendering from a 3D model is exactly what product visualisation is for. The scene system behind it is built as reproducible Blender/Python code (three material presets, six camera angles and a turntable, covered by tests); finished renders are produced per engagement on a machine with Blender installed.",
+        q: "Can you produce 3D product visuals instead of a physical photo shoot?",
+        a: "Yes — rendering from a 3D model lets you generate consistent angles, material colourways and turntables without booking repeat studio shoots. The scene architecture behind it is built as reproducible Blender/Python code (three material presets, six camera angles and a 120-frame turntable, covered by 20 tests); finished renders are produced per engagement on a Blender workstation.",
       },
       {
-        q: "What formats do you deliver?",
-        a: "Whatever the channel needs — the motion-production pipeline demonstration covers the workflow from brief and shot list to channel-formatted delivery.",
+        q: "Why is there no embedded showreel on this page yet?",
+        a: "Because earlier client edits are still being cleared for public listing and no standalone Blender render is published in this repository yet. Rather than display stock footage or unattributed frames, the studio keeps that slot transparently labelled until cleared work is published.",
+      },
+      {
+        q: "What formats and aspect ratios do you deliver?",
+        a: "Everything your channels need: 9:16 for Reels/TikTok/Shorts, 4:5 for paid feeds, 16:9 for YouTube and web, plus web-optimised H.264 (+faststart), VP9, poster images and silent hover previews prepared through a verified ffmpeg pipeline.",
+      },
+      {
+        q: "What do you need from us to start a video or 3D project?",
+        a: "For video and social ads: your brief, brand guidelines and raw footage or screen captures. For 3D visualisation: CAD files (if available), dimensions, reference photos and finish/material specs.",
+      },
+      {
+        q: "Can creative assets match our website and brand system directly?",
+        a: "Yes — because brand systems, creative production and web engineering sit in the same studio, typography, colour contrast and video compression standards stay aligned from start to finish.",
       },
     ],
     publicationState: "Published",
-    spokes: [
-      {
-        slug: "3d-visualization",
-        keywordId: "spec-blender-viz",
-        title: "Blender 3D Product Visualisation",
-        h1: "3D product visualisation",
-        lead: "Product imagery rendered from a 3D model rather than a photo shoot — any angle, colourway or scene without a reshoot.",
-        body: [
-          "The approach is built as code: the Product Visualisation project is a scripted Blender scene system — material presets, camera angles and a turntable — written so the setup is reproducible and testable. It is honest about its state: the scene code and its tests exist, and renders are produced per engagement on a machine with Blender installed.",
-          "This spoke is drafted; the creative production hub covers the full offering today.",
-        ],
-        projectSlugs: ["blender-product-visualisation"],
-        publicationState: "Drafted",
-      },
-      {
-        slug: "motion",
-        keywordId: "spec-motion-graphics",
-        title: "Motion Graphics and Video Editing",
-        h1: "Motion graphics",
-        lead: "Edited video and motion graphics that explain a product and hold attention.",
-        body: [
-          "The motion-production pipeline demonstration covers the workflow from brief and shot list through edit to channel-formatted delivery.",
-          "This spoke is drafted; the creative production hub covers the full offering today.",
-        ],
-        projectSlugs: ["motion-production-pipeline"],
-        publicationState: "Drafted",
-      },
-    ],
+    spokes: ALL_SPOKES["creative-production"] ?? [],
   },
 ];
 

@@ -1,14 +1,13 @@
 import type { ReactNode } from "react";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ArrowLink } from "@/components/ui/Button";
 import { PageHero } from "@/components/ui/PageHero";
-import { breadcrumbSchema } from "@/lib/structured-data";
 import { siteBaseUrl } from "@/lib/site";
 import type { ToolDef } from "@/lib/tools/catalog";
 
 function webAppSchema(tool: ToolDef) {
-  // A browser tool with no price: WebApplication is the honest type.
   return {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -25,14 +24,14 @@ export function ToolPageShell({ tool, children }: { tool: ToolDef; children: Rea
   return (
     <>
       <JsonLd data={webAppSchema(tool)} />
-      <JsonLd
-        data={breadcrumbSchema([
+      <Breadcrumbs
+        items={[
           { name: "Home", path: "/" },
           { name: "Tools", path: "/tools" },
           { name: tool.h1, path: `/tools/${tool.slug}` },
-        ])}
+        ]}
       />
-      <PageHero eyebrow="Tool" title={tool.h1} lead={tool.lead} />
+      <PageHero eyebrow="Interactive tool" title={tool.h1} lead={tool.lead} />
 
       <section className="container section">{children}</section>
 
@@ -40,7 +39,7 @@ export function ToolPageShell({ tool, children }: { tool: ToolDef; children: Rea
         <p className="fine-print measure">{tool.caveat}</p>
         <ul className="hub-links">
           <li>
-            <ArrowLink href={tool.relatedHub}>See the related service</ArrowLink>
+            <ArrowLink href={tool.relatedHub}>Explore the related service</ArrowLink>
           </li>
           <li>
             <ArrowLink href={tool.relatedResource}>Read the background guide</ArrowLink>
@@ -48,7 +47,13 @@ export function ToolPageShell({ tool, children }: { tool: ToolDef; children: Rea
         </ul>
       </section>
 
-      <ContactCTA />
+      <ContactCTA
+        standalone
+        eyebrow="Turn estimates into a real plan"
+        title="Ready for a grounded written scope?"
+        text="Share your figures and requirements. I will follow up with an honest read on trade-offs, phasing and realistic cost."
+        button="Start a conversation"
+      />
     </>
   );
 }

@@ -8,7 +8,14 @@ import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
+import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { isIndexable } from "@/lib/seo/publication";
 import { servicesForProject } from "@/lib/services";
+
+/** Dedicated published service hubs evidenced by a given project slug. */
+function hubsForProject(slug: string) {
+  return SERVICE_HUBS.filter((h) => isIndexable(h.publicationState) && h.projectSlugs.includes(slug));
+}
 
 type Props = { project: Project; variant: "project" | "case-study" };
 
@@ -35,6 +42,7 @@ export function ProjectDetail({ project, variant }: Props) {
   const backHref = isCaseStudy ? "/case-studies" : "/work";
   const statusNote = STATUS_NOTE[project.status];
   const services = servicesForProject(project.slug);
+  const hubs = hubsForProject(project.slug);
   const { prev, next } = isCaseStudy ? neighbours(project.slug) : { prev: undefined, next: undefined };
 
   return (
@@ -114,7 +122,19 @@ export function ProjectDetail({ project, variant }: Props) {
                   <dt>Stack</dt>
                   <dd>{project.technologies.join(", ")}</dd>
                 </div>
-                {services.length > 0 ? (
+                {hubs.length > 0 ? (
+                  <div>
+                    <dt>Related service</dt>
+                    <dd>
+                      {hubs.map((h, i) => (
+                        <span key={h.slug}>
+                          {i > 0 ? ", " : ""}
+                          <Link href={`/services/${h.slug}`}>{h.h1}</Link>
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                ) : services.length > 0 ? (
                   <div>
                     <dt>Service</dt>
                     <dd>
@@ -332,9 +352,7 @@ export function ProjectDetail({ project, variant }: Props) {
               ) : null}
               <MediaGallery items={project.gallery} />
             </section>
-          ) : (
-            <EditorNote>Add images or videos to `gallery` in lib/projects.ts to show a media gallery here.</EditorNote>
-          )}
+          ) : null}
         </div>
       </article>
 

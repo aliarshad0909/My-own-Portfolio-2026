@@ -23,7 +23,11 @@ import { isIndexable } from "@/lib/seo/publication";
 import { brokenLinks } from "@/lib/seo/routes";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
-import { evidenceViolations, publishedWithoutLiveEvidence } from "@/lib/seo/evidence";
+import { ALL_HUB_ENRICHMENTS } from "@/lib/seo/service-enrichment";
+import { BUSINESS_PILLARS, NATIONWIDE_SERVICES, blockingIntentConflicts, serviceAreaMatrix } from "@/lib/seo/service-areas";
+import { evidenceViolations, publishedWithoutLiveEvidence, unreviewedPublishedLocations } from "@/lib/seo/evidence";
+import { SERVICES } from "@/lib/services";
+import { SERVICE_OPTIONS } from "@/lib/inquiry";
 import { RESOURCES } from "@/lib/content/resources";
 import { INDUSTRIES } from "@/lib/content/industries";
 import { US_STATES } from "@/lib/geo/states";
@@ -61,20 +65,45 @@ for (const k of KEYWORD_REGISTRY) {
 for (const h of SERVICE_HUBS) {
   for (const b of brokenLinks([...h.relatedTools, ...h.relatedHubs])) linkProblems.push(`${h.slug} → ${b}`);
 }
+for (const [slug, enrich] of Object.entries(ALL_HUB_ENRICHMENTS)) {
+  const hrefs = [
+    ...enrich.relatedLinks.map((l) => l.href),
+    ...(enrich.heroSecondary ? [enrich.heroSecondary.href] : []),
+    ...(enrich.toolCallout ? [enrich.toolCallout.href] : []),
+    ...enrich.industries.flatMap((i) => (i.href ? [i.href] : [])),
+  ];
+  for (const b of brokenLinks(hrefs)) linkProblems.push(`enrichment:${slug} → ${b}`);
+}
 for (const r of RESOURCES) for (const b of brokenLinks(r.related)) linkProblems.push(`${r.slug} → ${b}`);
 for (const i of INDUSTRIES) for (const b of brokenLinks([i.relatedHub])) linkProblems.push(`${i.slug} → ${b}`);
 check("No broken internal links", linkProblems);
 
 check("Sitemap lists only known routes", brokenLinks(indexableSeoRoutes()));
 
-// Evidence integrity: a Published page cannot cite a project that is not built.
+// Evidence integrity: a Published page cannot cite an unbuilt project or overclaim its tier.
 check(
-  "Published pages cite only live demonstration builds",
+  "Published pages cite only substantiated builds matching their claimed evidence tier",
   evidenceViolations().map((v) => `${v.page} → ${v.project}: ${v.reason}`),
 );
-check("Every Published hub/industry has a live evidencing build", publishedWithoutLiveEvidence());
+check("Every Published hub/spoke/industry has a substantiated build", publishedWithoutLiveEvidence());
 
-// Location anti-doorway: nothing indexable without a local signal.
+// Pillar reconciliation: all 6 original pillars mapped; Creative Production & Brand & Growth included.
+const missingPillars = SERVICES.filter((s) => !BUSINESS_PILLARS.some((p) => p.pillarId === s.id)).map((s) => s.id);
+const missingNationwide = ["creative-production", "branding"].filter(
+  (slug) => !NATIONWIDE_SERVICES.some((s) => s.slug === slug),
+);
+check("All 6 business pillars reconciled and Creative Production + Brand & Growth in nationwide matrix", [
+  ...missingPillars.map((id) => `unmapped pillar: ${id}`),
+  ...missingNationwide.map((slug) => `missing from NATIONWIDE_SERVICES: ${slug}`),
+]);
+
+// CTA service pre-selection integrity.
+const badCtaServices = Object.entries(ALL_HUB_ENRICHMENTS)
+  .filter(([, enrich]) => !SERVICE_OPTIONS.includes(enrich.contactServiceTitle))
+  .map(([slug, enrich]) => `${slug} → "${enrich.contactServiceTitle}"`);
+check("Every service hub CTA maps to a valid /contact service option", badCtaServices);
+
+// Location anti-doorway + mandatory editorial review gate.
 const doorway = [];
 for (const s of US_STATES) {
   if (isIndexable(s.publicationState) && !s.evidenceHave.includes(LOCAL_SIGNAL)) doorway.push(`state ${s.slug}`);
@@ -82,7 +111,19 @@ for (const s of US_STATES) {
 for (const c of PILOT_CITIES) {
   if (isIndexable(c.publicationState) && !c.evidenceHave.includes(LOCAL_SIGNAL)) doorway.push(`city ${c.slug}`);
 }
-check("No location page indexable without a local signal", doorway);
+for (const a of serviceAreaMatrix()) {
+  if (isIndexable(a.publicationState) && !a.evidenceHave.includes(LOCAL_SIGNAL)) doorway.push(`area ${a.url}`);
+}
+check("No location or service-area page indexable without a local signal", doorway);
+check(
+  "No location or service-area page published without completed editorial review",
+  unreviewedPublishedLocations(),
+);
+
+check(
+  "No blocking duplicate-intent conflicts across matrix & registry",
+  blockingIntentConflicts().map((c) => `${c.signature} → ${c.owners.map((o) => o.url).join(" vs ")}`),
+);
 
 check(
   "No unconsented / fabricated testimonials",

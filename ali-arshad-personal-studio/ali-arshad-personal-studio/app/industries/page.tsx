@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { ArrowLink } from "@/components/ui/Button";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { breadcrumbSchema } from "@/lib/structured-data";
-import { pageMetadata } from "@/lib/seo";
 import { INDUSTRIES } from "@/lib/content/industries";
+import { pageMetadata } from "@/lib/seo";
 import { shouldRender } from "@/lib/seo/publication";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Industries: Ecommerce, SaaS, Logistics and More",
+  title: "Industries: Ecommerce, SaaS Startups & Logistics Operations",
   description:
-    "The same services, framed for the sectors they fit: ecommerce brands, SaaS startups, logistics and operations, and more. Each tied to a real demonstration build.",
+    "Web engineering, AI automation, operational dashboards and sourcing tooling framed for ecommerce brands, SaaS startups and logistics teams — each backed by working demos.",
   path: "/industries",
 });
 
@@ -19,30 +19,40 @@ export default function IndustriesPage() {
   const live = INDUSTRIES.filter((i) => shouldRender(i.publicationState));
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
+      <Breadcrumbs
+        items={[
           { name: "Home", path: "/" },
           { name: "Industries", path: "/industries" },
-        ])}
+        ]}
       />
       <PageHero
         eyebrow="Industries"
-        title="Built for your sector"
-        lead="The services are the same; what changes is the problem they solve for you. These pages frame the work for the sectors where there is real, demonstrable experience."
+        title="Built around how your sector operates"
+        lead="The underlying engineering, design and automation disciplines stay the same — what changes are the bottlenecks they remove. Each published sector below is backed by working demonstration software."
       />
       <section className="container section">
-        <ul className="resource-list">
+        <ul className="hub-card-grid">
           {live.map((i) => (
             <li key={i.slug}>
-              <h2 className="section-title section-title--sm">
-                <ArrowLink href={`/industries/${i.slug}`}>{i.name}</ArrowLink>
-              </h2>
-              <p className="measure muted">{i.description}</p>
+              <Link href={`/industries/${i.slug}`} className="hub-link-card">
+                <span className="hub-link-card__kind">Sector focus</span>
+                <span className="hub-link-card__title">
+                  <span>{i.name}</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </span>
+                <span className="hub-link-card__desc">{i.description}</span>
+              </Link>
             </li>
           ))}
         </ul>
       </section>
-      <ContactCTA />
+      <ContactCTA
+        standalone
+        eyebrow="Outside these sectors?"
+        title="Working in another industry?"
+        text="Tell me what your team builds or sells. Most web, automation and dashboard fundamentals transfer cleanly once we map your actual workflow."
+        button="Discuss your project"
+      />
     </>
   );
 }
