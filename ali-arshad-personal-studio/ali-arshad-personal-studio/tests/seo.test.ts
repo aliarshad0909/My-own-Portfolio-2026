@@ -18,6 +18,7 @@ import { RESOURCES } from "@/lib/content/resources";
 import { INDUSTRIES } from "@/lib/content/industries";
 import { TOOLS, toolState } from "@/lib/tools/catalog";
 import { TESTIMONIALS, unconsentedTestimonials } from "@/lib/content/testimonials";
+import { evidenceViolations, publishedWithoutLiveEvidence } from "@/lib/seo/evidence";
 
 describe("keyword registry: no self-competition", () => {
   it("has no two rows chasing the exact same keyword", () => {
@@ -238,5 +239,20 @@ describe("testimonials never fabricated", () => {
       assert.ok(t.quote.trim().length > 0, "empty testimonial quote");
       assert.ok(!/lorem|placeholder|example/i.test(t.quote), "placeholder-looking testimonial");
     }
+  });
+});
+
+describe("evidence integrity (declarations cannot bypass reality)", () => {
+  it("never cites a non-live project as evidence on a Published page", () => {
+    const v = evidenceViolations();
+    assert.deepEqual(
+      v.map((x) => `${x.page} → ${x.project}: ${x.reason}`),
+      [],
+      "a Published page cites a project that is not a live demo",
+    );
+  });
+
+  it("requires every Published hub/industry to cite at least one live demo", () => {
+    assert.deepEqual(publishedWithoutLiveEvidence(), [], "Published page with no live evidencing build");
   });
 });

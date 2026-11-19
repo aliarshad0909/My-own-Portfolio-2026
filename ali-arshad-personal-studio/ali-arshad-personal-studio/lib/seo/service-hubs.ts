@@ -439,7 +439,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       "We have no product photography",
     ],
     includes: [
-      "Blender 3D product visualisation and renders",
+      "Blender 3D product visualisation, built as reproducible scene code",
       "Video editing and motion graphics",
       "Short-form social video",
       "Campaign-ready graphics",
@@ -450,17 +450,17 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Review", detail: "Rounds with clear feedback" },
       { label: "Deliver", detail: "Final assets, formatted per channel" },
     ],
-    projectSlugs: ["blender-product-visualisation", "motion-production-pipeline"],
+    projectSlugs: ["motion-production-pipeline"],
     relatedTools: [],
     relatedHubs: ["/services/branding", "/services/ecommerce-development"],
     faqs: [
       {
-        q: "Can you make 3D renders without product photography?",
-        a: "Yes — that is a strength of 3D. The Blender product-visualisation demonstration builds product imagery from a model, not a photo shoot.",
+        q: "Can you produce 3D product visuals instead of a photo shoot?",
+        a: "Yes — rendering from a 3D model is exactly what product visualisation is for. The scene system behind it is built as reproducible Blender/Python code (three material presets, six camera angles and a turntable, covered by tests); finished renders are produced per engagement on a machine with Blender installed.",
       },
       {
         q: "What formats do you deliver?",
-        a: "Whatever the channel needs — the motion-production pipeline demonstration covers the workflow from brief to formatted delivery.",
+        a: "Whatever the channel needs — the motion-production pipeline demonstration covers the workflow from brief and shot list to channel-formatted delivery.",
       },
     ],
     publicationState: "Published",
@@ -470,9 +470,9 @@ export const SERVICE_HUBS: ServiceHub[] = [
         keywordId: "spec-blender-viz",
         title: "Blender 3D Product Visualisation",
         h1: "3D product visualisation",
-        lead: "Photoreal product imagery built in Blender, from a model rather than a photo shoot.",
+        lead: "Product imagery rendered from a 3D model rather than a photo shoot — any angle, colourway or scene without a reshoot.",
         body: [
-          "The Blender product-visualisation demonstration shows the approach: a product modelled and lit so it can be rendered in any angle, colourway or scene without a reshoot.",
+          "The approach is built as code: the Product Visualisation project is a scripted Blender scene system — material presets, camera angles and a turntable — written so the setup is reproducible and testable. It is honest about its state: the scene code and its tests exist, and renders are produced per engagement on a machine with Blender installed.",
           "This spoke is drafted; the creative production hub covers the full offering today.",
         ],
         projectSlugs: ["blender-product-visualisation"],

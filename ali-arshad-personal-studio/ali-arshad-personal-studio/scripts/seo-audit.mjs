@@ -23,6 +23,7 @@ import { isIndexable } from "@/lib/seo/publication";
 import { brokenLinks } from "@/lib/seo/routes";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { evidenceViolations, publishedWithoutLiveEvidence } from "@/lib/seo/evidence";
 import { RESOURCES } from "@/lib/content/resources";
 import { INDUSTRIES } from "@/lib/content/industries";
 import { US_STATES } from "@/lib/geo/states";
@@ -65,6 +66,13 @@ for (const i of INDUSTRIES) for (const b of brokenLinks([i.relatedHub])) linkPro
 check("No broken internal links", linkProblems);
 
 check("Sitemap lists only known routes", brokenLinks(indexableSeoRoutes()));
+
+// Evidence integrity: a Published page cannot cite a project that is not built.
+check(
+  "Published pages cite only live demonstration builds",
+  evidenceViolations().map((v) => `${v.page} → ${v.project}: ${v.reason}`),
+);
+check("Every Published hub/industry has a live evidencing build", publishedWithoutLiveEvidence());
 
 // Location anti-doorway: nothing indexable without a local signal.
 const doorway = [];
