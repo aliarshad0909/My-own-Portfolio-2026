@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Decision tree helping founders choose between a lean static or CMS site, standard Shopify, custom Next.js and TypeScript with PostgreSQL, and n8n workflow orchestration based on operational needs.">
+  <title>Web Tech Stack Decision Tree for Founders</title>
+  <defs>
+    <linearGradient id="bg-rts" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-rts" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-rts" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-rts)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">WEB ENGINEERING GUIDE · STACK DECISION TREE</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Match the Stack to the Operational Job — Not Hype</text>
+  <g transform="translate(914, 68)">
+    <rect width="230" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">3-Year Maintainability Lens</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Root Question -->
+  <g transform="translate(364, 162)">
+    <rect width="472" height="68" rx="12" fill="#1c1818" stroke="#ff7a5c" stroke-width="1.8"/>
+    <text x="236" y="30" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">START HERE</text>
+    <text x="236" y="54" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">What is the primary job of the software?</text>
+  </g>
+
+  <!-- 4 Branch Lines -->
+  <path d="M600 230 V268 H186 V300" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-rts)"/>
+  <path d="M600 230 V268 H462 V300" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-rts)"/>
+  <path d="M600 230 V268 H738 V300" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrc-rts)"/>
+  <path d="M600 230 V268 H1014 V300" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-rts)"/>
+
+  <!-- 4 Outcome Columns -->
+  <g transform="translate(56, 308)">
+    <rect width="260" height="232" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#a9abb2">BROCHURE / STUDIO</text>
+    <text x="20" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Next.js Static / CMS</text>
+    <text x="20" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Fast server-rendered</text>
+    <text x="20" y="124" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">pages, clean brand tokens</text>
+    <text x="20" y="148" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">and technical SEO.</text>
+    <rect x="20" y="176" width="220" height="34" rx="7" fill="#10171c"/>
+    <text x="34" y="198" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#7ed3a0">Zero plugin maintenance</text>
+
+    <g transform="translate(276, 0)">
+      <rect width="260" height="232" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="20" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#a9abb2">STANDARD DTC STORE</text>
+      <text x="20" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Restrained Shopify</text>
+      <text x="20" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Best default when standard</text>
+      <text x="20" y="124" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">variants &amp; native checkout</text>
+      <text x="20" y="148" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">fit without 12 heavy apps.</text>
+      <rect x="20" y="176" width="220" height="34" rx="7" fill="#10171c"/>
+      <text x="34" y="198" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#d9d7d2">Upgrade headless later if needed</text>
+    </g>
+
+    <g transform="translate(552, 0)">
+      <rect width="260" height="232" rx="12" fill="#171e25" stroke="#ff7a5c" stroke-opacity="0.7" stroke-width="1.6"/>
+      <text x="20" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">MVP / PORTAL / CUSTOM</text>
+      <text x="20" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Next.js + TS + Postgres</text>
+      <text x="20" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">One typed language end to</text>
+      <text x="20" y="124" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">end, pure domain tests &amp;</text>
+      <text x="20" y="148" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">straightforward hiring.</text>
+      <rect x="20" y="176" width="220" height="34" rx="7" fill="#ff7a5c" fill-opacity="0.16"/>
+      <text x="34" y="198" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">Boring, durable standard</text>
+    </g>
+
+    <g transform="translate(828, 0)">
+      <rect width="260" height="232" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="20" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#a9abb2">OPS GLUE &amp; SYNC</text>
+      <text x="20" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">n8n + Webhooks</text>
+      <text x="20" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Pair n8n with your app</text>
+      <text x="20" y="124" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">instead of coding brittle</text>
+      <text x="20" y="148" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">cron jobs from scratch.</text>
+      <rect x="20" y="176" width="220" height="34" rx="7" fill="#10171c"/>
+      <text x="34" y="198" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#7ed3a0">Visual retries &amp; error alerts</text>
+    </g>
+  </g>
+
+  <g transform="translate(56, 574)">
+    <rect width="1088" height="86" rx="10" fill="#12181e" stroke="#253038"/>
+    <text x="26" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">THREE DURABILITY FILTERS</text>
+    <text x="26" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#f9f6f0">01 · Easy future hand-off (TS / React / SQL)   ·   02 · Minimal package bloat   ·   03 · Pure unit-testable rules</text>
+  </g>
+  
+</svg>

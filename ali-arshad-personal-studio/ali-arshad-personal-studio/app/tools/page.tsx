@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -29,6 +30,23 @@ export default function ToolsPage() {
         eyebrow="Tools"
         title="Free, honest planning calculators"
         lead="Interactive calculators that run entirely in your browser. No sign-up, no email gate and no false precision — just clear numbers to sanity-check a project before starting."
+        aside={
+          <div className="hub-hero-card">
+            <div className="hub-hero-card__frame hub-hero-card__frame--dark-diagram">
+              <Image
+                src="/images/site-visuals/tools/planning-tools-overview.svg"
+                alt="Overview schematic of three browser-based planning calculators: Web Project Estimator, Automation ROI Calculator and Landed Cost Model"
+                width={1200}
+                height={720}
+                priority
+                sizes="(min-width: 1024px) 520px, 92vw"
+              />
+            </div>
+            <div className="hub-hero-card__caption">
+              <span>Three unit-tested planning tools — zero email walls</span>
+            </div>
+          </div>
+        }
       />
       <section className="container section">
         <ul className="hub-card-grid">

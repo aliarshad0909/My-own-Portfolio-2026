@@ -18,6 +18,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Video Editing Services for Brands & Product Launches",
       h1: "Video editing",
       lead: "Tight, story-first video editing for product launches, founder clips and brand storytelling — exported cleanly for social feeds and fast web playback.",
+      heroVisual: {
+        src: "/images/site-visuals/specializations/video-editing-timeline.svg",
+        alt: "Multi-track video editing timeline schematic showing a two-second hook, story cuts, safe captions, levelled voiceover mix and 16:9, 4:5 and 9:16 channel exports",
+        width: 1200,
+        height: 720,
+        caption: "Production schematic: hook-first timeline & probed multi-ratio exports",
+        darkDiagram: true,
+      },
       body: [
         "Raw footage rarely fails because of the camera — it fails because of pacing, muddy audio, slow openings and clumsy exports. Clean editing trims straight to what holds attention and respects your brand identity.",
         "Every edit finishes through a verified encoding pipeline (demonstrated in Motion Production: Media Pipeline, 28 tests invoking ffmpeg and ffprobe) so web versions stream instantly with +faststart and social cuts fit platform safe zones.",
@@ -61,6 +69,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Motion Graphics & Product Explainer Services",
       h1: "Motion graphics",
       lead: "Purposeful motion graphics, animated brand lockups and clean product explainers that clarify complex ideas quickly without decorative clutter.",
+      heroVisual: {
+        src: "/images/site-visuals/specializations/motion-storyboard-beats.svg",
+        alt: "Four-beat motion graphics storyboard diagram showing premise, UI flow motion, proof highlight, brand lockup, easing curve and reduced-motion poster delivery",
+        width: 1200,
+        height: 720,
+        caption: "Production schematic: 4-beat storyboard, easing & reduced-motion web delivery",
+        darkDiagram: true,
+      },
       body: [
         "Good motion graphics act as visual explanation, not visual noise. Whether illustrating how a software workflow connects or giving a brand identity a sharp animated sting, every movement should clarify hierarchy and product value.",
         "Paired with the verified ffmpeg/ffprobe delivery pipeline, finished motion assets arrive ready for both paid social channels and lightweight, reduced-motion-safe web integration.",
@@ -104,6 +120,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Blender 3D Product Visualisation Services",
       h1: "Blender 3D product visualisation",
       lead: "Reproducible 3D product stills, material colourways and turntables built in Blender — ideal when studio reshoots are too slow or expensive.",
+      heroVisual: {
+        src: "/images/site-visuals/specializations/blender-bpy-camera-rig.svg",
+        alt: "Technical schematic of the scripted Blender Python scene builder showing six spherical camera positions, three-point lighting and 120-frame turntable — not a rendered 3D image",
+        width: 1200,
+        height: 720,
+        caption: "Technical bpy scene schematic (not a rendered 3D image)",
+        darkDiagram: true,
+      },
       body: [
         "Product photography gets expensive fast when you launch four new finishes, tweak packaging or need an exploded angle a camera cannot capture. Building the scene in Blender lets you render consistent catalogue stills and turntables across every variant.",
         "The Blender Scene System project in this portfolio implements three material presets, three-point lighting, spherical camera placement across six angles and a 120-frame turntable in Python (bpy), covered by 20 unit tests. Because no render has been executed in this repository yet, this specialization stays in Drafted preview until finished renders are published.",
@@ -146,6 +170,14 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       title: "Social Advertising Creatives & Short-Form Video Editing",
       h1: "Social advertising creatives",
       lead: "Clear, brand-consistent short-form video edits and static ad variations formatted cleanly for Reels, TikTok, YouTube Shorts and paid social feeds.",
+      heroVisual: {
+        src: "/images/site-visuals/specializations/social-ad-safe-zones.svg",
+        alt: "Diagram illustrating 9:16 vertical social ad safe-zone margins avoiding platform UI overlays alongside modular Hook A, B and C testing variants",
+        width: 1200,
+        height: 720,
+        caption: "Creative system schematic: 9:16 safe-zone framing & modular hook testing",
+        darkDiagram: true,
+      },
       body: [
         "Paid social performance depends heavily on creative clarity: an immediate visual hook, legible captions inside platform safe zones, honest product demonstration and rapid format variations for testing.",
         "Combining hands-on creative production, HubSpot Social Media and Google Ads certifications, and verified web/social encoding tooling, I produce campaign-ready ad creatives aligned tightly with your brand and landing pages.",

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="End-to-end operations diagram for logistics and distribution teams connecting supplier RFQ scoring, landed-cost modelling, purchase-order partial receiving gates, append-only stock movement ledgers and unified reorder alerts.">
+  <title>Logistics, Procurement and Append-Only Inventory Operations Flow</title>
+  <defs>
+    <linearGradient id="bg-ilg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-ilg" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-ilg" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-ilg)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">INDUSTRY ARCHITECTURE · LOGISTICS &amp; OPERATIONS</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">From Supplier RFQ &amp; Landed Cost to Auditable Stock</text>
+  <g transform="translate(900, 68)">
+    <rect width="244" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Concept Architecture · Supply Chain</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <g transform="translate(56, 178)">
+    <!-- Step 1 -->
+    <rect width="236" height="278" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">01 · SOURCING</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">RFQ &amp; Scoring</text>
+    <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Standardised specs</text>
+    <text x="20" y="136" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Relative 5-axis scoring</text>
+    <text x="20" y="166" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• EXW/FOB/CIF/DDP</text>
+    <text x="20" y="196" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Volumetric freight check</text>
+    <text x="20" y="250" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Lantern demo pattern</text>
+
+    <path d="M236 139 H278" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-ilg)"/>
+
+    <!-- Step 2 -->
+    <g transform="translate(284, 0)">
+      <rect width="236" height="278" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">02 · PURCHASING</text>
+      <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">PO &amp; Receiving</text>
+      <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Open / partial / closed</text>
+      <text x="20" y="136" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Over-receipt refusal</text>
+      <text x="20" y="166" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Working-day ETAs</text>
+      <text x="20" y="196" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Milestone variance log</text>
+      <text x="20" y="250" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Zero silent over-counts</text>
+    </g>
+
+    <path d="M520 139 H562" stroke="#ff7a5c" stroke-width="2" marker-end="url(#arrc-ilg)"/>
+
+    <!-- Step 3 -->
+    <g transform="translate(568, 0)">
+      <rect width="236" height="278" rx="12" fill="#171e25" stroke="#ff7a5c" stroke-opacity="0.7" stroke-width="1.6"/>
+      <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">03 · LEDGER</text>
+      <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Movement Log</text>
+      <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">• Append-only entries</text>
+      <text x="20" y="136" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">• Matched transfer pairs</text>
+      <text x="20" y="166" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">• Posting gate blocks &lt; 0</text>
+      <text x="20" y="196" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">• Derived on-hand &amp; value</text>
+      <text x="20" y="250" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#ff7a5c">Meridian demo pattern</text>
+    </g>
+
+    <path d="M804 139 H846" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-ilg)"/>
+
+    <!-- Step 4 -->
+    <g transform="translate(852, 0)">
+      <rect width="236" height="278" rx="12" fill="#1c1818" stroke="#ff7a5c" stroke-opacity="0.55" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">04 · REORDER</text>
+      <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Unified Action</text>
+      <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• Counts on-hand + on-order</text>
+      <text x="20" y="136" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• Prevents double-buying</text>
+      <text x="20" y="166" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• KPI &amp; table always agree</text>
+      <text x="20" y="196" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• Buyer approves next PO</text>
+      <text x="20" y="250" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#7ed3a0">Human purchasing gate</text>
+    </g>
+  </g>
+
+  <g transform="translate(56, 496)">
+    <rect width="1088" height="162" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="28" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="1.6" fill="#ff7a5c">WHY APPEND-ONLY LEDGERS BEAT MUTABLE SPREADSHEETS</text>
+    <text x="28" y="78" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Every Stock Figure Can Be Replayed and Explained by Its Movement History</text>
+    <text x="28" y="114" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">When stock is computed as the sum of receipts, sales, transfers and audited adjustments, a double-click or partial delivery</text>
+    <text x="28" y="138" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">can never silently corrupt warehouse counts or trigger duplicate purchase orders.</text>
+  </g>
+  
+</svg>

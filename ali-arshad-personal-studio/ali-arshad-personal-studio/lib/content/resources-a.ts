@@ -15,6 +15,16 @@ export const RESOURCES_A: Resource[] = [
     body: [
       p("Nobody can quote a custom web application from a two-line message, and anyone who throws out a fixed number before inspecting your data model and integrations is guessing. Yet software pricing is not mysterious: almost every budget delta comes from five predictable variables."),
       h2("The five real cost drivers"),
+      figure({
+        src: "/images/site-visuals/resources/web-app-cost-drivers.svg",
+        alt: "Infographic summarizing the five custom web application cost drivers — workflow depth, integrations, design system, data integrity and calendar compression — beside a two-phase lean launch strategy",
+        width: 1200,
+        height: 720,
+        caption: "Five predictable variables that drive custom web budgets and how two-phase scoping protects quality.",
+        darkDiagram: true,
+        href: "/tools/web-project-estimator",
+        linkLabel: "Open Web Project Estimator",
+      }),
       ul([
         "Screen and workflow depth: five static marketing pages are vastly simpler than a multi-role portal with forms, state machines, filters and admin CRUD.",
         "Integrations: every external dependency (Stripe, HubSpot, Shopify, auth providers, ERP APIs) adds mapping, edge-case testing and error handling.",
@@ -61,6 +71,16 @@ export const RESOURCES_A: Resource[] = [
       code("Weekly saving = (weekly hours × people × loaded hourly rate) × realistic automation share\nPayback (weeks) = build cost ÷ weekly saving"),
       p("Use a loaded hourly rate (salary plus overhead or opportunity cost) rather than base wage, and cap the automation share realistically at 50%–75%. Almost every real business process still leaves exceptions, approvals or edge cases for people."),
       h2("A worked example"),
+      figure({
+        src: "/images/site-visuals/resources/automation-roi-payback.svg",
+        alt: "Worked automation payback chart illustrating 12 weekly admin hours at $40 per hour loaded cost, 65% automated via n8n to reclaim $312 per week and recover a $3,500 build in roughly 11 weeks",
+        width: 1200,
+        height: 720,
+        caption: "Illustrative worked payback model showing break-even around week 11 and four common ROI traps.",
+        darkDiagram: true,
+        href: "/tools/automation-roi-calculator",
+        linkLabel: "Run your numbers in the ROI Calculator",
+      }),
       p("Suppose two operations staff spend 6 hours each per week copying inbound inquiries into the CRM, deduplicating records and assembling a Monday pipeline sheet at $40/hour loaded cost ($480/week). Automating 65% of that routine with n8n reclaims $312/week — roughly $16,200/year. Against a $3,500 workflow build, payback lands around 11 weeks."),
       h2("Four traps that ruin automation ROI"),
       ul([
@@ -141,6 +161,16 @@ export const RESOURCES_A: Resource[] = [
     body: [
       p("Zapier popularized business automation for good reason: a non-technical operator can connect a form to Slack in five minutes. Problems usually appear six months later, when a 2-step zap grows into a 15-step workflow with loops, deduplication, conditional routing and thousands of monthly records."),
       h2("Side-by-side comparison"),
+      figure({
+        src: "/images/site-visuals/resources/n8n-vs-zapier-scaling.svg",
+        alt: "Directional comparison chart contrasting Zapier per-task step billing growth against n8n per-execution and flat self-hosted VPS scaling, alongside criteria for when each tool fits best",
+        width: 1200,
+        height: 720,
+        caption: "How multi-step workflow volume changes scaling economics and control between Zapier and n8n.",
+        darkDiagram: true,
+        href: "/services/n8n-automation",
+        linkLabel: "Explore n8n workflow automation",
+      }),
       table(
         ["Dimension", "n8n", "Zapier"],
         [
@@ -259,6 +289,16 @@ export const RESOURCES_A: Resource[] = [
     body: [
       p("Switching to Next.js does not automatically fix search visibility. What the App Router gives you is server-rendered HTML by default and typed primitives (`generateMetadata`, `sitemap.ts`, `robots.ts`) so technical SEO can be tested in code instead of cobbled together via plugins."),
       h2("Six technical foundations every Next.js site should enforce"),
+      figure({
+        src: "/images/site-visuals/resources/nextjs-app-router-seo.svg",
+        alt: "Six technical SEO foundations enforced in Next.js App Router: canonical metadataBase, single-intent URLs, honest JSON-LD schema, sitemap parity, Core Web Vitals protection and CI audits",
+        width: 1200,
+        height: 720,
+        caption: "Six technical SEO primitives enforced directly in Next.js App Router code and CI checks.",
+        darkDiagram: true,
+        href: "/services/web-development/nextjs",
+        linkLabel: "Explore Next.js development",
+      }),
       ol([
         "Set `metadataBase` from your canonical production origin: relative canonical URLs resolve cleanly to `https://yourdomain.com`, and preview deployments stay `noindex` via `robots.ts`.",
         "Keep one primary search intent per URL: use unique `<title>` and meta descriptions per route and avoid generating thin duplicate landing pages.",
@@ -287,6 +327,16 @@ export const RESOURCES_A: Resource[] = [
     body: [
       p("Founders often pick tools based on Twitter threads rather than operational reality. Six months later, they either fight plugin bloat on a CMS that was never meant to run app logic, or maintain five microservices for a product with fifty users."),
       h2("Match the stack to the actual job"),
+      figure({
+        src: "/images/site-visuals/resources/web-tech-stack-decision-tree.svg",
+        alt: "Web tech stack decision tree mapping brochure sites, standard DTC stores, SaaS MVPs and operational workflow glue to Next.js, Shopify, PostgreSQL and n8n",
+        width: 1200,
+        height: 720,
+        caption: "Pragmatic tech-stack decision tree filtered for three-year maintainability and clean hand-off.",
+        darkDiagram: true,
+        href: "/services/web-development",
+        linkLabel: "Explore web & application development",
+      }),
       table(
         ["What you are building", "Pragmatic default", "When to go custom (Next.js + TS)"],
         [

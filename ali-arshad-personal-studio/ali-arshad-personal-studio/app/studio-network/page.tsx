@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -56,6 +57,23 @@ export default function StudioNetworkPage() {
         eyebrow="How collaboration works"
         title="A studio of one, with a specialist network behind it"
         lead="Most projects are designed and engineered directly by me. When a build genuinely needs deep outside expertise, the Studio Network keeps delivery transparent under one accountable point of contact."
+        aside={
+          <div className="hub-hero-card">
+            <div className="hub-hero-card__frame hub-hero-card__frame--dark-diagram">
+              <Image
+                src="/images/site-visuals/network/studio-network-collaboration.svg"
+                alt="Hub-and-spoke collaboration diagram showing direct in-house execution and transparent specialist partners coordinated through Ali Arshad Personal Studio as one point of contact"
+                width={1200}
+                height={720}
+                priority
+                sizes="(min-width: 1024px) 520px, 92vw"
+              />
+            </div>
+            <div className="hub-hero-card__caption">
+              <span>Single-point-of-contact delivery with open attribution</span>
+            </div>
+          </div>
+        }
       />
 
       <section className="section section--tight" aria-labelledby="network-principles">

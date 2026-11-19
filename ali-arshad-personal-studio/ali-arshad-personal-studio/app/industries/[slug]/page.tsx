@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
@@ -64,7 +65,30 @@ export default async function IndustryPage({ params }: Props) {
           { name: industry.name, path: `/industries/${industry.slug}` },
         ]}
       />
-      <PageHero eyebrow="Industry" title={industry.title} lead={industry.lead}>
+      <PageHero
+        eyebrow="Industry"
+        title={industry.title}
+        lead={industry.lead}
+        aside={
+          industry.heroVisual ? (
+            <div className="hub-hero-card">
+              <div className="hub-hero-card__frame hub-hero-card__frame--dark-diagram">
+                <Image
+                  src={industry.heroVisual.src}
+                  alt={industry.heroVisual.alt}
+                  width={industry.heroVisual.width}
+                  height={industry.heroVisual.height}
+                  priority
+                  sizes="(min-width: 1024px) 520px, 92vw"
+                />
+              </div>
+              <div className="hub-hero-card__caption">
+                <span>{industry.heroVisual.caption}</span>
+              </div>
+            </div>
+          ) : undefined
+        }
+      >
         <div className="hero__actions">
           <ButtonLink href="/contact">Discuss a project</ButtonLink>
           {relatedHub ? (

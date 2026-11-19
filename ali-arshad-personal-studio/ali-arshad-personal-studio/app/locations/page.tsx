@@ -125,6 +125,21 @@ export default function LocationsPage() {
               Every state below is served remotely today. Individual state pages become clickable only when published with real local context.
             </p>
           </div>
+          <figure className="article-figure" style={{ marginBottom: "1.75rem", maxWidth: "58rem" }}>
+            <div className="article-figure__frame article-figure__frame--dark-diagram">
+              <Image
+                src="/images/site-visuals/locations/us-remote-regions-map.svg"
+                alt="Minimalist US regional schematic showing remote coverage across West, Midwest, South and Northeast Census regions with zero physical branch offices or fabricated map pins"
+                width={1200}
+                height={720}
+                loading="lazy"
+                sizes="(min-width: 1024px) 900px, 94vw"
+              />
+            </div>
+            <figcaption className="article-figure__caption">
+              <span>Stylized regional overview of remote studio coverage across all 50 US states and D.C. — zero physical offices or fabricated pins.</span>
+            </figcaption>
+          </figure>
           <LocationsBrowser regions={US_REGIONS} states={statesForBrowser} />
         </div>
       </section>

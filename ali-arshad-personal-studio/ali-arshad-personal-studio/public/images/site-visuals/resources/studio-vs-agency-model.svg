@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Side-by-side organizational diagram comparing an independent multidisciplinary studio's direct builder loop with a traditional agency's layered sales, account-manager and department hand-off structure.">
+  <title>Independent Studio vs Traditional Agency Communication Topology</title>
+  <defs>
+    <linearGradient id="bg-rsa" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-rsa" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-rsa" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-rsa)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">HIRING GUIDE · DELIVERY STRUCTURE COMPARED</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Direct Builder Alignment vs Multi-Department Layers</text>
+  <g transform="translate(918, 68)">
+    <rect width="226" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Choose Based on Project Shape</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Left: Independent Studio -->
+  <g transform="translate(56, 174)">
+    <rect width="526" height="482" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.7" stroke-width="1.6"/>
+    <text x="26" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">INDEPENDENT STUDIO (OF ONE)</text>
+    <text x="26" y="70" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Zero Telephone Game</text>
+
+    <rect x="26" y="102" width="184" height="72" rx="10" fill="#10171c" stroke="#354652"/>
+    <text x="44" y="134" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" font-weight="600" fill="#f9f6f0">Founder / Team</text>
+    <text x="44" y="156" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Direct conversation</text>
+
+    <path d="M210 138 H274" stroke="#ff7a5c" stroke-width="2.5" marker-end="url(#arrc-rsa)"/>
+
+    <rect x="282" y="102" width="218" height="72" rx="10" fill="#1c1818" stroke="#ff7a5c"/>
+    <text x="300" y="134" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" font-weight="600" fill="#f9f6f0">Designer &amp; Engineer</text>
+    <text x="300" y="156" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#ff7a5c">Same person scopes &amp; builds</text>
+
+    <rect x="26" y="206" width="474" height="128" rx="10" fill="#10171c" stroke="#26323b"/>
+    <text x="44" y="238" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Brand, Next.js, SEO &amp; n8n stay unified</text>
+    <text x="44" y="268" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Budget goes to execution, not office overhead</text>
+    <text x="44" y="298" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Partner specialists brought in transparently</text>
+
+    <rect x="26" y="356" width="474" height="98" rx="10" fill="#13221c" stroke="#478767"/>
+    <text x="44" y="388" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#7ed3a0">BEST FIT</text>
+    <text x="44" y="416" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">Founders, DTC brands &amp; lean ops teams needing</text>
+    <text x="44" y="438" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">focused milestones and direct accountability.</text>
+  </g>
+
+  <!-- Right: Traditional Agency -->
+  <g transform="translate(618, 174)">
+    <rect width="526" height="482" rx="12" fill="#12181e" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="26" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#a9abb2">TRADITIONAL FULL-SERVICE AGENCY</text>
+    <text x="26" y="70" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">High Parallel Bench Strength</text>
+
+    <!-- 4 chained hops -->
+    <rect x="26" y="102" width="108" height="72" rx="8" fill="#141d22" stroke="#2c3b46"/>
+    <text x="42" y="143" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="600" fill="#f9f6f0">Client</text>
+    <path d="M134 138 H152" stroke="#6f7e8a" stroke-width="1.8" marker-end="url(#arr-rsa)"/>
+
+    <rect x="158" y="102" width="108" height="72" rx="8" fill="#141d22" stroke="#2c3b46"/>
+    <text x="172" y="135" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" fill="#d9d7d2">Account</text>
+    <text x="172" y="155" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">Manager</text>
+    <path d="M266 138 H284" stroke="#6f7e8a" stroke-width="1.8" marker-end="url(#arr-rsa)"/>
+
+    <rect x="290" y="102" width="100" height="72" rx="8" fill="#141d22" stroke="#2c3b46"/>
+    <text x="306" y="135" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" fill="#d9d7d2">Design</text>
+    <text x="306" y="155" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">Silo</text>
+    <path d="M390 138 H408" stroke="#6f7e8a" stroke-width="1.8" marker-end="url(#arr-rsa)"/>
+
+    <rect x="414" y="102" width="86" height="72" rx="8" fill="#141d22" stroke="#2c3b46"/>
+    <text x="428" y="135" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" fill="#d9d7d2">Dev /</text>
+    <text x="428" y="155" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">SEO</text>
+
+    <rect x="26" y="206" width="474" height="128" rx="10" fill="#10171c" stroke="#26323b"/>
+    <text x="44" y="238" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• 5+ full-time specialists can sprint in parallel</text>
+    <text x="44" y="268" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Higher retainers cover sales &amp; account layers</text>
+    <text x="44" y="298" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">• Senior partner pitches; delivery team varies</text>
+
+    <rect x="26" y="356" width="474" height="98" rx="10" fill="#141d22" stroke="#2c3b46"/>
+    <text x="44" y="388" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#a9abb2">BEST FIT</text>
+    <text x="44" y="416" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">Enterprise multi-channel launches (TV, PR, ERP)</text>
+    <text x="44" y="438" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">requiring large simultaneous headcount.</text>
+  </g>
+  
+</svg>

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Workflow comparison contrasting repeated physical studio photo shoots for every new colourway or packaging update against a single calibrated Blender 3D scene rendering consistent angles, variants and 360-degree turntables.">
+  <title>3D Product Visualisation Scene Reuse vs Repeated Physical Photo Shoots</title>
+  <defs>
+    <linearGradient id="bg-r3d" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-r3d" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-r3d" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-r3d)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">3D PRODUCT VISUALISATION · CATALOGUE ECONOMICS</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Build One Calibrated 3D Scene → Render Every Variant</text>
+  <g transform="translate(882, 68)">
+    <rect width="262" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Workflow Diagram · Not a 3D Render</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Top Track: Traditional Reshoot Loop -->
+  <g transform="translate(56, 174)">
+    <rect width="1088" height="176" rx="12" fill="#12181e" stroke="#2c3b46" stroke-width="1.5"/>
+    <text x="26" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#a9abb2">REPEATED PHYSICAL STUDIO SHOOTS</text>
+    <g transform="translate(26, 56)">
+      <rect width="224" height="94" rx="9" fill="#141d22" stroke="#26323b"/>
+      <text x="16" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#f9f6f0">Wait for Factory Sample</text>
+      <text x="16" y="60" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Ship physical prototypes</text>
+
+      <path d="M224 47 H256" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-r3d)"/>
+
+      <rect x="262" width="224" height="94" rx="9" fill="#141d22" stroke="#26323b"/>
+      <text x="278" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#f9f6f0">Book Studio &amp; Light</text>
+      <text x="278" y="60" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Lighting drifts per batch</text>
+
+      <path d="M486 47 H518" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-r3d)"/>
+
+      <rect x="524" width="224" height="94" rx="9" fill="#141d22" stroke="#26323b"/>
+      <text x="540" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#f9f6f0">New Colourway Drops</text>
+      <text x="540" y="60" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Label or finish updated</text>
+
+      <path d="M748 47 H780" stroke="#ff9a8a" stroke-width="2" marker-end="url(#arrc-r3d)"/>
+
+      <rect x="786" width="250" height="94" rx="9" fill="#231917" stroke="#ff9a8a" stroke-opacity="0.5"/>
+      <text x="804" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#ff9a8a">Re-Book Full Shoot</text>
+      <text x="804" y="60" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#d9d7d2">Cost &amp; calendar repeat</text>
+    </g>
+  </g>
+
+  <!-- Bottom Track: Scripted Blender 3D Pipeline -->
+  <g transform="translate(56, 376)">
+    <rect width="1088" height="282" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.7" stroke-width="1.6"/>
+    <text x="26" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">CALIBRATED BLENDER / BPY SCENE WORKFLOW</text>
+    <g transform="translate(26, 58)">
+      <rect width="234" height="132" rx="10" fill="#10171c" stroke="#2c3b46"/>
+      <text x="18" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">01 · INPUT SPEC</text>
+      <text x="18" y="62" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">CAD or Dimensions</text>
+      <text x="18" y="90" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">STEP/OBJ or exact measurements</text>
+      <text x="18" y="112" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">+ finish &amp; label artwork</text>
+
+      <path d="M234 66 H268" stroke="#ff7a5c" stroke-width="2" marker-end="url(#arrc-r3d)"/>
+
+      <rect x="274" width="268" height="132" rx="10" fill="#1c1818" stroke="#ff7a5c"/>
+      <text x="292" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">02 · REUSABLE SCENE</text>
+      <text x="292" y="62" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Locked Rig &amp; Shaders</text>
+      <text x="292" y="90" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#e6dedb">Three-point lighting + spherical</text>
+      <text x="292" y="112" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#e6dedb">6-angle camera rig in code</text>
+
+      <path d="M542 66 H580" stroke="#7ed3a0" stroke-width="2" marker-end="url(#arr-r3d)"/>
+
+      <rect x="586" width="450" height="132" rx="10" fill="#13221c" stroke="#478767"/>
+      <text x="606" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#7ed3a0">03 · REPEATABLE OUTPUTS</text>
+      <text x="606" y="62" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Consistent Catalogue Grid Across Every SKU</text>
+      <text x="606" y="90" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#d9d7d2">• Instant colourway &amp; packaging swaps · zero lighting drift</text>
+      <text x="606" y="112" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#d9d7d2">• Exploded views, pre-production launches &amp; 360° turntables</text>
+    </g>
+
+    <text x="26" y="232" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Best for hard goods, packaging, ceramics, electronics &amp; hardware. Physical photography still wins for food, drape &amp; live people.</text>
+    <text x="26" y="258" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Note: The portfolio Blender/bpy scene builder (20 tests) is In Development with no standalone renders published yet.</text>
+  </g>
+  
+</svg>

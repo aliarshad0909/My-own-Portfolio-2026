@@ -80,6 +80,15 @@ export type ServiceHubEnrichment = {
     caption: string;
     diagram?: boolean;
   };
+  /** Optional custom architectural schematic shown in the hero when no live project preview applies. */
+  heroVisual?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    caption: string;
+    darkDiagram?: boolean;
+  };
   /** Optional honest scope / disclaimer notice near the top. */
   scopeNotice?: string;
   facts: HubFact[];

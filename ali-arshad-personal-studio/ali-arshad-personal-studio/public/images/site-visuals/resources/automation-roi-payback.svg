@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Worked calculation chart showing 12 weekly manual admin hours at $40 per hour loaded cost ($480/week), 65% automated via n8n reclaiming $312/week ($16,200/year) and paying back a $3,500 workflow build in roughly 11 weeks.">
+  <title>Worked Automation ROI Payback Example Chart</title>
+  <defs>
+    <linearGradient id="bg-rroi" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-rroi" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-rroi" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-rroi)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">AI &amp; AUTOMATION GUIDE · WORKED PAYBACK MODEL</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Worked Example: 12 Weekly Admin Hours → ~11-Week Payback</text>
+  <g transform="translate(876, 68)">
+    <rect width="268" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Illustrative Example · 65% Share</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <g transform="translate(56, 174)">
+    <!-- 4 Step Numbers Across Top -->
+    <rect width="250" height="136" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#a9abb2">MANUAL BASELINE</text>
+    <text x="20" y="76" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="30" font-weight="600" fill="#f9f6f0">$480 / wk</text>
+    <text x="20" y="108" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">2 staff × 6 hrs × $40 loaded</text>
+
+    <path d="M250 68 H274" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-rroi)"/>
+
+    <rect x="280" width="250" height="136" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.6" stroke-width="1.5"/>
+    <text x="300" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">AUTOMATED SHARE (65%)</text>
+    <text x="300" y="76" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="30" font-weight="600" fill="#ff7a5c">$312 / wk</text>
+    <text x="300" y="108" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#d9d7d2">35% stays with human review</text>
+
+    <path d="M530 68 H554" stroke="#ff7a5c" stroke-width="2" marker-end="url(#arrc-rroi)"/>
+
+    <rect x="560" width="250" height="136" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="580" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#a9abb2">WORKFLOW BUILD</text>
+    <text x="580" y="76" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="30" font-weight="600" fill="#f9f6f0">$3,500</text>
+    <text x="580" y="108" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Illustrative one-time n8n build</text>
+
+    <path d="M810 68 H834" stroke="#7ed3a0" stroke-width="2" marker-end="url(#arr-rroi)"/>
+
+    <rect x="840" width="248" height="136" rx="12" fill="#13221c" stroke="#478767" stroke-width="1.5"/>
+    <text x="860" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#7ed3a0">PAYBACK &amp; YEAR 1</text>
+    <text x="860" y="76" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="30" font-weight="600" fill="#7ed3a0">~11 Weeks</text>
+    <text x="860" y="108" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#d9d7d2">~$16,200/yr reclaimed time</text>
+  </g>
+
+  <!-- 52-week Visual Bar Timeline -->
+  <g transform="translate(56, 346)">
+    <rect width="1088" height="312" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="28" y="40" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">52-WEEK RECOVERY TIMELINE</text>
+
+    <!-- Bar -->
+    <rect x="28" y="70" width="224" height="54" rx="8" fill="#3a211c" stroke="#ff7a5c"/>
+    <text x="44" y="102" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" font-weight="600" fill="#f9f6f0">Wks 1–11 · Payback</text>
+
+    <rect x="260" y="70" width="800" height="54" rx="8" fill="#132a20" stroke="#478767"/>
+    <text x="284" y="102" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" font-weight="600" fill="#7ed3a0">Weeks 12–52 · Ongoing Reclaimed Operational Capacity (~41 Net Weeks)</text>
+
+    <!-- 4 Traps Footer -->
+    <text x="28" y="168" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#a9abb2">FOUR TRAPS THAT DISTORT ROI ESTIMATES</text>
+    <g transform="translate(28, 188)">
+      <rect width="246" height="96" rx="8" fill="#141d22" stroke="#26323b"/>
+      <text x="16" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">Assuming 100% hands-off</text>
+      <text x="16" y="54" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Exceptions &amp; client replies</text>
+      <text x="16" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">still need a human gate.</text>
+
+      <rect x="262" width="246" height="96" rx="8" fill="#141d22" stroke="#26323b"/>
+      <text x="278" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">Automating messy rules</text>
+      <text x="278" y="54" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Broken ownership only</text>
+      <text x="278" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">produces errors faster.</text>
+
+      <rect x="524" width="246" height="96" rx="8" fill="#141d22" stroke="#26323b"/>
+      <text x="540" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">Zero error monitoring</text>
+      <text x="540" y="54" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Budget small upkeep for</text>
+      <text x="540" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">API &amp; schema changes.</text>
+
+      <rect x="786" width="246" height="96" rx="8" fill="#141d22" stroke="#26323b"/>
+      <text x="802" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">Fragmented micro-savings</text>
+      <text x="802" y="54" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Target recurring multi-hour</text>
+      <text x="802" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">bottlenecks first.</text>
+    </g>
+  </g>
+  
+</svg>

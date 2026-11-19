@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Overview diagram of the three browser-based planning calculators: Web Project Cost Estimator, Automation ROI Calculator and Landed Cost Calculator — running locally in the browser with zero sign-up gates.">
+  <title>Free Browser-Based Project Planning Calculators Overview</title>
+  <defs>
+    <linearGradient id="bg-tl" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-tl" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-tl" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-tl)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">INTERACTIVE PLANNING SUITE · ZERO EMAIL GATES</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Three Pure-Logic Calculators Running in Your Browser</text>
+  <g transform="translate(908, 68)">
+    <rect width="236" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">100% Client-Side · Unit Tested</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <g transform="translate(56, 174)">
+    <!-- Card 1 -->
+    <rect width="342" height="332" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="24" y="40" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">01 · WEB SCOPE</text>
+    <text x="24" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Web Project Estimator</text>
+    <rect x="24" y="100" width="294" height="108" rx="8" fill="#0d1116" stroke="#253038"/>
+    <text x="38" y="130" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Inputs: Project type, screens,</text>
+    <text x="38" y="152" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">design depth, integrations, pace</text>
+    <line x1="38" y1="168" x2="300" y2="168" stroke="#222d36"/>
+    <text x="38" y="192" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#ff7a5c">→ Indicative Budget Band</text>
+    <text x="24" y="244" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Tests how scope choices shift</text>
+    <text x="24" y="268" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">effort before a discovery call.</text>
+    <text x="24" y="306" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#7ed3a0">Clamped pure TS model</text>
+
+    <!-- Card 2 -->
+    <g transform="translate(373, 0)">
+      <rect width="342" height="332" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.55" stroke-width="1.5"/>
+      <text x="24" y="40" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">02 · OPERATIONS</text>
+      <text x="24" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Automation ROI</text>
+      <rect x="24" y="100" width="294" height="108" rx="8" fill="#0d1116" stroke="#253038"/>
+      <text x="38" y="130" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Inputs: Weekly hrs, team size,</text>
+      <text x="38" y="152" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">loaded rate, capped share, cost</text>
+      <line x1="38" y1="168" x2="300" y2="168" stroke="#222d36"/>
+      <text x="38" y="192" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#ff7a5c">→ Annual Saving &amp; Payback</text>
+      <text x="24" y="244" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Caps automation below 100%</text>
+      <text x="24" y="268" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">for realistic human-gate maths.</text>
+      <text x="24" y="306" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#7ed3a0">Directional payback check</text>
+    </g>
+
+    <!-- Card 3 -->
+    <g transform="translate(746, 0)">
+      <rect width="342" height="332" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="24" y="40" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">03 · IMPORTS</text>
+      <text x="24" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Landed Cost Model</text>
+      <rect x="24" y="100" width="294" height="108" rx="8" fill="#0d1116" stroke="#253038"/>
+      <text x="38" y="130" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Inputs: Unit price, qty, freight,</text>
+      <text x="38" y="152" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">duty %, insurance &amp; fees</text>
+      <line x1="38" y1="168" x2="300" y2="168" stroke="#222d36"/>
+      <text x="38" y="192" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#ff7a5c">→ Unit Landed &amp; Uplift ×</text>
+      <text x="24" y="244" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Reveals true warehouse unit cost</text>
+      <text x="24" y="268" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">before locking retail margin.</text>
+      <text x="24" y="306" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#7ed3a0">Confirm HS codes with broker</text>
+    </g>
+  </g>
+
+  <g transform="translate(56, 544)">
+    <rect width="1088" height="116" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="28" y="46" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="17" font-weight="600" fill="#f9f6f0">No Sign-Up Wall · No Tracking Paywall · Transparent Caveats</text>
+    <text x="28" y="78" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">Every calculator runs pure TypeScript functions directly in your browser so you can pressure-test assumptions freely.</text>
+  </g>
+  
+</svg>

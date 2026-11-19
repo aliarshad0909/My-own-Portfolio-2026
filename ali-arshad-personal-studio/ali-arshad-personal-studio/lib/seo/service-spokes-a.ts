@@ -224,6 +224,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         caption: "Demo build: Tideline support reply citing source policy",
         projectSlug: "tideline-support-agent",
       },
+      supportingVisual: {
+        src: "/images/site-visuals/specializations/ai-agent-guardrail-loop.svg",
+        alt: "Diagram illustrating grounded retrieval confidence-floor routing: high-scoring matches return cited source answers while low-confidence queries escalate to a human",
+        width: 1200,
+        height: 720,
+        caption: "Grounded retrieval confidence floor & human escalation loop.",
+        darkDiagram: true,
+      },
       body: [
         "Customer support automation lives or dies on one failure mode: a confident wrong answer. A bot that improvises refund windows or shipping exceptions creates tickets instead of resolving them.",
         "The Tideline support-agent demonstration proves a safer pattern: inspectable BM25 retrieval over your documentation, bidirectional synonym expansion, verbatim source quoting where strictness matters, and a tuned confidence floor that hands off cleanly.",
@@ -322,6 +330,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         caption: "Demo build: Tideline BM25 knowledge-base retrieval view",
         projectSlug: "tideline-support-agent",
       },
+      supportingVisual: {
+        src: "/images/site-visuals/specializations/ai-agent-guardrail-loop.svg",
+        alt: "Diagram illustrating grounded retrieval confidence-floor routing over versioned documentation with citation links and human escalation",
+        width: 1200,
+        height: 720,
+        caption: "Inspectable retrieval scoring & documentation-gap logging architecture.",
+        darkDiagram: true,
+      },
       body: [
         "Retrieval-Augmented Generation (RAG) is only as reliable as its retrieval step. When teams bolt an LLM onto unindexed PDFs without scoring floors or citations, users quickly stop trusting the output.",
         "I build knowledge-base assistants from the retrieval layer up: clean document chunking, lexical BM25 or hybrid semantic search, transparent source links and strict abstention when your documentation does not cover the question.",
@@ -373,6 +389,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         height: 900,
         caption: "Demo build: Tessera storefront catalogue & live filtering",
         projectSlug: "tessera-clayworks-storefront",
+      },
+      supportingVisual: {
+        src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+        alt: "Next.js App Router architecture diagram showing Server Components, pure TypeScript domain modules, selective Client Islands, Route Handlers and automated CI checks",
+        width: 1200,
+        height: 720,
+        caption: "Server-first Next.js App Router & pure TypeScript domain architecture.",
+        darkDiagram: true,
       },
       body: [
         "Next.js shines when Server Components, static generation, metadata APIs and lean CSS are used deliberately rather than piled under heavy client-side abstractions.",

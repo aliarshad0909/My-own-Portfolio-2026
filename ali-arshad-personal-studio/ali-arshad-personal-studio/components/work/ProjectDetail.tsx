@@ -304,6 +304,29 @@ export function ProjectDetail({ project, variant }: Props) {
                 </ul>
               </section>
 
+              {project.architectureDiagram ? (
+                <section aria-labelledby="architecture-diagram-title">
+                  <h2 className="section-title section-title--sm" id="architecture-diagram-title">
+                    Technical architecture schematic
+                  </h2>
+                  <figure className="article-figure">
+                    <div className="article-figure__frame article-figure__frame--dark-diagram">
+                      <Image
+                        src={project.architectureDiagram.src}
+                        alt={project.architectureDiagram.alt}
+                        width={project.architectureDiagram.width}
+                        height={project.architectureDiagram.height}
+                        loading="lazy"
+                        sizes="(min-width: 1024px) 780px, 94vw"
+                      />
+                    </div>
+                    <figcaption className="article-figure__caption">
+                      <span>{project.architectureDiagram.caption}</span>
+                    </figcaption>
+                  </figure>
+                </section>
+              ) : null}
+
               {project.attribution ? (
                 <section aria-labelledby="attribution-title">
                   <h2 className="section-title section-title--sm" id="attribution-title">
