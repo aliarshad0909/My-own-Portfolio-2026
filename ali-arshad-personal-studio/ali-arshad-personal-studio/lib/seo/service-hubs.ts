@@ -16,17 +16,15 @@
 import type { FaqItem } from "@/lib/structured-data";
 import type { IconName } from "@/components/ui/Icon";
 import type { PublicationState } from "@/lib/seo/publication";
+import type { ServiceSpoke } from "@/lib/seo/service-spoke-types";
+import { SPOKES_AI_AND_WEB } from "@/lib/seo/service-spokes-a";
+import { SPOKES_CREATIVE_BRAND_SOURCING } from "@/lib/seo/service-spokes-b";
 
-export type ServiceSpoke = {
-  /** Last path segment: /services/<hubSlug>/<slug>. */
-  slug: string;
-  keywordId: string;
-  title: string;
-  h1: string;
-  lead: string;
-  body: string[];
-  projectSlugs: string[];
-  publicationState: PublicationState;
+export type { ServiceSpoke } from "@/lib/seo/service-spoke-types";
+
+const ALL_SPOKES: Record<string, ServiceSpoke[]> = {
+  ...SPOKES_AI_AND_WEB,
+  ...SPOKES_CREATIVE_BRAND_SOURCING,
 };
 
 export type ServiceStep = { label: string; detail: string };
@@ -112,34 +110,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [
-      {
-        slug: "nextjs",
-        keywordId: "spec-nextjs-developer",
-        title: "Hire a Next.js Developer",
-        h1: "Next.js development",
-        lead: "App Router, server components and the modern Next.js stack, used in production on this very site.",
-        body: [
-          "Next.js is the framework this studio builds on daily. The portfolio you are reading, its sitemap, structured data and every demo run on the App Router with TypeScript.",
-          "This page is being expanded with specific Next.js engagement detail. Until then, the web development hub covers the full offering.",
-        ],
-        projectSlugs: ["tessera-clayworks-storefront"],
-        publicationState: "Drafted",
-      },
-      {
-        slug: "mvp",
-        keywordId: "spec-saas-mvp",
-        title: "MVP Development for Startups",
-        h1: "MVP development",
-        lead: "A working first version you can show users and investors, scoped to prove one thing well.",
-        body: [
-          "An MVP is not a smaller version of everything — it is a complete version of the one thing that matters. The job is to find that thing with you and build it so it holds up to real use.",
-          "This spoke page is drafted and will carry startup-specific detail before it is published.",
-        ],
-        projectSlugs: ["northwind-analytics-dashboard"],
-        publicationState: "Drafted",
-      },
-    ],
+    spokes: ALL_SPOKES["web-development"] ?? [],
   },
   {
     slug: "n8n-automation",
@@ -199,7 +170,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["n8n-automation"] ?? [],
   },
   {
     slug: "ai-agents",
@@ -254,34 +225,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [
-      {
-        slug: "support",
-        keywordId: "spec-support-agent",
-        title: "AI Customer Support Agent",
-        h1: "AI customer support agents",
-        lead: "An agent that answers from your own knowledge base and escalates cleanly when it should.",
-        body: [
-          "The Tideline support-agent demonstration shows the shape of this work: grounded answers, a visible confidence signal and a hand-off to a person when the question is out of scope.",
-          "This spoke is drafted; the support hub above covers the full offering today.",
-        ],
-        projectSlugs: ["tideline-support-agent"],
-        publicationState: "Drafted",
-      },
-      {
-        slug: "sales",
-        keywordId: "spec-ai-sales-agent",
-        title: "AI Sales Agent Development",
-        h1: "AI sales agents",
-        lead: "Qualify and route inbound interest around the clock, then hand the real conversation to a human.",
-        body: [
-          "The Kestrel voice sales-agent demonstration captures a prospect's answers, scores them and passes a qualified, summarised lead onward.",
-          "This spoke is drafted; the AI agents hub covers the full offering today.",
-        ],
-        projectSlugs: ["kestrel-voice-sales-agent"],
-        publicationState: "Drafted",
-      },
-    ],
+    spokes: ALL_SPOKES["ai-agents"] ?? [],
   },
   {
     slug: "ecommerce-development",
@@ -391,7 +335,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["business-dashboards"] ?? [],
   },
   {
     slug: "branding",
@@ -445,7 +389,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["branding"] ?? [],
   },
   {
     slug: "global-sourcing",
@@ -499,7 +443,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["global-sourcing"] ?? [],
   },
   {
     slug: "creative-production",
@@ -554,34 +498,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [
-      {
-        slug: "3d-visualization",
-        keywordId: "spec-blender-viz",
-        title: "Blender 3D Product Visualisation",
-        h1: "3D product visualisation",
-        lead: "Product imagery rendered from a 3D model rather than a photo shoot — any angle, colourway or scene without a reshoot.",
-        body: [
-          "The approach is built as code: the Product Visualisation project is a scripted Blender scene system — material presets, camera angles and a turntable — written so the setup is reproducible and testable. It is honest about its state: the scene code and its tests exist, and renders are produced per engagement on a machine with Blender installed.",
-          "This spoke is drafted; the creative production hub covers the full offering today.",
-        ],
-        projectSlugs: ["blender-product-visualisation"],
-        publicationState: "Drafted",
-      },
-      {
-        slug: "motion",
-        keywordId: "spec-motion-graphics",
-        title: "Motion Graphics and Video Editing",
-        h1: "Motion graphics",
-        lead: "Edited video and motion graphics that explain a product and hold attention.",
-        body: [
-          "The motion-production pipeline demonstration covers the workflow from brief and shot list through edit to channel-formatted delivery.",
-          "This spoke is drafted; the creative production hub covers the full offering today.",
-        ],
-        projectSlugs: ["motion-production-pipeline"],
-        publicationState: "Drafted",
-      },
-    ],
+    spokes: ALL_SPOKES["creative-production"] ?? [],
   },
 ];
 

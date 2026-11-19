@@ -1,0 +1,571 @@
+import type { ServiceSpoke } from "@/lib/seo/service-spoke-types";
+
+/**
+ * High-intent specializations for Creative Production, Brand & Growth,
+ * and Global Sourcing.
+ *
+ * Evidence integrity rules:
+ * - `3d-visualization` cites `blender-product-visualisation` (In Development, no
+ *   renders yet) → remains `Drafted` (preview-only, noindex).
+ * - `overseas` (China sourcing coordination) requires a real, consented client
+ *   engagement in the keyword registry → remains `NeedsEvidence` (preview-only).
+ */
+export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
+  "creative-production": [
+    {
+      slug: "video-editing",
+      keywordId: "spec-video-editing",
+      title: "Video Editing Services for Brands & Product Launches",
+      h1: "Video editing",
+      lead: "Tight, story-first video editing for product launches, founder clips and brand storytelling — exported cleanly for social feeds and fast web playback.",
+      body: [
+        "Raw footage rarely fails because of the camera — it fails because of pacing, muddy audio, slow openings and clumsy exports. Clean editing trims straight to what holds attention and respects your brand identity.",
+        "Every edit finishes through a verified encoding pipeline (demonstrated in Motion Production: Media Pipeline, 28 tests invoking ffmpeg and ffprobe) so web versions stream instantly with +faststart and social cuts fit platform safe zones.",
+      ],
+      problems: [
+        "Hours of raw founder or product clips sit unused in cloud folders",
+        "Edits drag through slow intros before showing the product or hook",
+        "Audio levels, captions and pacing feel inconsistent across campaigns",
+        "Huge raw video exports stall mobile browsers when embedded on landing pages",
+      ],
+      deliverables: [
+        { title: "Narrative & hook-first cuts", detail: "Tight pacing structured around a clear first-two-second hook, crisp audio mix and clean visual rhythm." },
+        { title: "On-brand captions & titles", detail: "Legible typography aligned with your brand colour and contrast system rather than generic app presets." },
+        { title: "Multi-ratio channel exports", detail: "Dedicated 16:9, 4:5 and 9:16 exports framed intentionally for each platform's UI safe zones." },
+        { title: "Web-optimised delivery pack", detail: "H.264 (+faststart), VP9, poster stills and muted 6-second hover previews probed for exact dimensions." },
+      ],
+      workflow: {
+        title: "From raw footage to channel-ready cut",
+        caption: "Encoding and contact-sheet steps are backed by the Motion Production Media Pipeline demonstration (28 ffmpeg/ffprobe tests).",
+        steps: [
+          { label: "Ingest & brief", detail: "Review raw clips, goals & brand rules", icon: "briefcase" },
+          { label: "Assembly & cut", detail: "Pacing, audio mix, captions & grade", icon: "clapperboard" },
+          { label: "Review cut", detail: "Timestamped feedback & contact sheets", icon: "users", human: true },
+          { label: "Channel encode", detail: "Probed H.264/VP9 & social ratios", icon: "code" },
+        ],
+      },
+      stack: ["Video Editing", "ffmpeg / ffprobe", "H.264 +faststart", "VP9", "9:16 / 4:5 / 16:9"],
+      scopeNotice:
+        "Cleared client showreel edits are currently being prepared for public display. The technical web-encoding pipeline behind delivery is verified and documented in the Motion Production case study.",
+      faqs: [
+        { q: "What raw files do I need to supply?", a: "Camera footage, phone clips, screen recordings or voiceovers via Google Drive or Dropbox — plus brand fonts, logo SVG and any reference pacing you like." },
+        { q: "How many revision rounds are included?", a: "Typically two structured feedback rounds per deliverable, agreed in writing upfront so timelines stay predictable." },
+        { q: "Do you optimise videos for website hero embeds too?", a: "Yes — web deliverables include faststart H.264, VP9 alternatives, exact-size poster frames and muted preview loops so Core Web Vitals stay clean." },
+      ],
+      projectSlugs: ["motion-production-pipeline"],
+      publicationState: "Published",
+    },
+    {
+      slug: "motion",
+      keywordId: "spec-motion-graphics",
+      title: "Motion Graphics & Product Explainer Services",
+      h1: "Motion graphics",
+      lead: "Purposeful motion graphics, animated brand lockups and clean product explainers that clarify complex ideas in seconds without decorative clutter.",
+      body: [
+        "Good motion graphics act as visual explanation, not visual noise. Whether illustrating how a software workflow connects or giving a brand identity a sharp animated sting, every movement should clarify hierarchy and product value.",
+        "Paired with the verified ffmpeg/ffprobe delivery pipeline, finished motion assets arrive ready for both paid social channels and lightweight, reduced-motion-safe web integration.",
+      ],
+      problems: [
+        "Static landing-page screenshots fail to show how a product workflow actually behaves",
+        "Generic template animations clash with an otherwise refined brand identity",
+        "Explainer videos run too long and lose viewers before the value proposition lands",
+        "Heavy motion exports bloat page load times on mobile websites",
+      ],
+      deliverables: [
+        { title: "Product & UI motion clips", detail: "Clean 15–45 second motion explainers illustrating software interfaces, dashboards or product features." },
+        { title: "Animated brand lockups & stings", detail: "Restrained logo reveals, lower-thirds and title templates matching your exact brand tokens." },
+        { title: "Storyboard & contact sheets", detail: "Keyframe boards and inset contact sheets to approve pacing and typography before final render." },
+        { title: "Web & social encodes", detail: "Probed H.264/VP9 embeds with poster stills plus clean social exports." },
+      ],
+      workflow: {
+        title: "Motion graphics production sequence",
+        caption: "Structured brief-to-encode workflow backed by the Motion Production Media Pipeline demonstration.",
+        steps: [
+          { label: "Script & beats", detail: "Lock message, duration & style frames", icon: "lightbulb" },
+          { label: "Animate", detail: "Build typography, UI & brand motion", icon: "play" },
+          { label: "Review frames", detail: "Refine timing and legibility together", icon: "users", human: true },
+          { label: "Web/social prep", detail: "Encode H.264/VP9, posters & ratios", icon: "code" },
+        ],
+      },
+      stack: ["Motion Graphics", "SVG Brand Assets", "ffmpeg", "H.264 / VP9", "WebP Posters"],
+      scopeNotice:
+        "Finished cleared motion samples are in preparation for public listing. Delivery encoding and storyboard contact-sheet automation are live and verified in the Motion Production demo.",
+      faqs: [
+        { q: "What drives the price of a motion graphics project?", a: "Asset creation complexity, style-frame detail and revision depth matter far more than raw runtime. A tight 20-second custom UI explainer often takes more craft than a 60-second text-card video." },
+        { q: "Can motion clips respect prefers-reduced-motion on our website?", a: "Yes — every web video ships with an exact-aspect poster image so browsers with reduced-motion enabled see a crisp still frame instead of forced autoplay." },
+        { q: "Do you also create the visual identity beforehand if needed?", a: "Yes — pairing Brand & Identity Systems with Motion Graphics guarantees type, colour and contrast stay 100% consistent." },
+      ],
+      projectSlugs: ["motion-production-pipeline"],
+      publicationState: "Published",
+    },
+    {
+      slug: "3d-visualization",
+      keywordId: "spec-blender-viz",
+      title: "Blender 3D Product Visualisation Services",
+      h1: "Blender 3D product visualisation",
+      lead: "Reproducible 3D product stills, material colourways and turntables built in Blender — ideal when studio reshoots are too slow or expensive.",
+      body: [
+        "Product photography gets expensive fast when you launch four new finishes, tweak packaging or need an exploded angle a camera cannot capture. Building the scene in Blender lets you render consistent catalogue stills and turntables across every variant.",
+        "The Blender Scene System project in this portfolio implements three material presets, three-point lighting, spherical camera placement across six angles and a 120-frame turntable in Python (bpy), covered by 20 unit tests. Because no render has been executed in this repository yet, this specialization stays in Drafted preview until finished renders are published.",
+      ],
+      problems: [
+        "Every new colourway or packaging update forces another physical studio photo shoot",
+        "Product photography lighting drifts across batches, making catalogue grids uneven",
+        "Pre-production hardware or packaging needs launch visuals before factory samples arrive",
+        "Hand-tweaked 3D camera setups are hard to reproduce consistently across a full SKU line",
+      ],
+      deliverables: [
+        { title: "Product modelling & material presets", detail: "Accurate proportions and calibrated materials for matte, gloss, ceramic, metal or packaging finishes." },
+        { title: "Controlled three-point studio lighting", detail: "Reproducible lighting rig ensuring every SKU matches cleanly across your store catalogue." },
+        { title: "Multi-angle stills & 120-frame turntables", detail: "Consistent hero, detail, isometric and 360-degree turntable frames." },
+        { title: "Scripted Blender/bpy scene hand-off", detail: "Clean scene files so future colourways render quickly without starting over." },
+      ],
+      workflow: {
+        title: "Scripted Blender 3D visualisation flow",
+        caption: "Based on the Blender Scene System (20 Python tests). Renders are executed per engagement on a Blender workstation; this page stays Drafted until portfolio renders are published.",
+        steps: [
+          { label: "Product spec", detail: "Dimensions, CAD or reference photos", icon: "briefcase" },
+          { label: "Scene & shaders", detail: "Geometry, materials & three-point light", icon: "layers" },
+          { label: "Angle proof", detail: "Approve framing & finish presets", icon: "users", human: true },
+          { label: "Final render", detail: "High-res stills & turntable output", icon: "clapperboard" },
+        ],
+      },
+      stack: ["Blender", "Python (bpy)", "Three-Point Lighting", "Spherical Camera Rig", "Turntables"],
+      scopeNotice:
+        "Honest status: This specialization remains Drafted (preview-only, noindex) because the Blender Scene System project is still In Development with no rendered images published yet.",
+      faqs: [
+        { q: "Do I need CAD files to start a 3D product render?", a: "CAD files (STEP/OBJ/FBX) speed things up, but accurate measurements and clear reference photos from multiple sides are enough for most consumer products." },
+        { q: "Why is this page marked Drafted instead of Published?", a: "Under this studio's evidence rules, a capability page only enters the public search index once live finished visual proof is published in the portfolio." },
+      ],
+      projectSlugs: ["blender-product-visualisation"],
+      publicationState: "Drafted",
+    },
+    {
+      slug: "social-video",
+      keywordId: "spec-ugc-video",
+      title: "Social Advertising Creatives & Short-Form Video Editing",
+      h1: "Social advertising creatives",
+      lead: "Scroll-stopping short-form video edits and static ad variations formatted cleanly for Reels, TikTok, YouTube Shorts and paid social feeds.",
+      body: [
+        "Paid social performance depends heavily on creative clarity: an immediate visual hook, legible captions inside platform safe zones, honest product demonstration and rapid format variations for testing.",
+        "Combining hands-on creative production, HubSpot Social Media and Google Ads certifications, and verified web/social encoding tooling, I produce campaign-ready ad creatives aligned tightly with your brand and landing pages.",
+      ],
+      problems: [
+        "Paid social ads burn budget because creative looks amateur or off-brand",
+        "Important text and CTAs get covered by TikTok or Instagram UI overlays",
+        "Teams lack multiple hook variations to test what actually holds attention",
+        "Ad visuals promise a different vibe than the landing page buyers click into",
+      ],
+      deliverables: [
+        { title: "Hook-variant short-form edits", detail: "2–3 opening hooks per core product edit so media buyers can test messaging cleanly." },
+        { title: "Safe-zone 9:16 & 4:5 exports", detail: "Captions, graphics and product framing kept clear of platform buttons and overlays." },
+        { title: "Matching static ad templates", detail: "Brand-locked static variations in clean SVG/PNG formats for retargeting and feed placements." },
+        { title: "Landing-page alignment check", detail: "Optional matching landing-page headline and visual polish so post-click trust stays seamless." },
+      ],
+      workflow: {
+        title: "Social creative production cycle",
+        caption: "Pairs verified brand-system templates (Halcyon) with probed channel encoding (Motion Production Pipeline).",
+        steps: [
+          { label: "Angle & hooks", detail: "Pick core offer and 2–3 opening hooks", icon: "lightbulb" },
+          { label: "Cut & design", detail: "Edit clips and brand-locked ad frames", icon: "clapperboard" },
+          { label: "Compliance check", detail: "Confirm brand claims & safe zones", icon: "users", human: true },
+          { label: "Channel delivery", detail: "Deliver 9:16, 4:5 and static variants", icon: "trending" },
+        ],
+      },
+      stack: ["Short-Form Editing", "Motion Graphics", "SVG Social Templates", "ffmpeg", "Paid Social Specs"],
+      scopeNotice:
+        "Cleared client ad reels are pending publication permission. Brand-system social templates and encoding tooling are documented in the Halcyon and Motion Production case studies.",
+      faqs: [
+        { q: "Do you guarantee ad ROAS or CPA improvements?", a: "No honest studio guarantees ad-platform outcomes — media performance depends on offer, pricing, audience and landing page. I focus on sharp, testable creative execution." },
+        { q: "Can you edit raw UGC or founder-shot phone footage?", a: "Yes — tightening authentic founder or product footage into clean, well-paced social ads is one of the highest-leverage formats." },
+        { q: "Do you also support Google Ads or campaign coordination?", a: "Yes — see Paid Advertising Support under Brand & Growth for campaign coordination backed by Google Ads certification." },
+      ],
+      projectSlugs: ["motion-production-pipeline", "halcyon-brand-system"],
+      publicationState: "Published",
+    },
+  ],
+
+  branding: [
+    {
+      slug: "identity",
+      keywordId: "spec-logo-design",
+      title: "Brand Identity Design & Visual Systems",
+      h1: "Brand identity design",
+      lead: "Complete visual identity systems — logotypes, marks, WCAG-verified colour palettes, modular typography and usable SVG kits built to hold up on real websites.",
+      body: [
+        "Most startups outgrow a cheap standalone logo within three months because nobody defined the colour contrast rules, type hierarchy, spacing or applied templates around it.",
+        "Demonstrated in the Halcyon Brand System (50 automated checks including live WCAG 2.2 luminance calculations and real downloadable SVGs), I design brand identities as practical, developer-ready systems.",
+      ],
+      problems: [
+        "We have a logo PNG, but every new page or deck looks like a different brand",
+        "Brand accent colours fail contrast legibility on buttons and web copy",
+        "Typography scales feel arbitrary across mobile and desktop screens",
+        "Design files are trapped in formats developers and marketers cannot cleanly reuse",
+      ],
+      deliverables: [
+        { title: "Mark & lockup family", detail: "Primary, stacked and icon-only vector lockups exported as clean, optimised SVGs." },
+        { title: "WCAG-measured colour palette", detail: "Every text/surface colour pairing tested mathematically against AA/AAA contrast thresholds." },
+        { title: "Modular typography & voice rules", detail: "Coherent heading/body scale, tone guidance and clear do/don't examples." },
+        { title: "Applied web, social & email kit", detail: "Proof of the identity working in real browser contexts before final hand-off." },
+      ],
+      workflow: {
+        title: "System-first brand identity process",
+        caption: "Directly demonstrated in Halcyon: Brand System & Campaign (29 unit tests + 21 browser checks).",
+        steps: [
+          { label: "Territory", detail: "Positioning, audience & visual direction", icon: "lightbulb" },
+          { label: "System", detail: "Mark, WCAG colour tokens & type scale", icon: "layers" },
+          { label: "Apply", detail: "Prove on web, social & HTML email", icon: "code" },
+          { label: "Hand-off", detail: "Clean SVGs, CSS tokens & style guide", icon: "check" },
+        ],
+      },
+      stack: ["Vector SVG", "WCAG 2.2 Contrast", "Modular Type Scale", "CSS Design Tokens", "Brand Guidelines"],
+      faqs: [
+        { q: "Why test WCAG colour contrast during identity design?", a: "In the Halcyon build, our initial accent colour measured 3.36:1 on paper — below the 4.5:1 requirement for readable body text. Catching that upfront saves painful redesigns once your website launches." },
+        { q: "What files do we receive at the end?", a: "Clean vector SVG lockups, CSS custom-property tokens, a documented style guide and applied starter templates — all fully owned by your company." },
+        { q: "Can you design the identity and build the Next.js site together?", a: "Yes — doing both in one studio eliminates translation loss between brand deck and live code." },
+      ],
+      projectSlugs: ["halcyon-brand-system"],
+      publicationState: "Published",
+    },
+    {
+      slug: "social-media-management",
+      keywordId: "spec-social-media-management",
+      title: "Social Media Management & Channel Operations",
+      h1: "Social media management",
+      lead: "Consistent, brand-aligned social media strategy, template systems and publishing coordination — backed by 2+ years managing US-based brands and HubSpot Social Media Certification.",
+      body: [
+        "Most small brands oscillate between bursts of daily posting and six weeks of silence. Consistency breaks down when strategy, visual templates and publishing coordination sit in different hands.",
+        "Grounded in over two years of hands-on brand management for US-based brands and active HubSpot Academy Social Media Certification, I bring structured content pillars, reusable brand templates and steady publishing operations.",
+      ],
+      problems: [
+        "Social channels go quiet whenever founders get busy with operations",
+        "Visual posts clash with the website and lack a recognisable grid system",
+        "Posting happens reactively without clear inbound pillars or audience focus",
+        "Engagement and channel performance are rarely reviewed against business goals",
+      ],
+      deliverables: [
+        { title: "Channel strategy & content pillars", detail: "Clear audience positioning, inbound topics, cadence and social policy rules." },
+        { title: "Reusable brand-locked templates", detail: "Clean visual templates for announcements, product education and campaign pushes." },
+        { title: "Monthly editorial calendar & scheduling", detail: "Structured batching, copywriting and approval workflow so publishing stays predictable." },
+        { title: "Honest monthly review", detail: "Plain-English summary of what shipped, what resonated and what to refine next month." },
+      ],
+      workflow: {
+        title: "Monthly social media operating rhythm",
+        caption: "Informed by active HubSpot Social Media Certification and hands-on US brand-management experience.",
+        steps: [
+          { label: "Plan pillars", detail: "Align monthly themes with launches", icon: "lightbulb" },
+          { label: "Produce batch", detail: "Write copy & build brand-locked assets", icon: "layers" },
+          { label: "Client sign-off", detail: "Approve calendar & messaging cleanly", icon: "users", human: true },
+          { label: "Publish & review", detail: "Schedule, monitor & refine monthly", icon: "trending" },
+        ],
+      },
+      stack: ["HubSpot Inbound Methodology", "SVG Social Templates", "Editorial Calendars", "Short-Form Video", "Analytics"],
+      faqs: [
+        { q: "What verified training backs this service?", a: "Over two years managing brand, social and campaign operations for US-based brands, alongside an active HubSpot Academy Social Media Certification (valid through December 2028)." },
+        { q: "Do we approve posts before they go live?", a: "Always. Monthly or bi-weekly batches go through a clean sign-off step so your voice and product claims stay accurate." },
+        { q: "Can you pair social management with short-form video edits?", a: "Yes — creative production and social management sit under the same roof so static and video assets stay cohesive." },
+      ],
+      projectSlugs: ["halcyon-brand-system"],
+      publicationState: "Published",
+    },
+    {
+      slug: "email-marketing",
+      keywordId: "spec-email-marketing",
+      title: "Email Marketing Strategy & Custom HTML Email Templates",
+      h1: "Email marketing",
+      lead: "Lifecycle flows, campaign calendars and rock-solid table-based HTML email templates that render cleanly in Gmail, Apple Mail and Outlook.",
+      body: [
+        "Email remains one of the highest-ownership marketing channels a business has — yet most lists sit dormant or send cluttered drag-and-drop blasts that break in Outlook and land poorly on mobile.",
+        "Demonstrated in the Halcyon Brand System (which builds a real 600px table-based HTML email with inline styles, Outlook conditional comments, hidden preheader and plain-text fallback), I combine clear lifecycle strategy with dependable email engineering.",
+      ],
+      problems: [
+        "Subscribers sign up and never receive a structured welcome or onboarding sequence",
+        "Drag-and-drop email templates break spacing, dark mode or buttons in Outlook",
+        "Campaigns look disconnected from the brand's actual website",
+        "No clean plain-text fallback or preheader optimisation hurts readability",
+      ],
+      deliverables: [
+        { title: "Lifecycle flow architecture", detail: "Welcome, onboarding, post-purchase and re-engagement sequences mapped to real customer triggers." },
+        { title: "Client-safe HTML email templates", detail: "600px table-based HTML with inline styles, Outlook conditionals, accessible contrast and plain-text alternatives." },
+        { title: "Campaign copy & modular blocks", detail: "Reusable header, story, product and CTA modules your team can assemble quickly." },
+        { title: "ESP & automation wiring", detail: "Connect signup forms, ecommerce events or n8n workflows directly to your email platform." },
+      ],
+      workflow: {
+        title: "Email marketing & template workflow",
+        caption: "HTML email engineering is demonstrated live in Halcyon: Brand System & Campaign.",
+        steps: [
+          { label: "Map flows", detail: "Define welcome, launch & nurture triggers", icon: "layers" },
+          { label: "Code templates", detail: "Build 600px inline HTML + plain text", icon: "code" },
+          { label: "Review copy", detail: "Approve messaging, offers & preheaders", icon: "users", human: true },
+          { label: "Wire & send", detail: "Connect ESP triggers and track clicks", icon: "mail" },
+        ],
+      },
+      stack: ["Table-Based HTML Email", "Inline CSS", "Outlook Conditionals", "Resend / ESPs", "n8n Triggers"],
+      faqs: [
+        { q: "Why build table-based HTML emails instead of modern CSS Flexbox?", a: "Desktop Outlook still renders emails with the Word engine, which breaks Flexbox and strips external stylesheets. Clean 600px tables with inline styles ensure every recipient sees a sharp layout." },
+        { q: "Do templates include plain-text versions?", a: "Yes — every HTML template ships with a clean plain-text alternative and structured hidden preheader for inbox previews." },
+        { q: "Can email flows trigger from our custom website or n8n?", a: "Yes — signup, checkout or CRM stage webhooks can fire welcome and lifecycle sequences cleanly." },
+      ],
+      projectSlugs: ["halcyon-brand-system"],
+      publicationState: "Published",
+    },
+    {
+      slug: "content-strategy",
+      keywordId: "spec-content-strategy",
+      title: "Content Strategy & Editorial Systems for Brands",
+      h1: "Content strategy",
+      lead: "Practical editorial strategy that connects search intent, brand positioning, social distribution and conversion pages into one coherent publishing system.",
+      body: [
+        "Publishing random articles or social posts without an underlying architecture wastes effort. Effective content strategy maps what buyers actually ask before hiring or buying, pairs each topic with one canonical destination, and reuses core insights cleanly across channels.",
+        "This studio's own SEO and resource architecture — evidence-gated topic clusters, zero duplicate intent and clear internal linking — is a living example of that discipline.",
+      ],
+      problems: [
+        "Content gets written ad hoc without clear search intent or conversion paths",
+        "Multiple pages or posts compete against each other on the same topic",
+        "Brand voice shifts from technical blog posts to social captions and sales pages",
+        "Content calendars stall because production steps are undefined",
+      ],
+      deliverables: [
+        { title: "Intent-mapped topic architecture", detail: "One clear search intent and canonical owner per core commercial and informational question." },
+        { title: "Voice, angle & proof guidelines", detail: "Concrete editorial rules keeping copy sharp, grounded and free of generic filler." },
+        { title: "Cross-channel repurposing plan", detail: "Turn each cornerstone guide or case study into aligned email, social and landing-page assets." },
+        { title: "Editorial calendar & internal link map", detail: "Actionable publishing sequence connecting articles directly to relevant services and tools." },
+      ],
+      workflow: {
+        title: "Intent-driven content strategy loop",
+        caption: "Applies the same structured intent mapping and editorial restraint used across aliarshad.co.",
+        steps: [
+          { label: "Map questions", detail: "Audit real buyer & search intent", icon: "lightbulb" },
+          { label: "Assign owners", detail: "One canonical page per distinct query", icon: "layers" },
+          { label: "Draft & review", detail: "Write concise, substantiated editorial", icon: "users", human: true },
+          { label: "Link & distribute", detail: "Connect hubs, email & social channels", icon: "trending" },
+        ],
+      },
+      stack: ["Search Intent Mapping", "Editorial Calendars", "HubSpot Inbound", "Technical SEO", "Brand Voice"],
+      faqs: [
+        { q: "Do you guarantee first-page Google rankings?", a: "Never. Nobody controls Google's algorithm honestly. What structured content strategy delivers is clear intent alignment, clean technical architecture and genuinely useful pages worth linking to." },
+        { q: "How does content strategy connect to web development?", a: "Because I also engineer Next.js sites, heading hierarchy, internal links, structured data and page templates are built cleanly around the content plan." },
+        { q: "Can you execute the ongoing social and email content too?", a: "Yes — strategy can be handed over as a playbook or executed directly through Brand Management & Growth." },
+      ],
+      projectSlugs: ["halcyon-brand-system"],
+      publicationState: "Published",
+    },
+    {
+      slug: "paid-advertising-support",
+      keywordId: "spec-paid-advertising-support",
+      title: "Paid Advertising Support & Campaign Landing Pages",
+      h1: "Paid advertising support",
+      lead: "Coordinated paid-campaign support, ad-ready creative and fast conversion landing pages — grounded in active Google Ads AI-Powered Performance Ads Certification.",
+      body: [
+        "Paid campaigns frequently leak budget in the gap between the ad account and the destination page: ad creative promises one thing, the landing page loads slowly or changes the message, and tracking fails to connect back to real inquiries.",
+        "Backed by active Google Ads AI-Powered Performance Ads Certification (publicly verifiable via Skillshop/Credential.net) plus hands-on brand, web and creative production skills, I align campaign setup, ad creative and landing pages as one system.",
+      ],
+      problems: [
+        "Paid clicks land on slow generic homepages instead of message-matched landing pages",
+        "Ad creative variations take too long to produce when testing angles",
+        "Campaign structure, creative assets and conversion tracking sit with disconnected vendors",
+        "Reporting focuses on vanity clicks instead of qualified inquiries or real unit economics",
+      ],
+      deliverables: [
+        { title: "Campaign coordination & structure", detail: "Clean campaign alignment, audience/intent framing and budget hygiene inside your own ad accounts." },
+        { title: "Message-matched landing pages", detail: "Fast Next.js landing pages mirroring ad intent, proof and clear inquiry CTAs." },
+        { title: "Static & short-form ad creative", detail: "Brand-consistent visual and video ad variations built for clean testing." },
+        { title: "Conversion tracking & honest reporting", detail: "Clear event setup connecting form submissions or leads cleanly into your CRM." },
+      ],
+      workflow: {
+        title: "Aligned paid-campaign support cycle",
+        caption: "Supported by verified Google Ads AI-Powered Performance Ads Certification and custom web/creative execution.",
+        steps: [
+          { label: "Align offer", detail: "Match search/social intent to clear CTA", icon: "lightbulb" },
+          { label: "Build assets", detail: "Pair ad creatives with fast landing page", icon: "layers" },
+          { label: "Approve budget", detail: "Client owns ad account & spend limits", icon: "users", human: true },
+          { label: "Review & iterate", detail: "Refine creative & pages from real data", icon: "trending" },
+        ],
+      },
+      stack: ["Google Ads Certified", "Next.js Landing Pages", "Ad Creative Kits", "Conversion Tracking", "CRM Sync"],
+      faqs: [
+        { q: "Do we keep ownership of our Google Ads and Meta ad accounts?", a: "100% yes. Every campaign runs inside your own ad accounts with transparent access and billing directly under your control." },
+        { q: "Are you a large media-buying agency?", a: "No — I operate as an independent studio coordinating campaign structure, ad creative and conversion landing pages for founders and small brands who want tight alignment without agency retainers." },
+        { q: "Can you verify your Google Ads certification?", a: "Yes — the AI-Powered Performance Ads Certification (Skillshop / Google Ads) is listed on the Experience page with a direct public verification link." },
+      ],
+      projectSlugs: ["halcyon-brand-system"],
+      publicationState: "Published",
+    },
+  ],
+
+  "global-sourcing": [
+    {
+      slug: "supplier-research",
+      keywordId: "spec-supplier-research",
+      title: "Supplier Research & Procurement Shortlisting",
+      h1: "Supplier research",
+      lead: "Structured supplier discovery, standardised RFQs and direct-contact shortlists — built so product brands evaluate real manufacturers on clear facts.",
+      body: [
+        "Typing a product name into a B2B directory produces hundreds of nearly identical listings, half of them trading intermediaries quoting incompatible terms. Good supplier research starts with a tight specification so every response can be verified fairly.",
+        "Grounded in a BBA in Supply Chain Management and backed by the Lantern sourcing demonstration, I build structured supplier shortlists with transparent MOQ, lead-time and responsiveness notes that your business owns outright.",
+      ],
+      problems: [
+        "Hours spent messaging directory listings that return vague or incomparable quotes",
+        "Hard to tell direct manufacturers from middlemen adding unstated margin",
+        "Unclear product specs cause factories to quote different materials or packaging",
+        "Single-supplier dependency creates dangerous lead-time risk before peak seasons",
+      ],
+      deliverables: [
+        { title: "Standardised RFQ specification", detail: "Clear technical, material, packaging, MOQ and incoterm requirements so every supplier answers the same brief." },
+        { title: "Vetted supplier shortlist", detail: "Structured spreadsheet/workspace with direct factory contacts, MOQs, unit tiers, sample costs and lead times." },
+        { title: "Responsiveness & capability notes", detail: "Candid assessment of communication clarity, export readiness and compliance documentation requested." },
+        { title: "Sample ordering checklist", detail: "Clear criteria to evaluate incoming samples consistently before placing production deposits." },
+      ],
+      workflow: {
+        title: "Structured supplier research process",
+        caption: "Coordination and research grounded in supply-chain methodology; final supplier contracts stay directly with your business.",
+        steps: [
+          { label: "Lock RFQ", detail: "Define materials, packaging & target MOQ", icon: "briefcase" },
+          { label: "Discover & vet", detail: "Identify factories & verify export terms", icon: "globe" },
+          { label: "Collect quotes", detail: "Normalise unit price, carton size & terms", icon: "layers" },
+          { label: "Review shortlist", detail: "Select top candidates for sample orders", icon: "users", human: true },
+        ],
+      },
+      stack: ["RFQ Specifications", "Supplier Shortlisting", "Incoterm Normalisation", "Lantern Costing", "Supply Chain BBA"],
+      scopeNotice:
+        "Research and coordination only: feasibility is confirmed against product and import restrictions before work begins, and third-party factory quality or customs compliance is never guaranteed on a supplier's behalf.",
+      relatedTool: { href: "/tools/landed-cost-calculator", label: "Check margin with the Landed Cost Calculator" },
+      faqs: [
+        { q: "Do I get direct contact details for every shortlisted supplier?", a: "Yes. You keep full transparency and contract directly with whichever supplier you choose — zero hidden commission markups." },
+        { q: "Can you research backup suppliers for a product we already sell?", a: "Yes — benchmarking an incumbent supplier against vetted alternatives on true landed cost and lead time is a common engagement." },
+        { q: "Are there product categories you cannot assist with?", a: "Yes — regulated, restricted or hazardous goods require specialist compliance and legal clearance; every request goes through an upfront feasibility check." },
+      ],
+      projectSlugs: ["lantern-sourcing-platform"],
+      publicationState: "Published",
+    },
+    {
+      slug: "overseas",
+      keywordId: "spec-china-sourcing",
+      title: "China Sourcing Coordination & Supplier Follow-Up",
+      h1: "China sourcing coordination",
+      lead: "Practical China-based supplier discovery, sample follow-up and shipment coordination grounded in supply-chain training — transparent coordination, not brokerage.",
+      body: [
+        "Coordinating with overseas manufacturers across time zones breaks down on the details: ambiguous packaging specs, mismatched incoterms, slow sample revisions and unmonitored production milestones.",
+        "This specialization page covers structured China sourcing coordination — RFQ preparation, supplier communication, sample tracking and landed-cost comparison. Per this studio's strict evidence policy, it remains gated as NeedsEvidence (preview-only, noindex) until a real, consented regional sourcing engagement is published.",
+      ],
+      problems: [
+        "Time-zone gaps and unclear briefs stretch sample approvals across months",
+        "Mixed EXW, FOB and DDP quotes make factory comparisons misleading",
+        "Production milestones slip without proactive follow-up before shipment",
+        "Teams want structured coordination without losing direct visibility into supplier pricing",
+      ],
+      deliverables: [
+        { title: "Bilingual-ready specification & RFQ", detail: "Unambiguous measurements, tolerances, packaging and incoterm specs ready for factory quoting." },
+        { title: "Supplier discovery & sample tracking", detail: "Shortlist compilation, quote clarification and structured sample dispatch coordination." },
+        { title: "Landed-cost normalisation", detail: "Side-by-side comparison factoring freight weight, duty estimates and fees before order commitment." },
+        { title: "Forwarder & broker hand-off pack", detail: "Clean commercial spec and milestone tracker ready for your licensed freight forwarder and customs broker." },
+      ],
+      workflow: {
+        title: "Overseas sourcing coordination sequence",
+        caption: "Preview-only until backed by a consented client engagement. Customs clearance always remains with a licensed broker.",
+        steps: [
+          { label: "Confirm feasibility", detail: "Check product rules, volume & target cost", icon: "briefcase" },
+          { label: "Shortlist & RFQ", detail: "Collect comparable factory quotes", icon: "globe" },
+          { label: "Cost & sample", detail: "Model landed cost & inspect samples", icon: "trending" },
+          { label: "Broker hand-off", detail: "Track milestones to forwarder / broker", icon: "users", human: true },
+        ],
+      },
+      stack: ["Supplier Discovery", "EXW / FOB / CIF / DDP", "Landed Cost", "Milestone Tracking"],
+      scopeNotice:
+        "Preview only (NeedsEvidence): This page is not indexed in production until backed by a real, consented client engagement. Coordination only — not a licensed customs broker.",
+      relatedTool: { href: "/tools/landed-cost-calculator", label: "Model import landed cost" },
+      faqs: [
+        { q: "Are you an on-the-ground factory inspector or customs broker?", a: "No. I provide remote sourcing coordination, supplier research, landed-cost modelling and milestone tracking. Physical QC inspections and legal customs clearance stay with licensed third parties." },
+        { q: "Why is this page gated as NeedsEvidence?", a: "This studio's publication rules require a consented real client record before indexing region-specific sourcing claims." },
+      ],
+      projectSlugs: ["lantern-sourcing-platform"],
+      publicationState: "NeedsEvidence",
+    },
+    {
+      slug: "supplier-comparison",
+      keywordId: "spec-supplier-comparison",
+      title: "Supplier Comparison & Weighted Scoring Frameworks",
+      h1: "Supplier comparison",
+      lead: "Compare candidate suppliers fairly on all-in landed cost, lead time, quality signals, reliability and responsiveness — instead of guessing from raw unit prices.",
+      body: [
+        "Most procurement mistakes happen because teams compare suppliers in an ad-hoc spreadsheet where one factory quotes EXW, another quotes CIF, and nobody weights a three-week lead-time penalty against a 40-cent unit discount.",
+        "Demonstrated in Lantern: Supplier Sourcing & Landed Cost (31 unit tests + 21 browser checks), relative weighted scoring ranks suppliers transparently against each other and visibly reorders the ranking whenever quantity or incoterm changes.",
+      ],
+      problems: [
+        "Choosing the lowest unit quote backfires once slow shipping or poor quality hits",
+        "Mixed incoterms make spreadsheet comparisons apples-to-oranges",
+        "Stakeholders disagree subjectively on which supplier is 'better'",
+        "Changing order volume invalidates static comparisons immediately",
+      ],
+      deliverables: [
+        { title: "Normalised quote matrix", detail: "Align every supplier quote onto the same currency, volume tier and incoterm baseline." },
+        { title: "Weighted relative scorecard", detail: "Explicit scoring weights across landed cost (e.g. 40%), speed (20%), quality (20%), reliability (12%) and responsiveness (8%)." },
+        { title: "Volume & incoterm sensitivity analysis", detail: "See how supplier rankings shift between pilot runs (500 units) and scale orders (5,000 units)." },
+        { title: "Optional interactive web scorecard", detail: "Build a custom browser comparison app (like Lantern) when your team evaluates dozens of SKUs." },
+      ],
+      workflow: {
+        title: "Objective supplier scoring sequence",
+        caption: "Directly implemented in Lantern: Supplier Sourcing & Landed Cost (52 automated tests).",
+        steps: [
+          { label: "Standardise quotes", detail: "Align unit cost, cartons & incoterms", icon: "briefcase" },
+          { label: "Compute landed", detail: "Add freight, duty, insurance & fees", icon: "trending" },
+          { label: "Score relatively", detail: "Rank suppliers across five weighted criteria", icon: "layers" },
+          { label: "Select vendor", detail: "Team chooses with trade-offs visible", icon: "users", human: true },
+        ],
+      },
+      stack: ["Relative Weighted Scoring", "EXW / FOB / CIF / DDP", "Integer-Cent Maths", "Lantern Architecture"],
+      relatedTool: { href: "/tools/landed-cost-calculator", label: "Run a quick landed-cost check" },
+      faqs: [
+        { q: "Why use relative scoring instead of a fixed 1–10 rubric?", a: "Fixed rubrics let evaluators invent arbitrary grades. Relative scoring ranks your actual shortlisted suppliers against each other across measurable inputs so trade-offs stay honest." },
+        { q: "Can we change the weights for our industry?", a: "Yes — a fast-fashion brand may weight speed higher than a seasonal homewares brand. Every weight is configurable and visible." },
+        { q: "Does the cheapest unit price ever lose on the weighted score?", a: "Frequently — even in the Lantern demonstration dataset, the lowest landed-cost supplier loses overall once lead time, reliability and responsiveness are weighted." },
+      ],
+      projectSlugs: ["lantern-sourcing-platform"],
+      publicationState: "Published",
+    },
+    {
+      slug: "landed-cost-analysis",
+      keywordId: "spec-landed-cost-analysis",
+      title: "Landed-Cost Analysis & Import Margin Modelling",
+      h1: "Landed-cost analysis",
+      lead: "Calculate the true all-in cost of getting products to your warehouse — goods, volumetric freight, estimated tariffs, insurance and fees — before committing inventory capital.",
+      body: [
+        "The number on a supplier's pro-forma invoice is only the starting line. Between factory gate and warehouse shelf sit ocean or air freight (charged on whichever is greater of actual or volumetric weight), import tariffs, marine insurance, brokerage and port handling.",
+        "Grounded in a Supply Chain Management BBA and proven in both the Lantern sourcing platform and this site's free Landed Cost Calculator, I build clear landed-cost models and uplift multipliers so your retail pricing protects real margin.",
+      ],
+      problems: [
+        "Product margins evaporate after freight bills, tariffs and port handling land",
+        "Volumetric carton weight catches teams off guard on bulky lightweight items",
+        "Changing between EXW, FOB, CIF and DDP leads to double-counted or missed charges",
+        "Spreadsheet rounding and manual currency formulas quietly skew SKU profitability",
+      ],
+      deliverables: [
+        { title: "Full line-item landed-cost workbook", detail: "Explicit breakdown of goods value, freight (actual vs volumetric), duty estimate, insurance, brokerage and local delivery." },
+        { title: "Incoterm cost-allocation logic", detail: "Clean separation of seller-paid vs buyer-paid lines across EXW, FOB, CIF and DDP." },
+        { title: "Uplift factor & margin sensitivity", detail: "Know your exact landed multiplier (e.g. 1.32× invoice) and break-even retail price across volume tiers." },
+        { title: "Broker verification checklist", detail: "Clear summary of assumed HS codes and tariff rates ready for your licensed customs broker to confirm." },
+      ],
+      workflow: {
+        title: "Landed-cost modelling workflow",
+        caption: "Arithmetic matches the free Landed Cost Calculator and Lantern sourcing platform. Licensed customs brokers confirm binding tariff classifications.",
+        steps: [
+          { label: "Invoice & carton", detail: "Unit cost, MOQ, dimensions & weight", icon: "briefcase" },
+          { label: "Freight & terms", detail: "Actual vs volumetric weight by incoterm", icon: "globe" },
+          { label: "Tariff & fees", detail: "Add estimated duty, insurance & handling", icon: "trending" },
+          { label: "Broker confirm", detail: "Verify binding HS code before shipping", icon: "users", human: true },
+        ],
+      },
+      stack: ["EXW / FOB / CIF / DDP", "Volumetric Weight", "Uplift Multiplier", "Integer-Cent Models", "Custom Web Tools"],
+      scopeNotice:
+        "Planning and financial modelling only: estimated duty rates are for margin planning and must always be confirmed with a licensed customs broker before importing.",
+      relatedTool: { href: "/tools/landed-cost-calculator", label: "Try the free Landed Cost Calculator now" },
+      faqs: [
+        { q: "What is the landed-cost uplift factor?", a: "It is your total landed cost divided by the raw goods value. An uplift factor of 1.35 means a $10 factory unit actually costs $13.50 landed at your door — and your pricing must clear $13.50, not $10." },
+        { q: "Why does volumetric weight matter so much?", a: "Carriers charge on the greater of actual gross weight and dimensional (volumetric) weight. Bulky packaging can double freight cost even when the product is light." },
+        { q: "Do you confirm legal HS codes?", a: "No — I model estimates so you can evaluate suppliers and margins early, and flag every tariff assumption for confirmation by your licensed customs broker." },
+      ],
+      projectSlugs: ["lantern-sourcing-platform"],
+      publicationState: "Published",
+    },
+  ],
+};
