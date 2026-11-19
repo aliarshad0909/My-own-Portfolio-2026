@@ -1,4 +1,4 @@
-import { callout, code, h2, ol, p, table, ul, type Resource } from "@/lib/content/resource-types";
+import { callout, code, figure, h2, ol, p, table, ul, type Resource } from "@/lib/content/resource-types";
 
 export const RESOURCES_B: Resource[] = [
   {
@@ -15,6 +15,16 @@ export const RESOURCES_B: Resource[] = [
     body: [
       p("Landed cost is the complete sum required to buy a product, ship it across borders, clear customs and place it ready to sell in your warehouse. Two factories quoting the exact same $8.00 unit price can land at $10.40 and $12.90 once carton dimensions, incoterms and duties are included."),
       h2("The five core cost lines"),
+      figure({
+        src: "/images/diagrams/landed-cost-waterfall.svg",
+        alt: "Schematic diagram showing how factory goods value, volumetric freight, estimated import duty, marine insurance and brokerage fees combine into per-unit landed cost and uplift multiplier across EXW, FOB, CIF and DDP",
+        width: 1200,
+        height: 720,
+        caption: "Five additive landed-cost lines, uplift multiplier and buyer vs seller incoterm allocation.",
+        darkDiagram: true,
+        href: "/tools/landed-cost-calculator",
+        linkLabel: "Open Landed Cost Calculator",
+      }),
       ul([
         "Goods value: factory unit price multiplied by order quantity.",
         "Freight: ocean, air or road shipping — billed on the greater of actual gross weight and volumetric (dimensional) weight.",
@@ -71,6 +81,15 @@ export const RESOURCES_B: Resource[] = [
         "You have no engineering budget for ongoing feature iterations.",
       ]),
       h2("Move to custom or headless Next.js if:"),
+      figure({
+        src: "/images/projects/commerce/product.webp",
+        alt: "Tessera Clayworks custom storefront demonstration showing glaze swatches, size variants, live stock state and parametric SVG product illustration",
+        width: 1600,
+        height: 900,
+        caption: "Demonstration build (Tessera Clayworks): custom React/TypeScript storefront with live variant state and stock enforcement.",
+        href: "/case-studies/tessera-clayworks-storefront",
+        linkLabel: "Inspect Tessera case study",
+      }),
       ul([
         "Your storefront needs bespoke product configuration, live visual previews or B2B tiered ordering.",
         "Third-party theme scripts have slowed mobile pages enough to hurt browsing and paid-ad conversion.",
@@ -156,6 +175,15 @@ export const RESOURCES_B: Resource[] = [
     body: [
       p("Many companies pay for a brand deck once and stop opening it a month later. Usually it is because the document lists abstract mood adjectives while omitting the exact rules developers and marketers need every Tuesday: readable colour pairings, heading ratios, SVG lockups and email-safe fallbacks."),
       h2("Six things a usable brand style guide must include"),
+      figure({
+        src: "/images/projects/brand-system/contrast.webp",
+        alt: "Halcyon brand system demonstration showing live WCAG 2.2 luminance contrast measurements across documented colour pairs",
+        width: 1600,
+        height: 1075,
+        caption: "Demonstration build (Halcyon): live WCAG 2.2 contrast matrix computed directly from palette tokens.",
+        href: "/case-studies/halcyon-brand-system",
+        linkLabel: "Inspect Halcyon case study",
+      }),
       ul([
         "Logo lockup family & clearspace: horizontal, stacked and mark-only SVGs for dark and light surfaces.",
         "WCAG-tested colour palette: exact hex/CSS tokens paired with measured contrast ratios so body text and buttons never fail legibility.",

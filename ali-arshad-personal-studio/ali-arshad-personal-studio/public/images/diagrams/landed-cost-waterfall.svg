@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Landed cost breakdown diagram showing five additive cost lines — factory goods value, actual versus volumetric freight, estimated import duty by HS code, marine insurance, and customs brokerage fees — combining into total landed cost, per-unit landed cost and uplift multiplier across EXW, FOB, CIF and DDP incoterms.">
+  <title>Landed-Cost Stack &amp; Incoterm Allocation Model</title>
+  <defs>
+    <linearGradient id="bg-lc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="720" rx="16" fill="url(#bg-lc)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="56" y="66" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">IMPORT MARGIN MODELLING · LANDED COST</text>
+  <text x="56" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="30" font-weight="600" fill="#f9f6f0">From Factory Unit Price to Warehouse Landed Cost</text>
+  <line x1="56" y1="134" x2="1144" y2="134" stroke="#1e2830" stroke-width="1.5"/>
+
+  <!-- Left: 5 Stacked Cost Lines -->
+  <text x="56" y="174" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="1.4" fill="#a9abb2">FIVE ADDITIVE COST LINES (INTEGER-CENT ARITHMETIC)</text>
+
+  <!-- Bar 1: Goods -->
+  <g transform="translate(56, 194)">
+    <rect width="648" height="58" rx="9" fill="#172229" stroke="#2c3b46" stroke-width="1.5"/>
+    <rect x="0" y="0" width="8" height="58" rx="4" fill="#f9f6f0"/>
+    <text x="26" y="27" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="600" fill="#f9f6f0">01 · Goods Value</text>
+    <text x="26" y="48" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Factory unit price × order quantity (EXW / FOB base)</text>
+    <rect x="466" y="14" width="164" height="30" rx="6" fill="#0f151a"/>
+    <text x="480" y="34" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#f9f6f0">Base invoice line</text>
+  </g>
+
+  <!-- Bar 2: Freight -->
+  <g transform="translate(56, 266)">
+    <rect width="648" height="58" rx="9" fill="#172229" stroke="#2c3b46" stroke-width="1.5"/>
+    <rect x="0" y="0" width="8" height="58" rx="4" fill="#ff7a5c"/>
+    <text x="26" y="27" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="600" fill="#f9f6f0">02 · International Freight</text>
+    <text x="26" y="48" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Billed on max(actual gross weight, volumetric carton weight)</text>
+    <rect x="466" y="14" width="164" height="30" rx="6" fill="#ff7a5c" fill-opacity="0.14"/>
+    <text x="480" y="34" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#ff7a5c">Volumetric check</text>
+  </g>
+
+  <!-- Bar 3: Duty -->
+  <g transform="translate(56, 338)">
+    <rect width="648" height="58" rx="9" fill="#172229" stroke="#2c3b46" stroke-width="1.5"/>
+    <rect x="0" y="0" width="8" height="58" rx="4" fill="#ff7a5c" fill-opacity="0.75"/>
+    <text x="26" y="27" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="600" fill="#f9f6f0">03 · Estimated Import Duty</text>
+    <text x="26" y="48" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Tariff % by HS classification — confirm with licensed broker</text>
+    <rect x="466" y="14" width="164" height="30" rx="6" fill="#0f151a"/>
+    <text x="480" y="34" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#d9d7d2">HS code estimate</text>
+  </g>
+
+  <!-- Bar 4: Insurance -->
+  <g transform="translate(56, 410)">
+    <rect width="648" height="58" rx="9" fill="#172229" stroke="#2c3b46" stroke-width="1.5"/>
+    <rect x="0" y="0" width="8" height="58" rx="4" fill="#6f8391"/>
+    <text x="26" y="27" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="600" fill="#f9f6f0">04 · Marine / Cargo Insurance</text>
+    <text x="26" y="48" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Transit coverage (zeroed on buyer side under CIF / DDP)</text>
+    <rect x="466" y="14" width="164" height="30" rx="6" fill="#0f151a"/>
+    <text x="480" y="34" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#d9d7d2">Incoterm-aware</text>
+  </g>
+
+  <!-- Bar 5: Fees -->
+  <g transform="translate(56, 482)">
+    <rect width="648" height="58" rx="9" fill="#172229" stroke="#2c3b46" stroke-width="1.5"/>
+    <rect x="0" y="0" width="8" height="58" rx="4" fill="#6f8391"/>
+    <text x="26" y="27" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="600" fill="#f9f6f0">05 · Brokerage, Port &amp; Handling</text>
+    <text x="26" y="48" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#a9abb2">Customs entry filing, terminal charges &amp; warehouse drayage</text>
+    <rect x="466" y="14" width="164" height="30" rx="6" fill="#0f151a"/>
+    <text x="480" y="34" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" fill="#d9d7d2">Destination fees</text>
+  </g>
+
+  <!-- Right Panel: Formula & Outputs -->
+  <g transform="translate(744, 194)">
+    <rect width="400" height="346" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.55" stroke-width="1.5"/>
+    <text x="26" y="40" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" letter-spacing="1.6" fill="#ff7a5c">DECISION OUTPUTS</text>
+
+    <rect x="26" y="62" width="348" height="76" rx="9" fill="#0f151a" stroke="#26323b"/>
+    <text x="42" y="90" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#a9abb2">Per-unit landed cost</text>
+    <text x="42" y="120" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">Total Landed ÷ Units</text>
+
+    <rect x="26" y="152" width="348" height="76" rx="9" fill="#0f151a" stroke="#26323b"/>
+    <text x="42" y="180" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#a9abb2">Landed uplift multiplier</text>
+    <text x="42" y="210" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="19" font-weight="600" fill="#ff7a5c">Total Landed ÷ Goods Value</text>
+
+    <text x="26" y="264" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#f9f6f0">Why uplift protects margin</text>
+    <text x="26" y="290" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#a9abb2">A 1.32× uplift means a $10 factory unit</text>
+    <text x="26" y="314" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#a9abb2">actually costs $13.20 at your door.</text>
+  </g>
+
+  <!-- Bottom Incoterm Bar -->
+  <g transform="translate(56, 570)">
+    <rect width="1088" height="92" rx="12" fill="#12181e" stroke="#26323b" stroke-width="1.5"/>
+    <text x="24" y="34" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">INCOTERM COST ALLOCATION (BUYER VS SELLER)</text>
+    <text x="24" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" fill="#f9f6f0">EXW</text>
+    <text x="68" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#a9abb2">Buyer pays all 4 lines</text>
+
+    <text x="274" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" fill="#f9f6f0">FOB</text>
+    <text x="316" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#a9abb2">Main freight + duty + fees</text>
+
+    <text x="556" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" fill="#f9f6f0">CIF</text>
+    <text x="592" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#a9abb2">Duty + destination fees</text>
+
+    <text x="810" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" fill="#f9f6f0">DDP</text>
+    <text x="854" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#a9abb2">Verify broker &amp; hidden margin</text>
+  </g>
+</svg>

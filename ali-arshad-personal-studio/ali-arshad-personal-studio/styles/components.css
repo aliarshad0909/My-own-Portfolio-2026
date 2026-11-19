@@ -1741,6 +1741,16 @@ fieldset.calc__field {
   padding: 0.5rem;
 }
 
+.hub-hero-card__frame--dark-diagram {
+  background: #0d1116;
+  padding: 0;
+}
+
+.hub-hero-card__frame--light {
+  background: #ffffff;
+  padding: 0.35rem;
+}
+
 .hub-hero-card__frame img {
   display: block;
   width: 100%;
@@ -2720,6 +2730,56 @@ fieldset.calc__field {
   font-size: 0.85rem;
   line-height: 1.55;
   color: #e6e3dc;
+}
+
+.article-figure {
+  margin: 0.5rem 0;
+  max-width: 48rem;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+}
+
+.article-figure__frame {
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: #0f1317;
+}
+
+.article-figure__frame--diagram {
+  background: #f7f9fb;
+  padding: 0.5rem;
+}
+
+.article-figure__frame--dark-diagram {
+  background: #0d1116;
+  padding: 0;
+}
+
+.article-figure__frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.article-figure__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  font-size: var(--fs-tiny);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.article-figure__caption a {
+  color: var(--coral);
+  white-space: nowrap;
 }
 
 /* ── Interactive Locations Directory ────────────────────────────────────── */
