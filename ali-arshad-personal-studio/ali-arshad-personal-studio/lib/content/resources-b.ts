@@ -111,6 +111,16 @@ export const RESOURCES_B: Resource[] = [
     body: [
       p("Choosing between an independent studio and a full-service agency is mostly a question of communication overhead versus parallel headcount."),
       h2("How the two models compare in practice"),
+      figure({
+        src: "/images/site-visuals/resources/studio-vs-agency-model.svg",
+        alt: "Organizational comparison diagram contrasting an independent multidisciplinary studio's direct builder loop against a traditional agency's account-manager and department hand-off layers",
+        width: 1200,
+        height: 720,
+        caption: "Direct builder alignment vs multi-department agency bench strength — each wins for a different project shape.",
+        darkDiagram: true,
+        href: "/studio-network",
+        linkLabel: "See how the Studio Network works",
+      }),
       table(
         ["Dimension", "Independent Studio (of one)", "Traditional Agency"],
         [
@@ -140,6 +150,16 @@ export const RESOURCES_B: Resource[] = [
     body: [
       p("A visual refresh feels exciting right up until launch week reveals broken old URLs, dropped service pages and an avoidable drop in organic inquiries. Run through this checklist before touching a single page layout."),
       h2("Phase 1: Before designing anything"),
+      figure({
+        src: "/images/site-visuals/resources/website-redesign-phases.svg",
+        alt: "Three-phase website redesign flow illustrating Phase 1 URL inventory and intent mapping, Phase 2 301 redirect map and noindex staging QA, and Phase 3 live canonical, sitemap and Core Web Vitals verification",
+        width: 1200,
+        height: 720,
+        caption: "Three engineering gates that protect organic search equity and conversion flow through a redesign.",
+        darkDiagram: true,
+        href: "/resources/nextjs-seo",
+        linkLabel: "Read Next.js SEO best practices",
+      }),
       ol([
         "Export every current indexed URL and top landing page from Google Search Console and analytics.",
         "Identify which existing pages drive qualified inquiries — never delete or merge a ranking page without a deliberate redirect plan.",
@@ -212,6 +232,16 @@ export const RESOURCES_B: Resource[] = [
     body: [
       p("A 20-second bespoke UI product animation with custom illustrated components, sound design and three aspect-ratio exports often takes twice as long as a 60-second typographic edit built over clean founder footage. Knowing the four real cost drivers helps you brief cleanly and protect budget."),
       h2("What moves motion graphics & editing budgets"),
+      figure({
+        src: "/images/site-visuals/resources/motion-pricing-drivers.svg",
+        alt: "Effort matrix contrasting asset complexity against video runtime alongside three briefing rules that protect motion graphics budgets",
+        width: 1200,
+        height: 720,
+        caption: "Why asset complexity and animation density drive production effort far more than raw runtime.",
+        darkDiagram: true,
+        href: "/services/creative-production/motion",
+        linkLabel: "Explore motion graphics",
+      }),
       table(
         ["Cost driver", "Lower complexity", "Higher complexity"],
         [
@@ -243,6 +273,16 @@ export const RESOURCES_B: Resource[] = [
     body: [
       p("Physical product photography is still hard to beat for messy organic food, apparel drape or live lifestyle scenes with real people. For hard goods, packaging, electronics, ceramics, cosmetics and modular hardware, however, 3D product visualisation solves four expensive bottlenecks."),
       h2("Where 3D product visualisation outperforms photography"),
+      figure({
+        src: "/images/site-visuals/resources/3d-cgi-vs-reshoot-workflow.svg",
+        alt: "Workflow comparison contrasting repeated physical studio photo shoots for every new colourway against a calibrated Blender 3D scene rendering consistent angles, variants and turntables — schematic diagram, not a 3D render",
+        width: 1200,
+        height: 720,
+        caption: "Workflow schematic: reusing one calibrated Blender scene across colourways vs re-booking studio shoots.",
+        darkDiagram: true,
+        href: "/services/creative-production",
+        linkLabel: "Explore creative production",
+      }),
       ul([
         "Multi-variant catalogues: swap matte ceramic glazes, anodized metals or label artwork inside the exact same lighting rig so every SKU lines up identically on collection grids.",
         "Pre-production launches: produce clean hero stills and 360-degree turntables from CAD dimensions months before mass production arrives from the factory.",

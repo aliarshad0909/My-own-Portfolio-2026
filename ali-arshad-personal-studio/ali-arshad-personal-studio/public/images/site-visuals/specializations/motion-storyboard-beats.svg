@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Four-beat motion graphics storyboard illustrating style-frame progression from opening hook through UI flow demonstration, metric callout and brand lockup, paired with cubic-bezier easing and reduced-motion poster output.">
+  <title>Motion Graphics Storyboard Beats and Timing Curve</title>
+  <defs>
+    <linearGradient id="bg-mg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-mg" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-mg" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-mg)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">MOTION GRAPHICS · STORYBOARD &amp; TIMING DISCIPLINE</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Purposeful 4-Beat Explainer Storyboard</text>
+  <g transform="translate(896, 68)">
+    <rect width="248" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Reduced-Motion Poster Ready</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- 4 Storyboard Frames -->
+  <g transform="translate(56, 168)">
+    <!-- Beat 1 -->
+    <rect width="252" height="232" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="18" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">BEAT 01 · 0–3s</text>
+    <rect x="18" y="48" width="216" height="114" rx="8" fill="#0d1116" stroke="#26323b"/>
+    <rect x="38" y="76" width="96" height="10" rx="5" fill="#ff7a5c"/>
+    <rect x="38" y="96" width="160" height="14" rx="4" fill="#f9f6f0"/>
+    <rect x="38" y="118" width="124" height="10" rx="4" fill="#5e6d78"/>
+    <text x="18" y="190" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Core Premise</text>
+    <text x="18" y="213" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Crisp headline enters on beat 1</text>
+
+    <!-- Beat 2 -->
+    <g transform="translate(278, 0)">
+      <rect width="252" height="232" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="18" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">BEAT 02 · 3–14s</text>
+      <rect x="18" y="48" width="216" height="114" rx="8" fill="#0d1116" stroke="#26323b"/>
+      <rect x="34" y="68" width="54" height="72" rx="6" fill="#172229" stroke="#2f3f4a"/>
+      <rect x="99" y="68" width="54" height="72" rx="6" fill="#231917" stroke="#ff7a5c"/>
+      <rect x="164" y="68" width="54" height="72" rx="6" fill="#172229" stroke="#2f3f4a"/>
+      <path d="M88 104 H99 M153 104 H164" stroke="#ff7a5c" stroke-width="2"/>
+      <text x="18" y="190" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Workflow / UI Motion</text>
+      <text x="18" y="213" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Shows state change, not fluff</text>
+    </g>
+
+    <!-- Beat 3 -->
+    <g transform="translate(556, 0)">
+      <rect width="252" height="232" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="18" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">BEAT 03 · 14–22s</text>
+      <rect x="18" y="48" width="216" height="114" rx="8" fill="#0d1116" stroke="#26323b"/>
+      <path d="M40 140 L84 116 L128 124 L172 86 L212 72" stroke="#ff7a5c" stroke-width="3" fill="none"/>
+      <circle cx="172" cy="86" r="5" fill="#f9f6f0"/>
+      <circle cx="212" cy="72" r="5" fill="#ff7a5c"/>
+      <text x="18" y="190" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Proof &amp; Hierarchy</text>
+      <text x="18" y="213" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Spotlight key product value</text>
+    </g>
+
+    <!-- Beat 4 -->
+    <g transform="translate(834, 0)">
+      <rect width="254" height="232" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.55" stroke-width="1.5"/>
+      <text x="18" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">BEAT 04 · 22–28s</text>
+      <rect x="18" y="48" width="218" height="114" rx="8" fill="#0d1116" stroke="#26323b"/>
+      <polygon points="127,76 146,112 108,112" fill="none" stroke="#ff7a5c" stroke-width="3"/>
+      <rect x="82" y="126" width="90" height="8" rx="4" fill="#f9f6f0"/>
+      <text x="18" y="190" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Brand Sting &amp; Resolve</text>
+      <text x="18" y="213" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Clean lockup + poster still</text>
+    </g>
+  </g>
+
+  <!-- Bottom Motion Spec Panel: Easing Curve + Web Rules -->
+  <g transform="translate(56, 434)">
+    <rect width="530" height="226" rx="12" fill="#12181e" stroke="#26323b" stroke-width="1.5"/>
+    <text x="24" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">EASING &amp; MOTION PHYSICS</text>
+    <text x="24" y="66" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Restrained Deceleration · cubic-bezier(0.22, 1, 0.36, 1)</text>
+    <!-- Curve graph -->
+    <rect x="24" y="86" width="220" height="116" rx="8" fill="#0d1116" stroke="#253038"/>
+    <line x1="44" y1="184" x2="224" y2="184" stroke="#2a3741"/>
+    <line x1="44" y1="104" x2="44" y2="184" stroke="#2a3741"/>
+    <path d="M44 184 C78 104, 130 104, 224 104" stroke="#ff7a5c" stroke-width="3" fill="none"/>
+    <circle cx="44" cy="184" r="4.5" fill="#f9f6f0"/>
+    <circle cx="224" cy="104" r="4.5" fill="#ff7a5c"/>
+    <text x="264" y="114" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Fast entry, calm settle</text>
+    <text x="264" y="142" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Zero bouncy template gimmicks</text>
+    <text x="264" y="170" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Locked to brand type &amp; tokens</text>
+    <text x="264" y="198" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">• Reviewed via contact sheets</text>
+
+    <g transform="translate(558, 0)">
+      <rect width="530" height="226" rx="12" fill="#12181e" stroke="#26323b" stroke-width="1.5"/>
+      <text x="24" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">WEB &amp; ACCESSIBILITY GUARANTEES</text>
+      <text x="24" y="66" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Built for Core Web Vitals &amp; Reduced Motion</text>
+      <text x="24" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#d9d7d2">01 · Exact-aspect WebP poster displays instantly</text>
+      <text x="24" y="138" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#d9d7d2">02 · Respects prefers-reduced-motion automatically</text>
+      <text x="24" y="170" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#d9d7d2">03 · Compact H.264 +faststart / VP9 encodes</text>
+      <text x="24" y="202" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">04 · Zero bloated client animation runtime required</text>
+    </g>
+  </g>
+  
+</svg>

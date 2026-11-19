@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Technical architecture diagram of the creative production and ffmpeg media encoding pipeline: master brief and shot list, ffprobe source inspection enforcing even dimensions without upscaling, parallel H.264 faststart, VP9, WebP poster, silent hover preview and inset contact sheet outputs.">
+  <title>Creative Production and Web Media Encoding Pipeline</title>
+  <defs>
+    <linearGradient id="bg-cp" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-cp" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-cp" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-cp)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">CREATIVE PRODUCTION · VERIFIED MEDIA PIPELINE</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">From Master Cut to Probed Web &amp; Social Delivery</text>
+  <g transform="translate(858, 68)">
+    <rect width="286" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">28 Automated ffmpeg/ffprobe Tests</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Left Master Input -->
+  <g transform="translate(56, 174)">
+    <rect width="236" height="296" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">01 · SOURCE &amp; BRIEF</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Master Asset</text>
+    <rect x="20" y="92" width="196" height="40" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="117" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Video edit / motion master</text>
+    <rect x="20" y="144" width="196" height="40" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="169" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Shot list &amp; brand tokens</text>
+    <rect x="20" y="196" width="196" height="40" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="221" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Channel aspect targets</text>
+    <text x="20" y="272" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Technical diagram · not film output</text>
+  </g>
+
+  <path d="M292 322 H344" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-cp)"/>
+
+  <!-- Middle ffprobe Gate -->
+  <g transform="translate(352, 174)">
+    <rect width="256" height="296" rx="12" fill="#171e25" stroke="#ff7a5c" stroke-opacity="0.65" stroke-width="1.6"/>
+    <text x="22" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">02 · FFPROBE GATE</text>
+    <text x="22" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Inspect &amp; Guard</text>
+    <text x="22" y="108" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Read true width &amp; height</text>
+    <text x="22" y="140" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Refuse upscaling past source</text>
+    <text x="22" y="172" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Force even pixels for VP9</text>
+    <text x="22" y="204" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Drop missing audio cleanly</text>
+    <rect x="22" y="232" width="212" height="42" rx="8" fill="#ff7a5c" fill-opacity="0.14"/>
+    <text x="38" y="258" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" fill="#ff7a5c">Verified by real probe runs</text>
+  </g>
+
+  <!-- Fan-out arrows -->
+  <path d="M608 322 H648 V206 H684" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-cp)"/>
+  <path d="M608 322 H648 V284 H684" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-cp)"/>
+  <path d="M608 322 H648 V362 H684" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-cp)"/>
+  <path d="M608 322 H648 V438 H684" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrc-cp)"/>
+
+  <!-- Right 4 Probed Outputs -->
+  <g transform="translate(692, 174)">
+    <rect width="452" height="64" rx="10" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="28" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">H.264 (+faststart) &amp; VP9 / WebM</text>
+    <text x="20" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Immediate browser playback without full-file buffering</text>
+
+    <rect y="78" width="452" height="64" rx="10" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Silent 6-Second Hover Preview Loop</text>
+    <text x="20" y="128" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Audio track stripped · muted &amp; reduced-motion safe</text>
+
+    <rect y="156" width="452" height="64" rx="10" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="184" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Exact-Aspect WebP Poster Frame</text>
+    <text x="20" y="206" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Sampled at 25% duration · zero CLS layout shift</text>
+
+    <rect y="234" width="452" height="64" rx="10" fill="#1c1818" stroke="#ff7a5c" stroke-opacity="0.65" stroke-width="1.5"/>
+    <text x="20" y="262" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Inset Storyboard Contact Sheet + Social Ratios</text>
+    <text x="20" y="284" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#e6dedb">Skips slates/fade-ups · exports 16:9, 4:5 &amp; 9:16 cuts</text>
+  </g>
+
+  <!-- Bottom Strip -->
+  <g transform="translate(56, 514)">
+    <rect width="1088" height="146" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="28" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="1.6" fill="#ff7a5c">TRANSPARENCY &amp; DELIVERY STANDARDS</text>
+    <text x="28" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Engineered Delivery Pack — No Stock Stand-Ins</text>
+    <text x="28" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">Client edits, motion cuts and Blender renders are produced per engagement from your brief and brand kit.</text>
+    <text x="28" y="128" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">This diagram documents the verified CLI preparation pipeline rather than simulated showreel footage.</text>
+  </g>
+  
+</svg>

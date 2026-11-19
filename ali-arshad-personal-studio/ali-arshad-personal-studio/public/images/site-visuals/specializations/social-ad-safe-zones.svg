@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Diagram illustrating 9:16 vertical video safe-zone margins avoiding TikTok and Instagram UI overlays, 4:5 feed framing, and structured Hook A, B and C creative testing variants.">
+  <title>Social Advertising Safe Zones and Hook Variant Testing Matrix</title>
+  <defs>
+    <linearGradient id="bg-sa" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-sa" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-sa" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-sa)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">SOCIAL ADVERTISING CREATIVES · FORMAT &amp; HOOK SYSTEM</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Safe-Zone Framing &amp; Modular Hook Testing</text>
+  <g transform="translate(908, 68)">
+    <rect width="236" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Reels · TikTok · Shorts · Feed</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Left: 9:16 Vertical Phone Wireframe with Safe Zone -->
+  <g transform="translate(56, 166)">
+    <rect width="290" height="492" rx="22" fill="#10161b" stroke="#354652" stroke-width="2"/>
+    <text x="22" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#a9abb2">9:16 VERTICAL FRAME (1080×1920)</text>
+    <!-- Top Danger Zone -->
+    <rect x="16" y="48" width="258" height="58" rx="8" fill="#2a1919" stroke="#ff7a5c" stroke-opacity="0.4" stroke-dasharray="4 3"/>
+    <text x="30" y="82" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#ff9a8a">Top UI margin (14% · avoid text)</text>
+
+    <!-- Safe Content Zone -->
+    <rect x="16" y="116" width="200" height="236" rx="10" fill="#152229" stroke="#7ed3a0" stroke-width="1.8"/>
+    <text x="30" y="144" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12" font-weight="600" letter-spacing="1.2" fill="#7ed3a0">SAFE CREATIVE ZONE</text>
+    <rect x="30" y="162" width="172" height="54" rx="6" fill="#1e2d36"/>
+    <text x="42" y="186" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" fill="#f9f6f0">Visual Hook (0–2s)</text>
+    <text x="42" y="206" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12" fill="#a9abb2">Product + legible headline</text>
+    <rect x="30" y="230" width="172" height="52" rx="6" fill="#0d1116" stroke="#2c3b46"/>
+    <text x="42" y="261" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#f9f6f0">High-contrast captions</text>
+    <rect x="30" y="296" width="172" height="40" rx="6" fill="#ff7a5c" fill-opacity="0.18" stroke="#ff7a5c" stroke-opacity="0.6"/>
+    <text x="46" y="321" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">Clear offer / CTA</text>
+
+    <!-- Right UI rail -->
+    <rect x="224" y="196" width="50" height="156" rx="8" fill="#2a1919" stroke="#ff7a5c" stroke-opacity="0.4" stroke-dasharray="4 3"/>
+    <circle cx="249" cy="226" r="10" fill="#3a2525"/>
+    <circle cx="249" cy="262" r="10" fill="#3a2525"/>
+    <circle cx="249" cy="298" r="10" fill="#3a2525"/>
+    <text x="234" y="336" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="10.5" fill="#ff9a8a">Icons</text>
+
+    <!-- Bottom Caption Overlay Zone -->
+    <rect x="16" y="362" width="258" height="114" rx="8" fill="#2a1919" stroke="#ff7a5c" stroke-opacity="0.4" stroke-dasharray="4 3"/>
+    <text x="30" y="394" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#ff9a8a">Bottom platform overlay (25%)</text>
+    <text x="30" y="420" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12" fill="#a9abb2">Handle, ad CTA bar &amp; description</text>
+    <text x="30" y="444" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12" fill="#a9abb2">Never place key subtitles here</text>
+  </g>
+
+  <!-- Right Side: Modular Hook Matrix + Alignment -->
+  <g transform="translate(382, 166)">
+    <rect width="762" height="276" rx="12" fill="#141d22" stroke="#26323b" stroke-width="1.5"/>
+    <text x="26" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">MODULAR TESTING ARCHITECTURE</text>
+    <text x="26" y="70" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">1 Core Product Edit × 3 Opening Hooks</text>
+
+    <!-- 3 Hooks -->
+    <g transform="translate(26, 94)">
+      <rect width="218" height="154" rx="10" fill="#10171c" stroke="#ff7a5c" stroke-opacity="0.55"/>
+      <text x="16" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">HOOK A · PAIN POINT</text>
+      <text x="16" y="60" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#f9f6f0">Direct Friction</text>
+      <text x="16" y="88" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Names the exact issue</text>
+      <text x="16" y="110" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">buyers recognize in 2s.</text>
+      <text x="16" y="138" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#7ed3a0">→ Shared body + CTA</text>
+
+      <rect x="244" width="218" height="154" rx="10" fill="#10171c" stroke="#2c3b46"/>
+      <text x="260" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">HOOK B · PRODUCT FIRST</text>
+      <text x="260" y="60" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#f9f6f0">Visual Proof</text>
+      <text x="260" y="88" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Opens immediately on</text>
+      <text x="260" y="110" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">the product in action.</text>
+      <text x="260" y="138" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#7ed3a0">→ Shared body + CTA</text>
+
+      <rect x="488" width="222" height="154" rx="10" fill="#10171c" stroke="#2c3b46"/>
+      <text x="504" y="30" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">HOOK C · COMPARISON</text>
+      <text x="504" y="60" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#f9f6f0">Before vs After</text>
+      <text x="504" y="88" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Contrasts old workaround</text>
+      <text x="504" y="110" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">with the clean solution.</text>
+      <text x="504" y="138" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#7ed3a0">→ Shared body + CTA</text>
+    </g>
+
+    <!-- Bottom Right: Post-Click Brand Continuity -->
+    <g transform="translate(0, 304)">
+      <rect width="762" height="188" rx="12" fill="#12181e" stroke="#26323b" stroke-width="1.5"/>
+      <text x="26" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">POST-CLICK MESSAGE MATCH</text>
+      <text x="26" y="70" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Ad Creative Locked to Landing Page &amp; Brand Kit</text>
+      <g transform="translate(26, 94)">
+        <rect width="218" height="68" rx="8" fill="#171e25" stroke="#2c3b46"/>
+        <text x="16" y="28" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">9:16 &amp; 4:5 Video Cuts</text>
+        <text x="16" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Consistent brand typography</text>
+
+        <path d="M218 34 H244" stroke="#ff7a5c" stroke-width="2" marker-end="url(#arrc-sa)"/>
+
+        <rect x="248" width="218" height="68" rx="8" fill="#171e25" stroke="#2c3b46"/>
+        <text x="264" y="28" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">Matching Static Ads</text>
+        <text x="264" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Retargeting SVG/PNG variants</text>
+
+        <path d="M466 34 H492" stroke="#ff7a5c" stroke-width="2" marker-end="url(#arrc-sa)"/>
+
+        <rect x="496" width="214" height="68" rx="8" fill="#1c1818" stroke="#ff7a5c" stroke-opacity="0.6"/>
+        <text x="512" y="28" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">Fast Landing Page</text>
+        <text x="512" y="50" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#e6dedb">Same headline, tone &amp; offer</text>
+      </g>
+    </g>
+  </g>
+  
+</svg>

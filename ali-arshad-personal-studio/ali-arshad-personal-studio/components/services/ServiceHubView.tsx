@@ -42,33 +42,57 @@ function isHrefRenderable(href: string): boolean {
 }
 
 function HeroVisual({ enrichment }: { enrichment: ServiceHubEnrichment }) {
-  if (!enrichment.heroPreview) return null;
-  const project = getProject(enrichment.heroPreview.projectSlug);
-  if (!project || project.usesSampleMedia) return null;
-  const target = project.caseStudy ? `/case-studies/${project.slug}` : `/work/${project.slug}`;
+  if (enrichment.heroPreview) {
+    const project = getProject(enrichment.heroPreview.projectSlug);
+    if (!project || project.usesSampleMedia) return null;
+    const target = project.caseStudy ? `/case-studies/${project.slug}` : `/work/${project.slug}`;
 
-  return (
-    <div className="hub-hero-card">
-      <Link
-        href={target}
-        className={`hub-hero-card__frame ${enrichment.heroPreview.diagram ? "hub-hero-card__frame--diagram" : ""}`.trim()}
-        aria-label={`${project.title}, view case study`}
-      >
-        <Image
-          src={project.cover.src}
-          alt={project.cover.alt}
-          width={project.cover.width}
-          height={project.cover.height}
-          priority
-          sizes="(min-width: 1024px) 520px, 92vw"
-        />
-      </Link>
-      <div className="hub-hero-card__caption">
-        <span>{enrichment.heroPreview.caption}</span>
-        <Link href={target}>Inspect demo</Link>
+    return (
+      <div className="hub-hero-card">
+        <Link
+          href={target}
+          className={`hub-hero-card__frame ${enrichment.heroPreview.diagram ? "hub-hero-card__frame--diagram" : ""}`.trim()}
+          aria-label={`${project.title}, view case study`}
+        >
+          <Image
+            src={project.cover.src}
+            alt={project.cover.alt}
+            width={project.cover.width}
+            height={project.cover.height}
+            priority
+            sizes="(min-width: 1024px) 520px, 92vw"
+          />
+        </Link>
+        <div className="hub-hero-card__caption">
+          <span>{enrichment.heroPreview.caption}</span>
+          <Link href={target}>Inspect demo</Link>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (enrichment.heroVisual) {
+    const v = enrichment.heroVisual;
+    return (
+      <div className="hub-hero-card">
+        <div className={`hub-hero-card__frame ${v.darkDiagram ? "hub-hero-card__frame--dark-diagram" : ""}`.trim()}>
+          <Image
+            src={v.src}
+            alt={v.alt}
+            width={v.width}
+            height={v.height}
+            priority
+            sizes="(min-width: 1024px) 520px, 92vw"
+          />
+        </div>
+        <div className="hub-hero-card__caption">
+          <span>{v.caption}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 }
 
 export function ServiceHubView({ hub }: { hub: ServiceHub }) {
@@ -606,7 +630,7 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
         eyebrow={enrichment.eyebrow}
         title={hub.h1}
         lead={hub.lead}
-        aside={enrichment.heroPreview ? heroAside : undefined}
+        aside={enrichment.heroPreview || enrichment.heroVisual ? heroAside : undefined}
       >
         <p className="measure muted">{hub.intent}</p>
         <div className="hero__actions">

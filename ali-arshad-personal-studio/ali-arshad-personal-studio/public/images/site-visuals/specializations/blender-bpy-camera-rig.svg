@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Technical architecture diagram of the scripted Blender Python scene builder showing spherical camera coordinates across six product angles, three-point key fill and rim lighting, three material presets and a 120-frame turntable — explicitly labelled as a technical schematic rather than a rendered 3D image.">
+  <title>Scripted Blender Python Spherical Camera Rig and Three-Point Lighting Diagram</title>
+  <defs>
+    <linearGradient id="bg-bl" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-bl" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-bl" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-bl)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">BLENDER PYTHON (BPY) · TECHNICAL SCENE SCHEMATIC</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Spherical Camera Rig &amp; Three-Point Lighting Architecture</text>
+  <g transform="translate(860, 68)">
+    <rect width="284" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">20 Python Unit Tests · No Render Yet</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Left: Top-Down Spherical Coordinate & Lighting Diagram -->
+  <g transform="translate(56, 166)">
+    <rect width="584" height="492" rx="12" fill="#10161b" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="24" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">SPHERICAL CAMERA &amp; LIGHTING RIG (TOP-DOWN PLAN)</text>
+
+    <!-- Orbit circles -->
+    <circle cx="292" cy="264" r="176" fill="none" stroke="#25333d" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <circle cx="292" cy="264" r="118" fill="none" stroke="#314350" stroke-width="1.5"/>
+    <line x1="100" y1="264" x2="484" y2="264" stroke="#1c2730" stroke-width="1"/>
+    <line x1="292" y1="78" x2="292" y2="450" stroke="#1c2730" stroke-width="1"/>
+
+    <!-- Center Product Geometry placeholder -->
+    <polygon points="292,226 326,246 326,284 292,304 258,284 258,246" fill="#1b262e" stroke="#f9f6f0" stroke-width="2"/>
+    <line x1="292" y1="226" x2="292" y2="264" stroke="#a9abb2" stroke-width="1.2"/>
+    <line x1="292" y1="264" x2="326" y2="284" stroke="#a9abb2" stroke-width="1.2"/>
+    <line x1="292" y1="264" x2="258" y2="284" stroke="#a9abb2" stroke-width="1.2"/>
+    <text x="248" y="328" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#f9f6f0">Product Origin (0,0,0)</text>
+
+    <!-- 3 Lights on outer ring -->
+    <!-- Key Light -->
+    <circle cx="152" cy="154" r="16" fill="#ff7a5c" fill-opacity="0.22" stroke="#ff7a5c" stroke-width="2"/>
+    <line x1="166" y1="166" x2="262" y2="240" stroke="#ff7a5c" stroke-opacity="0.55" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="64" y="130" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">KEY LIGHT (45°)</text>
+
+    <!-- Fill Light -->
+    <circle cx="436" cy="176" r="14" fill="#6f8391" fill-opacity="0.25" stroke="#a9abb2" stroke-width="1.8"/>
+    <line x1="422" y1="184" x2="324" y2="244" stroke="#a9abb2" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="404" y="148" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#d9d7d2">FILL LIGHT</text>
+
+    <!-- Rim Light -->
+    <circle cx="348" cy="430" r="14" fill="#6f8391" fill-opacity="0.25" stroke="#a9abb2" stroke-width="1.8"/>
+    <line x1="340" y1="416" x2="306" y2="306" stroke="#a9abb2" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="372" y="434" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#d9d7d2">RIM / BACK LIGHT</text>
+
+    <!-- 6 Camera Markers on inner orbit -->
+    <circle cx="292" cy="146" r="6" fill="#f9f6f0"/>
+    <circle cx="394" cy="205" r="6" fill="#f9f6f0"/>
+    <circle cx="394" cy="323" r="6" fill="#f9f6f0"/>
+    <circle cx="292" cy="382" r="6" fill="#ff7a5c"/>
+    <circle cx="190" cy="323" r="6" fill="#f9f6f0"/>
+    <circle cx="190" cy="205" r="6" fill="#f9f6f0"/>
+    <text x="164" y="468" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">6 spherical camera presets + 120-frame 360° turntable</text>
+  </g>
+
+  <!-- Right: Code Parameters & Honesty Notice -->
+  <g transform="translate(668, 166)">
+    <rect width="476" height="316" rx="12" fill="#141d22" stroke="#26323b" stroke-width="1.5"/>
+    <text x="24" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">REPRODUCIBLE PYTHON MODULES</text>
+    <text x="24" y="70" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Testable Outside Blender via bpy Stub</text>
+
+    <rect x="24" y="92" width="428" height="58" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="40" y="117" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">3 Calibrated Material Presets</text>
+    <text x="40" y="138" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Swappable matte, satin and gloss shader specs</text>
+
+    <rect x="24" y="162" width="428" height="58" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="40" y="187" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">Azimuth / Elevation / Radius Maths</text>
+    <text x="40" y="208" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Every SKU shares exact lens, angle &amp; lighting parity</text>
+
+    <rect x="24" y="232" width="428" height="58" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="40" y="257" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" font-weight="600" fill="#f9f6f0">120-Frame Turntable Generator</text>
+    <text x="40" y="278" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Verified frame ranges &amp; clean 360° loop geometry</text>
+
+    <rect y="340" width="476" height="152" rx="12" fill="#1c1818" stroke="#ff7a5c" stroke-opacity="0.65" stroke-width="1.5"/>
+    <text x="24" y="376" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">HONEST STATUS NOTE</text>
+    <text x="24" y="408" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Technical Schematic — Not a 3D Render</text>
+    <text x="24" y="438" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">No image has been rendered in this repository yet.</text>
+    <text x="24" y="462" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#a9abb2">Client renders execute on a Blender workstation per project.</text>
+  </g>
+  
+</svg>

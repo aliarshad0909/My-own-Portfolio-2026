@@ -1773,6 +1773,14 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     contactServiceTitle: "Creative Production",
     heroCta: "Discuss creative production",
     heroSecondary: { label: "Inspect media pipeline demo", href: "/case-studies/motion-production-pipeline" },
+    heroVisual: {
+      src: "/images/site-visuals/services/creative-production/production-encoding-pipeline.svg",
+      alt: "Technical architecture diagram of the creative production and ffmpeg/ffprobe web encoding pipeline producing H.264 faststart, VP9, posters, hover loops and social ratios",
+      width: 1200,
+      height: 720,
+      caption: "Technical schematic: verified ffmpeg/ffprobe encoding pipeline (not film footage)",
+      darkDiagram: true,
+    },
     scopeNotice:
       "Transparency note: The engineering tooling behind this offering — an ffmpeg web-video preparation pipeline (28 tests) and a scripted Blender/bpy scene system (20 tests) — is built and verified. Finished 3D renders and cleared client showreel footage are not yet published on this site, so this page does not display stock photography or synthetic stand-ins.",
     facts: [

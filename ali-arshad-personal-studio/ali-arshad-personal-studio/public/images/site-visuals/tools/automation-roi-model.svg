@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Visual diagram of the Automation ROI Calculator formula showing weekly hours multiplied by team size, loaded hourly rate and realistic capped automation share compared against build cost to determine payback weeks.">
+  <title>Automation ROI Formula and Payback Horizon Diagram</title>
+  <defs>
+    <linearGradient id="bg-arm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-arm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-arm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-arm)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">AUTOMATION ROI CALCULATOR · PAYBACK ARITHMETIC</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">How Realistic Time Savings Determine Payback Weeks</text>
+  <g transform="translate(896, 68)">
+    <rect width="248" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Automation Share Capped &lt; 100%</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Formula Flow Top -->
+  <g transform="translate(56, 174)">
+    <rect width="240" height="128" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">WEEKLY EFFORT</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">Hours × People</text>
+    <text x="20" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Recurring manual admin</text>
+
+    <text x="256" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="24" font-weight="600" fill="#ff7a5c">×</text>
+
+    <rect x="284" width="240" height="128" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="304" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">LOADED COST</text>
+    <text x="304" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">Hourly Rate</text>
+    <text x="304" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Wage + overhead value</text>
+
+    <text x="540" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="24" font-weight="600" fill="#ff7a5c">×</text>
+
+    <rect x="568" width="248" height="128" rx="12" fill="#1c1818" stroke="#ff7a5c" stroke-opacity="0.65" stroke-width="1.5"/>
+    <text x="588" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">REALISTIC CAP</text>
+    <text x="588" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">50%–75% Share</text>
+    <text x="588" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#e6dedb">Keeps human approvals</text>
+
+    <text x="832" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="24" font-weight="600" fill="#7ed3a0">=</text>
+
+    <rect x="860" width="228" height="128" rx="12" fill="#13221c" stroke="#478767" stroke-width="1.5"/>
+    <text x="880" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#7ed3a0">WEEKLY SAVING</text>
+    <text x="880" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">Reclaimed Value</text>
+    <text x="880" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#d9d7d2">× 52 = Yearly saving</text>
+  </g>
+
+  <!-- Payback Chart Bottom -->
+  <g transform="translate(56, 336)">
+    <rect width="1088" height="322" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="28" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">ILLUSTRATIVE PAYBACK HORIZON (BUILD COST ÷ WEEKLY SAVING)</text>
+
+    <!-- Axes -->
+    <line x1="68" y1="264" x2="720" y2="264" stroke="#354652" stroke-width="1.5"/>
+    <line x1="68" y1="74" x2="68" y2="264" stroke="#354652" stroke-width="1.5"/>
+    <!-- Flat build cost line -->
+    <line x1="68" y1="184" x2="720" y2="184" stroke="#a9abb2" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="570" y="174" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">One-time build cost</text>
+    <!-- Cumulative savings rising line -->
+    <path d="M68 264 L268 184 L700 88" stroke="#ff7a5c" stroke-width="3.2" fill="none"/>
+    <!-- Break-even dot -->
+    <circle cx="268" cy="184" r="7" fill="#ff7a5c" stroke="#f9f6f0" stroke-width="2"/>
+    <line x1="268" y1="184" x2="268" y2="264" stroke="#ff7a5c" stroke-opacity="0.55" stroke-dasharray="4 3"/>
+    <text x="220" y="286" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" fill="#ff7a5c">Break-even point</text>
+    <text x="72" y="286" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">Week 0</text>
+    <text x="648" y="286" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">Week 52</text>
+    <text x="478" y="96" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="600" fill="#7ed3a0">Net reclaimed time</text>
+
+    <!-- Decision Guidance Right -->
+    <rect x="752" y="64" width="308" height="226" rx="10" fill="#141d22" stroke="#26323b"/>
+    <text x="774" y="98" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" font-weight="600" fill="#f9f6f0">Sanity-Check Bands</text>
+    <text x="774" y="132" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="600" fill="#7ed3a0">≤ 16 weeks payback</text>
+    <text x="774" y="154" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Strong candidate on a stable process</text>
+    <text x="774" y="192" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="600" fill="#f2c66d">16–40 weeks payback</text>
+    <text x="774" y="214" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Trim scope to highest-friction steps</text>
+    <text x="774" y="252" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="600" fill="#ff9a8a">&gt; 52 weeks payback</text>
+    <text x="774" y="274" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Fix or pick a higher-leverage workflow</text>
+  </g>
+  
+</svg>

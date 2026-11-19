@@ -128,6 +128,14 @@ export type Project = {
   /** Public source code, when sharing is appropriate. */
   sourceUrl?: string;
   attribution?: Attribution;
+  /** Optional technical architecture diagram shown inside the project / case study write-up. */
+  architectureDiagram?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    caption: string;
+  };
   /** Presence of this object lists the project under /case-studies. */
   caseStudy?: CaseStudy;
 };
@@ -753,6 +761,13 @@ const BLENDER: Project = {
   },
   usesSampleMedia: true,
   gallery: [],
+  architectureDiagram: {
+    src: "/images/site-visuals/specializations/blender-bpy-camera-rig.svg",
+    alt: "Technical schematic of the Blender Python scene builder showing six spherical camera positions, three-point lighting and 120-frame turntable — not a rendered 3D image",
+    width: 1200,
+    height: 720,
+    caption: "Technical architecture schematic of the Python (bpy) rig — not rendered 3D output.",
+  },
   caseStudy: {
     background:
       "A product visualisation pipeline, written as code so that lighting and camera setups are reproducible rather than hand-placed per shot.",
@@ -830,6 +845,13 @@ const MOTION: Project = {
   },
   usesSampleMedia: true,
   gallery: [],
+  architectureDiagram: {
+    src: "/images/site-visuals/services/creative-production/production-encoding-pipeline.svg",
+    alt: "Technical architecture diagram of the Node.js and ffmpeg/ffprobe media pipeline showing source probing and parallel H.264 faststart, VP9, WebP poster, hover preview and contact-sheet outputs",
+    width: 1200,
+    height: 720,
+    caption: "Technical architecture schematic of the verified ffmpeg/ffprobe CLI pipeline — not finished film footage.",
+  },
   caseStudy: {
     background:
       "Motion work needs a repeatable path from a master file to the files a website actually serves. This is that path, written as two command-line tools.",

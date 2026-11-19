@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Minimalist regional map schematic of the four US Census regions — West, Midwest, South and Northeast — showing remote service coverage across all 50 US states and Washington D.C. with zero physical branch offices and zero fabricated map pins.">
+  <title>United States Remote Service Coverage by Census Region</title>
+  <defs>
+    <linearGradient id="bg-usm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-usm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-usm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-usm)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">NATIONWIDE REMOTE COVERAGE · ALL 50 STATES + D.C.</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Four US Regions Served Remotely — Zero Fabricated Pins</text>
+  <g transform="translate(872, 68)">
+    <rect width="272" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">50 States + D.C. · Remote Studio</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Stylized Minimalist 4-Region Geometric US Silhouette Map (No fake pins/offices) -->
+  <g transform="translate(56, 166)">
+    <rect width="708" height="492" rx="12" fill="#10161b" stroke="#253038" stroke-width="1.5"/>
+    <text x="24" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="#a9abb2">STYLIZED REGIONAL COVERAGE SCHEMATIC (NON-PHYSICAL REMOTE DELIVERY)</text>
+
+    <!-- WEST REGION polygon -->
+    <path d="M54 96 L244 96 L244 328 L160 328 L120 296 L64 252 L44 174 Z" fill="#1b262e" stroke="#ff7a5c" stroke-opacity="0.65" stroke-width="2"/>
+    <text x="86" y="182" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">WEST</text>
+    <text x="86" y="210" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#ff7a5c">13 States</text>
+    <text x="86" y="234" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">PT / MT overlap</text>
+    <!-- AK & HI minimal insets -->
+    <rect x="54" y="356" width="84" height="48" rx="8" fill="#162027" stroke="#364854"/>
+    <text x="72" y="385" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#d9d7d2">AK · Remote</text>
+    <rect x="150" y="356" width="84" height="48" rx="8" fill="#162027" stroke="#364854"/>
+    <text x="168" y="385" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#d9d7d2">HI · Remote</text>
+
+    <!-- MIDWEST REGION polygon -->
+    <path d="M254 96 L486 96 L496 226 L464 248 L254 248 Z" fill="#172229" stroke="#3c4f5d" stroke-width="2"/>
+    <text x="296" y="168" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">MIDWEST</text>
+    <text x="296" y="196" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#ff7a5c">12 States</text>
+    <text x="296" y="220" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">CT / ET overlap</text>
+
+    <!-- SOUTH REGION polygon -->
+    <path d="M254 258 L544 258 L568 318 L528 424 L490 424 L452 362 L352 384 L318 418 L254 358 Z" fill="#19232a" stroke="#ff7a5c" stroke-opacity="0.45" stroke-width="2"/>
+    <text x="334" y="318" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">SOUTH</text>
+    <text x="334" y="346" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#ff7a5c">16 States + D.C.</text>
+    <text x="334" y="370" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">CT / ET overlap</text>
+
+    <!-- NORTHEAST REGION polygon -->
+    <path d="M498 96 L646 84 L662 152 L614 218 L552 246 L508 226 Z" fill="#1d2830" stroke="#ff7a5c" stroke-opacity="0.8" stroke-width="2"/>
+    <text x="526" y="156" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">NORTHEAST</text>
+    <text x="526" y="182" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#ff7a5c">9 States</text>
+    <text x="526" y="206" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">ET core overlap</text>
+
+    <text x="24" y="466" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">No physical branch offices, rented virtual addresses or invented city pins.</text>
+  </g>
+
+  <!-- Right Column: Coverage Governance & Disciplines -->
+  <g transform="translate(792, 166)">
+    <rect width="352" height="236" rx="12" fill="#141d22" stroke="#26323b" stroke-width="1.5"/>
+    <text x="22" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">ANTI-DOORWAY POLICY</text>
+    <text x="22" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">408 Planned Combinations</text>
+    <text x="22" y="102" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Every state and pilot metro is</text>
+    <text x="22" y="124" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">served remotely today, while</text>
+    <text x="22" y="146" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">dedicated local pages stay</text>
+    <text x="22" y="168" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">unindexed until real regional</text>
+    <text x="22" y="190" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">proof &amp; editorial review exist.</text>
+
+    <rect y="260" width="352" height="232" rx="12" fill="#141d22" stroke="#26323b" stroke-width="1.5"/>
+    <text x="22" y="296" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">REMOTE COLLABORATION</text>
+    <text x="22" y="328" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">Consistent Rhythm Anywhere</text>
+    <text x="22" y="364" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Live discovery across PT → ET</text>
+    <text x="22" y="394" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Written specs &amp; milestone dates</text>
+    <text x="22" y="424" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Staged preview links every phase</text>
+    <text x="22" y="454" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">• Direct repo &amp; doc hand-off</text>
+  </g>
+  
+</svg>

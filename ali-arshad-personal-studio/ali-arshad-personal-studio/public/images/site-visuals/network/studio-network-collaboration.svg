@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Hub-and-spoke collaboration diagram showing the client connecting through Ali Arshad Personal Studio as one accountable point of contact, coordinating direct studio execution alongside transparent specialist partners for security, blockchain or heavy infrastructure when scoped.">
+  <title>Studio Network Single-Point-of-Contact Collaboration Architecture</title>
+  <defs>
+    <linearGradient id="bg-sn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-sn" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-sn" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-sn)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">THE STUDIO NETWORK · COLLABORATION STRUCTURE</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">One Accountable Contact — Transparent Specialist Depth</text>
+  <g transform="translate(878, 68)">
+    <rect width="266" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Zero Hidden Subcontracting</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Left: Client -->
+  <g transform="translate(56, 254)">
+    <rect width="212" height="156" rx="12" fill="#141d22" stroke="#354652" stroke-width="1.6"/>
+    <text x="22" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#a9abb2">CLIENT TEAM</text>
+    <text x="22" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Your Business</text>
+    <text x="22" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Single brief, written</text>
+    <text x="22" y="128" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">scope &amp; milestone line</text>
+  </g>
+
+  <path d="M268 332 H344" stroke="#ff7a5c" stroke-width="2.4" fill="none" marker-end="url(#arrc-sn)"/>
+
+  <!-- Center: Hub -->
+  <g transform="translate(352, 206)">
+    <rect width="292" height="252" rx="14" fill="#1c1818" stroke="#ff7a5c" stroke-width="2"/>
+    <text x="24" y="40" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.5" fill="#ff7a5c">SINGLE POINT OF CONTACT</text>
+    <text x="24" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">Ali Arshad Studio</text>
+    <line x1="24" y1="94" x2="268" y2="94" stroke="#3a2824"/>
+    <text x="24" y="124" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Owns architecture &amp; UX</text>
+    <text x="24" y="152" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• Coordinates timeline &amp; QA</text>
+    <text x="24" y="180" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">• States partner roles upfront</text>
+    <text x="24" y="208" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#e6dedb">• Never passes you to juniors</text>
+  </g>
+
+  <!-- Branches to Direct vs Partner -->
+  <path d="M644 294 H700 V240 H742" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-sn)"/>
+  <path d="M644 370 H700 V432 H742" stroke="#ff7a5c" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrc-sn)"/>
+
+  <!-- Right Top: Core Direct Pillars -->
+  <g transform="translate(750, 166)">
+    <rect width="394" height="164" rx="12" fill="#141d22" stroke="#2c3b46" stroke-width="1.5"/>
+    <text x="22" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#7ed3a0">DIRECT STUDIO EXECUTION</text>
+    <text x="22" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Five Core In-House Pillars</text>
+    <text x="22" y="96" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Web &amp; Software · AI Agents &amp; n8n</text>
+    <text x="22" y="120" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Brand &amp; Growth · Creative Production</text>
+    <text x="22" y="144" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#a9abb2">Global Sourcing Coordination</text>
+  </g>
+
+  <!-- Right Bottom: Vetted Specialist Partners -->
+  <g transform="translate(750, 354)">
+    <rect width="394" height="164" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="22" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">PARTNER-DELIVERED WHEN SCOPED</text>
+    <text x="22" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Specialist Technical Modules</text>
+    <text x="22" y="96" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Deep security audits · Smart contracts</text>
+    <text x="22" y="120" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Heavy cloud infrastructure &amp; DevOps</text>
+    <text x="22" y="144" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#a9abb2">Attributed openly · named only with consent</text>
+  </g>
+
+  <!-- Footer Strip -->
+  <g transform="translate(56, 556)">
+    <rect width="1088" height="104" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="28" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="16" font-weight="600" fill="#f9f6f0">Written Attribution Before Any Work Begins</text>
+    <text x="28" y="74" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">You always know what is built directly in-studio and what is delivered with a vetted specialist — zero fake agency claims or implied logos.</text>
+  </g>
+  
+</svg>

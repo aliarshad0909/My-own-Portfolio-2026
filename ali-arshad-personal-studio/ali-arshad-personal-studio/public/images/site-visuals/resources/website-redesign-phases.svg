@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Three-phase website redesign diagram showing Phase 1 pre-design URL audit and intent map, Phase 2 301 redirects, WCAG contrast and noindex staging, and Phase 3 launch-week canonical, sitemap and Core Web Vitals verification.">
+  <title>Three-Phase Website Redesign Checklist Protecting SEO and Conversion</title>
+  <defs>
+    <linearGradient id="bg-rwr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-rwr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-rwr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-rwr)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">WEB ENGINEERING CHECKLIST · SEO-SAFE REDESIGN</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Three Gates That Prevent Post-Launch Traffic Drops</text>
+  <g transform="translate(922, 68)">
+    <rect width="222" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Zero Dropped Rankings</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <g transform="translate(56, 180)">
+    <!-- Phase 1 -->
+    <rect width="330" height="352" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="22" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">PHASE 01 · BEFORE DESIGN</text>
+    <text x="22" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Baseline &amp; Intent Map</text>
+    <text x="22" y="114" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">1. Export every indexed URL</text>
+    <text x="22" y="140" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">   from Search Console</text>
+    <text x="22" y="176" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">2. Flag top inquiry pages</text>
+    <text x="22" y="202" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">   never delete blindly</text>
+    <text x="22" y="238" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">3. Map 1 intent per URL</text>
+    <text x="22" y="274" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">4. Gather real sales FAQs</text>
+    <rect x="22" y="300" width="286" height="32" rx="7" fill="#10171c"/>
+    <text x="36" y="321" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#ff7a5c">Gate: URL inventory locked</text>
+
+    <path d="M330 176 H372" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-rwr)"/>
+
+    <!-- Phase 2 -->
+    <g transform="translate(379, 0)">
+      <rect width="330" height="352" rx="12" fill="#171e25" stroke="#ff7a5c" stroke-opacity="0.7" stroke-width="1.6"/>
+      <text x="22" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">PHASE 02 · BUILD &amp; STAGING</text>
+      <text x="22" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Redirects &amp; QA Guard</text>
+      <text x="22" y="114" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">1. Write 1-to-1 301 map</text>
+      <text x="22" y="140" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">   for every renamed slug</text>
+      <text x="22" y="176" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">2. Verify WCAG &amp; H1–H3</text>
+      <text x="22" y="202" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">   plus 360px mobile fit</text>
+      <text x="22" y="238" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">3. Keep staging noindex</text>
+      <text x="22" y="274" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">4. Test forms &amp; CRM sync</text>
+      <rect x="22" y="300" width="286" height="32" rx="7" fill="#ff7a5c" fill-opacity="0.16"/>
+      <text x="36" y="321" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">Gate: 301s &amp; forms verified</text>
+    </g>
+
+    <path d="M709 176 H751" stroke="#ff7a5c" stroke-width="2" marker-end="url(#arrc-rwr)"/>
+
+    <!-- Phase 3 -->
+    <g transform="translate(758, 0)">
+      <rect width="330" height="352" rx="12" fill="#13221c" stroke="#478767" stroke-width="1.5"/>
+      <text x="22" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#7ed3a0">PHASE 03 · LAUNCH WEEK</text>
+      <text x="22" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Verify Live Signals</text>
+      <text x="22" y="114" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">1. Check live canonicals</text>
+      <text x="22" y="140" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">   exact HTTPS apex/www</text>
+      <text x="22" y="176" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">2. Submit sitemap.xml</text>
+      <text x="22" y="202" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">   crawl for zero 404s</text>
+      <text x="22" y="238" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">3. Measure mobile CWV</text>
+      <text x="22" y="274" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#f9f6f0">4. Confirm event tracking</text>
+      <rect x="22" y="300" width="286" height="32" rx="7" fill="#0d1914"/>
+      <text x="36" y="321" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#7ed3a0">Gate: Clean launch confirmed</text>
+    </g>
+  </g>
+
+  <g transform="translate(56, 568)">
+    <rect width="1088" height="90" rx="10" fill="#12181e" stroke="#253038"/>
+    <text x="26" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15.5" font-weight="600" fill="#f9f6f0">Why Redesigns Drop Traffic: Unmapped Old URLs, Accidental Noindex Tags &amp; Merged Intent Pages</text>
+    <text x="26" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#a9abb2">Treating redirect maps and canonical checks as Phase 1–2 engineering gates eliminates almost all avoidable migration loss.</text>
+  </g>
+  
+</svg>

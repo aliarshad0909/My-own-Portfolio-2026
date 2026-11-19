@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -31,7 +32,30 @@ export function ToolPageShell({ tool, children }: { tool: ToolDef; children: Rea
           { name: tool.h1, path: `/tools/${tool.slug}` },
         ]}
       />
-      <PageHero eyebrow="Interactive tool" title={tool.h1} lead={tool.lead} />
+      <PageHero
+        eyebrow="Interactive tool"
+        title={tool.h1}
+        lead={tool.lead}
+        aside={
+          tool.heroVisual ? (
+            <div className="hub-hero-card">
+              <div className="hub-hero-card__frame hub-hero-card__frame--dark-diagram">
+                <Image
+                  src={tool.heroVisual.src}
+                  alt={tool.heroVisual.alt}
+                  width={tool.heroVisual.width}
+                  height={tool.heroVisual.height}
+                  priority
+                  sizes="(min-width: 1024px) 520px, 92vw"
+                />
+              </div>
+              <div className="hub-hero-card__caption">
+                <span>{tool.heroVisual.caption}</span>
+              </div>
+            </div>
+          ) : undefined
+        }
+      />
 
       <section className="container section">{children}</section>
 

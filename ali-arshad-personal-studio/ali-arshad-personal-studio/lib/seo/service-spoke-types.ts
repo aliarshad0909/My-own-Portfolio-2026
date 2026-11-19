@@ -20,6 +20,15 @@ export type SpokeHeroVisual = {
   lightCard?: boolean;
 };
 
+export type SpokeSupportingVisual = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption: string;
+  darkDiagram?: boolean;
+};
+
 export type ServiceSpoke = {
   /** Last path segment: /services/<hubSlug>/<slug>. */
   slug: string;
@@ -29,6 +38,8 @@ export type ServiceSpoke = {
   lead: string;
   /** Optional verified visual preview rendered in the split hero aside. */
   heroVisual?: SpokeHeroVisual;
+  /** Optional supporting explanatory diagram shown inside the deliverables section. */
+  supportingVisual?: SpokeSupportingVisual;
   /** Concise positioning context shown beneath the hero lead. */
   body: string[];
   /** Specific client bottlenecks this specialization solves. */

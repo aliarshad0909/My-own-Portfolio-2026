@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Architecture diagram of a Next.js App Router application separating Server Components, typed Route Handlers, pure TypeScript domain modules, selective Client Islands, and built-in metadata and sitemap generation.">
+  <title>Next.js App Router Server-First Architecture</title>
+  <defs>
+    <linearGradient id="bg-nx" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-nx" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-nx" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-nx)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">NEXT.JS APP ROUTER · SERVER-FIRST ARCHITECTURE</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Lean Client Bundles with Typed Server &amp; Domain Layers</text>
+  <g transform="translate(922, 68)">
+    <rect width="222" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">React 19 · TypeScript · SEO</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <!-- Layer 1: Edge / Request -->
+  <g transform="translate(56, 174)">
+    <rect width="232" height="310" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">01 · SERVER HTML</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">App Router</text>
+    <rect x="20" y="94" width="192" height="44" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="121" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">Server Components</text>
+    <rect x="20" y="150" width="192" height="44" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="177" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">generateMetadata()</text>
+    <rect x="20" y="206" width="192" height="44" rx="8" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="233" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">sitemap.ts &amp; JSON-LD</text>
+    <text x="20" y="284" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#7ed3a0">Zero client JS for static copy</text>
+  </g>
+
+  <path d="M288 329 H338" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-nx)"/>
+
+  <!-- Layer 2: Pure Domain Logic -->
+  <g transform="translate(346, 174)">
+    <rect width="256" height="310" rx="12" fill="#171e25" stroke="#ff7a5c" stroke-opacity="0.6" stroke-width="1.6"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">02 · PURE DOMAIN</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Framework-Free TS</text>
+    <text x="20" y="108" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Pricing &amp; integer-cent rules</text>
+    <text x="20" y="140" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Validation &amp; schemas</text>
+    <text x="20" y="172" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Publication &amp; SEO gates</text>
+    <text x="20" y="204" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#d9d7d2">• Unit tested in milliseconds</text>
+    <rect x="20" y="236" width="216" height="46" rx="8" fill="#ff7a5c" fill-opacity="0.14"/>
+    <text x="34" y="264" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" fill="#ff7a5c">Shared by UI &amp; Route Handlers</text>
+  </g>
+
+  <!-- Split to Client Islands + Backend APIs -->
+  <path d="M602 329 H640 V248 H674" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-nx)"/>
+  <path d="M602 329 H640 V410 H674" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arr-nx)"/>
+
+  <g transform="translate(682, 174)">
+    <!-- Client Islands -->
+    <rect width="462" height="144" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="22" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">03A · SELECTIVE CLIENT ISLANDS</text>
+    <text x="22" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">Interactive State Only Where Needed</text>
+    <text x="22" y="100" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">Filters, calculators, forms, tabs &amp; keyboard-accessible controls</text>
+    <text x="22" y="124" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">paired with next/image sizing to protect Core Web Vitals.</text>
+
+    <!-- Route Handlers & External APIs -->
+    <rect y="166" width="462" height="144" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="22" y="202" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">03B · TYPED ROUTE HANDLERS</text>
+    <text x="22" y="234" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="19" font-weight="600" fill="#f9f6f0">Validated APIs, Databases &amp; Webhooks</text>
+    <text x="22" y="266" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">PostgreSQL / Supabase, Stripe Checkout, Resend email, and</text>
+    <text x="22" y="290" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">authenticated n8n webhooks with rate limiting &amp; timeouts.</text>
+  </g>
+
+  <!-- CI Verification Bar -->
+  <g transform="translate(56, 524)">
+    <rect width="1088" height="136" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="26" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">AUTOMATED RELEASE VERIFICATION</text>
+    <text x="26" y="72" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">TypeScript Strict Check  →  Node Unit Tests  →  SEO &amp; Link Audit  →  Playwright Responsive QA</text>
+    <text x="26" y="106" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">Every route, canonical URL, form validation rule and responsive viewport (360px–1440px) is verified before deployment.</text>
+  </g>
+  
+</svg>

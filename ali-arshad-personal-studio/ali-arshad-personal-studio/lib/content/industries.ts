@@ -11,6 +11,14 @@
 
 import type { PublicationState } from "@/lib/seo/publication";
 
+export type IndustryHeroVisual = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption: string;
+};
+
 export type Industry = {
   slug: string; // /industries/<slug>
   keywordId: string;
@@ -25,6 +33,8 @@ export type Industry = {
   helps: string[];
   projectSlugs: string[];
   relatedHub: string;
+  /** Optional sector architecture diagram shown in the hero aside. */
+  heroVisual?: IndustryHeroVisual;
 };
 
 export const INDUSTRIES: Industry[] = [
@@ -51,6 +61,13 @@ export const INDUSTRIES: Industry[] = [
     ],
     projectSlugs: ["tessera-clayworks-storefront", "motion-production-pipeline"],
     relatedHub: "/services/ecommerce-development",
+    heroVisual: {
+      src: "/images/site-visuals/industries/ecommerce-ops-architecture.svg",
+      alt: "Concept architecture diagram for ecommerce brands connecting a custom Next.js storefront, integer-cent checkout, append-only inventory ledger and brand retention workflows",
+      width: 1200,
+      height: 720,
+      caption: "Concept architecture: connected storefront, stock & retention",
+    },
   },
   {
     slug: "saas",
@@ -75,6 +92,13 @@ export const INDUSTRIES: Industry[] = [
     ],
     projectSlugs: ["northwind-analytics-dashboard"],
     relatedHub: "/services/web-development",
+    heroVisual: {
+      src: "/images/site-visuals/industries/saas-stack-architecture.svg",
+      alt: "Concept architecture diagram for SaaS startups linking a lean Next.js MVP core and embedded SVG analytics to lead qualification, docs support agents and automated reporting",
+      width: 1200,
+      height: 720,
+      caption: "Concept architecture: lean MVP core, analytics & automation",
+    },
   },
   {
     slug: "logistics",
@@ -99,6 +123,13 @@ export const INDUSTRIES: Industry[] = [
     ],
     projectSlugs: ["meridian-inventory-operations", "lantern-sourcing-platform"],
     relatedHub: "/services/business-dashboards",
+    heroVisual: {
+      src: "/images/site-visuals/industries/logistics-supply-flow.svg",
+      alt: "Concept operations flow diagram for logistics teams connecting supplier RFQs, landed-cost scoring, PO receiving gates, append-only stock ledgers and unified reorder alerts",
+      width: 1200,
+      height: 720,
+      caption: "Concept architecture: sourcing, PO receiving & append-only stock",
+    },
   },
 
   // ───────────────── Stubs (gated until real copy / client) ─────────────────

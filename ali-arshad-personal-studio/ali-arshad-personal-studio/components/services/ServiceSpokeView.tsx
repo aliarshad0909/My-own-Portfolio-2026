@@ -173,6 +173,26 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
             />
           </div>
 
+          {spoke.supportingVisual ? (
+            <figure className="article-figure" style={{ marginTop: "2rem", maxWidth: "56rem" }}>
+              <div
+                className={`article-figure__frame ${spoke.supportingVisual.darkDiagram ? "article-figure__frame--dark-diagram" : ""}`.trim()}
+              >
+                <Image
+                  src={spoke.supportingVisual.src}
+                  alt={spoke.supportingVisual.alt}
+                  width={spoke.supportingVisual.width}
+                  height={spoke.supportingVisual.height}
+                  loading="lazy"
+                  sizes="(min-width: 1024px) 860px, 94vw"
+                />
+              </div>
+              <figcaption className="article-figure__caption">
+                <span>{spoke.supportingVisual.caption}</span>
+              </figcaption>
+            </figure>
+          ) : null}
+
           {spoke.stack.length > 0 ? (
             <div style={{ marginTop: "1.75rem" }}>
               <p className="label" style={{ marginBottom: "0.65rem" }}>

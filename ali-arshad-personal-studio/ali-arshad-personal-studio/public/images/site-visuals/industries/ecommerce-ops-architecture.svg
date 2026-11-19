@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Operational architecture diagram for ecommerce brands connecting a custom Next.js storefront, integer-cent cart and checkout validation, append-only inventory ledger, n8n order alerts and brand lifecycle email.">
+  <title>Ecommerce Storefront, Inventory and Post-Purchase Operations Architecture</title>
+  <defs>
+    <linearGradient id="bg-iec" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arr-iec" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrc-iec" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+    
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-iec)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">INDUSTRY ARCHITECTURE · ECOMMERCE BRANDS</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Connected Storefront, Inventory &amp; Post-Purchase Operations</text>
+  <g transform="translate(906, 68)">
+    <rect width="238" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Concept Architecture · DTC &amp; B2B</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+  
+  <g transform="translate(56, 178)">
+    <!-- 4 connected operational pillars -->
+    <rect width="236" height="260" rx="12" fill="#141d22" stroke="#ff7a5c" stroke-opacity="0.6" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">01 · STOREFRONT</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Discovery &amp; UX</text>
+    <text x="20" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Fast multi-attribute filters</text>
+    <text x="20" y="132" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Live variant &amp; stock UI</text>
+    <text x="20" y="160" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Launch video / 3D assets</text>
+    <text x="20" y="188" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Technical SEO canonicals</text>
+    <text x="20" y="236" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Next.js / React 19</text>
+
+    <path d="M236 308 H278" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-iec)" transform="translate(0,-178)"/>
+
+    <g transform="translate(284, 0)">
+      <rect width="236" height="260" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">02 · CHECKOUT</text>
+      <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Rules &amp; Payment</text>
+      <text x="20" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Integer-cent pricing</text>
+      <text x="20" y="132" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Promo + shipping rules</text>
+      <text x="20" y="160" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Server stock re-check</text>
+      <text x="20" y="188" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Stripe / Shopify API</text>
+      <text x="20" y="236" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Zero oversell drift</text>
+    </g>
+
+    <path d="M520 308 H562" stroke="#6f7e8a" stroke-width="2" marker-end="url(#arr-iec)" transform="translate(0,-178)"/>
+
+    <g transform="translate(568, 0)">
+      <rect width="236" height="260" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+      <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">03 · BACK OFFICE</text>
+      <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Stock &amp; Admin</text>
+      <text x="20" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Catalogue CRUD admin</text>
+      <text x="20" y="132" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Append-only movements</text>
+      <text x="20" y="160" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Reorder alerts via n8n</text>
+      <text x="20" y="188" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">• Landed-cost margins</text>
+      <text x="20" y="236" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">One shared data model</text>
+    </g>
+
+    <path d="M804 308 H846" stroke="#ff7a5c" stroke-width="2" marker-end="url(#arrc-iec)" transform="translate(0,-178)"/>
+
+    <g transform="translate(852, 0)">
+      <rect width="236" height="260" rx="12" fill="#1c1818" stroke="#ff7a5c" stroke-opacity="0.65" stroke-width="1.5"/>
+      <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">04 · RETENTION</text>
+      <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Brand &amp; Support</text>
+      <text x="20" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• 600px HTML lifecycle mail</text>
+      <text x="20" y="132" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• Policy-cited KB agent</text>
+      <text x="20" y="160" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• Revenue &amp; SKU dashboard</text>
+      <text x="20" y="188" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#e6dedb">• Human exception desk</text>
+      <text x="20" y="236" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#ff7a5c">Cohesive brand tokens</text>
+    </g>
+  </g>
+
+  <g transform="translate(56, 480)">
+    <rect width="1088" height="176" rx="12" fill="#12181e" stroke="#253038" stroke-width="1.5"/>
+    <text x="28" y="40" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="1.6" fill="#ff7a5c">VERIFIED CONCEPT DEMONSTRATIONS BEHIND THIS ARCHITECTURE</text>
+    <text x="28" y="78" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Tessera Clayworks (Storefront &amp; Admin)  ·  Meridian (Inventory Ledger)  ·  Halcyon (Brand &amp; Email)</text>
+    <text x="28" y="114" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">Each system is built as a tested demonstration under a fictional brand so you can inspect the exact engineering before scoping.</text>
+    <text x="28" y="142" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#7ed3a0">Zero invented ecommerce clients or fabricated conversion claims.</text>
+  </g>
+  
+</svg>
