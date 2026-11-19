@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -10,68 +9,71 @@ import { shouldRender } from "@/lib/seo/publication";
 import { TOOLS, toolState } from "@/lib/tools/catalog";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Free Tools: Project Estimator, Automation ROI & Landed Cost",
+  title: "Calculator Centre: Shipping, Landed Cost, Currency, Automation ROI & Project Estimator",
   description:
-    "Three free, browser-based planning calculators: a web project cost estimator, an automation ROI calculator and a landed cost calculator. No sign-up required.",
+    "Five free browser-based business calculators: Shipping Cost, Landed Cost, Currency Exchange, Automation ROI and Project Estimation. No sign-up required.",
   path: "/tools",
 });
 
 export default function ToolsPage() {
   const tools = TOOLS.filter((t) => shouldRender(toolState(t)));
+
   return (
     <>
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },
-          { name: "Tools", path: "/tools" },
+          { name: "Calculator Centre", path: "/tools" },
         ]}
       />
       <PageHero
-        eyebrow="Tools"
-        title="Free, honest planning calculators"
-        lead="Interactive calculators that run entirely in your browser. No sign-up, no email gate and no false precision — just clear numbers to sanity-check a project before starting."
-        aside={
-          <div className="hub-hero-card">
-            <div className="hub-hero-card__frame hub-hero-card__frame--dark-diagram">
-              <Image
-                src="/images/site-visuals/tools/planning-tools-overview.svg"
-                alt="Overview schematic of three browser-based planning calculators: Web Project Estimator, Automation ROI Calculator and Landed Cost Model"
-                width={1200}
-                height={720}
-                priority
-                sizes="(min-width: 1024px) 520px, 92vw"
-              />
-            </div>
-            <div className="hub-hero-card__caption">
-              <span>Three unit-tested planning tools — zero email walls</span>
-            </div>
-          </div>
-        }
+        eyebrow="Calculator Centre"
+        title="Practical tools for smarter business decisions."
+        lead="Calculate costs, understand profitability, estimate projects and discover the potential value of automation — free, fast and transparent with zero email gates."
       />
-      <section className="container section">
-        <ul className="hub-card-grid">
-          {tools.map((t) => (
-            <li key={t.slug}>
-              <Link href={`/tools/${t.slug}`} className="hub-link-card">
-                <span className="hub-link-card__kind">Free calculator</span>
-                <span className="hub-link-card__title">
-                  <span>{t.h1}</span>
+
+      <section className="container section section--tight-top" aria-label="Available calculators">
+        <ul className="tools-hub-grid">
+          {tools.map((t, index) => (
+            <li key={t.slug} className="tool-card reveal">
+              <Link href={`/tools/${t.slug}`} className="tool-card__link">
+                <div className="tool-card__head">
+                  <span className="tool-card__icon" aria-hidden="true">
+                    <Icon name={t.icon} size={22} />
+                  </span>
+                  <span className="tool-card__cat">{t.category}</span>
+                  <span className="tool-card__num" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <h2 className="tool-card__title">{t.h1}</h2>
+                <p className="tool-card__lead">{t.lead}</p>
+                <p className="tool-card__meta">{t.previewHighlight}</p>
+
+                <span className="tool-card__cta">
+                  <span>Open calculator</span>
                   <Icon name="arrow-up-right" size={16} />
                 </span>
-                <span className="hub-link-card__desc">{t.lead}</span>
               </Link>
             </li>
           ))}
         </ul>
+
+        <p className="fine-print tools-hub-note">
+          Every calculator runs on unit-tested domain logic with visible formulas and transparent caveats. Live currency rates are proxied and cached
+          server-side with instant manual-rate fallback when needed.
+        </p>
       </section>
+
       <ContactCTA
         standalone
-        eyebrow="Next step"
-        title="Want to pressure-test your numbers with a real scope?"
-        text="Send your project context and I will walk you through realistic phasing and trade-offs."
-        button="Discuss your project"
-        secondaryHref="/resources"
-        secondaryLabel="Read the guides"
+        eyebrow="Turn numbers into action"
+        title="Want to review your figures on a real project scope?"
+        text="Share your goals, operational numbers or requirements and I will reply with honest phasing, realistic costs and clear next steps."
+        button="Let's Discuss Your Project"
+        secondaryHref="/services"
+        secondaryLabel="Explore Services"
       />
     </>
   );

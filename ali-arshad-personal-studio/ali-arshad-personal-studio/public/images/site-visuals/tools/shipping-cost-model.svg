@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Shipping cost calculation diagram comparing actual weight and volumetric weight to determine chargeable weight and total estimated freight cost.">
+  <title>Shipping Cost &amp; Volumetric Weight Formula Diagram</title>
+  <defs>
+    <linearGradient id="bg-sc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arrc-sc" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-sc)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">SHIPPING COST CALCULATOR · CHARGEABLE WEIGHT MODEL</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Actual Weight vs. Volumetric Weight</text>
+  <g transform="translate(884, 68)">
+    <rect width="260" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">Metric (kg/cm) ↔ Imperial (lb/in)</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+
+  <!-- Left column: Two Weight Inputs -->
+  <g transform="translate(56, 174)">
+    <rect width="340" height="218" rx="12" fill="#141d22" stroke="#26323b" stroke-width="1.5"/>
+    <text x="24" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">01 · SCALE WEIGHT</text>
+    <text x="24" y="76" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">Actual Weight</text>
+    <text x="24" y="110" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">Gross carton mass on scale</text>
+    <rect x="24" y="138" width="292" height="54" rx="10" fill="#0d1116" stroke="#253038"/>
+    <text x="42" y="171" font-family="ui-monospace, Consolas, monospace" font-size="18" fill="#f9f6f0">e.g. 12.00 kg (26.46 lb)</text>
+
+    <rect y="248" width="340" height="234" rx="12" fill="#141d22" stroke="#26323b" stroke-width="1.5"/>
+    <text x="24" y="286" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">02 · DIMENSIONAL WEIGHT</text>
+    <text x="24" y="324" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">Volumetric Weight</text>
+    <text x="24" y="358" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="15" fill="#a9abb2">Space occupied in aircraft / container</text>
+    <rect x="24" y="384" width="292" height="72" rx="10" fill="#0d1116" stroke="#253038"/>
+    <text x="42" y="416" font-family="ui-monospace, Consolas, monospace" font-size="16" fill="#ff7a5c">(L × W × H) ÷ Divisor</text>
+    <text x="42" y="442" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Air express: 5,000 · Cargo: 6,000</text>
+  </g>
+
+  <!-- Connector arrows -->
+  <path d="M396 283 L462 380" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrc-sc)"/>
+  <path d="M396 535 L462 430" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrc-sc)"/>
+
+  <!-- Middle: MAX Chargeable Gate -->
+  <g transform="translate(470, 290)">
+    <rect width="268" height="230" rx="14" fill="#171f26" stroke="#ff7a5c" stroke-width="1.8"/>
+    <text x="24" y="40" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">CARRIER RULE</text>
+    <text x="24" y="78" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">Chargeable Weight</text>
+    <rect x="24" y="102" width="220" height="54" rx="10" fill="#0d1116"/>
+    <text x="40" y="135" font-family="ui-monospace, Consolas, monospace" font-size="15.5" fill="#f9f6f0">max(Actual, Volumetric)</text>
+    <text x="24" y="186" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Light, bulky cartons bill higher</text>
+    <text x="24" y="206" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">than their scale weight.</text>
+  </g>
+
+  <path d="M738 405 L796 405" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrc-sc)"/>
+
+  <!-- Right: Total Cost Breakdown -->
+  <g transform="translate(804, 174)">
+    <rect width="340" height="482" rx="12" fill="#12181e" stroke="#2f3b45" stroke-width="1.5"/>
+    <text x="26" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">TOTAL ESTIMATED COST</text>
+    <text x="26" y="80" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="22" font-weight="600" fill="#f9f6f0">Freight + Handling</text>
+
+    <g transform="translate(26, 114)">
+      <rect width="288" height="86" rx="10" fill="#171f26" stroke="#253038"/>
+      <text x="18" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">FREIGHT CHARGE</text>
+      <text x="18" y="64" font-family="ui-monospace, Consolas, monospace" font-size="16" fill="#f9f6f0">Chargeable × Rate / kg</text>
+
+      <rect y="106" width="288" height="86" rx="10" fill="#171f26" stroke="#253038"/>
+      <text x="18" y="138" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">FIXED SURCHARGES</text>
+      <text x="18" y="170" font-family="ui-monospace, Consolas, monospace" font-size="16" fill="#f9f6f0">+ Handling &amp; Docs Fee</text>
+
+      <rect y="218" width="288" height="106" rx="10" fill="#1f1716" stroke="#ff7a5c" stroke-opacity="0.6"/>
+      <text x="18" y="250" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" font-weight="600" fill="#ff7a5c">PLANNING OUTPUT</text>
+      <text x="18" y="282" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Estimated Total (USD)</text>
+      <text x="18" y="308" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13" fill="#a9abb2">Plus CBM &amp; cost per actual kg</text>
+    </g>
+  </g>
+</svg>
+

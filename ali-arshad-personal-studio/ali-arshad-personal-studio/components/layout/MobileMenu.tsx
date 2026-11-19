@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import { createPortal } from "react-dom";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { Icon } from "@/components/ui/Icon";
-import { NAV_ITEMS, SITE } from "@/lib/site";
+import { MOBILE_SECONDARY_ITEMS, NAV_ITEMS, SITE } from "@/lib/site";
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -121,8 +121,8 @@ export function MobileMenu({ open, onClose, isActive, returnFocusTo }: Props) {
       <div ref={panelRef} className="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="Menu">
         <div className="mobile-menu__top">
           <span className="brand">
-            <BrandMark size={28} />
-            <span className="brand__name">{SITE.name}</span>
+            <BrandMark size={26} />
+            <span className="brand__name brand__name--caps">{SITE.brandMarkText}</span>
           </span>
           <button ref={closeRef} type="button" className="menu-toggle menu-toggle--close" aria-label="Close menu" onClick={() => close()}>
             <Icon name="close" size={24} />
@@ -147,9 +147,28 @@ export function MobileMenu({ open, onClose, isActive, returnFocusTo }: Props) {
               );
             })}
           </ul>
+          <p className="mobile-menu__sublabel">More</p>
+          <ul className="mobile-menu__sublist">
+            {MOBILE_SECONDARY_ITEMS.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`mobile-menu__sublink ${active ? "is-active" : ""}`.trim()}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => close(false)}
+                  >
+                    <span>{item.label}</span>
+                    <Icon name="arrow-up-right" size={15} />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </nav>
         <Link href="/contact" className="btn btn--primary btn--md mobile-menu__cta" onClick={() => close(false)}>
-          <span>Let&rsquo;s Talk</span>
+          <span>Start a Project</span>
           <Icon name="arrow-up-right" size={18} className="btn__icon" />
         </Link>
       </div>
