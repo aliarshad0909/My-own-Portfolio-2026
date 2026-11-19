@@ -1,6 +1,7 @@
 import type { IconName } from "@/components/ui/Icon";
 import type { ArchNode } from "@/components/services/InteractiveArchitecture";
 import type { WorkflowScenario } from "@/components/services/WorkflowScenarios";
+import { MORE_HUB_ENRICHMENT } from "@/lib/seo/service-enrichment-more";
 
 export type HubLayoutVariant =
   | "blueprint"
@@ -510,4 +511,10 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
   },
 };
 
-export const getHubEnrichment = (slug: string): ServiceHubEnrichment | undefined => HUB_ENRICHMENT[slug];
+export const ALL_HUB_ENRICHMENTS: Record<string, ServiceHubEnrichment> = {
+  ...HUB_ENRICHMENT,
+  ...MORE_HUB_ENRICHMENT,
+};
+
+export const getHubEnrichment = (slug: string): ServiceHubEnrichment | undefined =>
+  ALL_HUB_ENRICHMENTS[slug];

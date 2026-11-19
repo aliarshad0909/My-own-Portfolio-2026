@@ -12,6 +12,8 @@ import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { CredentialCard } from "@/components/credentials/CredentialCard";
+import { getIndustry } from "@/lib/content/industries";
+import { getResource } from "@/lib/content/resources";
 import { visibleCredentials } from "@/lib/credentials";
 import { getProject, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
@@ -21,6 +23,21 @@ import { singleServiceSchema } from "@/lib/structured-data";
 
 function contactHrefFor(serviceTitle: string) {
   return `/contact?service=${encodeURIComponent(serviceTitle)}`;
+}
+
+/** Ensure internal link cards never point at a route that is gated off in production. */
+function isHrefRenderable(href: string): boolean {
+  if (href.startsWith("/resources/")) {
+    const slug = href.slice("/resources/".length);
+    const r = getResource(slug);
+    return r ? shouldRender(r.publicationState) : false;
+  }
+  if (href.startsWith("/industries/")) {
+    const slug = href.slice("/industries/".length);
+    const ind = getIndustry(slug);
+    return ind ? shouldRender(ind.publicationState) : false;
+  }
+  return true;
 }
 
 function HeroVisual({ enrichment }: { enrichment: ServiceHubEnrichment }) {
@@ -401,8 +418,10 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
       </section>
     ) : null;
 
+  const visibleRelatedLinks = enrichment.relatedLinks.filter((item) => isHrefRenderable(item.href));
+
   const relatedSection =
-    enrichment.relatedLinks.length > 0 ? (
+    visibleRelatedLinks.length > 0 ? (
       <section className="section section--tight" aria-labelledby={`${hub.slug}-related`}>
         <div className="container">
           <div className="section-head">
@@ -412,7 +431,7 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
             </h2>
           </div>
           <ul className="hub-card-grid">
-            {enrichment.relatedLinks.map((item) => (
+            {visibleRelatedLinks.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hub-link-card">
                   <span className="hub-link-card__kind">{item.kind}</span>
@@ -591,7 +610,7 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
         <p className="measure muted">{hub.intent}</p>
         <div className="hero__actions">
           <ButtonLink href={ctaHref}>{enrichment.heroCta}</ButtonLink>
-          {enrichment.heroSecondary ? (
+          {enrichment.heroSecondary && isHrefRenderable(enrichment.heroSecondary.href) ? (
             <ButtonLink href={enrichment.heroSecondary.href} variant="secondary" icon={null}>
               {enrichment.heroSecondary.label}
             </ButtonLink>

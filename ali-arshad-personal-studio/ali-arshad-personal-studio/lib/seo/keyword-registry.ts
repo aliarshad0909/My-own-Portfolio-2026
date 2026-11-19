@@ -236,6 +236,20 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     linksFrom: ["/services"],
     notes: "Coordination and tooling only; not a licensed customs broker. Caveat shown on page.",
   },
+  {
+    id: "hub-creative-production",
+    keyword: "creative production video motion 3d",
+    intent: "commercial",
+    cluster: "service-hub",
+    primaryUrl: "/services/creative-production",
+    supporting: ["product video editing", "motion graphics studio", "blender product visualization"],
+    state: "Published",
+    evidenceRequired: [E.UNIQUE_COPY, E.REAL_DEMO],
+    evidenceHave: [E.UNIQUE_COPY, E.REAL_DEMO],
+    linksTo: ["/work/motion-production-pipeline", "/services/branding", "/contact"],
+    linksFrom: ["/services"],
+    notes: "Evidenced by the ffmpeg media pipeline demo; Blender 3D renders and showreel marked honestly as in preparation.",
+  },
 
   // ─────────────────────── Specialized service spokes (long-tail) ────────────
   {
