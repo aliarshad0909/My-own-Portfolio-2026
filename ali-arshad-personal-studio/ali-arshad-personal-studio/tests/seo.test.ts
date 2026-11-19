@@ -17,9 +17,13 @@ import {
   BUSINESS_PILLARS,
   NATIONWIDE_SERVICES,
   blockingIntentConflicts,
+  cityServiceAreas,
   coreServiceAreaMatrix,
   serviceAreaMatrix,
 } from "@/lib/seo/service-areas";
+import { getHub } from "@/lib/seo/service-hubs";
+import { getState } from "@/lib/geo/states";
+import { getCity } from "@/lib/geo/cities";
 import { PROJECTS, getProject } from "@/lib/projects";
 import { SERVICES } from "@/lib/services";
 import { SERVICE_OPTIONS } from "@/lib/inquiry";
@@ -335,6 +339,25 @@ describe("service-area matrix, pillar reconciliation & evidence tiers", () => {
         SERVICE_OPTIONS.includes(enrich.contactServiceTitle),
         `enrichment:${slug} CTA service "${enrich.contactServiceTitle}" is not in SERVICE_OPTIONS`,
       );
+    }
+  });
+});
+
+describe("city × service routes", () => {
+  it("has selected city-service combinations, each resolving to real hub/state/city", () => {
+    const areas = cityServiceAreas();
+    assert.ok(areas.length > 0, "expected at least one selected city-service combination");
+    for (const a of areas) {
+      assert.ok(getHub(a.serviceSlug), `${a.url}: unknown service hub ${a.serviceSlug}`);
+      assert.ok(getState(a.stateSlug), `${a.url}: unknown state ${a.stateSlug}`);
+      assert.ok(getCity(a.stateSlug, a.citySlug), `${a.url}: unknown city ${a.stateSlug}/${a.citySlug}`);
+    }
+  });
+
+  it("keeps every city-service URL a known route and starts them all gated", () => {
+    for (const a of cityServiceAreas()) {
+      assert.ok(isKnownRoute(a.url), `${a.url} is not a known route`);
+      assert.ok(!isIndexable(a.publicationState), `${a.url} is indexable without a verified local signal`);
     }
   });
 });
