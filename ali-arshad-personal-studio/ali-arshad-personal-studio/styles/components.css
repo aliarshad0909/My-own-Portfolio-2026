@@ -1392,3 +1392,40 @@
     display: block;
   }
 }
+
+/* ── Location directory & utilities ─────────────────────────────────────── */
+
+/* Constrain prose to a comfortable reading measure. */
+.measure {
+  max-width: var(--measure);
+}
+.measure + .measure {
+  margin-top: 1rem;
+}
+
+/* Secondary text / not-yet-live location names (rendered as plain text, not
+   links, so the directory never points at a page that would 404). */
+.muted {
+  color: var(--muted);
+}
+
+/* Responsive list of state / city links. Collapses to one column on phones. */
+.location-grid {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem 1.5rem;
+}
+.location-grid li {
+  padding-block: 0.35rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.location-grid a {
+  color: var(--text);
+  text-decoration: none;
+}
+.location-grid a:hover {
+  color: var(--coral);
+}
