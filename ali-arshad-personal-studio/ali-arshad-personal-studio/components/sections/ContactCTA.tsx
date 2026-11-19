@@ -6,6 +6,8 @@ type Props = {
   title?: string;
   text?: string;
   button?: string;
+  /** Destination for the primary button (defaults to /contact; supports ?service= preselection). */
+  href?: string;
   /** Render as a self-contained section with page padding. */
   standalone?: boolean;
   /** Optional second action beside the primary button. */
@@ -21,6 +23,7 @@ export function ContactCTA({
   title = "Have a project in mind?",
   text = "Whether you're launching a brand, developing a digital product, or automating business workflows, let's discuss how to bring your idea to life.",
   button = "Contact Ali",
+  href = "/contact",
   standalone = false,
   secondaryHref,
   secondaryLabel,
@@ -46,7 +49,7 @@ export function ContactCTA({
         <h2 className="cta-panel__title">{title}</h2>
         <p className="cta-panel__text">{text}</p>
         <div className="cta-panel__actions">
-          <ButtonLink href="/contact" iconLeft="send">
+          <ButtonLink href={href} iconLeft="send">
             {button}
           </ButtonLink>
           {secondaryHref && secondaryLabel ? (
