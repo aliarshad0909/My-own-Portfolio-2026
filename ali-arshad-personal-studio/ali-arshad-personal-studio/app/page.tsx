@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
+import { Capabilities } from "@/components/sections/Capabilities";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { CredentialsPreview } from "@/components/sections/CredentialsPreview";
 import { FeaturedWork } from "@/components/sections/FeaturedWork";
 import { Hero } from "@/components/sections/Hero";
-import { HowIWork } from "@/components/sections/HowIWork";
 import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
 import { StudioStory } from "@/components/sections/StudioStory";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -22,22 +21,23 @@ export default function HomePage() {
     <>
       <JsonLd data={personSchema()} />
       <JsonLd data={webSiteSchema()} />
-      {/* Who I am → What I do → What I've built → Why trust me → How to work with me */}
+      {/* Hero → Services → Selected work → Capabilities → About → Start a project.
+          Credentials, certifications and process detail live on their own pages
+          (/experience, /about, /services) rather than crowding the homepage. */}
       <Hero />
       <ServiceShowcaseHome />
       <FeaturedWork />
+      <Capabilities />
       <StudioStory />
-      <CredentialsPreview />
-      <HowIWork />
       <ContactCTA
         standalone
         signature
         eyebrow="Start here"
         title="Have something worth building?"
         text="From your first idea to a working digital product, creative campaign, or automated business process, let's discuss what you need."
-        button="Start a project"
-        secondaryHref="/services"
-        secondaryLabel="View services"
+        button="Start a Project"
+        secondaryHref="/work"
+        secondaryLabel="Explore Work"
       />
     </>
   );
