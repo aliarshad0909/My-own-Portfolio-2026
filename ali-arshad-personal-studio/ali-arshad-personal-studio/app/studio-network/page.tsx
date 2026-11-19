@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { breadcrumbSchema } from "@/lib/structured-data";
 import { pageMetadata } from "@/lib/seo";
 import { getKeyword } from "@/lib/seo/keyword-registry";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
@@ -22,20 +21,24 @@ export const metadata: Metadata = pageMetadata({
 
 const PRINCIPLES = [
   {
+    icon: "users" as const,
     title: "One point of contact",
-    text: "You deal with me. I coordinate the specialists; you are never handed off to a stranger mid-project.",
+    text: "You deal directly with me. I coordinate any specialist collaborators so you are never handed off to strangers mid-project.",
   },
   {
+    icon: "check" as const,
     title: "Honest attribution",
-    text: "When a partner does the work, I say so. Their work is never presented as mine.",
+    text: "When a partner delivers a specialist module, I state it plainly upfront. Partner work is never presented as my solo output.",
   },
   {
+    icon: "alert" as const,
     title: "Named only with consent",
-    text: "Collaborators are introduced when a project needs them and only named publicly with their agreement. No logos are displayed to imply relationships that are not real.",
+    text: "Collaborators are introduced when a project needs them and named publicly only with permission — zero implied partnerships or fake logos.",
   },
   {
-    title: "The right specialism, not the nearest",
-    text: "Blockchain, advanced security, large-scale infrastructure: for work outside my own depth I bring in someone qualified rather than improvising.",
+    icon: "code" as const,
+    title: "The right specialist, not guesswork",
+    text: "Blockchain engineering, deep security reviews or heavy infrastructure: when work sits outside my core craft, qualified specialists handle it.",
   },
 ];
 
@@ -43,46 +46,54 @@ export default function StudioNetworkPage() {
   if (!shouldRender(state)) notFound();
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
+      <Breadcrumbs
+        items={[
           { name: "Home", path: "/" },
           { name: "Studio Network", path: "/studio-network" },
-        ])}
+        ]}
       />
       <PageHero
-        eyebrow="How it works"
-        title="A studio of one, with a network behind it"
-        lead="Some projects need more than one pair of hands or one specialism. The Studio Network is how that is handled honestly: coordinated partners, a single point of contact, and no pretending a solo studio is an agency."
+        eyebrow="How collaboration works"
+        title="A studio of one, with a specialist network behind it"
+        lead="Most projects are designed and engineered directly by me. When a build genuinely needs deep outside expertise, the Studio Network keeps delivery transparent under one accountable point of contact."
       />
 
-      <section className="container section">
-        <p className="measure">
-          Most projects are delivered directly. When one needs expertise beyond
-          mine, I bring in a vetted collaborator rather than stretch past what I
-          can genuinely do well. The arrangement is simple and stated upfront, so
-          you always know who is doing what.
-        </p>
-      </section>
-
-      <section className="container section--tight">
-        <h2 className="section-title">The principles</h2>
-        <ul className="hub-list">
-          {PRINCIPLES.map((p) => (
-            <li key={p.title}>
-              <Icon name="check" size={18} />
-              <span>
-                <strong>{p.title}.</strong> {p.text}
-              </span>
-            </li>
-          ))}
-        </ul>
+      <section className="section section--tight" aria-labelledby="network-principles">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow eyebrow--plain">Operating principles</p>
+            <h2 className="section-title section-title--sm" id="network-principles">
+              No pretending a solo studio is a 30-person agency
+            </h2>
+            <p className="section-sub">
+              Every partner involvement is agreed in writing before work starts, so you always know who is building what and why.
+            </p>
+          </div>
+          <ul className="hub-deliverables">
+            {PRINCIPLES.map((p) => (
+              <li key={p.title} className="hub-deliverable">
+                <div className="hub-deliverable__head">
+                  <span className="hub-deliverable__icon" aria-hidden="true">
+                    <Icon name={p.icon} size={18} />
+                  </span>
+                  <h3 className="hub-deliverable__title">{p.title}</h3>
+                </div>
+                <p className="hub-deliverable__detail">{p.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <Testimonials title="What partners and clients say" />
 
       <ContactCTA
-        title="A project that needs more than one specialism?"
-        text="Tell me the whole scope. If part of it is better delivered by a partner, I'll say so and coordinate it."
+        standalone
+        eyebrow="Multi-discipline scope"
+        title="Planning a project that needs more than one specialism?"
+        text="Tell me the full scope. If part of it is better handled with a vetted partner, I will say so openly and coordinate delivery cleanly."
+        button="Discuss your scope"
+        href={`/contact?service=${encodeURIComponent("Specialist Technical Collaboration")}`}
       />
     </>
   );

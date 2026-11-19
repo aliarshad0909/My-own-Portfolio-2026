@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Faq } from "@/components/ui/Faq";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -6,7 +7,7 @@ import { serviceListSchema, type FaqItem } from "@/lib/structured-data";
 import { FlowDiagram, type FlowStep } from "@/components/services/FlowDiagram";
 import { ServiceNav } from "@/components/services/ServiceNav";
 import { PendingMedia, RelatedProjectList, ServiceShowcase } from "@/components/services/ServiceShowcase";
-import { ArrowLink, ButtonLink } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { pageMetadata } from "@/lib/seo";
@@ -237,20 +238,30 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="container section--tight" aria-label="In-depth service pages">
-        <h2 className="section-title">Go deeper on a specific service</h2>
-        <p className="measure">
-          Each core service has its own page with the problems it solves, what a
-          typical engagement includes, how the work runs and the demonstration
-          builds behind it.
-        </p>
-        <ul className="hub-links">
-          {PUBLISHED_HUBS.map((h) => (
-            <li key={h.slug}>
-              <ArrowLink href={`/services/${h.slug}`}>{h.h1}</ArrowLink>
-            </li>
-          ))}
-        </ul>
+      <section className="section section--tight" aria-label="In-depth service pages">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow eyebrow--plain">Dedicated service pages</p>
+            <h2 className="section-title">Go deeper on a specific service</h2>
+            <p className="section-sub">
+              Each core service has its own deep-dive page with workflow architecture, deliverables, technology integrations, demonstration builds, specializations and FAQs.
+            </p>
+          </div>
+          <ul className="hub-card-grid">
+            {PUBLISHED_HUBS.map((h) => (
+              <li key={h.slug}>
+                <Link href={`/services/${h.slug}`} className="hub-link-card">
+                  <span className="hub-link-card__kind">Service hub</span>
+                  <span className="hub-link-card__title">
+                    <span>{h.h1}</span>
+                    <Icon name="arrow-up-right" size={16} />
+                  </span>
+                  <span className="hub-link-card__desc">{h.lead}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <Faq id="services-faq" eyebrow="Common questions" title="Questions clients usually start with" items={FAQ_ITEMS} surface />

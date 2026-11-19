@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { ArrowLink } from "@/components/ui/Button";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { breadcrumbSchema } from "@/lib/structured-data";
 import { pageMetadata } from "@/lib/seo";
-import { TOOLS, toolState } from "@/lib/tools/catalog";
 import { shouldRender } from "@/lib/seo/publication";
+import { TOOLS, toolState } from "@/lib/tools/catalog";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Free Tools: Project Estimator, Automation ROI, Landed Cost",
+  title: "Free Tools: Project Estimator, Automation ROI & Landed Cost",
   description:
-    "Three free, functional calculators: a web project cost estimator, an automation ROI calculator and a landed cost calculator. Honest planning figures, no sign-up.",
+    "Three free, browser-based planning calculators: a web project cost estimator, an automation ROI calculator and a landed cost calculator. No sign-up required.",
   path: "/tools",
 });
 
@@ -19,28 +19,42 @@ export default function ToolsPage() {
   const tools = TOOLS.filter((t) => shouldRender(toolState(t)));
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
+      <Breadcrumbs
+        items={[
           { name: "Home", path: "/" },
           { name: "Tools", path: "/tools" },
-        ])}
+        ]}
       />
       <PageHero
         eyebrow="Tools"
-        title="Free, honest calculators"
-        lead="Quick planning tools that run entirely in your browser. No sign-up, no email wall, no false precision — just a useful starting point."
+        title="Free, honest planning calculators"
+        lead="Interactive calculators that run entirely in your browser. No sign-up, no email gate and no false precision — just clear numbers to sanity-check a project before starting."
       />
       <section className="container section">
-        <ul className="hub-links">
+        <ul className="hub-card-grid">
           {tools.map((t) => (
             <li key={t.slug}>
-              <ArrowLink href={`/tools/${t.slug}`}>{t.h1}</ArrowLink>
-              <span className="muted"> — {t.lead}</span>
+              <Link href={`/tools/${t.slug}`} className="hub-link-card">
+                <span className="hub-link-card__kind">Free calculator</span>
+                <span className="hub-link-card__title">
+                  <span>{t.h1}</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </span>
+                <span className="hub-link-card__desc">{t.lead}</span>
+              </Link>
             </li>
           ))}
         </ul>
       </section>
-      <ContactCTA />
+      <ContactCTA
+        standalone
+        eyebrow="Next step"
+        title="Want to pressure-test your numbers with a real scope?"
+        text="Send your project context and I will walk you through realistic phasing and trade-offs."
+        button="Discuss your project"
+        secondaryHref="/resources"
+        secondaryLabel="Read the guides"
+      />
     </>
   );
 }
