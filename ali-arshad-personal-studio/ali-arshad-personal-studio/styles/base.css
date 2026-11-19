@@ -64,6 +64,14 @@ h4 {
   text-wrap: balance;
 }
 
+/* Optical correction. -0.02em is tuned for the display sizes; at card and
+   row headings it closes the letters up and costs legibility, so the small
+   headings keep a little more room. The display rules tighten further. */
+h3,
+h4 {
+  letter-spacing: -0.012em;
+}
+
 p {
   text-wrap: pretty;
 }
@@ -160,10 +168,28 @@ button {
   padding-top: 0;
 }
 
+/*
+ * Section rhythm guard.
+ *
+ * A band's padding reads as deliberate when the background changes across it:
+ * half the gap is tinted, so the eye sees the edge of a new material. Two
+ * untinted bands in a row have no such edge, and their full paddings add up
+ * into one hole twice the height of every other gap on the page — the
+ * "excessive vertical scrolling caused by unnecessary padding" this pass is
+ * meant to remove. /about (credentials followed by the FAQ) is the one place
+ * the sequence does this today; the rule also keeps it from reappearing.
+ *
+ * --tight and --flush-top set their own top padding on purpose and are left
+ * alone, and the :not() chain is written one class at a time so it does not
+ * depend on Selectors 4 list support.
+ */
+.section:not(.section--surface) + .section:not(.section--surface):not(.section--tight):not(.section--flush-top) {
+  padding-top: calc(var(--section) * 0.5);
+}
+
 .section--surface {
   position: relative;
   background: var(--surface);
-  border-block: 1px solid var(--border-soft);
 }
 
 .section--surface::before {
@@ -171,7 +197,7 @@ button {
   position: absolute;
   inset: 0;
   background: url("/images/backgrounds/dark-texture.webp") center / cover no-repeat;
-  opacity: 0.35;
+  opacity: 0.28;
   pointer-events: none;
 }
 

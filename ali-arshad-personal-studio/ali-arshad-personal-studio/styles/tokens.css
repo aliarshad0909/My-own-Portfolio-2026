@@ -13,6 +13,12 @@
   --muted: #a9abb2;
   --border: #30363b;
   --border-soft: rgba(48, 54, 59, 0.6);
+  /* Form controls need a 3:1 boundary against --bg (WCAG 1.4.11); --border is
+     1.59:1, which is right for a decorative hairline and wrong for an input. */
+  --border-field: #5a6268;
+  /* One quiet surface lift, used wherever a chip, tag or badge used to carry an
+     outline. A fill reads as grouping; an outline reads as a control. */
+  --tint: rgba(249, 246, 240, 0.065);
   --coral-soft: rgba(255, 122, 92, 0.12);
   --coral-line: rgba(255, 122, 92, 0.45);
   --on-coral: #14100e;
@@ -26,7 +32,7 @@
   --fs-page: clamp(2.125rem, 1.5rem + 2.9vw, 3.75rem); /* 34 → 60px */
   --fs-section: clamp(1.625rem, 1.3rem + 1.4vw, 2.5rem); /* 26 → 40px */
   --fs-section-sm: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem); /* 22 → 28px */
-  --fs-card: clamp(1.125rem, 1.05rem + 0.3vw, 1.375rem); /* 18 → 22px */
+  --fs-card: clamp(1.1875rem, 1.07rem + 0.45vw, 1.4375rem); /* 19 → 23px */
   --fs-lead: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem); /* 16 → 19px */
   --fs-body: 1rem;
   --fs-small: 0.875rem;
@@ -34,9 +40,12 @@
 
   /* Layout */
   --max: 1240px;
+  /* Measure. --max is the layout container; prose never fills it. */
+  --measure: 66ch;
+  --measure-sm: 56ch;
   --gutter: clamp(1.125rem, 0.6rem + 2.4vw, 2rem);
-  --section: clamp(3.25rem, 2rem + 5vw, 6.5rem); /* 52 → 104px */
-  --section-tight: clamp(1.25rem, 0.9rem + 1.4vw, 1.75rem);
+  --section: clamp(4rem, 2.25rem + 7.5vw, 9rem); /* 64 → 144px, maxed at 1440 */
+  --section-tight: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem); /* 24 → 36px */
   --radius: 14px;
   --radius-sm: 10px;
   --header-h: 68px;
