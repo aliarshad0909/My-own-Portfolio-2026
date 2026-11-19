@@ -15,7 +15,7 @@
   <rect width="1200" height="720" rx="16" fill="url(#bg-rroi)"/>
   <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
   <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">AI &amp; AUTOMATION GUIDE · WORKED PAYBACK MODEL</text>
-  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Worked Example: 12 Weekly Admin Hours → ~11-Week Payback</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="28" font-weight="600" fill="#f9f6f0">12 Weekly Admin Hours → ~11-Week Payback</text>
   <g transform="translate(876, 68)">
     <rect width="268" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
     <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
