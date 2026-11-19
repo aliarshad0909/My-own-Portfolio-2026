@@ -58,7 +58,7 @@ export function WebProjectEstimator() {
         </label>
 
         <fieldset className="calc__field">
-          <span>Design</span>
+          <legend>Design</legend>
           <div className="calc__choices">
             {(["template", "custom"] as DesignLevel[]).map((d) => (
               <label key={d} className={`calc__choice ${design === d ? "is-on" : ""}`}>
@@ -70,7 +70,7 @@ export function WebProjectEstimator() {
         </fieldset>
 
         <fieldset className="calc__field">
-          <span>Timeline</span>
+          <legend>Timeline</legend>
           <div className="calc__choices">
             {(["standard", "rush"] as Urgency[]).map((u) => (
               <label key={u} className={`calc__choice ${urgency === u ? "is-on" : ""}`}>

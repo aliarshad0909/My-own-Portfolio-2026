@@ -46,10 +46,10 @@ export const INDUSTRIES: Industry[] = [
     helps: [
       "Custom storefronts with catalogue, cart and checkout built for conversion",
       "Integration with payment, fulfilment and back-office tools",
-      "3D product visualisation and launch video when photography falls short",
+      "Launch video and motion when photography falls short",
       "A fast, accessible, SEO-ready front end",
     ],
-    projectSlugs: ["tessera-clayworks-storefront", "blender-product-visualisation"],
+    projectSlugs: ["tessera-clayworks-storefront", "motion-production-pipeline"],
     relatedHub: "/services/ecommerce-development",
   },
   {

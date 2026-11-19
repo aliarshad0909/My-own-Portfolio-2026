@@ -1538,9 +1538,16 @@
   gap: 0.4rem;
   font-size: var(--fs-small);
 }
+fieldset.calc__field {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
 .calc__field > span,
 .calc__field > legend {
   color: var(--muted);
+  padding: 0;
 }
 .calc__suffix {
   color: var(--muted);
