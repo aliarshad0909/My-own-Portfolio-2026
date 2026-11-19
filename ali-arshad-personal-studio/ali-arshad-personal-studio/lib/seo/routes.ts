@@ -19,6 +19,7 @@
 import { PROJECTS, caseStudies } from "@/lib/projects";
 import { KEYWORD_REGISTRY } from "@/lib/seo/keyword-registry";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { cityServiceAreas, serviceAreaMatrix } from "@/lib/seo/service-areas";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 
@@ -57,6 +58,8 @@ export function knownRoutes(): Set<string> {
 
   for (const s of US_STATES) routes.add(`/locations/${s.slug}`);
   for (const c of PILOT_CITIES) routes.add(`/locations/${c.stateSlug}/${c.slug}`);
+  for (const a of serviceAreaMatrix()) routes.add(a.url);
+  for (const ca of cityServiceAreas()) routes.add(ca.url);
 
   return routes;
 }

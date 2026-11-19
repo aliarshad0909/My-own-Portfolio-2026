@@ -23,6 +23,8 @@ import { isIndexable } from "@/lib/seo/publication";
 import { brokenLinks } from "@/lib/seo/routes";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { ALL_HUB_ENRICHMENTS } from "@/lib/seo/service-enrichment";
+import { blockingIntentConflicts, serviceAreaMatrix } from "@/lib/seo/service-areas";
 import { evidenceViolations, publishedWithoutLiveEvidence } from "@/lib/seo/evidence";
 import { RESOURCES } from "@/lib/content/resources";
 import { INDUSTRIES } from "@/lib/content/industries";
@@ -61,6 +63,15 @@ for (const k of KEYWORD_REGISTRY) {
 for (const h of SERVICE_HUBS) {
   for (const b of brokenLinks([...h.relatedTools, ...h.relatedHubs])) linkProblems.push(`${h.slug} → ${b}`);
 }
+for (const [slug, enrich] of Object.entries(ALL_HUB_ENRICHMENTS)) {
+  const hrefs = [
+    ...enrich.relatedLinks.map((l) => l.href),
+    ...(enrich.heroSecondary ? [enrich.heroSecondary.href] : []),
+    ...(enrich.toolCallout ? [enrich.toolCallout.href] : []),
+    ...enrich.industries.flatMap((i) => (i.href ? [i.href] : [])),
+  ];
+  for (const b of brokenLinks(hrefs)) linkProblems.push(`enrichment:${slug} → ${b}`);
+}
 for (const r of RESOURCES) for (const b of brokenLinks(r.related)) linkProblems.push(`${r.slug} → ${b}`);
 for (const i of INDUSTRIES) for (const b of brokenLinks([i.relatedHub])) linkProblems.push(`${i.slug} → ${b}`);
 check("No broken internal links", linkProblems);
@@ -82,7 +93,15 @@ for (const s of US_STATES) {
 for (const c of PILOT_CITIES) {
   if (isIndexable(c.publicationState) && !c.evidenceHave.includes(LOCAL_SIGNAL)) doorway.push(`city ${c.slug}`);
 }
-check("No location page indexable without a local signal", doorway);
+for (const a of serviceAreaMatrix()) {
+  if (isIndexable(a.publicationState) && !a.evidenceHave.includes(LOCAL_SIGNAL)) doorway.push(`area ${a.url}`);
+}
+check("No location or service-area page indexable without a local signal", doorway);
+
+check(
+  "No blocking duplicate-intent conflicts across matrix & registry",
+  blockingIntentConflicts().map((c) => `${c.signature} → ${c.owners.map((o) => o.url).join(" vs ")}`),
+);
 
 check(
   "No unconsented / fabricated testimonials",

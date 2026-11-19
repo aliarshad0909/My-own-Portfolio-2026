@@ -12,6 +12,8 @@ import { brokenLinks, isKnownRoute } from "@/lib/seo/routes";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES, orphanCities } from "@/lib/geo/cities";
 import { SERVICE_HUBS, allSpokes } from "@/lib/seo/service-hubs";
+import { ALL_HUB_ENRICHMENTS } from "@/lib/seo/service-enrichment";
+import { blockingIntentConflicts, serviceAreaMatrix } from "@/lib/seo/service-areas";
 import { getProject } from "@/lib/projects";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { RESOURCES } from "@/lib/content/resources";
@@ -254,5 +256,42 @@ describe("evidence integrity (declarations cannot bypass reality)", () => {
 
   it("requires every Published hub/industry to cite at least one live demo", () => {
     assert.deepEqual(publishedWithoutLiveEvidence(), [], "Published page with no live evidencing build");
+  });
+});
+
+describe("service-area matrix & enrichment integrity", () => {
+  it("models all 306 state × service combinations without publishing doorway pages", () => {
+    const matrix = serviceAreaMatrix();
+    assert.equal(matrix.length, 306, "expected 6 core services × 51 jurisdictions");
+    const published = matrix.filter((a) => isIndexable(a.publicationState));
+    assert.deepEqual(published.map((a) => a.url), [], "service-area page published without local evidence");
+  });
+
+  it("has zero blocking duplicate-intent conflicts across matrix and registry", () => {
+    assert.deepEqual(
+      blockingIntentConflicts().map((c) => c.signature),
+      [],
+      "two publishable URLs compete for the same intent signature",
+    );
+  });
+
+  it("keeps every specialization spoke aligned with its keyword-registry state", () => {
+    for (const { hub, spoke } of allSpokes()) {
+      const row = getKeyword(spoke.keywordId);
+      assert.ok(row, `${hub.slug}/${spoke.slug}: unknown keywordId ${spoke.keywordId}`);
+      assert.equal(spoke.publicationState, row!.state, `${hub.slug}/${spoke.slug} state drifts from registry`);
+    }
+  });
+
+  it("points every enriched hub internal link at a known route", () => {
+    for (const [slug, enrich] of Object.entries(ALL_HUB_ENRICHMENTS)) {
+      const hrefs = [
+        ...enrich.relatedLinks.map((l) => l.href),
+        ...(enrich.heroSecondary ? [enrich.heroSecondary.href] : []),
+        ...(enrich.toolCallout ? [enrich.toolCallout.href] : []),
+        ...enrich.industries.flatMap((i) => (i.href ? [i.href] : [])),
+      ];
+      assert.deepEqual(brokenLinks(hrefs), [], `enrichment:${slug} has broken internal links`);
+    }
   });
 });

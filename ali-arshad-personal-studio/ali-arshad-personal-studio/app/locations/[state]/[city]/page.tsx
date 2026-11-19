@@ -76,6 +76,7 @@ export default async function CityPage({ params }: Props) {
       </section>
 
       <ContactCTA
+        standalone
         title={`${cityRecord.name} project in mind?`}
         text="Start with a short discovery call. Remote delivery, clear written scope."
       />

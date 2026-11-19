@@ -98,6 +98,7 @@ export default async function StatePage({ params }: Props) {
       ) : null}
 
       <ContactCTA
+        standalone
         title={`Based in ${record.name}? Let's talk`}
         text="Remote delivery, clear scope, staged hand-off. Start with a short discovery call."
       />
