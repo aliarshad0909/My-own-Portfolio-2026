@@ -1,6 +1,20 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { SERVICES } from "@/lib/services";
+import { BUSINESS_PILLARS } from "@/lib/seo/service-areas";
+
+/**
+ * Deep-link each pillar to its most detailed destination: the dedicated service
+ * hub page when one exists, the Studio Network for partner-delivered work, and
+ * the services overview anchor as a final fallback. One source of truth, so the
+ * card and the destination never drift.
+ */
+function serviceHref(id: string): string {
+  const pillar = BUSINESS_PILLARS.find((p) => p.pillarId === id);
+  if (pillar?.hubSlugs[0]) return `/services/${pillar.hubSlugs[0]}`;
+  if (id === "specialist-collaboration") return "/studio-network";
+  return `/services#${id}`;
+}
 
 /**
  * The six services as an editorial card grid.
@@ -28,7 +42,7 @@ export function ServiceShowcaseHome() {
         <ul className="svc-grid">
           {SERVICES.map((s, i) => (
             <li key={s.id} className="svc-card reveal">
-              <Link href={`/services#${s.id}`} className="svc-card__link">
+              <Link href={serviceHref(s.id)} className="svc-card__link">
                 <span className="svc-card__num" aria-hidden="true">
                   {String(i + 1).padStart(2, "0")}
                 </span>

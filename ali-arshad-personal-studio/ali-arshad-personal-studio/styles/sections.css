@@ -3215,3 +3215,122 @@
   color: var(--muted);
   line-height: 1.65;
 }
+
+/* ───────── Capabilities — one pipeline ───────── */
+.cap__rail {
+  position: relative;
+  margin-top: clamp(28px, 4vw, 52px);
+}
+
+/* The animated connecting rail sits behind the three nodes, centred on the
+   node badges. Hidden on narrow screens where the nodes stack vertically. */
+.cap__flow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 44px;
+  width: 100%;
+  height: 40px;
+  overflow: visible;
+  display: none;
+}
+.cap__flow-rail {
+  stroke: var(--border);
+  stroke-width: 2;
+}
+.cap__flow-dot {
+  fill: var(--coral);
+  transform: translateX(40px);
+  animation: cap-flow 4.6s linear infinite;
+}
+.cap__flow-dot--2 {
+  animation-delay: 2.3s;
+  opacity: 0.6;
+}
+@keyframes cap-flow {
+  0% { transform: translateX(40px); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(960px); opacity: 0; }
+}
+
+.cap__stages {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.cap-node__link {
+  display: grid;
+  gap: 6px;
+  padding: clamp(20px, 2.4vw, 30px);
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  text-decoration: none;
+  height: 100%;
+  position: relative;
+  transition: border-color var(--fast) var(--ease), transform var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+.cap-node__link:hover {
+  border-color: var(--coral-line);
+  transform: translateY(-3px);
+  background: var(--surface);
+}
+.cap-node__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--coral-soft);
+  color: var(--coral);
+  margin-bottom: 6px;
+  transition: background var(--fast) var(--ease);
+}
+.cap-node__link:hover .cap-node__badge {
+  background: var(--coral);
+  color: var(--on-coral);
+}
+.cap-node__label {
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--coral);
+}
+.cap-node__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-card);
+  font-weight: 600;
+  color: var(--text);
+}
+.cap-node__text {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+/* The inline arrow between nodes, shown only in the horizontal layout. */
+.cap-node__arrow {
+  display: none;
+  position: absolute;
+  right: -26px;
+  top: 46px;
+  color: var(--border-field);
+  z-index: 2;
+}
+
+@media (min-width: 820px) {
+  .cap__flow { display: block; }
+  .cap__stages { grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 44px); }
+  .cap-node__arrow { display: inline-flex; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cap__flow-dot { animation: none; opacity: 0; }
+}

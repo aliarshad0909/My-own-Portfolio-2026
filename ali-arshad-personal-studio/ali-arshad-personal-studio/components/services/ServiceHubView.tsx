@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { ServiceMotion } from "@/components/services/ServiceMotion";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { InteractiveArchitecture } from "@/components/services/InteractiveArchitecture";
 import { ServiceDemoShowcase } from "@/components/services/ServiceDemoShowcase";
@@ -626,6 +627,8 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
       ) : null}
 
       {renderBody()}
+
+      <ServiceMotion hubSlug={hub.slug} />
 
       <Faq
         id={`faq-${hub.slug}`}

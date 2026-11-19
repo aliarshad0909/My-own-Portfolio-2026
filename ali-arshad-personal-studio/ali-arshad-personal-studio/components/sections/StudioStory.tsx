@@ -1,15 +1,5 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
-import { Icon, type IconName } from "@/components/ui/Icon";
-
-const STRANDS: { icon: IconName; label: string }[] = [
-  { icon: "briefcase", label: "Business administration" },
-  { icon: "globe", label: "Supply chain management" },
-  { icon: "trending", label: "Brand management" },
-  { icon: "clapperboard", label: "Creative production" },
-  { icon: "code", label: "Web & software development" },
-  { icon: "bot", label: "Intelligent automation" },
-];
 
 /** Short personal introduction, with the portrait already in the repository. */
 export function StudioStory() {
@@ -40,15 +30,6 @@ export function StudioStory() {
             That range is the point. A sourcing problem and a slow checkout are the same problem seen from two ends, and having both perspectives in the
             same head is what removes the hand-offs where projects usually lose their shape.
           </p>
-
-          <ul className="intro__strands" aria-label="Background">
-            {STRANDS.map((s) => (
-              <li key={s.label}>
-                <Icon name={s.icon} size={16} />
-                <span>{s.label}</span>
-              </li>
-            ))}
-          </ul>
 
           <div className="intro__actions">
             <ButtonLink href="/about" variant="secondary" icon={null}>

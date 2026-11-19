@@ -7,7 +7,6 @@ const DISCIPLINES: { icon: IconName; label: string }[] = [
   { icon: "clapperboard", label: "Creative production" },
   { icon: "code", label: "Software development" },
   { icon: "bot", label: "AI automation" },
-  { icon: "briefcase", label: "Business strategy" },
 ];
 
 /**
@@ -33,13 +32,14 @@ export function Hero() {
           </h1>
 
           <p className="hero__lead">
-            One independent studio handling the full arc of a project: brand, interface, and the code and automation that run it.
+            Creative production, software development and AI automation from one
+            independent studio: the full arc of a project, without the hand-offs.
           </p>
 
           <div className="hero__actions">
-            <ButtonLink href="/work">Explore my work</ButtonLink>
+            <ButtonLink href="/work">Explore Work</ButtonLink>
             <ButtonLink href="/contact" variant="secondary" icon={null}>
-              Let&rsquo;s build something
+              Start a Project
             </ButtonLink>
           </div>
 
