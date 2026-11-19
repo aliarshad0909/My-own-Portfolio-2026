@@ -482,7 +482,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
     includes: [
       "Video editing and short-form social ad cutdowns (9:16, 4:5, 16:9)",
       "Motion graphics, product explainers and animated brand assets",
-      "Blender 3D product visualisation built from reproducible scene setups",
+      "Blender 3D product visualisation, built as reproducible scene code",
       "Web video preparation (H.264 +faststart, VP9, silent hover previews, posters)",
       "Channel-formatted campaign graphics aligned with your brand tokens",
     ],

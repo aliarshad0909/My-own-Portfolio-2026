@@ -271,7 +271,6 @@ describe("evidence integrity (declarations cannot bypass reality)", () => {
     assert.deepEqual(publishedWithoutLiveEvidence(), [], "Published page with no live evidencing build");
   });
 });
-
 describe("service-area matrix, pillar reconciliation & evidence tiers", () => {
   it("reconciles all 6 original business pillars and includes Creative Production & Brand & Growth nationwide", () => {
     assert.equal(BUSINESS_PILLARS.length, SERVICES.length, "pillar count matches lib/services.ts");

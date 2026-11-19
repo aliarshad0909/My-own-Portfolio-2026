@@ -1,14 +1,22 @@
 /**
  * Evidence integrity & location editorial-review checks.
  *
+ * The publication gate asks whether a page's `evidenceRequired` strings are all
+ * present in `evidenceHave`. That is necessary but not sufficient: declarations
+ * must never bypass reality. A `Published` page may cite only builds that
+ * genuinely exist, and its claimed evidence tier must match the actual record.
+ *
  * Explicitly distinguishes four evidence tiers so locally tested demonstrations
  * are NEVER equated with publicly deployed apps, verified professional work or
  * client outcomes:
  *
- *   1. `locally-tested-demo`      — status Demo Ready with no public `liveUrl`
- *   2. `publicly-deployed-demo`   — status Demo Ready with a real public `liveUrl`
+ *   1. `locally-tested-demo`        — status Demo Ready with no public `liveUrl`
+ *   2. `publicly-deployed-demo`     — status Demo Ready with a real public `liveUrl`
  *   3. `verified-professional-work` — Professional Work with status Verified/Published
- *   4. `verified-client-outcome`  — Consented client testimonial / verified outcome
+ *   4. `verified-client-outcome`    — Consented client testimonial / verified outcome
+ *
+ * Drafts may still reference in-progress work because they are noindex and do
+ * not render in production.
  *
  * Also enforces the mandatory editorial-review gate on all state, city and
  * service-area location pages so templated scaffolds can never be published.
@@ -74,7 +82,7 @@ export function evidenceViolations(): EvidenceViolation[] {
   const byUrl = new Map(KEYWORD_REGISTRY.map((k) => [k.primaryUrl, k]));
 
   for (const { page, state, slugs } of citedEvidence()) {
-    if (!isIndexable(state)) continue;
+    if (!isIndexable(state)) continue; // drafts may reference in-progress work
     const resolved: Project[] = [];
     for (const slug of slugs) {
       const project = getProject(slug);
