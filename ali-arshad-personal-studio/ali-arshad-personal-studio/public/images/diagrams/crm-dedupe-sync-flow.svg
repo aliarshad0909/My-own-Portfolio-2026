@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="CRM automation pipeline in n8n: capture webhook or booking event, validate and deduplicate contacts across a 30-day window, upsert contact and deal in HubSpot or Pipedrive with 3x bounded retry, route owner summary to Slack, and log dead-letter failures.">
+  <title>CRM Ingestion, Deduplication &amp; Upsert Pipeline</title>
+  <defs>
+    <linearGradient id="bg-crm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arrow-crm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#6f7e8a"/>
+    </marker>
+    <marker id="arrow-crm-c" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" rx="16" fill="url(#bg-crm)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="56" y="66" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">CRM AUTOMATION · BOUNDARY INTEGRITY</text>
+  <text x="56" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="30" font-weight="600" fill="#f9f6f0">Deduplicated Contact &amp; Deal Sync Pattern</text>
+  <line x1="56" y1="134" x2="1144" y2="134" stroke="#1e2830" stroke-width="1.5"/>
+
+  <!-- Step 1: Sources -->
+  <g transform="translate(56, 178)">
+    <rect width="234" height="232" rx="12" fill="#141d22" stroke="#2a3741" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">01 · CAPTURE</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Inbound Events</text>
+
+    <rect x="20" y="90" width="194" height="36" rx="7" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="113" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#d9d7d2">Next.js contact forms</text>
+
+    <rect x="20" y="136" width="194" height="36" rx="7" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="159" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#d9d7d2">Booked call webhooks</text>
+
+    <rect x="20" y="182" width="194" height="36" rx="7" fill="#10171c" stroke="#26323b"/>
+    <text x="34" y="205" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="#d9d7d2">Stripe billing events</text>
+  </g>
+
+  <path d="M290 294 H340" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arrow-crm)"/>
+
+  <!-- Step 2: Validate & Dedupe -->
+  <g transform="translate(348, 178)">
+    <rect width="248" height="232" rx="12" fill="#141d22" stroke="#354652" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">02 · CLEANSE</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Validate &amp; Dedupe</text>
+
+    <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">• Lowercase &amp; trim email</text>
+    <text x="20" y="136" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">• Reject spam / honeypot</text>
+    <text x="20" y="166" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">• Lookup existing CRM ID</text>
+    <text x="20" y="196" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#a9abb2">• 30-day duplicate guard</text>
+  </g>
+
+  <path d="M596 294 H646" stroke="#6f7e8a" stroke-width="2" fill="none" marker-end="url(#arrow-crm)"/>
+
+  <!-- Step 3: Upsert CRM -->
+  <g transform="translate(654, 178)">
+    <rect width="234" height="232" rx="12" fill="#171e25" stroke="#354652" stroke-width="1.5"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">03 · UPSERT</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">CRM Write</text>
+
+    <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">HubSpot · Pipedrive</text>
+    <text x="20" y="132" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#d9d7d2">Airtable · Custom API</text>
+
+    <rect x="20" y="156" width="194" height="54" rx="8" fill="#10171c" stroke="#2c3a44"/>
+    <text x="34" y="179" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#f9f6f0">Bounded retry ×3</text>
+    <text x="34" y="199" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#a9abb2">Handles 429 rate limits</text>
+  </g>
+
+  <path d="M888 294 H934" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrow-crm-c)"/>
+
+  <!-- Step 4: Rep Handoff -->
+  <g transform="translate(942, 178)">
+    <rect width="202" height="232" rx="12" fill="#1c1818" stroke="#ff7a5c" stroke-width="1.8" stroke-dasharray="6 4"/>
+    <text x="20" y="36" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">04 · OWNER</text>
+    <text x="20" y="68" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f9f6f0">Rep Hand-Off</text>
+    <text x="20" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#e6dedb">Assigns owner by</text>
+    <text x="20" y="132" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#e6dedb">territory or scope and</text>
+    <text x="20" y="158" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14.5" fill="#e6dedb">posts context to Slack.</text>
+    <rect x="20" y="182" width="162" height="32" rx="16" fill="#ff7a5c" fill-opacity="0.16"/>
+    <text x="36" y="203" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#ff7a5c">Clean deal history</text>
+  </g>
+
+  <!-- Branches below -->
+  <path d="M472 410 V496" stroke="#6f7e8a" stroke-width="1.8" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow-crm)"/>
+  <path d="M771 410 V496" stroke="#ff7a5c" stroke-width="1.8" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow-crm-c)"/>
+
+  <!-- Bottom Left: Rejection -->
+  <g transform="translate(56, 504)">
+    <rect width="528" height="156" rx="12" fill="#12181e" stroke="#26323b" stroke-width="1.5"/>
+    <text x="24" y="40" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" letter-spacing="1.4" fill="#a9abb2">INVALID OR DUPLICATE PATH</text>
+    <text x="24" y="74" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Blocked Before Polluting the Pipeline</text>
+    <text x="24" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#a9abb2">Malformed payloads return HTTP 422; repeat submissions update</text>
+    <text x="24" y="130" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#a9abb2">the existing contact record instead of splitting deal history.</text>
+  </g>
+
+  <!-- Bottom Right: Error Queue -->
+  <g transform="translate(616, 504)">
+    <rect width="528" height="156" rx="12" fill="#12181e" stroke="#4a2c26" stroke-width="1.5"/>
+    <text x="24" y="40" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">API OUTAGE / DEAD-LETTER PATH</text>
+    <text x="24" y="74" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="18" font-weight="600" fill="#f9f6f0">Zero Silently Dropped Inquiries</text>
+    <text x="24" y="106" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#a9abb2">If all retries fail, the raw payload and error status route to an</text>
+    <text x="24" y="130" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#a9abb2">alert channel and replay log so no lead disappears overnight.</text>
+  </g>
+</svg>
+

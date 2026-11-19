@@ -12,6 +12,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "Google Workspace Automation with n8n (Sheets, Gmail, Drive)",
       h1: "Google Workspace automation",
       lead: "Automate Gmail triage, Google Sheets reporting, Drive folder provisioning and Docs generation using reliable n8n workflows instead of brittle Apps Script hacks.",
+      heroVisual: {
+        src: "/images/diagrams/google-workspace-n8n-flow.svg",
+        alt: "Architecture diagram showing n8n connecting cron and webhook triggers through JavaScript schema validation to Google Sheets, Drive, Docs and human-reviewed Gmail drafts",
+        width: 1200,
+        height: 720,
+        caption: "Illustrative Google Workspace & n8n workflow architecture",
+        darkDiagram: true,
+      },
       body: [
         "Most small and mid-sized teams already run their operations inside Gmail, Google Sheets and Google Drive. The bottleneck is rarely the tools themselves — it is the manual copying between inboxes, spreadsheets, CRMs and folders.",
         "Using n8n, Google Workspace connects cleanly to your forms, billing systems and databases with explicit schema checks, scheduled reconciliation and version-controlled logic you can inspect and own.",
@@ -54,6 +62,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "CRM Automation Services (HubSpot, Pipedrive, Custom Webhooks)",
       h1: "CRM automation",
       lead: "Keep HubSpot, Pipedrive or Airtable clean automatically — deduplicated contacts, accurate deal stages, owner routing and instant context across your stack.",
+      heroVisual: {
+        src: "/images/diagrams/crm-dedupe-sync-flow.svg",
+        alt: "CRM automation pipeline diagram illustrating webhook capture, email normalisation, 30-day deduplication, 3x retried CRM upsert and Slack owner routing",
+        width: 1200,
+        height: 720,
+        caption: "Illustrative CRM validation, deduplication & retry flow",
+        darkDiagram: true,
+      },
       body: [
         "CRMs fail when updating them feels like a second job. Reps skip fields, web forms create duplicate contacts, and leadership stops trusting pipeline reports.",
         "CRM automation removes manual data entry at the boundaries: every inbound lead, booked meeting, invoice event or support ticket syncs cleanly with retries, deduplication and clear failure logging.",
@@ -96,6 +112,15 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "Automated Lead Qualification Workflows (n8n & AI)",
       h1: "Lead qualification automation",
       lead: "Validate, score, deduplicate and route inbound leads automatically on trigger — so high-intent inquiries reach sales quickly while spam and low-fit requests stay out of the way.",
+      heroVisual: {
+        src: "/images/projects/n8n-lead-automation/workflow-diagram.svg",
+        alt: "Diagram of the 15-node inbound lead qualification n8n workflow showing validation, 30-day deduplication, 0-100 scoring, CRM routing and human approval",
+        width: 1180,
+        height: 560,
+        caption: "Demo diagram: 15-node inbound lead qualification workflow",
+        projectSlug: "inbound-lead-qualification-workflow",
+        diagram: true,
+      },
       body: [
         "Speed and relevance decide most inbound service and B2B sales. When every inquiry lands in the same inbox without filtering or scoring, high-intent buyers wait behind incomplete or off-scope messages.",
         "My Inbound Lead Qualification demonstration shows this pattern in 15 n8n nodes: 22 local unit tests execute the workflow's actual JavaScript scoring, deduplication and routing code (orchestration has not been run on a hosted n8n server).",
@@ -138,6 +163,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "Business Process Automation Services for Growing Teams",
       h1: "Business process automation",
       lead: "Remove repetitive operational glue work across sales, onboarding, reporting and inventory — automating the rule-based steps while keeping judgement with people.",
+      heroVisual: {
+        src: "/images/projects/supply-chain/cover.webp",
+        alt: "Meridian operational dashboard demonstration showing computed stock balances, purchase-order status and reorder exception flags",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Meridian operational ledger & exception view",
+        projectSlug: "meridian-inventory-operations",
+      },
       body: [
         "Most growing companies accumulate hidden manual processes: exporting orders, updating client folders, chasing overdue approvals and reconciling status across four apps. Each task takes ten minutes; together they consume days every week.",
         "Good process automation starts by fixing and simplifying the workflow first, then wiring reliable n8n pipelines and lightweight internal web tools so operations scale without proportional admin headcount.",
@@ -183,6 +216,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "AI Customer Support Agent Development (Grounded & Auditable)",
       h1: "AI customer support agents",
       lead: "An inspectable support agent grounded strictly in your own knowledge base — citing source articles accurately and escalating to a human whenever confidence drops.",
+      heroVisual: {
+        src: "/images/projects/support-agent/conversation.webp",
+        alt: "Tideline support agent demonstration answering a customer refund inquiry while citing the matching knowledge-base policy article",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Tideline support reply citing source policy",
+        projectSlug: "tideline-support-agent",
+      },
       body: [
         "Customer support automation lives or dies on one failure mode: a confident wrong answer. A bot that improvises refund windows or shipping exceptions creates tickets instead of resolving them.",
         "The Tideline support-agent demonstration proves a safer pattern: inspectable BM25 retrieval over your documentation, bidirectional synonym expansion, verbatim source quoting where strictness matters, and a tuned confidence floor that hands off cleanly.",
@@ -224,6 +265,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "AI Sales & Voice Qualification Agent Development",
       h1: "AI sales qualification agents",
       lead: "Capture and qualify inbound sales inquiries around the clock over voice or chat using deterministic slot filling, loop guards and clean CRM hand-offs.",
+      heroVisual: {
+        src: "/images/projects/voice-sales-agent/cover.webp",
+        alt: "Kestrel voice qualification agent demonstration showing live slot capture, conversation transcript and explicit voice or text mode indicator",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Kestrel voice & chat qualification interface",
+        projectSlug: "kestrel-voice-sales-agent",
+      },
       body: [
         "Most inbound leads do not want to fill out a twelve-field form at 9 PM — yet leaving them with a generic voicemail loses momentum. A scoped qualification agent bridges that gap by collecting the key discovery facts cleanly.",
         "Built on the pattern demonstrated in the Kestrel Voice Qualification Agent (48 automated tests), the conversation runs on an explicit state machine with browser speech support where available, honest fallback to typing where not, and a structured summary handed straight to your sales team.",
@@ -265,6 +314,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "RAG & Knowledge-Base AI Assistant Development",
       h1: "Knowledge-base & RAG assistants",
       lead: "Turn internal SOPs, product manuals and help centres into a fast, cited Q&A interface with inspectable retrieval scoring and explicit boundaries.",
+      heroVisual: {
+        src: "/images/projects/support-agent/cover.webp",
+        alt: "Tideline knowledge-base retrieval interface demonstration displaying suggested questions alongside indexed help articles",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Tideline BM25 knowledge-base retrieval view",
+        projectSlug: "tideline-support-agent",
+      },
       body: [
         "Retrieval-Augmented Generation (RAG) is only as reliable as its retrieval step. When teams bolt an LLM onto unindexed PDFs without scoring floors or citations, users quickly stop trusting the output.",
         "I build knowledge-base assistants from the retrieval layer up: clean document chunking, lexical BM25 or hybrid semantic search, transparent source links and strict abstention when your documentation does not cover the question.",
@@ -309,6 +366,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "Hire a Next.js Developer (App Router, TypeScript, SEO)",
       h1: "Next.js development",
       lead: "Production Next.js App Router applications built with React, TypeScript and technical SEO — engineered by an independent studio that runs its own site on the exact same stack.",
+      heroVisual: {
+        src: "/images/projects/commerce/shop.webp",
+        alt: "Tessera Clayworks storefront demonstration showing filtered product catalogue, glaze swatches and responsive grid layout",
+        width: 1600,
+        height: 900,
+        caption: "Demo build: Tessera storefront catalogue & live filtering",
+        projectSlug: "tessera-clayworks-storefront",
+      },
       body: [
         "Next.js shines when Server Components, static generation, metadata APIs and lean CSS are used deliberately rather than piled under heavy client-side abstractions.",
         "This website itself — including its App Router pages, dynamic sitemap, canonical URLs, JSON-LD builders and interactive tools — demonstrates how cleanly I structure Next.js production builds.",
@@ -351,6 +416,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "Custom React Application Development (TypeScript & Testing)",
       h1: "React application development",
       lead: "Interactive, stateful React and TypeScript web applications built with clean domain separation, zero-drift arithmetic and end-to-end browser verification.",
+      heroVisual: {
+        src: "/images/projects/commerce/product.webp",
+        alt: "Tessera Clayworks React product view demonstration showing dynamic glaze selection, size variants, stock limits and parametric SVG illustration",
+        width: 1600,
+        height: 900,
+        caption: "Demo build: stateful React variant & stock controls",
+        projectSlug: "tessera-clayworks-storefront",
+      },
       body: [
         "When an interface carries real state — product variants, multi-step checkouts, financial ledgers, live filters or interactive calculators — keeping business rules tangled inside React components quickly becomes unmaintainable.",
         "Every interactive application in this portfolio separates pure TypeScript domain logic from the React rendering layer, backed by Node.js unit tests and Playwright browser checks.",
@@ -393,6 +466,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "MVP Development for Startups (Next.js, React, TypeScript)",
       h1: "MVP development for startups",
       lead: "A working, testable first version built to prove your core value proposition to early users and investors — without spending six months over-building version one.",
+      heroVisual: {
+        src: "/images/projects/security-dashboard/cover.webp",
+        alt: "Sentryline web application demonstration showing a dark-mode multi-view interface with grade trends and explicit scope notice",
+        width: 1500,
+        height: 1148,
+        caption: "Demo build: Sentryline focused TypeScript & React app",
+        projectSlug: "sentryline-security-posture",
+      },
       body: [
         "An MVP is not a buggy, half-finished version of twenty features. It is a dependable, complete version of the single workflow that proves whether customers care.",
         "Working directly with founders, I help cut non-essential scope before writing code, ship reviewable weekly milestones in Next.js and TypeScript, and hand over a clean codebase your future engineers will not want to throw away.",
@@ -438,6 +519,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "Custom Inventory & Purchasing Software Development",
       h1: "Custom inventory software",
       lead: "Replace fragile stock spreadsheets with append-only movement ledgers, purchase-order receiving, warehouse transfers and reorder logic that never drifts.",
+      heroVisual: {
+        src: "/images/projects/supply-chain/cover.webp",
+        alt: "Meridian inventory software demonstration displaying on-hand stock, on-order quantities and reorder alerts computed from an append-only ledger",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Meridian append-only inventory ledger",
+        projectSlug: "meridian-inventory-operations",
+      },
       body: [
         "Most inventory headaches start when stock is stored as an editable number in a spreadsheet or rigid app. One double-click, partial supplier shipment or warehouse transfer leaves your recorded stock contradicting the shelves — with no trail showing why.",
         "Built on the architecture proven in the Meridian Inventory & Purchasing Operations demonstration (58 automated tests over 1,265 movements), stock is computed directly from an append-only ledger so balances, valuations and reorder flags agree by construction.",
@@ -479,6 +568,14 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       title: "Custom React Analytics Dashboard Development",
       h1: "Analytics dashboards",
       lead: "Fast, accessible React and TypeScript analytics dashboards where KPI tiles, SVG trend charts, channel breakdowns and CSV exports always derive from one source.",
+      heroVisual: {
+        src: "/images/projects/analytics-dashboard/detail.webp",
+        alt: "Northwind revenue analytics dashboard demonstration showing custom SVG channel breakdowns beside a sortable product performance table",
+        width: 1500,
+        height: 1055,
+        caption: "Demo build: Northwind SVG breakdowns & sortable table",
+        projectSlug: "northwind-analytics-dashboard",
+      },
       body: [
         "Off-the-shelf BI embeds often feel slow, clunky and visually disconnected from your product. Worse, when headline tiles and tables run separate queries, executives spot contradictions within five minutes.",
         "Demonstrated in the Northwind Revenue Analytics Dashboard (7,146 orders, zero charting-library bloat, 29 automated tests), I build crisp, accessible analytics interfaces with pure derivation logic, exact previous-period comparisons and screen-reader-ready data tables.",

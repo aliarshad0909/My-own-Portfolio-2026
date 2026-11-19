@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { LocationsBrowser } from "@/components/locations/LocationsBrowser";
 import { ContactCTA } from "@/components/sections/ContactCTA";
@@ -67,6 +68,23 @@ export default function LocationsPage() {
         eyebrow="US Coverage · Remote Studio"
         title="Working remotely across all 50 US states"
         lead="Web engineering, n8n workflow automation, AI agents, brand systems and sourcing coordination delivered remotely — with one accountable point of contact wherever your team sits."
+        aside={
+          <div className="hub-hero-card">
+            <div className="hub-hero-card__frame hub-hero-card__frame--dark-diagram">
+              <Image
+                src="/images/diagrams/remote-us-delivery-zones.svg"
+                alt="Schematic of remote studio delivery across Pacific, Mountain, Central and Eastern US time zones with staged async reviews and zero physical branch offices"
+                width={1200}
+                height={720}
+                priority
+                sizes="(min-width: 1024px) 520px, 92vw"
+              />
+            </div>
+            <div className="hub-hero-card__caption">
+              <span>Remote US time-zone overlap — zero fabricated offices</span>
+            </div>
+          </div>
+        }
       />
 
       <section className="section section--tight" aria-labelledby="remote-model">

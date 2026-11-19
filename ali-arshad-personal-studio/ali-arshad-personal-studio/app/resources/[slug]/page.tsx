@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
@@ -150,6 +151,33 @@ export default async function ResourcePage({ params }: Props) {
               <pre key={i} className="article-code">
                 <code>{block.text}</code>
               </pre>
+            );
+          }
+          if (block.type === "figure") {
+            const frameClass = [
+              "article-figure__frame",
+              block.diagram ? "article-figure__frame--diagram" : "",
+              block.darkDiagram ? "article-figure__frame--dark-diagram" : "",
+            ]
+              .filter(Boolean)
+              .join(" ");
+            return (
+              <figure key={i} className="article-figure">
+                <div className={frameClass}>
+                  <Image
+                    src={block.src}
+                    alt={block.alt}
+                    width={block.width}
+                    height={block.height}
+                    loading="lazy"
+                    sizes="(min-width: 900px) 760px, 94vw"
+                  />
+                </div>
+                <figcaption className="article-figure__caption">
+                  <span>{block.caption}</span>
+                  {block.href ? <Link href={block.href}>{block.linkLabel ?? "Inspect demonstration"}</Link> : null}
+                </figcaption>
+              </figure>
             );
           }
           if (block.type === "table") {
