@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node scripts/run-tests.mjs",
     "seo:csv": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/export-keyword-registry.mjs",
-    "seo:audit": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-audit.mjs"
+    "seo:audit": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-audit.mjs",
+    "seo:report": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-report.mjs"
   },
   "dependencies": {
     "next": "^16.4.1",
