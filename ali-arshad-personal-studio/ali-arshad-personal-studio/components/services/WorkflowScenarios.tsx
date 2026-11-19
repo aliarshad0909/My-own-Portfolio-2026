@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { Icon } from "@/components/ui/Icon";
 
 export type WorkflowScenario = {
@@ -29,9 +29,22 @@ type Props = {
  */
 export function WorkflowScenarios({ eyebrow = "In practice", title, lead, scenarios }: Props) {
   const [activeId, setActiveId] = useState<string>(scenarios[0]?.id ?? "");
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const current = scenarios.find((s) => s.id === activeId) ?? scenarios[0];
 
   if (!current) return null;
+
+  const onTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next = index;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = (index + 1) % scenarios.length;
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = (index - 1 + scenarios.length) % scenarios.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = scenarios.length - 1;
+    else return;
+    e.preventDefault();
+    setActiveId(scenarios[next].id);
+    tabRefs.current[next]?.focus();
+  };
 
   return (
     <div className="scenarios">
@@ -42,18 +55,23 @@ export function WorkflowScenarios({ eyebrow = "In practice", title, lead, scenar
       </div>
 
       <div className="scenarios__tabs" role="tablist" aria-label={title}>
-        {scenarios.map((s) => {
+        {scenarios.map((s, idx) => {
           const selected = s.id === current.id;
           return (
             <button
               key={s.id}
+              ref={(el) => {
+                tabRefs.current[idx] = el;
+              }}
               type="button"
               role="tab"
               aria-selected={selected}
+              tabIndex={selected ? 0 : -1}
               id={`tab-${s.id}`}
               aria-controls={`panel-${s.id}`}
               className={`scenarios__tab ${selected ? "is-active" : ""}`.trim()}
               onClick={() => setActiveId(s.id)}
+              onKeyDown={(e) => onTabKeyDown(e, idx)}
             >
               <span className="scenarios__tab-cat">{s.category}</span>
               <span className="scenarios__tab-label">{s.label}</span>
@@ -111,3 +129,4 @@ export function WorkflowScenarios({ eyebrow = "In practice", title, lead, scenar
     </div>
   );
 }
+

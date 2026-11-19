@@ -159,7 +159,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       },
     ],
     integrationsHeading: "Core stack & engineering standards",
-    integrationsLead: "The exact stack running this portfolio and every live demonstration build in the work archive.",
+    integrationsLead: "The exact stack running this portfolio and the locally tested demonstration builds in the work archive.",
     integrations: [
       {
         category: "Frontend & Framework",
@@ -215,29 +215,29 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       "Every demonstration below is written in TypeScript and React with automated unit and browser suites — fictional brands, real working software.",
     toolCallout: {
       eyebrow: "Free planning tool",
-      title: "Estimate a realistic budget band in under a minute",
-      text: "Select your project type, screen count, integrations, design depth and timeline for an honest planning range — no email gate.",
+      title: "Model an illustrative budget band in your browser",
+      text: "Select your project type, screen count, integrations, design depth and timeline for an illustrative planning range — not a quote, no email gate.",
       href: "/tools/web-project-estimator",
       cta: "Open Web Project Estimator",
     },
     processHeading: "From first call to clean hand-off",
-    processLead: "Staged delivery means you review working software every week instead of waiting for a single big reveal.",
+    processLead: "Staged delivery means you review working software at each milestone instead of waiting for a single big reveal.",
     process: [
       {
         label: "Discovery & scope",
-        cadence: "Week 1",
+        cadence: "Phase 1",
         detail: "A focused conversation followed by a plain-language written scope: deliverables, sequence, assumptions and cost.",
         deliverable: "Output: Signed-off scope & milestone plan",
       },
       {
         label: "Interface & data model",
-        cadence: "Week 1–2",
+        cadence: "Phase 2",
         detail: "Agree on key page layouts, component tokens and core data structures before writing application code.",
         deliverable: "Output: Design direction & typed domain schema",
       },
       {
         label: "Staged build & testing",
-        cadence: "Weeks 2–5",
+        cadence: "Phase 3",
         detail: "Ship reviewable preview links at each milestone with unit tests and browser checks covering critical paths.",
         deliverable: "Output: Staging URLs & verified test suite",
       },
@@ -308,7 +308,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     ],
     problemsHeading: "Why most off-the-shelf chatbots erode customer trust",
     problemsLead:
-      "Businesses want faster support and 24/7 qualification — without an unsupervised bot inventing refund policies or trapping buyers in loops.",
+      "Businesses want faster support and after-hours qualification — without an unsupervised bot inventing refund policies or trapping buyers in loops.",
     problems: [
       {
         quote: "Our support inbox answers the same twenty policy questions every day.",
@@ -488,7 +488,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
             "Qualified summary lands in the CRM and Slack ready for human follow-up.",
           ],
           tools: ["State Machine", "Web Speech / Voice API", "TypeScript", "n8n", "HubSpot"],
-          humanBoundary: "Quotes, discovery advice and closing conversations stay 100% with your sales team.",
+          humanBoundary: "Quotes, discovery advice and closing conversations stay directly with your sales team.",
         },
         {
           id: "agent-internal",
@@ -551,7 +551,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       },
       {
         sector: "Fleet, Logistics & Field Services",
-        title: "24/7 inbound quote & dispatch intake",
+        title: "After-hours inbound quote & dispatch intake",
         detail: "Capture fleet size, route needs and urgency reliably — modeled directly in the Kestrel voice qualification build.",
         href: "/industries/logistics",
       },
@@ -561,27 +561,27 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
         detail: "Collect project context before discovery calls and route qualified inquiries straight into your CRM.",
       },
     ],
-    demoHeading: "Two working agent demonstrations — fully inspectable",
+    demoHeading: "Two locally tested agent demonstrations — fully inspectable",
     demoLead:
-      "Both builds run under fictional brands, expose their exact retrieval or state-machine mechanics, and carry full automated test suites.",
+      "Both builds run under fictional brands, expose their exact retrieval or state-machine mechanics, and carry full automated local test suites (neither is publicly deployed).",
     processHeading: "How an AI agent project runs",
     processLead: "Tightly scoped, grounded against real questions, and guarded before launch.",
     process: [
       {
         label: "Scope & guardrails",
-        cadence: "Days 1–3",
+        cadence: "Phase 1",
         detail: "Review real customer transcripts, define exact in-scope topics, and set explicit escalation rules.",
         deliverable: "Output: Scope charter & sample question set",
       },
       {
         label: "Ground & structure",
-        cadence: "Week 1",
+        cadence: "Phase 2",
         detail: "Clean and index your knowledge base or model the qualification state machine and extraction slots.",
         deliverable: "Output: Testable retrieval / state engine",
       },
       {
         label: "Build & boundary test",
-        cadence: "Weeks 2–3",
+        cadence: "Phase 3",
         detail: "Build the UI and CRM/n8n hand-off, then test both in-scope accuracy and out-of-scope escalation.",
         deliverable: "Output: Staging agent & passing test suite",
       },
@@ -589,7 +589,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
         label: "Launch & tune",
         cadence: "Launch",
         detail: "Deploy with transcript logging so you can review escalated queries and refine thresholds over time.",
-        deliverable: "Output: Live agent, docs & tuning playbook",
+        deliverable: "Output: Production agent, docs & tuning playbook",
       },
     ],
     relatedLinks: [
@@ -726,7 +726,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
           id: "ecom-storefront",
           category: "Custom Storefront",
           label: "Brand-led headless or custom shop",
-          summary: "Pair editorial presentation with instant filtering, real variant previews and a checkout flow built for mobile buyers.",
+          summary: "Pair editorial presentation with responsive filtering, real variant previews and a checkout flow built for mobile buyers.",
           before: [
             "Generic theme looks identical to ten competitors in the same niche.",
             "Variant changes fail to reflect real stock or visual finish clearly.",
@@ -774,7 +774,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
             "Automated unit and browser tests lock every discount and shipping edge case.",
           ],
           tools: ["TypeScript", "Node.js Test Runner", "Playwright", "Stripe"],
-          humanBoundary: "Finance and marketing set promotional rules; code guarantees exact arithmetic.",
+          humanBoundary: "Finance and marketing set promotional rules; unit-tested integer-cent code handles the arithmetic.",
         },
       ],
     },
@@ -784,7 +784,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       {
         category: "Storefront Engineering",
         items: ["Next.js", "React 19", "TypeScript", "Accessible Forms", "Parametric SVG / Media"],
-        note: "Sub-second navigation and zero layout shift on product pages.",
+        note: "Lean client payloads and disciplined layout sizing on product pages.",
       },
       {
         category: "Payments & Headless Commerce",
@@ -840,27 +840,27 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     process: [
       {
         label: "Commerce scope",
-        cadence: "Week 1",
+        cadence: "Phase 1",
         detail: "Map products, variants, shipping tiers, tax rules, payment provider and back-office integrations.",
         deliverable: "Output: Written commerce spec & platform choice",
       },
       {
         label: "Storefront design",
-        cadence: "Weeks 1–2",
+        cadence: "Phase 2",
         detail: "Design product pages, filtering UX, cart drawer and mobile checkout around your brand identity.",
         deliverable: "Output: Interactive visual system & page layouts",
       },
       {
         label: "Rules, storefront & admin",
-        cadence: "Weeks 3–6",
+        cadence: "Phase 3",
         detail: "Build pricing/stock logic with unit tests, wire storefront and checkout, and test end-to-end journeys.",
         deliverable: "Output: Staging store & Playwright test suite",
       },
       {
         label: "Launch & QA",
         cadence: "Launch",
-        detail: "Verify live payment webhooks, SEO redirects, canonicals, mobile performance and team hand-off.",
-        deliverable: "Output: Live store & operator documentation",
+        detail: "Verify payment webhooks, SEO redirects, canonicals, mobile performance and team hand-off.",
+        deliverable: "Output: Production store & operator documentation",
       },
     ],
     relatedLinks: [
@@ -1012,7 +1012,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
             "Sortable product table with one-click CSV export matching the view.",
           ],
           tools: ["Next.js", "React 19", "TypeScript", "Custom SVG", "PostgreSQL"],
-          humanBoundary: "Founders and finance interpret margin shifts; the dashboard guarantees reconciled math.",
+          humanBoundary: "Founders and finance interpret margin shifts; shared derivation functions keep tiles and tables aligned.",
         },
         {
           id: "dash-inventory",
@@ -1142,27 +1142,27 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     process: [
       {
         label: "Questions & audit",
-        cadence: "Week 1",
+        cadence: "Phase 1",
         detail: "Audit your current spreadsheets/sources and lock the exact definitions for every metric and status.",
         deliverable: "Output: Metric spec & data source audit",
       },
       {
         label: "Model & rules",
-        cadence: "Week 2",
+        cadence: "Phase 2",
         detail: "Build and unit-test the derivation or ledger engine against realistic sample data.",
         deliverable: "Output: Tested analytics/ledger module",
       },
       {
         label: "Views & interactions",
-        cadence: "Weeks 3–4",
+        cadence: "Phase 3",
         detail: "Build responsive KPI strips, SVG charts, sortable tables, operational actions and CSV export.",
         deliverable: "Output: Interactive staging dashboard",
       },
       {
         label: "Verify & deploy",
         cadence: "Launch",
-        detail: "Reconcile live numbers with your team, verify mobile/accessibility checks and deploy.",
-        deliverable: "Output: Live dashboard & calculation guide",
+        detail: "Reconcile figures with your team, verify mobile/accessibility checks and deploy.",
+        deliverable: "Output: Production dashboard & calculation guide",
       },
     ],
     relatedLinks: [
@@ -1388,19 +1388,19 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     process: [
       {
         label: "Positioning & audit",
-        cadence: "Week 1",
+        cadence: "Phase 1",
         detail: "Clarify audience, voice, visual territory and where current channels feel inconsistent.",
         deliverable: "Output: Creative direction brief",
       },
       {
         label: "Identity & tokens",
-        cadence: "Weeks 2–3",
+        cadence: "Phase 2",
         detail: "Develop mark, lockups, WCAG-checked colour palette and modular typography.",
         deliverable: "Output: Core identity & contrast report",
       },
       {
         label: "Real-world application",
-        cadence: "Weeks 3–4",
+        cadence: "Phase 3",
         detail: "Prove the system across real touchpoints: web hero, social templates and HTML email.",
         deliverable: "Output: Applied templates & landing preview",
       },
@@ -1555,8 +1555,8 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     },
     toolCallout: {
       eyebrow: "Free planning tool",
-      title: "Model your true landed cost in 30 seconds",
-      text: "Enter unit cost, quantity, freight, estimated duty rate, insurance and brokerage/handling fees to see your real per-unit landed cost and uplift factor immediately.",
+      title: "Model an illustrative landed cost in your browser",
+      text: "Enter unit cost, quantity, freight, estimated duty rate, insurance and brokerage/handling fees to inspect per-unit landed cost and uplift factor.",
       href: "/tools/landed-cost-calculator",
       cta: "Open Landed Cost Calculator",
     },
@@ -1710,25 +1710,25 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     process: [
       {
         label: "Define & check feasibility",
-        cadence: "Days 1–3",
+        cadence: "Phase 1",
         detail: "Clarify product spec, volume, target landed cost and any obvious regulatory or import constraints.",
         deliverable: "Output: Standardised RFQ pack",
       },
       {
         label: "Research & shortlist",
-        cadence: "Weeks 1–2",
+        cadence: "Phase 2",
         detail: "Identify and vet candidate suppliers, collect structured quotes and verify packaging specs.",
         deliverable: "Output: Shortlisted supplier matrix",
       },
       {
         label: "Model landed cost",
-        cadence: "Week 2–3",
+        cadence: "Phase 3",
         detail: "Normalise quotes across incoterms, freight weight, duty estimate and handling fees, then score relatively.",
         deliverable: "Output: Landed-cost workbook & ranked comparison",
       },
       {
         label: "Coordinate samples & hand-off",
-        cadence: "Ongoing / Launch",
+        cadence: "Launch / Ongoing",
         detail: "Coordinate sample rounds, follow up on milestones and hand clean docs to your freight forwarder and customs broker.",
         deliverable: "Output: Sample tracker & reusable costing tool",
       },
@@ -1908,7 +1908,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
           before: [
             "Every new colourway or packaging tweak requires another physical shoot.",
             "Inconsistent lighting across product photos makes catalogue grids look patchy.",
-            "Exploded or internal views are impossible with a camera.",
+            "Exploded or internal views are hard or impractical to capture with a physical camera.",
           ],
           after: [
             "Repeatable three-point lighting and spherical camera angles defined in code.",
@@ -1934,7 +1934,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
             "Drop-in ready for Next.js sites with prefers-reduced-motion respect.",
           ],
           tools: ["ffmpeg", "ffprobe", "Node.js", "Next.js MotionMedia"],
-          humanBoundary: "Final visual approval stays with the brand owner; tooling guarantees technical compliance.",
+          humanBoundary: "Final visual approval stays with the brand owner; automated ffprobe checks verify codec and dimension rules.",
         },
       ],
     },
@@ -2036,19 +2036,19 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     process: [
       {
         label: "Brief & shot list",
-        cadence: "Days 1–2",
+        cadence: "Phase 1",
         detail: "Align on message, target channels, aspect ratios, raw footage or 3D reference, and deliverables.",
         deliverable: "Output: Written shot list & scope",
       },
       {
         label: "Produce",
-        cadence: "Weeks 1–2",
+        cadence: "Phase 2",
         detail: "Edit footage, build motion graphics or construct the Blender lighting and material scene.",
         deliverable: "Output: First cut / preview frames",
       },
       {
         label: "Review & refine",
-        cadence: "Week 2",
+        cadence: "Phase 3",
         detail: "Focused feedback rounds using timestamped cuts and contact sheets to lock pacing and detail.",
         deliverable: "Output: Approved master",
       },
@@ -2093,3 +2093,4 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     },
   },
 };
+

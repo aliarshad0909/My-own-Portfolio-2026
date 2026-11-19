@@ -1,33 +1,104 @@
 /**
- * The service-area matrix: 6 core services × 51 jurisdictions = 306 potential
- * service-area pages, defined entirely as structured data.
+ * Nationwide service-area matrix & business-pillar reconciliation.
  *
- * This is deliberately NOT 306 published pages. Every combination has a planned
- * URL, a unique keyword intent and a publication state, but each defaults to
- * `Researched` — planned only, no route rendered anywhere. A combination earns
- * a page the same way everything else does: real, geographically useful content
- * and a genuine local signal, declared as evidence, then flipped to Published.
+ * Clearly distinguishes two layers that must never be conflated:
+ *   1. The 6 original studio business pillars (`BUSINESS_PILLARS`, matching
+ *      `lib/services.ts` 1-to-1):
+ *        - Creative Production
+ *        - Web & Software Development
+ *        - AI Agents & Automation
+ *        - Brand Management & Growth
+ *        - Global Sourcing & Supply Chain
+ *        - Specialist Technical Collaboration (partner-delivered via /studio-network;
+ *          deliberately excluded from local geo pages)
+ *   2. The 8 commercial nationwide service-hub tracks (`NATIONWIDE_SERVICES`)
+ *      covering ALL 5 direct business pillars (including Creative Production and
+ *      Brand & Growth) plus high-intent SEO specializations:
+ *        - Pillar hubs (`tier: "pillar"`): web-development, creative-production,
+ *          branding, global-sourcing
+ *        - SEO specialization hubs (`tier: "seo-specialization"`): n8n-automation,
+ *          ai-agents, ecommerce-development, business-dashboards
  *
- * Route shape: `/services/<service>/in/<state>` (and, for selected metros,
- * `/services/<service>/in/<state>/<city>`). The `/in/` segment keeps these
- * distinct from the existing `/services/<hub>/<spoke>` and
- * `/locations/<state>/<city>` routes, so there is no collision.
+ * That produces 8 × 51 = 408 planned state × service combinations (preserving
+ * the original 6 × 51 = 306 commercial SEO subset in `CORE_SERVICES` while
+ * ensuring Creative Production and Brand & Growth are full citizens of the
+ * long-term nationwide architecture).
  *
- * Duplicate-intent detection (see `duplicateIntentConflicts`) guarantees two
- * pages never chase the same (service, place) query: a combination whose intent
- * collides with another matrix entry or with a keyword-registry row is reported
- * and must stay blocked, never published.
+ * ANTI-DOORWAY & EDITORIAL REVIEW GATE:
+ * ZERO service-area pages are published today. Every entry defaults to
+ * `Researched` (or preview-only `NeedsEvidence` for the pilot scaffolds). A
+ * page may flip to `Published` ONLY when all three hold:
+ *   1. A genuine local signal exists
+ *   2. Template scaffold copy has been replaced with unique, substantial copy
+ *   3. `editorialReview` confirms reviewed, locally differentiated content
  */
 
 import type { PublicationState } from "@/lib/seo/publication";
-import { US_STATES, type UsState } from "@/lib/geo/states";
+import { EDITORIAL_REVIEW, US_STATES, type EditorialReviewGate, type UsState } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 import { KEYWORD_REGISTRY } from "@/lib/seo/keyword-registry";
 
-/** The six core, commercially geo-relevant services that form the matrix. */
-export type CoreService = {
+export type ServiceTier = "pillar" | "seo-specialization";
+
+/** Explicit 1-to-1 reconciliation with the 6 business pillars in lib/services.ts. */
+export type BusinessPillarMapping = {
+  /** Matches `Service.id` in lib/services.ts. */
+  pillarId: string;
+  label: string;
+  /** Published `/services/<slug>` hubs belonging to this business pillar. */
+  hubSlugs: string[];
+  /** Whether this pillar participates in the nationwide geo matrix. */
+  inNationwideMatrix: boolean;
+  note?: string;
+};
+
+export const BUSINESS_PILLARS: BusinessPillarMapping[] = [
+  {
+    pillarId: "creative-production",
+    label: "Creative Production",
+    hubSlugs: ["creative-production"],
+    inNationwideMatrix: true,
+  },
+  {
+    pillarId: "web-development",
+    label: "Web & Software Development",
+    hubSlugs: ["web-development", "ecommerce-development", "business-dashboards"],
+    inNationwideMatrix: true,
+  },
+  {
+    pillarId: "ai-automation",
+    label: "AI Agents & Automation",
+    hubSlugs: ["n8n-automation", "ai-agents"],
+    inNationwideMatrix: true,
+  },
+  {
+    pillarId: "brand-growth",
+    label: "Brand Management & Growth",
+    hubSlugs: ["branding"],
+    inNationwideMatrix: true,
+  },
+  {
+    pillarId: "global-sourcing",
+    label: "Global Sourcing & Supply Chain",
+    hubSlugs: ["global-sourcing"],
+    inNationwideMatrix: true,
+  },
+  {
+    pillarId: "specialist-collaboration",
+    label: "Specialist Technical Collaboration",
+    hubSlugs: [],
+    inNationwideMatrix: false,
+    note: "Partner-delivered work coordinated via /studio-network; deliberately excluded from local geo pages.",
+  },
+];
+
+export type NationwideService = {
   /** Matches a hub slug under /services. */
   slug: string;
+  /** Parent business pillar id in lib/services.ts. */
+  pillarId: string;
+  /** Distinguishes primary business-pillar hubs from SEO specialization hubs. */
+  tier: ServiceTier;
   /** Normalised concept used for duplicate-intent signatures. */
   concept: string;
   /** Noun phrase for the geo keyword: "<phrase> in <State>". */
@@ -36,22 +107,40 @@ export type CoreService = {
   label: string;
 };
 
-export const CORE_SERVICES: CoreService[] = [
-  { slug: "web-development", concept: "web-development", keywordPhrase: "web development services", label: "Web development" },
-  { slug: "n8n-automation", concept: "automation", keywordPhrase: "n8n automation services", label: "n8n automation" },
-  { slug: "ai-agents", concept: "ai-agents", keywordPhrase: "ai agent development", label: "AI agents" },
-  { slug: "ecommerce-development", concept: "ecommerce", keywordPhrase: "ecommerce development", label: "Ecommerce development" },
-  { slug: "business-dashboards", concept: "dashboards", keywordPhrase: "business dashboard development", label: "Business dashboards" },
-  { slug: "global-sourcing", concept: "sourcing", keywordPhrase: "sourcing and supply chain support", label: "Global sourcing" },
+/** Backwards-compatible alias for NationwideService. */
+export type CoreService = NationwideService;
+
+/**
+ * All 8 commercial service tracks in the long-term nationwide architecture:
+ * all 5 direct business pillars (including Creative Production and Brand & Growth)
+ * plus focused SEO specializations.
+ */
+export const NATIONWIDE_SERVICES: NationwideService[] = [
+  { slug: "web-development", pillarId: "web-development", tier: "pillar", concept: "web-development", keywordPhrase: "web development services", label: "Web & application development" },
+  { slug: "creative-production", pillarId: "creative-production", tier: "pillar", concept: "creative-production", keywordPhrase: "creative production and video editing", label: "Creative production" },
+  { slug: "branding", pillarId: "brand-growth", tier: "pillar", concept: "brand-growth", keywordPhrase: "brand identity and growth services", label: "Brand & growth" },
+  { slug: "global-sourcing", pillarId: "global-sourcing", tier: "pillar", concept: "sourcing", keywordPhrase: "sourcing and supply chain support", label: "Global sourcing" },
+  { slug: "n8n-automation", pillarId: "ai-automation", tier: "seo-specialization", concept: "automation", keywordPhrase: "n8n automation services", label: "n8n automation" },
+  { slug: "ai-agents", pillarId: "ai-automation", tier: "seo-specialization", concept: "ai-agents", keywordPhrase: "ai agent development", label: "AI agents" },
+  { slug: "ecommerce-development", pillarId: "web-development", tier: "seo-specialization", concept: "ecommerce", keywordPhrase: "ecommerce development", label: "Ecommerce development" },
+  { slug: "business-dashboards", pillarId: "web-development", tier: "seo-specialization", concept: "dashboards", keywordPhrase: "business dashboard development", label: "Business dashboards" },
 ];
 
+/** The original 6-entry commercial engineering & sourcing subset (306 combinations). */
+export const CORE_SERVICES: NationwideService[] = NATIONWIDE_SERVICES.filter((s) =>
+  ["web-development", "n8n-automation", "ai-agents", "ecommerce-development", "business-dashboards", "global-sourcing"].includes(s.slug),
+);
+
 export const CORE_SERVICE_SLUGS = CORE_SERVICES.map((s) => s.slug);
+export const NATIONWIDE_SERVICE_SLUGS = NATIONWIDE_SERVICES.map((s) => s.slug);
 
 const LOCAL_SIGNAL = "A genuine local signal exists (client in region, or stated service area)";
 const UNIQUE_COPY = "Page has unique, substantial copy (not templated boilerplate)";
 
 export type ServiceArea = {
   serviceSlug: string;
+  pillarId: string;
+  tier: ServiceTier;
   stateSlug: string;
   /** Planned canonical URL for this combination. */
   url: string;
@@ -63,51 +152,67 @@ export type ServiceArea = {
   publicationState: PublicationState;
   evidenceRequired: string[];
   evidenceHave: string[];
+  /** Mandatory editorial review gate confirming meaningful, locally differentiated content. */
+  editorialReview: EditorialReviewGate;
 };
 
 /**
- * Overrides for specific combinations: elevate a publication state, or record
- * held evidence. Keyed by `${serviceSlug}:${stateSlug}`. Anything absent stays
- * `Researched` (planned only). Nothing here is `Published` without both a local
- * signal and unique copy — the audit refuses it otherwise.
+ * Overrides for specific combinations: elevate a preview scaffold state, or
+ * record held evidence and completed editorial review. Keyed by
+ * `${serviceSlug}:${stateSlug}`. Anything absent stays `Researched`.
+ * ZERO entries are Published without local signal, unique copy AND editorial review.
  */
 export const SERVICE_AREA_OVERRIDES: Record<
   string,
-  { publicationState: PublicationState; evidenceHave?: string[] }
+  {
+    publicationState: PublicationState;
+    evidenceHave?: string[];
+    editorialReview?: EditorialReviewGate;
+  }
 > = {
-  // A small, honest pilot set: drafted scaffolds (preview-only, noindex) for the
-  // highest-intent metros' states. None are Published — no local signal yet.
+  // Pilot scaffolds (preview-only, noindex; NEVER rendered in production).
   "web-development:texas": { publicationState: "NeedsEvidence" },
   "web-development:california": { publicationState: "NeedsEvidence" },
   "n8n-automation:new-york": { publicationState: "NeedsEvidence" },
   "ai-agents:california": { publicationState: "NeedsEvidence" },
   "ecommerce-development:florida": { publicationState: "NeedsEvidence" },
   "business-dashboards:illinois": { publicationState: "NeedsEvidence" },
+  "branding:new-york": { publicationState: "NeedsEvidence" },
+  "creative-production:california": { publicationState: "NeedsEvidence" },
 };
 
-function buildArea(service: CoreService, state: UsState): ServiceArea {
+function buildArea(service: NationwideService, state: UsState): ServiceArea {
   const key = `${service.slug}:${state.slug}`;
   const override = SERVICE_AREA_OVERRIDES[key];
   return {
     serviceSlug: service.slug,
+    pillarId: service.pillarId,
+    tier: service.tier,
     stateSlug: state.slug,
     url: `/services/${service.slug}/in/${state.slug}`,
     keyword: `${service.keywordPhrase} in ${state.name}`,
     concept: service.concept,
     signature: `${service.concept}:${state.slug}`,
     publicationState: override?.publicationState ?? "Researched",
-    evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY],
+    evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY, EDITORIAL_REVIEW],
     evidenceHave: override?.evidenceHave ?? [],
+    editorialReview: override?.editorialReview ?? { reviewed: false, hasCustomContent: false },
   };
 }
 
-/** The full 306-entry matrix (6 core services × 51 jurisdictions). */
+/** The full 408-entry nationwide matrix (8 commercial tracks × 51 jurisdictions, all gated). */
 export function serviceAreaMatrix(): ServiceArea[] {
   const out: ServiceArea[] = [];
-  for (const service of CORE_SERVICES) {
+  for (const service of NATIONWIDE_SERVICES) {
     for (const state of US_STATES) out.push(buildArea(service, state));
   }
   return out;
+}
+
+/** The original 306-entry subset (6 engineering/sourcing tracks × 51 jurisdictions). */
+export function coreServiceAreaMatrix(): ServiceArea[] {
+  const coreSet = new Set(CORE_SERVICE_SLUGS);
+  return serviceAreaMatrix().filter((a) => coreSet.has(a.serviceSlug));
 }
 
 export const getServiceArea = (serviceSlug: string, stateSlug: string): ServiceArea | undefined =>
@@ -120,10 +225,11 @@ export const serviceAreasForState = (stateSlug: string) =>
   serviceAreaMatrix().filter((a) => a.stateSlug === stateSlug);
 
 // ─────────────────── Selected city × service pages ──────────────────────────
-// Only a few metros justify a city-level service page. Keyed to pilot cities.
 
 export type CityServiceArea = {
   serviceSlug: string;
+  pillarId: string;
+  tier: ServiceTier;
   stateSlug: string;
   citySlug: string;
   cityName: string;
@@ -132,29 +238,34 @@ export type CityServiceArea = {
   concept: string;
   signature: string;
   publicationState: PublicationState;
+  editorialReview: EditorialReviewGate;
 };
 
-/** Which pilot-city × service combinations exist as planned pages. */
 export const CITY_SERVICE_SELECTED: {
   serviceSlug: string;
   citySlug: string;
   publicationState?: PublicationState;
+  editorialReview?: EditorialReviewGate;
 }[] = [
   { serviceSlug: "web-development", citySlug: "austin" },
   { serviceSlug: "ai-agents", citySlug: "san-francisco" },
   { serviceSlug: "ecommerce-development", citySlug: "miami" },
   { serviceSlug: "business-dashboards", citySlug: "chicago" },
   { serviceSlug: "n8n-automation", citySlug: "seattle" },
+  { serviceSlug: "branding", citySlug: "new-york-city" },
+  { serviceSlug: "creative-production", citySlug: "los-angeles" },
 ];
 
 export function cityServiceAreas(): CityServiceArea[] {
   const out: CityServiceArea[] = [];
   for (const sel of CITY_SERVICE_SELECTED) {
     const city = PILOT_CITIES.find((c) => c.slug === sel.citySlug);
-    const service = CORE_SERVICES.find((s) => s.slug === sel.serviceSlug);
+    const service = NATIONWIDE_SERVICES.find((s) => s.slug === sel.serviceSlug);
     if (!city || !service) continue;
     out.push({
       serviceSlug: service.slug,
+      pillarId: service.pillarId,
+      tier: service.tier,
       stateSlug: city.stateSlug,
       citySlug: city.slug,
       cityName: city.name,
@@ -163,6 +274,7 @@ export function cityServiceAreas(): CityServiceArea[] {
       concept: service.concept,
       signature: `${service.concept}:${city.stateSlug}:${city.slug}`,
       publicationState: sel.publicationState ?? "Researched",
+      editorialReview: sel.editorialReview ?? { reviewed: false, hasCustomContent: false },
     });
   }
   return out;
@@ -175,16 +287,6 @@ export const getCityServiceArea = (serviceSlug: string, stateSlug: string, cityS
 
 // ─────────────────── Duplicate-intent detection ─────────────────────────────
 
-/**
- * Normalise a free-text keyword to a coarse intent signature so near-duplicates
- * collide: lowercase, drop punctuation and a small st#opword/synonym set, sort
- * the remaining tokens. Two keywords that mean the same thing map to the same
- * signature even if worded differently ("web developer in texas" vs "texas web
- * development services").
- */
-// Only truly generic connectors and interchangeable service-type nouns are
-// dropped. Intent-distinguishing words (hire, vs, cost, freelance, …) are kept,
-// so "ali arshad" and "hire ali arshad" stay distinct.
 const STOP = new Set([
   "in", "the", "a", "for", "and", "services", "service", "development", "dev", "of",
 ]);
@@ -205,6 +307,10 @@ const SYNONYM: Record<string, string> = {
   sourcing: "sourcing",
   supply: "sourcing",
   chain: "sourcing",
+  branding: "brand",
+  brand: "brand",
+  video: "creative",
+  creative: "creative",
 };
 
 export function intentSignature(keyword: string): string {
@@ -222,12 +328,6 @@ export type IntentConflict = {
   owners: { source: string; url: string; keyword: string; publishable: boolean }[];
 };
 
-/**
- * Find keywords (across the matrix, the city×service pages and the keyword
- * registry) that share an intent signature but point at different URLs. These
- * are the pages that must NOT both be published — one owns the intent, the
- * others are blocked.
- */
 export function duplicateIntentConflicts(): IntentConflict[] {
   const bySig = new Map<string, IntentConflict["owners"]>();
   const add = (source: string, url: string, keyword: string, publishable: boolean) => {

@@ -3,7 +3,16 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { PendingMedia } from "@/components/services/ServiceShowcase";
+import { evidenceTierOf, type EvidenceTier } from "@/lib/seo/evidence";
 import type { Project } from "@/lib/projects";
+
+const TIER_LABEL: Record<EvidenceTier, string> = {
+  "not-built": "In development (no finished media)",
+  "locally-tested-demo": "Locally tested demonstration · not publicly deployed",
+  "publicly-deployed-demo": "Publicly deployed demonstration",
+  "verified-professional-work": "Verified professional engagement",
+  "verified-client-outcome": "Verified client outcome",
+};
 
 type Props = {
   projects: Project[];
@@ -24,9 +33,9 @@ type Props = {
  */
 export function ServiceDemoShowcase({
   projects,
-  eyebrow = "Verified capability",
+  eyebrow = "Substantiated capability",
   title = "Working demonstration builds",
-  lead = "Each project below is a complete, tested build under a fictional brand, labelled openly as a demonstration rather than a client engagement.",
+  lead = "Each project below is a locally tested build under a fictional brand, labelled openly as a demonstration rather than a publicly deployed site or client engagement.",
   showLeadGallery = false,
   pendingMedia,
 }: Props) {
@@ -73,6 +82,7 @@ export function ServiceDemoShowcase({
                   <TypeBadge type={p.projectType} />
                   <StatusBadge status={p.status} />
                 </div>
+                <p className="fine-print">{TIER_LABEL[evidenceTierOf(p)]}</p>
                 <h3 className="demo-card__title">
                   <Link href={p.caseStudy ? `/case-studies/${p.slug}` : `/work/${p.slug}`}>{p.title}</Link>
                 </h3>
@@ -137,3 +147,4 @@ export function ServiceDemoShowcase({
     </div>
   );
 }
+

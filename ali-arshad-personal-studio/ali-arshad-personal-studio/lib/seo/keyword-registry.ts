@@ -65,15 +65,26 @@ export type KeywordOpportunity = {
   notes?: string;
 };
 
-// Evidence predicates reused across rows, so the QA output reads consistently.
-const E = {
-  REAL_DEMO: "A working, deployed demo exists for this capability",
-  REAL_CLIENT: "A real, consented client engagement backs the claim",
+// Evidence predicates reused across rows, so QA output distinguishes
+// locally tested demonstrations, publicly deployed demos, verified professional
+// work, actual client outcomes and editorial reviews cleanly.
+export const EVIDENCE_PREDICATES = {
+  /** Built and verified via local unit/browser tests; NOT equated with a public deployment. */
+  REAL_DEMO: "A working, locally tested demonstration build exists for this capability",
+  /** Publicly reachable demo URL exists (`project.liveUrl` is set). */
+  PUBLIC_DEMO: "A publicly deployed demonstration URL exists for this capability",
+  /** Verified paid/employed professional engagement (`projectType: Professional Work`, Verified/Published). */
+  VERIFIED_WORK: "Verified professional work exists for this capability",
+  /** Consented real client engagement & outcome (none fabricated). */
+  REAL_CLIENT: "A real, consented client engagement and outcome backs the claim",
   LOCAL_SIGNAL: "A genuine local signal exists (client in region, or stated service area)",
   UNIQUE_COPY: "Page has unique, substantial copy (not templated boilerplate)",
+  EDITORIAL_REVIEW: "Editorial review completed confirming meaningful, locally differentiated content (non-templated)",
   TOOL_WORKS: "The interactive tool is implemented and tested",
   ARTICLE_WRITTEN: "The article is fully written and reviewed",
 } as const;
+
+const E = EVIDENCE_PREDICATES;
 
 export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
   // ─────────────────────────────── Brand (navigational, real today) ──────────
@@ -372,7 +383,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/texas",
     supporting: ["texas next.js developer", "freelance web developer texas"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/services/web-development", "/contact"],
     linksFrom: ["/locations"],
@@ -386,7 +397,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/california",
     supporting: ["california freelance developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/services/web-development", "/contact"],
     linksFrom: ["/locations"],
@@ -399,7 +410,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/new-york",
     supporting: ["n8n consultant new york"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/services/n8n-automation", "/contact"],
     linksFrom: ["/locations"],
@@ -412,7 +423,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/texas/austin",
     supporting: ["austin next.js developer", "freelance developer austin tx"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/texas", "/services/web-development"],
     linksFrom: ["/locations/texas"],
@@ -425,7 +436,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/florida/miami",
     supporting: ["shopify developer miami"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/florida", "/services/ecommerce-development"],
     linksFrom: ["/locations/florida"],
@@ -438,7 +449,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/illinois/chicago",
     supporting: ["analytics developer chicago"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/illinois", "/services/business-dashboards"],
     linksFrom: ["/locations/illinois"],
@@ -816,7 +827,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/florida",
     supporting: ["florida freelance developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/services/web-development", "/contact"],
     linksFrom: ["/locations"],
@@ -829,7 +840,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/illinois",
     supporting: ["illinois freelance developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/services/web-development", "/contact"],
     linksFrom: ["/locations"],
@@ -842,7 +853,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/washington",
     supporting: ["seattle automation consultant"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/services/n8n-automation", "/contact"],
     linksFrom: ["/locations"],
@@ -855,7 +866,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/washington/seattle",
     supporting: ["seattle react developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/washington", "/services/web-development"],
     linksFrom: ["/locations/washington"],
@@ -868,7 +879,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/california/san-francisco",
     supporting: ["ai agent developer bay area"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/california", "/services/ai-agents"],
     linksFrom: ["/locations/california"],
@@ -881,7 +892,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/new-york/new-york-city",
     supporting: ["nyc freelance developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/new-york", "/services/web-development"],
     linksFrom: ["/locations/new-york"],
@@ -894,7 +905,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/california/los-angeles",
     supporting: ["la ecommerce developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/california", "/services/ecommerce-development"],
     linksFrom: ["/locations/california"],
@@ -907,7 +918,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/massachusetts/boston",
     supporting: ["boston analytics developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/massachusetts", "/services/business-dashboards"],
     linksFrom: ["/locations/massachusetts"],
@@ -920,7 +931,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/colorado/denver",
     supporting: ["denver next.js developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/colorado", "/services/web-development"],
     linksFrom: ["/locations/colorado"],
@@ -933,7 +944,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/georgia/atlanta",
     supporting: ["atlanta n8n developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/georgia", "/services/n8n-automation"],
     linksFrom: ["/locations/georgia"],
@@ -1056,7 +1067,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/arizona/phoenix",
     supporting: ["phoenix freelance developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/locations/arizona", "/services/web-development"],
     linksFrom: ["/locations/arizona"],
@@ -1069,7 +1080,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     primaryUrl: "/locations/north-carolina",
     supporting: ["charlotte web developer", "raleigh developer"],
     state: "NeedsEvidence",
-    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY],
+    evidenceRequired: [E.LOCAL_SIGNAL, E.UNIQUE_COPY, E.EDITORIAL_REVIEW],
     evidenceHave: [],
     linksTo: ["/services/web-development", "/contact"],
     linksFrom: ["/locations"],

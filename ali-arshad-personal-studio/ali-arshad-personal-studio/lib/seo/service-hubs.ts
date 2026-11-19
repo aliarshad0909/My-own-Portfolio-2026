@@ -33,6 +33,10 @@ export type ServiceHub = {
   /** /services/<slug>. Matches a primaryUrl in the keyword registry. */
   slug: string;
   keywordId: string;
+  /** Parent business pillar id matching lib/services.ts. */
+  pillarId: string;
+  /** Clearly distinguishes primary business-pillar hubs from focused SEO specializations. */
+  hubTier: "pillar" | "seo-specialization";
   icon: IconName;
   title: string; // <title> / metadata
   h1: string;
@@ -59,6 +63,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "web-development",
     keywordId: "hub-web-development",
+    pillarId: "web-development",
+    hubTier: "pillar",
     icon: "code",
     title: "Freelance Web Development Services (Next.js, React, TypeScript)",
     h1: "Web and application development",
@@ -90,7 +96,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
     faqs: [
       {
         q: "What stack do you build on?",
-        a: "Next.js (App Router), React and TypeScript, deployed primarily on Vercel. This portfolio, its technical SEO architecture and every interactive demonstration build run on the same stack.",
+        a: "Next.js (App Router), React and TypeScript, typically deployed on Vercel. This portfolio, its technical SEO architecture and the locally tested demonstration builds in the work archive run on the same stack.",
       },
       {
         q: "Can you take over an existing React or Next.js codebase?",
@@ -98,11 +104,11 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
       {
         q: "How much does a custom web application cost?",
-        a: "Every build is scoped and quoted individually rather than from a rigid price sheet. Use the Web Project Estimator on this site for an indicative range, followed by a plain-language written scope after discovery.",
+        a: "Every build is scoped and quoted individually rather than from a rigid price sheet. Use the Web Project Estimator on this site for an illustrative planning range, followed by a plain-language written scope after discovery.",
       },
       {
         q: "Do we own the source code, domain and hosting accounts?",
-        a: "Yes — 100%. The Git repository, deployment account and third-party credentials live under your ownership with clear documentation at hand-off.",
+        a: "Yes. The Git repository, deployment account and third-party credentials live directly under your ownership with clear documentation at hand-off.",
       },
       {
         q: "How do you handle technical SEO and Core Web Vitals?",
@@ -115,6 +121,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "n8n-automation",
     keywordId: "hub-n8n-automation",
+    pillarId: "ai-automation",
+    hubTier: "seo-specialization",
     icon: "bot",
     title: "n8n Workflow Automation Services & Custom Integrations",
     h1: "n8n workflow automation",
@@ -175,6 +183,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "ai-agents",
     keywordId: "hub-ai-agents",
+    pillarId: "ai-automation",
+    hubTier: "seo-specialization",
     icon: "bot",
     title: "AI Agent Development Services",
     h1: "AI agent development",
@@ -217,7 +227,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
       {
         q: "Does every agent require an expensive LLM API?",
-        a: "Not always. When deterministic retrieval (BM25) or an explicit slot-filling state machine solves the problem with higher auditability and zero hallucination risk, I recommend that first and reserve LLMs for tasks where language reasoning genuinely helps.",
+        a: "Not always. When deterministic retrieval (BM25) or an explicit slot-filling state machine solves the job with higher auditability and verbatim policy quoting, I recommend that first and reserve LLMs for tasks where language reasoning genuinely helps.",
       },
       {
         q: "How does human hand-off work when the agent cannot answer?",
@@ -230,6 +240,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "ecommerce-development",
     keywordId: "hub-ecommerce",
+    pillarId: "web-development",
+    hubTier: "seo-specialization",
     icon: "layers",
     title: "Ecommerce Website Development",
     h1: "Ecommerce development",
@@ -285,6 +297,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "business-dashboards",
     keywordId: "hub-dashboards",
+    pillarId: "web-development",
+    hubTier: "seo-specialization",
     icon: "trending",
     title: "Business Dashboard Development",
     h1: "Dashboards and data visualisation",
@@ -340,6 +354,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "branding",
     keywordId: "hub-branding",
+    pillarId: "brand-growth",
+    hubTier: "pillar",
     icon: "lightbulb",
     title: "Brand Identity Design Services",
     h1: "Brand and identity systems",
@@ -394,6 +410,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "global-sourcing",
     keywordId: "hub-sourcing",
+    pillarId: "global-sourcing",
+    hubTier: "pillar",
     icon: "briefcase",
     title: "Global Sourcing and Supply Chain Coordination",
     h1: "Global sourcing coordination",
@@ -448,6 +466,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
   {
     slug: "creative-production",
     keywordId: "hub-creative-production",
+    pillarId: "creative-production",
+    hubTier: "pillar",
     icon: "clapperboard",
     title: "Creative Production Services: Video Editing, Motion & 3D",
     h1: "Creative production",

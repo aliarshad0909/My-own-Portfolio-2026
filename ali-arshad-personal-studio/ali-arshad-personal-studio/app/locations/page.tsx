@@ -9,7 +9,7 @@ import { PILOT_CITIES } from "@/lib/geo/cities";
 import { US_REGIONS, US_STATES } from "@/lib/geo/states";
 import { pageMetadata } from "@/lib/seo";
 import { shouldRender } from "@/lib/seo/publication";
-import { CORE_SERVICES, serviceAreaMatrix } from "@/lib/seo/service-areas";
+import { NATIONWIDE_SERVICES, serviceAreaMatrix } from "@/lib/seo/service-areas";
 
 export const metadata: Metadata = pageMetadata({
   title: "Where I Work: Remote Digital Studio Serving All 50 US States",
@@ -52,6 +52,8 @@ export default function LocationsPage() {
   }));
 
   const matrixCount = serviceAreaMatrix().length;
+  const pillarServices = NATIONWIDE_SERVICES.filter((s) => s.tier === "pillar");
+  const specializedServices = NATIONWIDE_SERVICES.filter((s) => s.tier === "seo-specialization");
 
   return (
     <>
@@ -75,7 +77,7 @@ export default function LocationsPage() {
               Transparent national coverage without doorway spam
             </h2>
             <p className="section-sub">
-              Most agencies spin up hundreds of near-identical &ldquo;developer in [city]&rdquo; doorway pages. Here, the nationwide architecture ({matrixCount} planned service × state combinations) stays strictly gated until a market is genuinely earned.
+              Most agencies spin up hundreds of near-identical &ldquo;developer in [city]&rdquo; doorway pages. Here, the nationwide architecture ({matrixCount} planned service × state combinations across all direct business pillars and SEO specializations) stays strictly unpublished until each page has a real local signal and passes editorial review for locally differentiated content.
             </p>
           </div>
           <ul className="hub-deliverables">
@@ -148,20 +150,53 @@ export default function LocationsPage() {
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Available nationwide</p>
             <h2 className="section-title section-title--sm" id="nationwide-services">
-              Core services delivered remotely to every US state
+              Primary business pillars &amp; focused SEO specializations
             </h2>
+            <p className="section-sub">
+              All five direct studio pillars—including Creative Production and Brand &amp; Growth—plus focused technical specializations are delivered remotely nationwide. Partner-delivered specialist work is coordinated transparently through the Studio Network.
+            </p>
           </div>
+          <p className="label" style={{ marginTop: "1rem" }}>Primary business pillars</p>
           <ul className="hub-card-grid">
-            {CORE_SERVICES.map((s) => (
+            {pillarServices.map((s) => (
               <li key={s.slug}>
                 <Link href={`/services/${s.slug}`} className="hub-link-card">
-                  <span className="hub-link-card__kind">Remote nationwide</span>
+                  <span className="hub-link-card__kind">Primary pillar · Remote</span>
                   <span className="hub-link-card__title">
                     <span>{s.label}</span>
                     <Icon name="arrow-up-right" size={16} />
                   </span>
                   <span className="hub-link-card__desc">
-                    Explore scope, workflow architecture, demonstration builds and FAQs.
+                    Explore scope, deliverables, demonstrations and FAQs.
+                  </span>
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/studio-network" className="hub-link-card">
+                <span className="hub-link-card__kind">Partner pillar · Coordinated</span>
+                <span className="hub-link-card__title">
+                  <span>Specialist technical collaboration</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </span>
+                <span className="hub-link-card__desc">
+                  Partner-delivered security, blockchain and specialist engineering coordinated under one contact.
+                </span>
+              </Link>
+            </li>
+          </ul>
+          <p className="label" style={{ marginTop: "2rem" }}>Focused SEO specializations</p>
+          <ul className="hub-card-grid">
+            {specializedServices.map((s) => (
+              <li key={s.slug}>
+                <Link href={`/services/${s.slug}`} className="hub-link-card">
+                  <span className="hub-link-card__kind">Specialization hub · Remote</span>
+                  <span className="hub-link-card__title">
+                    <span>{s.label}</span>
+                    <Icon name="arrow-up-right" size={16} />
+                  </span>
+                  <span className="hub-link-card__desc">
+                    Dedicated deep-dive page with architecture, workflows and FAQs.
                   </span>
                 </Link>
               </li>

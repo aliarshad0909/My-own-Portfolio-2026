@@ -33,8 +33,8 @@ export type ProjectType = "Professional Work" | "Original Concept" | "Open-Sourc
 /**
  * Planned        — scoped but not started. Not indexed, not shown in the gallery.
  * In Development — being built. Not indexed.
- * Demo Ready     — builds, tested, and deployable or deployed. Not indexed until published.
- * Verified       — a real engagement confirmed with the client, including naming permission.
+ * Demo Ready     — built and locally tested in this repository; NOT publicly deployed unless `liveUrl` is set.
+ * Verified       — a real professional engagement confirmed with the client, including naming permission.
  * Published      — live, written up, and approved for public listing. Indexed.
  */
 export type ProjectStatus = "Planned" | "In Development" | "Demo Ready" | "Verified" | "Published";

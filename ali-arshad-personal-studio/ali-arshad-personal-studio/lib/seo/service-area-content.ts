@@ -1,11 +1,11 @@
 /**
- * Honest, unique-per-combination content and metadata for service-area pages.
+ * SCAFFOLD-ONLY preview helpers for unverified service-area pages.
  *
- * A service-area page only publishes with substantive, geographically useful
- * content (see requirements). These helpers give each combination a distinct,
- * truthful starting point keyed on the real service and state — never a single
- * boilerplate paragraph with the place-name swapped in. The scaffold states
- * plainly that delivery is remote and that the page is not a local-office claim.
+ * IMPORTANT: The copy generated here is a preview scaffold ONLY and is NEVER
+ * sufficient to publish a service-area page. Before any combination may flip to
+ * `Published`, this scaffold must be replaced with bespoke, locally
+ * differentiated editorial content AND marked `editorialReview: { reviewed: true,
+ * hasCustomContent: true }` alongside a genuine local signal.
  */
 
 import type { ServiceArea } from "@/lib/seo/service-areas";
@@ -22,14 +22,14 @@ export function serviceAreaMeta(area: ServiceArea, hub: ServiceHub, state: UsSta
 }
 
 /**
- * Distinct body for a state × service page. Draws on the hub's real problems and
- * the state's own context so no two pages read the same, and is explicit that
- * this is remote work, not a local office.
+ * Preview-only scaffold paragraphs for an unverified state × service page.
+ * Explicitly states that delivery is remote and that no local office exists.
+ * Must be replaced with bespoke, editorially reviewed local copy prior to publication.
  */
 export function serviceAreaIntro(hub: ServiceHub, state: UsState): string[] {
-  const p0 = hub.problems[0] ? hub.problems[0].toLowerCase() : "a specific problem to solve";
+  const p0 = hub.problems[0] ? hub.problems[0].toLowerCase() : "a specific operational problem to solve";
   return [
-    `${hub.h1} for ${state.name} businesses, delivered remotely by an independent studio. If your team in ${state.name} is thinking "${p0}", that is exactly the kind of work this covers — and location inside ${state.name} rarely matters when delivery is remote, clearly scoped and staged.`,
-    `The largest market here is ${state.largestMetro}, but ${state.name} founders and operators anywhere in the ${state.region.toLowerCase()} are served the same way. There is no ${state.name} office to visit, and this page does not pretend otherwise; what it offers is a clear point of contact for ${hub.h1.toLowerCase()} in ${state.name}.`,
+    `${hub.h1} for ${state.name} businesses, delivered remotely by an independent studio. If your team in ${state.name} is dealing with "${p0}", this preview scaffold outlines how remote delivery is scoped and staged.`,
+    `There is no physical studio office in ${state.name} or ${state.largestMetro}, and this page does not claim one. Before this route could ever become public or indexable, this scaffold must be replaced with editorially reviewed, locally specific content backed by a real ${state.name} engagement or service commitment.`,
   ];
 }

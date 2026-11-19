@@ -104,3 +104,4 @@ export function LocationsBrowser({ regions, states }: Props) {
     </div>
   );
 }
+

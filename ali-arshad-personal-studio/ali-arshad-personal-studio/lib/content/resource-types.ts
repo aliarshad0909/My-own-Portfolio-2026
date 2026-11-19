@@ -39,3 +39,4 @@ export const ol = (items: string[]): ArticleBlock => ({ type: "ol", items });
 export const callout = (title: string, text: string): ArticleBlock => ({ type: "callout", title, text });
 export const table = (headers: string[], rows: string[][]): ArticleBlock => ({ type: "table", headers, rows });
 export const code = (text: string): ArticleBlock => ({ type: "code", text });
+

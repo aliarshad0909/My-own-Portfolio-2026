@@ -58,7 +58,7 @@ export const RESOURCES_B: Resource[] = [
       table(
         ["Factor", "Standard Shopify", "Custom / Headless Next.js"],
         [
-          ["Time to launch", "Days to a few weeks with standard checkout and apps", "4–8+ weeks for tailored catalogue, rules and QA"],
+          ["Time to launch", "Shorter setup when standard checkout and themes fit", "Longer upfront build for tailored catalogue, rules and QA"],
           ["Monthly app creep", "Apps for bundles, custom pricing, filters and ERP sync add up fast", "Core rules live cleanly in your own tested TypeScript"],
           ["Variant & cart edge cases", "Great for standard size/colour SKUs; complex discount/shipping rules get brittle", "Exact integer-cent math, stock re-validation and bespoke UX"],
           ["Core Web Vitals & brand feel", "Clean on minimal themes; degrades rapidly as third-party scripts stack up", "Complete control over performance, layout, typography and motion"],
@@ -73,7 +73,7 @@ export const RESOURCES_B: Resource[] = [
       h2("Move to custom or headless Next.js if:"),
       ul([
         "Your storefront needs bespoke product configuration, live visual previews or B2B tiered ordering.",
-        "Third-party theme scripts have pushed mobile load times past 4+ seconds and hurt paid-ad conversion.",
+        "Third-party theme scripts have slowed mobile pages enough to hurt browsing and paid-ad conversion.",
         "Your storefront must tie tightly into a custom inventory ledger, purchasing desk or back-office portal.",
       ]),
     ],
@@ -104,7 +104,7 @@ export const RESOURCES_B: Resource[] = [
       h2("When an agency is genuinely the better choice"),
       p("If you are an enterprise brand running a 12-person parallel launch across TV, global localization, PR and heavy legacy ERP migration on a fixed six-week deadline, you need an agency's bench strength."),
       h2("When an independent multidisciplinary studio shines"),
-      p("If you are a founder, ecommerce brand or lean operations team who wants brand, Next.js engineering, technical SEO and n8n automation speaking the exact same language — with one accountable person and partner specialists brought in transparently only where needed — a studio of one delivers dramatically higher craft per dollar."),
+      p("If you are a founder, ecommerce brand or lean operations team who wants brand, Next.js engineering, technical SEO and n8n automation speaking the exact same language — with one accountable person and partner specialists brought in transparently only where needed — a studio of one keeps coordination direct and overhead lean."),
     ],
   },
   {
@@ -119,7 +119,7 @@ export const RESOURCES_B: Resource[] = [
     publicationState: "Published",
     related: ["/services/web-development", "/resources/nextjs-seo", "/tools/web-project-estimator"],
     body: [
-      p("A visual refresh feels exciting right up until launch week reveals broken old URLs, dropped service pages and a 40% dip in organic inquiries. Run through this checklist before touching a single page layout."),
+      p("A visual refresh feels exciting right up until launch week reveals broken old URLs, dropped service pages and an avoidable drop in organic inquiries. Run through this checklist before touching a single page layout."),
       h2("Phase 1: Before designing anything"),
       ol([
         "Export every current indexed URL and top landing page from Google Search Console and analytics.",
@@ -150,7 +150,7 @@ export const RESOURCES_B: Resource[] = [
     title: "What Is a Brand Style Guide? (And What Makes One Usable)",
     description:
       "Why static logo PDFs gather dust, and the six practical ingredients of a modern brand style guide that designers, marketers and developers actually use.",
-    lead: "A logo is one asset. A brand style guide is the operating system that keeps your website, emails, ads and product looking unmistakable.",
+    lead: "A logo is one asset. A brand style guide is the operating system that keeps your website, emails, ads and product visually coherent.",
     publicationState: "Published",
     related: ["/services/branding", "/services/branding/identity", "/work/halcyon-brand-system"],
     body: [
@@ -218,7 +218,7 @@ export const RESOURCES_B: Resource[] = [
       ul([
         "Multi-variant catalogues: swap matte ceramic glazes, anodized metals or label artwork inside the exact same lighting rig so every SKU lines up identically on collection grids.",
         "Pre-production launches: produce clean hero stills and 360-degree turntables from CAD dimensions months before mass production arrives from the factory.",
-        "Impossible views: clean cross-sections, floating exploded components and macro material details without fighting studio dust or reflections.",
+        "Hard-to-photograph views: clean cross-sections, floating exploded components and macro material details without fighting studio dust or reflections.",
         "Reproducible camera systems: scripting camera spheres and three-point lighting in Blender (Python/bpy) guarantees next year's new SKU matches today's catalogue pixel for pixel.",
       ]),
       h2("What you need to prepare for a 3D product render"),
@@ -234,3 +234,4 @@ export const RESOURCES_B: Resource[] = [
     ],
   },
 ];
+

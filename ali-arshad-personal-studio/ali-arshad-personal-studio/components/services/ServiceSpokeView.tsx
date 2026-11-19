@@ -228,3 +228,4 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
     </>
   );
 }
+

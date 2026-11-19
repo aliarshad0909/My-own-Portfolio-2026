@@ -60,7 +60,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       keywordId: "spec-motion-graphics",
       title: "Motion Graphics & Product Explainer Services",
       h1: "Motion graphics",
-      lead: "Purposeful motion graphics, animated brand lockups and clean product explainers that clarify complex ideas in seconds without decorative clutter.",
+      lead: "Purposeful motion graphics, animated brand lockups and clean product explainers that clarify complex ideas quickly without decorative clutter.",
       body: [
         "Good motion graphics act as visual explanation, not visual noise. Whether illustrating how a software workflow connects or giving a brand identity a sharp animated sting, every movement should clarify hierarchy and product value.",
         "Paired with the verified ffmpeg/ffprobe delivery pipeline, finished motion assets arrive ready for both paid social channels and lightweight, reduced-motion-safe web integration.",
@@ -93,7 +93,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       faqs: [
         { q: "What drives the price of a motion graphics project?", a: "Asset creation complexity, style-frame detail and revision depth matter far more than raw runtime. A tight 20-second custom UI explainer often takes more craft than a 60-second text-card video." },
         { q: "Can motion clips respect prefers-reduced-motion on our website?", a: "Yes — every web video ships with an exact-aspect poster image so browsers with reduced-motion enabled see a crisp still frame instead of forced autoplay." },
-        { q: "Do you also create the visual identity beforehand if needed?", a: "Yes — pairing Brand & Identity Systems with Motion Graphics guarantees type, colour and contrast stay 100% consistent." },
+        { q: "Do you also create the visual identity beforehand if needed?", a: "Yes — pairing Brand & Identity Systems with Motion Graphics keeps type, colour and contrast consistent across channels." },
       ],
       projectSlugs: ["motion-production-pipeline"],
       publicationState: "Published",
@@ -145,7 +145,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       keywordId: "spec-ugc-video",
       title: "Social Advertising Creatives & Short-Form Video Editing",
       h1: "Social advertising creatives",
-      lead: "Scroll-stopping short-form video edits and static ad variations formatted cleanly for Reels, TikTok, YouTube Shorts and paid social feeds.",
+      lead: "Clear, brand-consistent short-form video edits and static ad variations formatted cleanly for Reels, TikTok, YouTube Shorts and paid social feeds.",
       body: [
         "Paid social performance depends heavily on creative clarity: an immediate visual hook, legible captions inside platform safe zones, honest product demonstration and rapid format variations for testing.",
         "Combining hands-on creative production, HubSpot Social Media and Google Ads certifications, and verified web/social encoding tooling, I produce campaign-ready ad creatives aligned tightly with your brand and landing pages.",
@@ -273,7 +273,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       keywordId: "spec-email-marketing",
       title: "Email Marketing Strategy & Custom HTML Email Templates",
       h1: "Email marketing",
-      lead: "Lifecycle flows, campaign calendars and rock-solid table-based HTML email templates that render cleanly in Gmail, Apple Mail and Outlook.",
+      lead: "Lifecycle flows, campaign calendars and dependable table-based HTML email templates that render cleanly in Gmail, Apple Mail and Outlook.",
       body: [
         "Email remains one of the highest-ownership marketing channels a business has — yet most lists sit dormant or send cluttered drag-and-drop blasts that break in Outlook and land poorly on mobile.",
         "Demonstrated in the Halcyon Brand System (which builds a real 600px table-based HTML email with inline styles, Outlook conditional comments, hidden preheader and plain-text fallback), I combine clear lifecycle strategy with dependable email engineering.",
@@ -384,7 +384,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       },
       stack: ["Google Ads Certified", "Next.js Landing Pages", "Ad Creative Kits", "Conversion Tracking", "CRM Sync"],
       faqs: [
-        { q: "Do we keep ownership of our Google Ads and Meta ad accounts?", a: "100% yes. Every campaign runs inside your own ad accounts with transparent access and billing directly under your control." },
+        { q: "Do we keep ownership of our Google Ads and Meta ad accounts?", a: "Yes. Campaigns run inside your own ad accounts with transparent access and billing directly under your control." },
         { q: "Are you a large media-buying agency?", a: "No — I operate as an independent studio coordinating campaign structure, ad creative and conversion landing pages for founders and small brands who want tight alignment without agency retainers." },
         { q: "Can you verify your Google Ads certification?", a: "Yes — the AI-Powered Performance Ads Certification (Skillshop / Google Ads) is listed on the Experience page with a direct public verification link." },
       ],
@@ -455,7 +455,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         "Teams want structured coordination without losing direct visibility into supplier pricing",
       ],
       deliverables: [
-        { title: "Bilingual-ready specification & RFQ", detail: "Unambiguous measurements, tolerances, packaging and incoterm specs ready for factory quoting." },
+        { title: "Clear technical specification & RFQ", detail: "Unambiguous measurements, tolerances, packaging and incoterm specs ready for factory quoting." },
         { title: "Supplier discovery & sample tracking", detail: "Shortlist compilation, quote clarification and structured sample dispatch coordination." },
         { title: "Landed-cost normalisation", detail: "Side-by-side comparison factoring freight weight, duty estimates and fees before order commitment." },
         { title: "Forwarder & broker hand-off pack", detail: "Clean commercial spec and milestone tracker ready for your licensed freight forwarder and customs broker." },
@@ -569,3 +569,4 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
     },
   ],
 };
+

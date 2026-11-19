@@ -136,14 +136,14 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     heroSecondary: { label: "Estimate automation ROI", href: "/tools/automation-roi-calculator" },
     heroPreview: {
       projectSlug: "inbound-lead-qualification-workflow",
-      caption: "15-node inbound lead workflow · 22 verified Code-node tests",
+      caption: "15-node workflow JSON · 22 local Code-node tests (not hosted)",
       diagram: true,
     },
     facts: [
       { label: "Hosting", value: "Self-hosted or n8n Cloud" },
       { label: "Verification", value: "Unit-tested JS Code nodes" },
       { label: "Guardrails", value: "Human approval on high-stakes sends" },
-      { label: "Ownership", value: "Exportable JSON, zero lock-in" },
+      { label: "Ownership", value: "Exportable workflow JSON you own" },
     ],
     problemsHeading: "Where manual operations quietly bleed time",
     problemsLead:
@@ -151,7 +151,7 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     problems: [
       {
         quote: "Our team copies data between forms, sheets and the CRM all day.",
-        impact: "Manual re-entry introduces silent typos, duplicate records and hours lost to work a webhook should finish in seconds.",
+        impact: "Manual re-entry introduces typos, duplicate records and hours spent on work a webhook can handle automatically.",
       },
       {
         quote: "Inbound leads sit untouched until someone checks the inbox.",
@@ -159,7 +159,7 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       },
       {
         quote: "Weekly reporting is stitched together by hand every Monday.",
-        impact: "Exporting CSVs from four platforms delays decisions and guarantees numbers drift from one sheet to the next.",
+        impact: "Exporting CSVs from multiple platforms delays decisions and makes it easy for numbers to drift between sheets.",
       },
       {
         quote: "We hit Zapier or Make limits as branching and volume grew.",
@@ -245,7 +245,7 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
         },
       ],
       caption:
-        "Modeled directly on the 15-node Inbound Lead Qualification demonstration in this portfolio (22 unit tests execute the workflow's own Code-node JavaScript). Credentials are always referenced by name, never hardcoded.",
+        "Modeled on the 15-node Inbound Lead Qualification demonstration in this portfolio (22 unit tests execute the Code-node JavaScript locally; orchestration has not been run on a hosted n8n server). Credentials are referenced by name only, never hardcoded.",
     },
     scenarios: {
       eyebrow: "Practical workflows",
@@ -263,9 +263,9 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
             "Duplicate inquiries create split records and awkward double follow-ups.",
           ],
           after: [
-            "Every submission is validated, deduplicated and scored in seconds.",
+            "Each submission is validated, deduplicated and scored automatically on trigger.",
             "Hot and warm inquiries create CRM deals and notify the owner in Slack.",
-            "A structured follow-up draft waits for one-click human approval.",
+            "A structured follow-up draft waits for human approval before sending.",
           ],
           tools: ["n8n", "Webhooks", "HubSpot / Pipedrive", "Slack", "Gmail"],
           humanBoundary: "Sales reviews every drafted reply and decides pricing, discovery calls and edge-case qualification.",
@@ -286,7 +286,7 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
             "Formatted tabs update in Google Sheets and a summary lands in Slack or Gmail.",
           ],
           tools: ["n8n", "Google Sheets", "Google Drive", "Gmail", "Stripe / Shopify API"],
-          humanBoundary: "Leadership interprets anomalies and strategy; automation only guarantees the numbers arrive on time and reconciled.",
+          humanBoundary: "Leadership interprets anomalies and strategy; automation focuses on consistent collection and reconciliation.",
         },
         {
           id: "client-onboarding",
@@ -369,7 +369,7 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     ],
     integrationsHeading: "Systems & integrations commonly wired with n8n",
     integrationsLead:
-      "n8n ships with hundreds of native nodes and talks cleanly to any tool exposing a REST API, webhook or database connection.",
+      "n8n ships with native nodes and HTTP Request support for common SaaS tools, databases and webhooks. Specific integrations are scoped per project.",
     integrations: [
       {
         category: "CRM & Sales Pipeline",
@@ -447,27 +447,27 @@ export const HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
     process: [
       {
         label: "Process audit",
-        cadence: "Days 1–2",
+        cadence: "Phase 1",
         detail: "We walk through the real workflow end to end — including exceptions, bad inputs and manual overrides — and agree on a plain-language scope.",
         deliverable: "Output: Written workflow spec & fixed scope",
       },
       {
         label: "Architecture & wiring",
-        cadence: "Days 3–4",
-        detail: "Map every trigger, branch, retry rule, credential scope and human-approval step before building.",
+        cadence: "Phase 2",
+        detail: "Map triggers, branches, retry rules, credential scopes and human-approval steps before building.",
         deliverable: "Output: Node blueprint & credential list",
       },
       {
         label: "Build & verification",
-        cadence: "Weeks 1–2",
-        detail: "Build the n8n workflow, write and test Code-node logic against realistic edge-case payloads, and wire the error handler.",
+        cadence: "Phase 3",
+        detail: "Build the n8n workflow, test Code-node logic against realistic edge-case payloads, and wire the error handler.",
         deliverable: "Output: Staging workflow & test evidence",
       },
       {
         label: "Deploy & hand-off",
         cadence: "Launch",
-        detail: "Deploy to your self-hosted instance or n8n Cloud, verify live runs together, and hand over exportable JSON plus an operator runbook.",
-        deliverable: "Output: Live workflow, runbook & full ownership",
+        detail: "Deploy to your self-hosted instance or n8n Cloud, verify runs together, and hand over exportable JSON plus an operator runbook.",
+        deliverable: "Output: Production workflow, runbook & ownership",
       },
     ],
     relatedLinks: [

@@ -50,10 +50,11 @@ export function ServiceAreaView({
       {!isIndexable(area.publicationState) ? (
         <EditorNote>
           This {hub.h1} × {state.name} service-area page is{" "}
-          {area.publicationState}. It renders on previews only (noindex) and is
-          not served in production until it has unique, geographically useful
-          content and a genuine {state.name} signal, then is set to Published in
-          lib/seo/service-areas.ts.
+          {area.publicationState} (scaffold only). It renders on previews only
+          (noindex) and stays unpublished in production until: (1) a genuine{" "}
+          {state.name} local signal exists, (2) template copy is replaced with
+          meaningful, locally differentiated content, and (3) editorialReview is
+          completed and flipped to Published in lib/seo/service-areas.ts.
         </EditorNote>
       ) : null}
 

@@ -95,10 +95,10 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       keywordId: "spec-lead-qualification",
       title: "Automated Lead Qualification Workflows (n8n & AI)",
       h1: "Lead qualification automation",
-      lead: "Validate, score, deduplicate and route inbound leads in seconds — so hot inquiries reach sales immediately while spam and low-fit requests stay out of the way.",
+      lead: "Validate, score, deduplicate and route inbound leads automatically on trigger — so high-intent inquiries reach sales quickly while spam and low-fit requests stay out of the way.",
       body: [
         "Speed and relevance decide most inbound service and B2B sales. When every inquiry lands in the same inbox without filtering or scoring, high-intent buyers wait behind incomplete or off-scope messages.",
-        "My Inbound Lead Qualification demonstration shows this exact pattern built end to end: 15 n8n nodes with 22 automated tests executing the workflow's real JavaScript scoring, deduplication and routing logic.",
+        "My Inbound Lead Qualification demonstration shows this pattern in 15 n8n nodes: 22 local unit tests execute the workflow's actual JavaScript scoring, deduplication and routing code (orchestration has not been run on a hosted n8n server).",
       ],
       problems: [
         "Qualified prospects wait hours while teams sift through generic inquiries",
@@ -110,7 +110,7 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         { title: "Schema & honeypot intake gate", detail: "Reject invalid or bot submissions cleanly with HTTP 422 before they ever reach sales." },
         { title: "Transparent 0–100 scoring rules", detail: "Versioned JavaScript scoring over budget, urgency, scope fit and completeness — easy to tune as your offer evolves." },
         { title: "Band-based routing (Hot / Warm / Cold)", detail: "Hot leads notify sales immediately and create CRM deals; cold inquiries log quietly without interrupting the team." },
-        { title: "Human-approved follow-up drafts", detail: "Assemble accurate reply drafts from approved message blocks so a human checks and sends in seconds." },
+        { title: "Human-approved follow-up drafts", detail: "Assemble accurate reply drafts from approved message blocks so a human checks and sends quickly." },
       ],
       workflow: {
         title: "Inbound lead qualification sequence",
@@ -168,7 +168,7 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       relatedTool: { href: "/tools/automation-roi-calculator", label: "Check payback with the Automation ROI Calculator" },
       faqs: [
         { q: "Should we automate a messy process right away?", a: "No. Automating a broken process just produces broken outcomes faster. Every engagement starts by tightening the steps and ownership before building." },
-        { q: "What payback period makes an automation worth building?", a: "Usually under 3 to 6 months on a stable process. If payback stretches past a year, I will tell you to automate a higher-leverage bottleneck first." },
+        { q: "What payback period makes an automation worth building?", a: "As a general rule of thumb, payback measured in a few months on a stable process is usually compelling. If payback stretches past a year, it is often better to tackle a higher-friction bottleneck first." },
         { q: "Can automation pair with a custom dashboard?", a: "Yes — n8n handles background orchestration while a lightweight Next.js/React dashboard gives operators a clean view of state and exceptions." },
       ],
       projectSlugs: ["inbound-lead-qualification-workflow", "meridian-inventory-operations"],
@@ -294,7 +294,7 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       stack: ["Okapi BM25", "Hybrid RAG", "OpenAI / Anthropic APIs", "TypeScript", "Next.js"],
       faqs: [
         { q: "When is lexical BM25 better than vector embeddings?", a: "For structured policies, SKUs, error codes and compact knowledge bases, BM25 is faster, deterministic, zero-cost and completely inspectable. Hybrid search combines both when corpora grow large and varied." },
-        { q: "Does our private documentation train external AI models?", a: "No. Retrieval stays inside your index, and any API-based LLM calls use zero-data-retention commercial API endpoints." },
+        { q: "Does our private documentation train external AI models?", a: "Retrieval indexes stay inside your own environment. Where a commercial LLM API is used, data handling follows that provider's published commercial API terms and is reviewed with you during scoping." },
         { q: "Can we restrict access to internal staff only?", a: "Yes — internal SOP assistants deploy behind your authentication boundary." },
       ],
       projectSlugs: ["tideline-support-agent"],
@@ -422,7 +422,7 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       stack: ["Next.js", "React 19", "TypeScript", "PostgreSQL / Supabase", "Stripe", "Vercel"],
       relatedTool: { href: "/tools/web-project-estimator", label: "Estimate MVP budget & timeline" },
       faqs: [
-        { q: "How long does a focused MVP usually take?", a: "Typically 4 to 8 weeks for a tightly scoped first version with 1–2 core integrations. Bigger multi-role platforms take longer and are staged transparently." },
+        { q: "How long does a focused MVP usually take?", a: "Timelines depend on workflow complexity, integrations and review turnaround. Focused first versions typically span several weeks and are agreed in a written milestone schedule after discovery." },
         { q: "Will we have to rewrite the MVP if we raise a round?", a: "No — because it is built on standard Next.js, React and TypeScript with clean separation of logic and tests, a seed-stage engineering team can extend it directly." },
         { q: "Can you help narrow down our feature list before quoting?", a: "Yes — trimming scope to protect your runway and launch date is often the highest-value part of discovery." },
       ],
@@ -516,3 +516,4 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
     },
   ],
 };
+

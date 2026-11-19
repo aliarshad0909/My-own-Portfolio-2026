@@ -22,25 +22,25 @@ export const RESOURCES_A: Resource[] = [
         "Data integrity & permissions: simple contact forms are cheap; append-only ledgers, integer-cent commerce rules and role-based access control require careful testing.",
         "Calendar compression: genuine rush deadlines compress review cycles and raise delivery risk.",
       ]),
-      h2("Indicative planning bands"),
+      h2("Illustrative planning bands (not a price list)"),
       table(
-        ["Build shape", "Typical scope", "Planning range (indicative)"],
+        ["Build shape", "Typical scope", "Illustrative market range"],
         [
-          ["Focused marketing / studio site", "5–10 pages, custom design tokens, technical SEO, contact flow", "$2,500 – $6,500"],
-          ["Startup MVP / internal tool", "1 core workflow, auth, database, 1–2 integrations, staged tests", "$7,000 – $18,000"],
-          ["Custom storefront or dashboard", "Catalogue/analytics rules, admin CRUD, payments or live data connectors", "$12,000 – $30,000+"],
+          ["Focused marketing / studio site", "Small page set, custom design tokens, technical SEO, contact flow", "Low-to-mid four figures"],
+          ["Startup MVP / internal tool", "1 core workflow, auth, database, 1–2 integrations, staged tests", "High four to low five figures"],
+          ["Custom storefront or dashboard", "Catalogue/analytics rules, admin CRUD, payments or live data connectors", "Five figures depending on depth"],
         ],
       ),
       callout(
-        "Planning figures, not a fixed quote",
-        "Real pricing always follows a discovery call and a plain-language written scope. Use the Web Project Estimator on this site to test how screen count, design depth and integrations move your range.",
+        "Illustrative planning figures, not a studio quote",
+        "There is no fixed price list — real pricing always follows discovery and a plain-language written scope. Use the Web Project Estimator on this site to test how screen count, design depth and integrations move an indicative range.",
       ),
       h2("How to spend less without regretting version one"),
       ol([
         "Cut features, never quality: ship the single core workflow properly instead of building six half-finished tabs.",
         "Keep v1 integrations tight: integrate only the systems needed on day one; connect secondary tools once users prove demand.",
         "Separate domain rules from UI: clean TypeScript modules avoid expensive rewrites when you scale.",
-        "Avoid artificial urgency: a calm six-week schedule almost always produces cleaner software at lower cost than a frantic three-week sprint.",
+        "Avoid artificial urgency: a realistic milestone schedule almost always produces cleaner software at lower risk than a rushed sprint.",
       ]),
     ],
   },
@@ -146,7 +146,7 @@ export const RESOURCES_A: Resource[] = [
       p("If you need three simple linear automations ('new Calendly booking → add row to Sheet → ping Slack'), low monthly volume and zero technical setup, Zapier is completely fine. Do not migrate just for the sake of migrating."),
       h2("When moving to n8n pays off quickly"),
       ul([
-        "Your Zapier bill is climbing past $150–$300/month because multi-step workflows run thousands of tasks.",
+        "Your per-task Zapier bill climbs steeply because multi-step workflows run thousands of tasks each month.",
         "You need real validation, 30-day deduplication, scoring rules or custom API pagination.",
         "You handle sensitive customer or financial payloads that should stay on self-hosted infrastructure.",
         "You want exportable JSON workflows you can version in Git and test like real software.",
@@ -213,7 +213,7 @@ export const RESOURCES_A: Resource[] = [
       ul([
         "Unsupervised outbound cold emails or autonomous pricing negotiations.",
         "Medical, legal or regulated compliance advice without specialist sign-off.",
-        "Any workflow where a deterministic SQL query, formula or n8n rule already gives an exact 100% accurate result.",
+        "Any workflow where a deterministic SQL query, formula or n8n rule already gives an exact, repeatable result.",
       ]),
     ],
   },
@@ -277,3 +277,4 @@ export const RESOURCES_A: Resource[] = [
     ],
   },
 ];
+

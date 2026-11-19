@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { Icon, type IconName } from "@/components/ui/Icon";
 
 export type ArchNodeKind = "trigger" | "logic" | "integration" | "human" | "output";
@@ -43,9 +43,22 @@ type Props = {
  */
 export function InteractiveArchitecture({ eyebrow = "Architecture", title, lead, nodes, caption }: Props) {
   const [activeId, setActiveId] = useState<string>(nodes[0]?.id ?? "");
+  const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const active = nodes.find((n) => n.id === activeId) ?? nodes[0];
 
   if (!active) return null;
+
+  const onNodeKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next = index;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = (index + 1) % nodes.length;
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = (index - 1 + nodes.length) % nodes.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = nodes.length - 1;
+    else return;
+    e.preventDefault();
+    setActiveId(nodes[next].id);
+    btnRefs.current[next]?.focus();
+  };
 
   return (
     <figure className="arch">
@@ -66,10 +79,14 @@ export function InteractiveArchitecture({ eyebrow = "Architecture", title, lead,
           return (
             <li key={node.id} className="arch__item">
               <button
+                ref={(el) => {
+                  btnRefs.current[index] = el;
+                }}
                 type="button"
                 className={`arch__node arch__node--${node.kind} ${isSelected ? "is-active" : ""}`.trim()}
                 aria-pressed={isSelected}
                 onClick={() => setActiveId(node.id)}
+                onKeyDown={(e) => onNodeKeyDown(e, index)}
               >
                 <span className="arch__node-top">
                   <span className="arch__num">{String(index + 1).padStart(2, "0")}</span>
@@ -114,3 +131,4 @@ export function InteractiveArchitecture({ eyebrow = "Architecture", title, lead,
     </figure>
   );
 }
+

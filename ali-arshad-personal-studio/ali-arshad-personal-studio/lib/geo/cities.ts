@@ -11,7 +11,7 @@
  */
 
 import type { PublicationState } from "@/lib/seo/publication";
-import { US_STATES } from "@/lib/geo/states";
+import { EDITORIAL_REVIEW, US_STATES, type EditorialReviewGate } from "@/lib/geo/states";
 
 export type PilotCity = {
   /** URL slug under /locations/<state>/<city>. */
@@ -24,6 +24,7 @@ export type PilotCity = {
   publicationState: PublicationState;
   evidenceRequired: string[];
   evidenceHave: string[];
+  editorialReview: EditorialReviewGate;
 };
 
 const LOCAL_SIGNAL =
@@ -42,8 +43,9 @@ function city([name, stateSlug, primaryService]: Row): PilotCity {
     stateSlug,
     primaryService,
     publicationState: "NeedsEvidence",
-    evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY],
+    evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY, EDITORIAL_REVIEW],
     evidenceHave: [],
+    editorialReview: { reviewed: false, hasCustomContent: false },
   };
 }
 
