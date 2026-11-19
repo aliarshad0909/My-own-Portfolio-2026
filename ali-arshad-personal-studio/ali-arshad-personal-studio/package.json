@@ -2,7 +2,7 @@
   "name": "ali-arshad-personal-studio",
   "version": "1.0.0",
   "private": true,
-  "description": "Ali Arshad \u2014 Personal Studio portfolio website",
+  "description": "Ali Arshad \u00e2\u20ac\u201d Personal Studio portfolio website",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +11,11 @@
     "test": "node scripts/run-tests.mjs",
     "seo:csv": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/export-keyword-registry.mjs",
     "seo:audit": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-audit.mjs",
-    "seo:report": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-report.mjs"
+    "seo:report": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-report.mjs",
+    "remotion:studio": "remotion studio remotion/index.ts",
+    "remotion:render:capabilities": "remotion render remotion/index.ts CapabilitiesPipeline public/videos/capabilities-pipeline.mp4",
+    "remotion:render:n8n": "remotion render remotion/index.ts N8nWorkflow public/videos/n8n-workflow.mp4",
+    "remotion:render:ai-agent": "remotion render remotion/index.ts AiAgentFlow public/videos/ai-agent-flow.mp4"
   },
   "dependencies": {
     "next": "^16.4.1",
@@ -19,9 +23,11 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@remotion/cli": "^4.0.545",
     "@types/node": "^22.10.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "remotion": "^4.0.545",
     "typescript": "^5.7.0"
   },
   "engines": {

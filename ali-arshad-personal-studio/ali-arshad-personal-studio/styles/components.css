@@ -2934,3 +2934,25 @@ fieldset.calc__field {
     transform: none;
   }
 }
+/* ── Service hub motion loop (pre-rendered Remotion via MotionMedia) ─────── */
+.service-motion {
+  margin: clamp(20px, 3vw, 36px) 0 0;
+  max-width: 980px;
+}
+.service-motion__media {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg);
+  aspect-ratio: 16 / 9;
+}
+.service-motion__media img,
+.service-motion__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.service-motion__cap {
+  margin-top: 12px;
+}
