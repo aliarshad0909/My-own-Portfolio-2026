@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: stockflow-ops
+    runtime: node
+    plan: free
+    rootDir: apps/stockflow
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start -- -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://stock.aliarshad.co
+
