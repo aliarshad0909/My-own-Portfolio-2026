@@ -1,0 +1,112 @@
+import fs from "node:fs";
+import path from "node:path";
+import { PGlite } from "@electric-sql/pglite";
+import { drizzle as drizzlePglite, type PgliteDatabase } from "drizzle-orm/pglite";
+import { drizzle as drizzlePg, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import * as schema from "@/db/schema";
+import { seedDemoData } from "@/db/seed";
+
+export type AppDatabase = NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>;
+
+type DbState = {
+  db: AppDatabase;
+  driver: "postgres" | "pglite";
+  execRaw: (sql: string) => Promise<void>;
+  initialized: boolean;
+  initPromise: Promise<void> | null;
+};
+
+const globalForDb = globalThis as unknown as { __pipelineosDb?: DbState };
+
+function loadInitMigrationSql(): string {
+  const migrationPath = path.join(process.cwd(), "src", "db", "migrations", "0000_init.sql");
+  return fs.readFileSync(migrationPath, "utf8");
+}
+
+function createState(): DbState {
+  const databaseUrl = (process.env.DATABASE_URL || "").trim();
+
+  if (databaseUrl) {
+    const pool = new Pool({
+      connectionString: databaseUrl,
+      max: 8,
+      ssl: databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1") ? false : { rejectUnauthorized: false },
+    });
+    const db = drizzlePg(pool, { schema });
+    return {
+      db,
+      driver: "postgres",
+      execRaw: async (sql: string) => {
+        await pool.query(sql);
+      },
+      initialized: false,
+      initPromise: null,
+    };
+  }
+
+  const dataDir = (process.env.PGLITE_DATA_DIR || "").trim() || path.join(process.cwd(), "data", "pgdata");
+  if (dataDir !== "memory://") {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+  const client = dataDir === "memory://" ? new PGlite() : new PGlite(dataDir);
+  const db = drizzlePglite(client, { schema });
+
+  return {
+    db,
+    driver: "pglite",
+    execRaw: async (sql: string) => {
+      await client.exec(sql);
+    },
+    initialized: false,
+    initPromise: null,
+  };
+}
+
+function getState(): DbState {
+  if (!globalForDb.__pipelineosDb) {
+    globalForDb.__pipelineosDb = createState();
+  }
+  return globalForDb.__pipelineosDb;
+}
+
+/**
+ * Returns the ready-to-query Drizzle PostgreSQL instance, ensuring migrations
+ * and initial realistic demo data are loaded once per process.
+ */
+export async function getDb(): Promise<AppDatabase> {
+  const state = getState();
+  if (!state.initialized) {
+    if (!state.initPromise) {
+      state.initPromise = (async () => {
+        const sql = loadInitMigrationSql();
+        await state.execRaw(sql);
+        const existingUsers = await state.db.select({ id: schema.users.id }).from(schema.users).limit(1);
+        if (existingUsers.length === 0) {
+          await seedDemoData(state.db);
+        }
+        state.initialized = true;
+      })();
+    }
+    await state.initPromise;
+  }
+  return state.db;
+}
+
+export function getDbDriver(): "postgres" | "pglite" {
+  return getState().driver;
+}
+
+/**
+ * Atomically resets the demo workspace data while keeping active sessions intact
+ * for the demo user so visitors stay signed in cleanly after resetting.
+ */
+export async function resetDemoWorkspace(): Promise<void> {
+  const state = getState();
+  await getDb();
+  await state.execRaw(`
+    TRUNCATE TABLE activities, deal_history, deals, leads, contacts, companies RESTART IDENTITY CASCADE;
+  `);
+  await seedDemoData(state.db, { skipUsers: true });
+}
+
