@@ -381,6 +381,32 @@ export function ProjectDetail({ project, variant }: Props) {
                       <li key={b}>{b}</li>
                     ))}
                   </ul>
+                  {project.mobilePreview.interactiveWebUrl || project.mobilePreview.androidApkUrl ? (
+                    <div className="detail__links" style={{ marginTop: "16px" }}>
+                      {project.mobilePreview.interactiveWebUrl ? (
+                        <a
+                          className="btn btn--primary btn--sm"
+                          href={project.mobilePreview.interactiveWebUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span>Open Interactive Mobile Web Preview</span>
+                          <Icon name="arrow-up-right" size={16} className="btn__icon" />
+                        </a>
+                      ) : null}
+                      {project.mobilePreview.androidApkUrl ? (
+                        <a
+                          className="btn btn--secondary btn--sm"
+                          href={project.mobilePreview.androidApkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span>Download Android Preview APK</span>
+                          <Icon name="arrow-up-right" size={16} className="btn__icon" />
+                        </a>
+                      ) : null}
+                    </div>
+                  ) : null}
                   <div className="mobile-preview__grid">
                     {project.mobilePreview.screens.map((screen) => (
                       <figure key={screen.src} className="mobile-preview__card">

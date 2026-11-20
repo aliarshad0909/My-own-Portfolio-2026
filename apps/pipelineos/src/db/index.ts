@@ -1,10 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { PGlite } from "@electric-sql/pglite";
+import { eq } from "drizzle-orm";
 import { drizzle as drizzlePglite, type PgliteDatabase } from "drizzle-orm/pglite";
 import { drizzle as drizzlePg, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "@/db/schema";
+import { DEMO_ACCOUNT } from "@/lib/crypto";
 import { seedDemoData } from "@/db/seed";
 
 export type AppDatabase = NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>;
@@ -25,13 +27,15 @@ function loadInitMigrationSql(): string {
 }
 
 function createState(): DbState {
-  const databaseUrl = (process.env.DATABASE_URL || "").trim();
+  const databaseUrl = (process.env.PIPELINEOS_DATABASE_URL || process.env.DATABASE_URL || "").trim();
 
   if (databaseUrl) {
+    const isLocal = databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1");
+    const rejectUnauthorized = process.env.PGSSL_REJECT_UNAUTHORIZED !== "false";
     const pool = new Pool({
       connectionString: databaseUrl,
       max: 8,
-      ssl: databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1") ? false : { rejectUnauthorized: false },
+      ssl: isLocal ? false : { rejectUnauthorized },
     });
     const db = drizzlePg(pool, { schema });
     return {
@@ -43,6 +47,12 @@ function createState(): DbState {
       initialized: false,
       initPromise: null,
     };
+  }
+
+  if (process.env.RENDER === "true") {
+    throw new Error(
+      "DATABASE_URL (or PIPELINEOS_DATABASE_URL) is required in Render production so data persists in PostgreSQL.",
+    );
   }
 
   const dataDir = (process.env.PGLITE_DATA_DIR || "").trim() || path.join(process.cwd(), "data", "pgdata");
@@ -81,9 +91,22 @@ export async function getDb(): Promise<AppDatabase> {
       state.initPromise = (async () => {
         const sql = loadInitMigrationSql();
         await state.execRaw(sql);
-        const existingUsers = await state.db.select({ id: schema.users.id }).from(schema.users).limit(1);
-        if (existingUsers.length === 0) {
+        const existingDemo = await state.db
+          .select({ id: schema.users.id })
+          .from(schema.users)
+          .where(eq(schema.users.email, DEMO_ACCOUNT.email))
+          .limit(1);
+        const existingCompanies = await state.db
+          .select({ id: schema.companies.id })
+          .from(schema.companies)
+          .limit(1);
+
+        if (existingDemo.length === 0 && existingCompanies.length === 0) {
           await seedDemoData(state.db);
+        } else if (existingDemo.length === 0) {
+          await seedDemoData(state.db, { usersOnly: true });
+        } else if (existingCompanies.length === 0) {
+          await seedDemoData(state.db, { skipUsers: true });
         }
         state.initialized = true;
       })();
@@ -109,4 +132,3 @@ export async function resetDemoWorkspace(): Promise<void> {
   `);
   await seedDemoData(state.db, { skipUsers: true });
 }
-

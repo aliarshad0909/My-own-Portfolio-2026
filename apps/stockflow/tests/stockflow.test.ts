@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 
 process.env.PGLITE_DATA_DIR = "memory://";
 process.env.DATABASE_URL = "";
+process.env.STOCKFLOW_DATABASE_URL = "";
 
 import { getDb, resetDemoWorkspace } from "@/db";
 import { customers, products, purchaseOrderItems, purchaseOrders, salesOrderItems, salesOrders, suppliers, warehouses } from "@/db/schema";
@@ -16,10 +17,41 @@ import {
   receivePurchaseOrder,
   transferStock,
 } from "@/lib/inventory";
-import { hashPassword, verifyPassword } from "@/lib/crypto";
+import { generateLockedPassword, hashPassword, resolveSessionSecret, verifyPassword } from "@/lib/crypto";
+import { verifyCsrfOrigin } from "@/lib/security";
 import { productCreateSchema, stockTransferSchema } from "@/lib/validation";
 
 describe("StockFlow validation & security", () => {
+  it("enforces production SESSION_SECRET, random locked passwords, and CSRF origin guard", () => {
+    assert.equal(generateLockedPassword().length, 64);
+    const prevRender = process.env.RENDER;
+    const prevSecret = process.env.SESSION_SECRET;
+    try {
+      process.env.RENDER = "true";
+      process.env.SESSION_SECRET = "short";
+      assert.throws(() => resolveSessionSecret(), /at least 32/);
+      process.env.SESSION_SECRET = "b".repeat(64);
+      assert.equal(resolveSessionSecret(), "b".repeat(64));
+    } finally {
+      if (prevRender === undefined) delete process.env.RENDER;
+      else process.env.RENDER = prevRender;
+      if (prevSecret === undefined) delete process.env.SESSION_SECRET;
+      else process.env.SESSION_SECRET = prevSecret;
+    }
+
+    const crossCookieReq = new Request("https://stock.aliarshad.co/api/v1/demo/reset", {
+      method: "POST",
+      headers: { host: "stock.aliarshad.co", origin: "https://evil.example" },
+    });
+    assert.equal(verifyCsrfOrigin(crossCookieReq)?.status, 403);
+
+    const mobileBearerReq = new Request("https://stock.aliarshad.co/api/v1/demo/reset", {
+      method: "POST",
+      headers: { host: "stock.aliarshad.co", origin: "https://mobile.example", authorization: "Bearer token123" },
+    });
+    assert.equal(verifyCsrfOrigin(mobileBearerReq), null);
+  });
+
   it("hashes and verifies credentials securely", () => {
     const h = hashPassword("StockFlowDemo2026!");
     assert.equal(verifyPassword("StockFlowDemo2026!", h), true);

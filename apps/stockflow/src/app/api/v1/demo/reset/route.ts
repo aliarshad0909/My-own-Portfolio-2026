@@ -1,19 +1,36 @@
 import { NextResponse } from "next/server";
 import { resetDemoWorkspace } from "@/db";
-import { isAllowedOpsRole, requireApiUser } from "@/lib/auth";
+import { requireApiUser } from "@/lib/auth";
 import { checkRateLimit, clientKey } from "@/lib/rate-limit";
+import { verifyCsrfOrigin } from "@/lib/security";
 
 export async function POST(request: Request) {
+  if (process.env.ALLOW_DEMO_RESET === "false") {
+    return NextResponse.json({ error: "Demo workspace reset is disabled." }, { status: 403 });
+  }
+
+  const csrf = verifyCsrfOrigin(request);
+  if (csrf) return csrf;
+
   const auth = await requireApiUser(request);
   if ("error" in auth) return auth.error;
-  if (!isAllowedOpsRole(auth.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (auth.user.role !== "demo" && auth.user.role !== "admin") {
+    return NextResponse.json({ error: "Only demo or admin accounts may reset the demo inventory." }, { status: 403 });
+  }
 
-  const limit = checkRateLimit(clientKey(request, "reset"), 6, 60_000);
-  if (!limit.allowed) {
-    return NextResponse.json({ error: `Rate limited. Try again in ${limit.retryAfterSeconds}s.` }, { status: 429 });
+  const perClient = checkRateLimit(clientKey(request, "reset"), 3, 120_000);
+  if (!perClient.allowed) {
+    return NextResponse.json({ error: `Rate limited. Try again in ${perClient.retryAfterSeconds}s.` }, { status: 429 });
+  }
+
+  const globalCooldown = checkRateLimit("global:stockflow-demo-reset", 1, 15_000);
+  if (!globalCooldown.allowed) {
+    return NextResponse.json(
+      { error: `Inventory was just reset. Try again in ${globalCooldown.retryAfterSeconds}s.` },
+      { status: 429 },
+    );
   }
 
   await resetDemoWorkspace();
   return NextResponse.json({ ok: true, message: "StockFlow demo inventory reset cleanly." });
 }
-

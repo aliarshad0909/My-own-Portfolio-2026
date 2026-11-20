@@ -1,0 +1,65 @@
+# Unified Render Blueprint for Ali Arshad Personal Studio Live SaaS Ecosystem
+# Deploy all three free-tier commercial-compatible services from one Render Blueprint:
+#   1. pipelineos-crm        -> https://crm.aliarshad.co   (Node Web Service, Free)
+#   2. stockflow-ops         -> https://stock.aliarshad.co (Node Web Service, Free)
+#   3. stockflow-mobile-web  -> Interactive Expo Web preview (Static Site, Free, always-on)
+#
+# Supply separate Neon Free PostgreSQL connection strings for DATABASE_URL on each web service.
+
+services:
+  - type: web
+    name: pipelineos-crm
+    runtime: node
+    plan: free
+    rootDir: apps/pipelineos
+    buildCommand: npm ci && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://crm.aliarshad.co
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: stockflow-ops
+    runtime: node
+    plan: free
+    rootDir: apps/stockflow
+    buildCommand: npm ci && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: STOCKFLOW_DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://stock.aliarshad.co
+      - key: CORS_ALLOWED_ORIGINS
+        value: "*"
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: stockflow-mobile-web
+    runtime: static
+    rootDir: apps/stockflow-mobile
+    buildCommand: npm ci && npx expo export --platform web
+    staticPublishPath: dist
+    envVars:
+      - key: EXPO_PUBLIC_API_URL
+        value: https://stock.aliarshad.co
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
