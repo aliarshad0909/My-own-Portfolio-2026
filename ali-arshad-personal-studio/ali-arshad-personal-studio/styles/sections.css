@@ -3715,3 +3715,295 @@
     transform: none;
   }
 }
+
+
+/* ==========================================================================
+   LIVE PRODUCT DEMONSTRATIONS (PipelineOS & StockFlow Showcase + Case Studies)
+   ========================================================================== */
+
+.live-demos {
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  background: radial-gradient(1200px 460px at 14% 0%, rgba(255, 122, 92, 0.06), transparent 65%),
+    var(--bg);
+}
+
+.live-demos__lead {
+  max-width: 66ch;
+  margin-top: 10px;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 28px;
+}
+
+@media (max-width: 960px) {
+  .demo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.demo-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+  min-width: 0;
+  transition: border-color var(--fast) ease, transform var(--fast) ease;
+}
+
+.demo-card:hover {
+  border-color: var(--coral-line);
+  transform: translateY(-3px);
+}
+
+.demo-card__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  background: #0b1120;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.demo-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  transition: transform 0.35s ease;
+}
+
+.demo-card:hover .demo-card__img {
+  transform: scale(1.02);
+}
+
+.demo-card__media-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(11, 13, 16, 0.86);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+}
+
+.demo-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px 22px 24px;
+  flex: 1;
+  min-width: 0;
+}
+
+.demo-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.demo-card__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.demo-card__title a {
+  color: var(--text);
+}
+
+.demo-card__title a:hover {
+  color: var(--coral);
+}
+
+.demo-card__subtitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--coral);
+  margin: -4px 0 0;
+}
+
+.demo-card__desc {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.demo-card__features {
+  display: grid;
+  gap: 7px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  font-size: 0.86rem;
+  color: var(--text);
+}
+
+.demo-card__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+.demo-card__features svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--coral);
+}
+
+.demo-card__stack {
+  margin-top: 2px;
+}
+
+.demo-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.live-demos__note {
+  margin-top: 20px;
+  max-width: 78ch;
+}
+
+/* Case Study Demo Access Panel */
+.demo-access-panel {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.demo-access-panel__note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.demo-access-panel__grid {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.demo-access-panel__grid dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.demo-access-panel__grid dd {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.demo-access-panel__cta {
+  padding-top: 4px;
+}
+
+/* Case Study StockFlow Mobile Preview Gallery */
+.prose ul.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+
+.prose ul.tag-list li {
+  padding-left: 10px;
+}
+
+.prose ul.tag-list li::before {
+  display: none;
+}
+
+.mobile-preview__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0 14px;
+}
+
+@media (max-width: 900px) {
+  .mobile-preview__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .mobile-preview__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.mobile-preview__card {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.mobile-preview__frame {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  background: #0f172a;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.mobile-preview__frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mobile-preview__caption {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-card,
+  .demo-card__img {
+    transition: none;
+  }
+
+  .demo-card:hover,
+  .demo-card:hover .demo-card__img {
+    transform: none;
+  }
+}

@@ -305,7 +305,7 @@ export function ProjectDetail({ project, variant }: Props) {
               </section>
 
               {project.architectureDiagram ? (
-                <section aria-labelledby="architecture-diagram-title">
+                <section id="architecture" aria-labelledby="architecture-diagram-title">
                   <h2 className="section-title section-title--sm" id="architecture-diagram-title">
                     Technical architecture schematic
                   </h2>
@@ -324,6 +324,81 @@ export function ProjectDetail({ project, variant }: Props) {
                       <span>{project.architectureDiagram.caption}</span>
                     </figcaption>
                   </figure>
+                </section>
+              ) : null}
+
+              {project.demoAccess ? (
+                <section id="demo-access" aria-labelledby="demo-access-title">
+                  <h2 className="section-title section-title--sm" id="demo-access-title">
+                    Interactive demo access &amp; deployment status
+                  </h2>
+                  <div className="demo-access-panel">
+                    <p className="demo-access-panel__note">{project.demoAccess.hostingNote}</p>
+                    <dl className="demo-access-panel__grid">
+                      <div>
+                        <dt>Target Deployment</dt>
+                        <dd>{project.demoAccess.deploymentTarget}</dd>
+                      </div>
+                      <div>
+                        <dt>Demo Credentials</dt>
+                        <dd>
+                          <code>{project.demoAccess.demoEmail}</code> /{" "}
+                          <code>{project.demoAccess.demoPassword}</code>
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>Run Locally</dt>
+                        <dd>
+                          <code>{project.demoAccess.localRunCommand}</code>
+                        </dd>
+                      </div>
+                    </dl>
+                    {project.liveUrl ? (
+                      <div className="demo-access-panel__cta">
+                        <a
+                          className="btn btn--primary btn--sm"
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span>Open Live Instance</span>
+                          <Icon name="arrow-up-right" size={16} className="btn__icon" />
+                        </a>
+                      </div>
+                    ) : null}
+                  </div>
+                </section>
+              ) : null}
+
+              {project.mobilePreview ? (
+                <section id="mobile-preview" aria-labelledby="mobile-preview-title">
+                  <h2 className="section-title section-title--sm" id="mobile-preview-title">
+                    {project.mobilePreview.headline}
+                  </h2>
+                  <p>{project.mobilePreview.summary}</p>
+                  <ul className="tag-list" aria-label="Mobile app technologies">
+                    {project.mobilePreview.techBadges.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                  <div className="mobile-preview__grid">
+                    {project.mobilePreview.screens.map((screen) => (
+                      <figure key={screen.src} className="mobile-preview__card">
+                        <div className="mobile-preview__frame">
+                          <Image
+                            src={screen.src}
+                            alt={screen.alt}
+                            width={screen.width}
+                            height={screen.height}
+                            loading="lazy"
+                            sizes="(min-width: 1024px) 220px, 44vw"
+                          />
+                        </div>
+                        <figcaption className="mobile-preview__caption">{screen.label}</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                  <p className="fine-print">{project.mobilePreview.distributionNote}</p>
                 </section>
               ) : null}
 
