@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --navy-950: #08101d;
+  --navy-900: #0d192b;
+  --navy-800: #14243d;
+  --surface-bg: #f4f6fa;
+  --surface-card: #ffffff;
+  --border-subtle: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --brand-primary: #2563eb;
+  --brand-primary-hover: #1d4ed8;
+}
+
+html,
+body {
+  background-color: var(--surface-bg);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), var(--font-inter), system-ui, sans-serif;
+}
+
+/* Subtle custom scrollbars for Kanban board */
+.pipeline-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.pipeline-scroll::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 999px;
+}
+
+.pipeline-scroll::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 999px;
+}
+
