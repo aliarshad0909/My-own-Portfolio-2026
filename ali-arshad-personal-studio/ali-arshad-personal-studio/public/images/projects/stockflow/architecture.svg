@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-label="StockFlow Inventory Web and Mobile Companion Architecture">
+  <defs>
+    <linearGradient id="sbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071513"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="sarrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="640" rx="16" fill="url(#sbg)"/>
+  <text x="48" y="54" fill="#34d399" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="1.6">STOCKFLOW · MULTI-WAREHOUSE INVENTORY SAAS + REACT NATIVE MOBILE</text>
+  <text x="48" y="84" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="700">Shared /api/v1 REST Backend Serving Web Operations Console &amp; Expo Mobile App</text>
+
+  <!-- Web Client -->
+  <rect x="48" y="124" width="320" height="200" rx="14" fill="#132229" stroke="#244048" stroke-width="1.5"/>
+  <text x="70" y="156" fill="#34d399" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">WEB OPERATIONS CONSOLE</text>
+  <text x="70" y="182" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="15" font-weight="700">Next.js 16 · Cookie Session Auth</text>
+  <text x="70" y="208" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• KPI Dashboard &amp; Valuation Breakdown</text>
+  <text x="70" y="230" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• Product Catalog, SKUs &amp; EAN-13 Barcodes</text>
+  <text x="70" y="252" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• Multi-Warehouse Bins, Transfers &amp; Adjust</text>
+  <text x="70" y="274" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• Purchase Orders, Sales Orders &amp; Audit Trail</text>
+  <text x="70" y="302" fill="#6ee7b7" font-family="monospace" font-size="11">source: "web"</text>
+
+  <!-- Mobile Client -->
+  <rect x="48" y="346" width="320" height="202" rx="14" fill="#132229" stroke="#10b981" stroke-width="1.8"/>
+  <text x="70" y="378" fill="#6ee7b7" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">STOCKFLOW MOBILE (11 SCREENS)</text>
+  <text x="70" y="404" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="15" font-weight="700">React Native + Expo SDK 52 · Bearer Auth</text>
+  <text x="70" y="430" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• Native expo-camera Barcode Scanner</text>
+  <text x="70" y="452" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• Mobile Stock Adjustments &amp; Transfers</text>
+  <text x="70" y="474" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• 1-Tap PO Receiving &amp; SO Fulfilment</text>
+  <text x="70" y="496" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• Low-Stock Alerts, Warehouse Switch &amp; Settings</text>
+  <text x="70" y="526" fill="#34d399" font-family="monospace" font-size="11">Authorization: Bearer &lt;token&gt; · source: "mobile"</text>
+
+  <!-- Shared API -->
+  <rect x="442" y="124" width="326" height="424" rx="14" fill="#132229" stroke="#244048" stroke-width="1.5"/>
+  <text x="466" y="156" fill="#60a5fa" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">SHARED /API/V1 REST BACKEND</text>
+
+  <rect x="466" y="176" width="278" height="74" rx="9" fill="#0f172a" stroke="#334155"/>
+  <text x="482" y="200" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Dual Web + Mobile Auth</text>
+  <text x="482" y="220" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">HttpOnly cookies for web · Bearer tokens for</text>
+  <text x="482" y="236" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Expo mobile · CORS + Zod + Rate Limiter</text>
+
+  <rect x="466" y="264" width="278" height="118" rx="9" fill="#0f172a" stroke="#334155"/>
+  <text x="482" y="288" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Versioned Inventory Endpoints</text>
+  <text x="482" y="310" fill="#cbd5e1" font-family="monospace" font-size="11">/api/v1/products?barcode=...</text>
+  <text x="482" y="328" fill="#cbd5e1" font-family="monospace" font-size="11">/api/v1/stock/adjust &amp; /transfer</text>
+  <text x="482" y="346" fill="#cbd5e1" font-family="monospace" font-size="11">/api/v1/purchase-orders/:id/receive</text>
+  <text x="482" y="364" fill="#cbd5e1" font-family="monospace" font-size="11">/api/v1/sales-orders/:id/action · /alerts</text>
+
+  <rect x="466" y="396" width="278" height="130" rx="9" fill="#0c2620" stroke="#10b981"/>
+  <text x="482" y="420" fill="#d1fae5" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Atomic Ledger Transactions</text>
+  <text x="482" y="442" fill="#a7f3d0" font-family="system-ui, sans-serif" font-size="11">• Negative-stock prevention guard</text>
+  <text x="482" y="460" fill="#a7f3d0" font-family="system-ui, sans-serif" font-size="11">• Double-entry inter-warehouse transfers</text>
+  <text x="482" y="478" fill="#a7f3d0" font-family="system-ui, sans-serif" font-size="11">• Reservation / fulfilment stock locking</text>
+  <text x="482" y="496" fill="#a7f3d0" font-family="system-ui, sans-serif" font-size="11">• Immutable stock_movements audit log</text>
+
+  <!-- Database Layer -->
+  <rect x="842" y="124" width="310" height="424" rx="14" fill="#132229" stroke="#244048" stroke-width="1.5"/>
+  <text x="866" y="156" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">POSTGRESQL + DRIZZLE ORM</text>
+
+  <rect x="866" y="176" width="262" height="218" rx="9" fill="#0f172a" stroke="#334155"/>
+  <text x="882" y="200" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Operations Schema (11 Tables)</text>
+  <text x="882" y="224" fill="#cbd5e1" font-family="monospace" font-size="12">• users / sessions</text>
+  <text x="882" y="244" fill="#cbd5e1" font-family="monospace" font-size="12">• warehouses</text>
+  <text x="882" y="264" fill="#cbd5e1" font-family="monospace" font-size="12">• products (SKU + EAN-13)</text>
+  <text x="882" y="284" fill="#cbd5e1" font-family="monospace" font-size="12">• stock_levels (per bin)</text>
+  <text x="882" y="304" fill="#cbd5e1" font-family="monospace" font-size="12">• stock_movements (audit)</text>
+  <text x="882" y="324" fill="#cbd5e1" font-family="monospace" font-size="12">• suppliers / purchase_orders</text>
+  <text x="882" y="344" fill="#cbd5e1" font-family="monospace" font-size="12">• customers / sales_orders</text>
+  <text x="882" y="372" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Single source of truth for Web &amp; Mobile</text>
+
+  <rect x="866" y="408" width="262" height="118" rx="9" fill="#0f172a" stroke="#475569"/>
+  <text x="882" y="432" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Deployment Blueprint</text>
+  <text x="882" y="454" fill="#6ee7b7" font-family="system-ui, sans-serif" font-size="12" font-weight="600">API/Web: stock.aliarshad.co</text>
+  <text x="882" y="474" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Render Free + Neon Free PostgreSQL</text>
+  <text x="882" y="496" fill="#93c5fd" font-family="system-ui, sans-serif" font-size="12" font-weight="600">Mobile: Expo Go QR &amp; EAS APK</text>
+  <text x="882" y="514" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">eas.json preview APK + iOS build profile</text>
+
+  <!-- Arrows -->
+  <line x1="368" y1="224" x2="438" y2="224" stroke="#34d399" stroke-width="2.2" marker-end="url(#sarrow)"/>
+  <line x1="368" y1="446" x2="438" y2="446" stroke="#34d399" stroke-width="2.2" marker-end="url(#sarrow)"/>
+  <line x1="768" y1="330" x2="838" y2="330" stroke="#34d399" stroke-width="2.2" marker-end="url(#sarrow)"/>
+
+  <text x="48" y="596" fill="#64748b" font-family="system-ui, sans-serif" font-size="12">Clean-room TypeScript architecture inspired by InvenTree (MIT). Verified end-to-end across web console, Expo mobile client &amp; PostgreSQL.</text>
+</svg>
+

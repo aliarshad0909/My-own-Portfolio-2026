@@ -3,6 +3,7 @@ import { ContactCTA } from "@/components/sections/ContactCTA";
 import { FeaturedWork } from "@/components/sections/FeaturedWork";
 import { FreelanceConnect } from "@/components/sections/FreelanceConnect";
 import { Hero } from "@/components/sections/Hero";
+import { LiveProductDemos } from "@/components/sections/LiveProductDemos";
 import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
 import { WhyWorkWithMe } from "@/components/sections/WhyWorkWithMe";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -22,10 +23,11 @@ export default function HomePage() {
       <JsonLd data={personSchema()} />
       <JsonLd data={webSiteSchema()} />
       {/* Streamlined conversion architecture:
-          1. Hero → 2. Services → 3. Selected Work (7 priority builds) →
-          4. Why Work With Me → 5. Freelance & Social Connect → 6. Final CTA. */}
+          1. Hero → 2. Services → 3. Live Product Demonstrations (PipelineOS & StockFlow) →
+          4. Selected Work (7 priority builds) → 5. Why Work With Me → 6. Freelance & Social Connect → 7. Final CTA. */}
       <Hero />
       <ServiceShowcaseHome />
+      <LiveProductDemos />
       <FeaturedWork />
       <WhyWorkWithMe />
       <FreelanceConnect />

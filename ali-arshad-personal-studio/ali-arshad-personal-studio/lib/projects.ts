@@ -136,6 +136,22 @@ export type Project = {
     height: number;
     caption: string;
   };
+  /** Optional interactive demo credentials and deployment blueprint details. */
+  demoAccess?: {
+    deploymentTarget: string;
+    demoEmail: string;
+    demoPassword: string;
+    localRunCommand: string;
+    hostingNote: string;
+  };
+  /** Optional mobile companion app showcase rendered under #mobile-preview. */
+  mobilePreview?: {
+    headline: string;
+    summary: string;
+    distributionNote: string;
+    techBadges: string[];
+    screens: (ProjectImage & { label: string })[];
+  };
   /** Presence of this object lists the project under /case-studies. */
   caseStudy?: CaseStudy;
 };
@@ -1178,7 +1194,356 @@ const SECURITY: Project = {
   },
 };
 
+const PIPELINEOS: Project = {
+  id: "p13",
+  slug: "pipelineos-crm",
+  title: "PipelineOS — CRM & Sales Management SaaS",
+  categories: ["Web & Software", "Business Solutions"],
+  tags: ["Full-Stack SaaS", "PostgreSQL", "Kanban Pipeline", "Lead Conversion", "RBAC Auth"],
+  year: "2026",
+  summary:
+    "A complete full-stack CRM and sales management SaaS built with Next.js, Drizzle ORM, and PostgreSQL — featuring persistent contacts, transactional lead conversion, a 6-stage Kanban deal pipeline, activities, live revenue analytics, and 1-click demo reset.",
+  projectType: "Open-Source Adaptation",
+  status: "Demo Ready",
+  role: "Product architect and full-stack software engineer",
+  contribution: [
+    "Audited open-source CRM licenses and rejected AGPL/Enterprise codebases in favor of a legally clean MIT-inspired architecture",
+    "Designed a standalone deep-navy SaaS interface completely separate from the portfolio's obsidian/coral identity",
+    "Engineered an 8-table PostgreSQL relational schema with Drizzle ORM, integer-cent deal values, and versioned SQL migrations",
+    "Implemented scrypt salted password authentication, SHA-256 HttpOnly sessions, RBAC roles, and in-memory write rate limiting",
+    "Built end-to-end CRUD for contacts with communication history, leads with atomic conversion to contact + deal, Kanban deal stage moves with audit history, follow-up tasks, and live DB-computed analytics",
+    "Verified with automated unit/PostgreSQL integration tests and headless Chromium desktop/mobile E2E checks",
+  ],
+  technologies: ["Next.js 16", "TypeScript", "PostgreSQL", "Drizzle ORM", "Tailwind CSS", "Zod", "Node.js Test Runner"],
+  featured: true,
+  liveUrl: process.env.NEXT_PUBLIC_PIPELINEOS_URL?.trim() || undefined,
+  sourceUrl: "https://github.com/aliarshad0909/My-own-Portfolio-2026",
+  cover: {
+    src: "/images/projects/pipelineos/dashboard.png",
+    alt: "PipelineOS CRM executive dashboard showing open pipeline value, won revenue, conversion rate, and overdue tasks",
+    width: 1440,
+    height: 900,
+  },
+  gallery: [
+    {
+      type: "image",
+      src: "/images/projects/pipelineos/pipeline.png",
+      alt: "PipelineOS 6-stage Kanban deal pipeline board with stage totals and quick stage transitions",
+      width: 1440,
+      height: 900,
+    },
+    {
+      type: "image",
+      src: "/images/projects/pipelineos/contacts.png",
+      alt: "PipelineOS contacts directory with live search, detail drawer, and communication timeline",
+      width: 1440,
+      height: 900,
+    },
+    {
+      type: "image",
+      src: "/images/projects/pipelineos/leads.png",
+      alt: "PipelineOS lead capture workspace with source filtering and one-click transactional conversion",
+      width: 1440,
+      height: 900,
+    },
+    {
+      type: "image",
+      src: "/images/projects/pipelineos/analytics.png",
+      alt: "PipelineOS live PostgreSQL revenue analytics, funnel conversion rates, and rep performance",
+      width: 1440,
+      height: 900,
+    },
+    {
+      type: "image",
+      src: "/images/projects/pipelineos/login.png",
+      alt: "PipelineOS sign-in screen with one-click demo access and credential login",
+      width: 1440,
+      height: 900,
+    },
+  ],
+  architectureDiagram: {
+    src: "/images/projects/pipelineos/architecture.svg",
+    alt: "PipelineOS technical architecture connecting Next.js App Router UI, Zod-validated REST APIs, Drizzle ORM, and PostgreSQL",
+    width: 1200,
+    height: 620,
+    caption: "PipelineOS system blueprint: Next.js 16 App Router, scrypt/cookie RBAC authentication, transactional lead conversion, and dual-driver PostgreSQL persistence.",
+  },
+  demoAccess: {
+    deploymentTarget: "crm.aliarshad.co (Render Free + Neon Free PostgreSQL blueprint ready)",
+    demoEmail: "demo@pipelineos.studio",
+    demoPassword: "PipelineDemo2026!",
+    localRunCommand: "cd apps/pipelineos && npm install && npm run dev -- -p 3010",
+    hostingNote:
+      "Verified locally with full PostgreSQL persistence and Chromium E2E tests. Public subdomain hosting at crm.aliarshad.co is configured via apps/pipelineos/render.yaml and awaiting owner hosting/DNS activation.",
+  },
+  attribution: {
+    project: "Atomic CRM (Marmelab)",
+    url: "https://github.com/marmelab/atomic-crm",
+    license: "MIT",
+    licenseUrl: "https://opensource.org/licenses/MIT",
+    copyright: "Marmelab",
+    originalWork:
+      "Reference CRM domain modeling for contacts, companies, deals, notes, and sales pipeline stages under the permissive MIT License.",
+    modifications: [
+      "Clean-room TypeScript implementation built directly on Next.js 16 App Router and Drizzle ORM without React-Admin or Supabase dependencies",
+      "Added transactional Lead → Contact + Deal conversion with immutable deal_stage_history audit logging",
+      "Added custom scrypt password hashing, SHA-256 HttpOnly cookie sessions, RBAC enforcement, rate limiting, and 1-click seeded demo reset",
+      "Built standalone deep-navy responsive UI with live PostgreSQL funnel analytics and automated E2E QA verification",
+    ],
+  },
+  caseStudy: {
+    background:
+      "Prospective B2B clients evaluating a software studio want to interact with real, persistent business applications rather than static Figma slides. PipelineOS was built as a standalone CRM & Sales Management SaaS demonstrating full-stack architecture, database modeling, and conversion-ready UI polish.",
+    challenge:
+      "Many open-source CRM codebases rely on AGPL-3.0 licenses, proprietary Enterprise modules, or heavy 2–4 GB RAM container stacks that are expensive to host and legally restrictive for commercial agency reuse. The challenge was delivering a genuine PostgreSQL-backed CRM that is 100% permissively licensed, lightweight enough for $0/month commercial-compatible free hosting, and clean to demo repeatedly.",
+    objectives: [
+      "Deliver real CRUD persistence across contacts, leads, deals, notes, and follow-up tasks in PostgreSQL",
+      "Model transactional business logic: atomic Lead → Contact + Deal conversion and immutable stage movement history",
+      "Provide safe public demonstration access with one-click demo sign-in, rate limiting, and instant seeded dataset reset",
+      "Establish an independent B2B SaaS visual identity distinct from the main portfolio website",
+    ],
+    approach:
+      "Built as a self-contained Next.js 16 TypeScript application (`apps/pipelineos`) backed by Drizzle ORM and an 8-table PostgreSQL schema. A dual-driver database adapter connects seamlessly to Neon Free PostgreSQL in production (`DATABASE_URL`) while using persisted PostgreSQL-compatible PGlite locally for zero-friction development and deterministic CI/E2E testing.",
+    features: [
+      "Executive dashboard displaying open pipeline value, weighted forecast, won revenue, lead conversion rate, and overdue tasks",
+      "Contacts directory with live search, CRUD forms, and per-contact communication timeline (notes, calls, emails, meetings)",
+      "Lead capture & qualification queue with status tracking and atomic 1-click conversion into a Contact + Pipeline Deal",
+      "6-stage Kanban pipeline board (New → Qualified → Proposal → Negotiation → Won / Lost) with stage-move audit history",
+      "Activity & follow-up task manager linked directly to deals and contacts with overdue status indicators",
+      "Live analytics view computed directly from PostgreSQL records (pipeline by stage, lead source attribution, rep performance)",
+      "Demo Workspace Reset button that cleanly restores the realistic B2B demonstration dataset in a single transaction",
+    ],
+    decisions: [
+      {
+        title: "MIT clean-room stack over AGPL / Enterprise forks",
+        text: "After directly auditing upstream license files, AGPL-3.0 and Enterprise-gated CRM repos were rejected. Modeling the workflow on MIT-licensed Atomic CRM concepts in TypeScript/Drizzle guarantees clean commercial ownership and ~150 MB runtime memory.",
+      },
+      {
+        title: "Transactional lead conversion with stage history",
+        text: "Converting a lead creates the Contact, opens a Deal, links the originating Lead ID, and records the opening stage history entry inside one PostgreSQL transaction so partial records can never exist.",
+      },
+      {
+        title: "Integer-cent currency accounting",
+        text: "All deal values and pipeline forecasts are stored as integer cents (`value_cents`) and formatted at display time, avoiding floating-point rounding drift in rollups and analytics.",
+      },
+    ],
+    process: [
+      "Audited open-source CRM repositories, license files, and commercial-compatible free hosting limits",
+      "Designed the 8-table PostgreSQL relational schema, SQL migrations, and realistic B2B seed dataset",
+      "Built authenticated REST endpoints with Zod validation, scrypt/cookie sessions, RBAC checks, and rate limiting",
+      "Implemented the responsive deep-navy desktop/mobile interface across Dashboard, Contacts, Leads, Pipeline, Activities, and Analytics",
+      "Verified every journey with automated unit/DB tests and headless Chromium desktop (1440px) & mobile (390px) E2E suites",
+    ],
+    solution:
+      "A production-structured, standalone CRM SaaS (`apps/pipelineos`) ready to deploy to `crm.aliarshad.co` via the included `render.yaml` blueprint and Neon PostgreSQL connection string.",
+    results: [
+      "5/5 automated unit and real PostgreSQL integration tests pass (auth, Zod schemas, rate limiting, CRUD, atomic lead conversion, stage history, analytics, and demo reset).",
+      "Headless Chromium E2E QA verified unauthenticated redirect, 1-click demo login, contact create/edit, lead conversion, live analytics update, task creation, and demo reset with zero console/page errors and zero overflow at 1440px and 390px.",
+      "Production Next.js build (`npm run build`), TypeScript strict check (`tsc --noEmit`), and ESLint 9 pass with zero errors.",
+    ],
+  },
+};
+
+const STOCKFLOW: Project = {
+  id: "p14",
+  slug: "stockflow-inventory",
+  title: "StockFlow — Inventory & Operations SaaS + Mobile App",
+  categories: ["Web & Software", "Business Solutions"],
+  tags: ["Inventory SaaS", "React Native & Expo", "Barcode Scanner", "Multi-Warehouse", "PostgreSQL"],
+  year: "2026",
+  summary:
+    "A multi-warehouse inventory and operations platform paired with a real 11-screen React Native + Expo mobile companion app — sharing a single PostgreSQL database and versioned /api/v1 REST API for live barcode scanning, stock adjustments, transfers, and order fulfilment.",
+  projectType: "Open-Source Adaptation",
+  status: "Demo Ready",
+  role: "Full-stack & mobile systems architect",
+  contribution: [
+    "Architected an 11-table PostgreSQL inventory schema covering products, EAN-13 barcodes, warehouses, per-bin stock levels, immutable movement ledgers, suppliers, purchase orders, customers, and sales orders",
+    "Built dual Web HttpOnly-cookie and Mobile Authorization Bearer authentication on a unified `/api/v1/*` REST API with CORS support",
+    "Engineered atomic PostgreSQL transactions preventing negative stock balances across receipts, adjustments, issues, inter-warehouse transfers, PO receiving, and SO reserve/fulfil/ship workflows",
+    "Built the full StockFlow web operations console (`apps/stockflow`) in an industrial slate-emerald visual identity",
+    "Built the genuine 11-screen React Native + Expo companion mobile app (`apps/stockflow-mobile`) with `expo-camera` barcode scanning, live stock adjustments, transfers, order receiving, and alerts",
+    "Verified real-time web-to-mobile synchronization against the same PostgreSQL database via automated integration tests and Chromium E2E suites",
+  ],
+  technologies: [
+    "Next.js 16",
+    "React Native",
+    "Expo SDK 52",
+    "expo-camera",
+    "TypeScript",
+    "PostgreSQL",
+    "Drizzle ORM",
+    "Zod",
+  ],
+  featured: true,
+  liveUrl: process.env.NEXT_PUBLIC_STOCKFLOW_URL?.trim() || undefined,
+  sourceUrl: "https://github.com/aliarshad0909/My-own-Portfolio-2026",
+  cover: {
+    src: "/images/projects/stockflow/dashboard.png",
+    alt: "StockFlow inventory operations dashboard showing total units on hand, stock valuation, low-stock alerts, warehouse breakdown, and movement feed",
+    width: 1440,
+    height: 900,
+  },
+  gallery: [
+    {
+      type: "image",
+      src: "/images/projects/stockflow/products.png",
+      alt: "StockFlow SKU catalog with EAN-13 barcodes, category filters, pricing, and multi-warehouse availability",
+      width: 1440,
+      height: 900,
+    },
+    {
+      type: "image",
+      src: "/images/projects/stockflow/warehouses.png",
+      alt: "StockFlow multi-warehouse console with Austin, Chicago, and Newark hubs plus atomic stock transfer and adjustment forms",
+      width: 1440,
+      height: 900,
+    },
+    {
+      type: "image",
+      src: "/images/projects/stockflow/orders.png",
+      alt: "StockFlow Purchase Orders receiving and Sales Orders reserve, fulfil, and dispatch workflow",
+      width: 1440,
+      height: 900,
+    },
+    {
+      type: "image",
+      src: "/images/projects/stockflow/movements.png",
+      alt: "StockFlow immutable stock movement audit trail distinguishing web and mobile operator events",
+      width: 1440,
+      height: 900,
+    },
+  ],
+  architectureDiagram: {
+    src: "/images/projects/stockflow/architecture.svg",
+    alt: "StockFlow system architecture showing Web Console and React Native Expo Mobile App sharing the /api/v1 REST backend and PostgreSQL database",
+    width: 1200,
+    height: 640,
+    caption: "StockFlow unified web + mobile architecture: shared /api/v1 REST API serving both the Next.js operations console and the 11-screen Expo mobile app from one PostgreSQL ledger.",
+  },
+  demoAccess: {
+    deploymentTarget: "stock.aliarshad.co (Render Free + Neon Free PostgreSQL blueprint + Expo EAS preview APK)",
+    demoEmail: "ops@stockflow.studio",
+    demoPassword: "StockFlowDemo2026!",
+    localRunCommand: "cd apps/stockflow && npm install && npm run dev -- -p 3020",
+    hostingNote:
+      "Both the StockFlow web/API backend and the StockFlow Mobile Expo companion app are verified locally with live end-to-end PostgreSQL sync. Public hosting at stock.aliarshad.co is configured via apps/stockflow/render.yaml and awaiting owner hosting/DNS activation.",
+  },
+  mobilePreview: {
+    headline: "StockFlow Mobile — Real React Native + Expo Companion App (11 Screens)",
+    summary:
+      "Built in TypeScript with Expo SDK 52 and native expo-camera barcode scanning, StockFlow Mobile authenticates via Bearer tokens directly against the shared StockFlow /api/v1 backend. Every barcode lookup, stock receipt, cycle count, warehouse transfer, and purchase order receipt writes atomically to the same PostgreSQL ledger tagged with source: \"mobile\".",
+    distributionNote:
+      "Configured for Expo Go QR testing (`npx expo start`), standalone Expo Web preview, and EAS internal Android `.apk` builds (`eas build -p android --profile preview`). Not published on the Apple App Store or Google Play Store.",
+    techBadges: [
+      "React Native 0.76",
+      "Expo SDK 52",
+      "expo-camera (EAN-13 / Code-128 / QR)",
+      "Bearer Token Auth",
+      "AsyncStorage",
+      "11 Native Screens",
+    ],
+    screens: [
+      {
+        label: "Mobile Dashboard",
+        src: "/images/projects/stockflow/mobile-dashboard.png",
+        alt: "StockFlow Mobile dashboard screen showing active Austin warehouse banner, 668 units on hand, stock valuation, quick operations, and low-stock watchlist",
+        width: 780,
+        height: 1688,
+      },
+      {
+        label: "Barcode Scanner",
+        src: "/images/projects/stockflow/mobile-scanner.png",
+        alt: "StockFlow Mobile barcode scanner screen with live EAN-13 lookup matching SF-AUD-101 Studio Monitor Headphones Pro",
+        width: 780,
+        height: 1688,
+      },
+      {
+        label: "Stock Adjustment",
+        src: "/images/projects/stockflow/mobile-adjust.png",
+        alt: "StockFlow Mobile stock adjustment screen with receipt/count/issue modes, interactive quantity stepper, and live projected balance",
+        width: 780,
+        height: 1688,
+      },
+      {
+        label: "Orders & Receiving",
+        src: "/images/projects/stockflow/mobile-orders.png",
+        alt: "StockFlow Mobile orders screen with 1-tap Purchase Order receiving into warehouse and Sales Order fulfilment",
+        width: 780,
+        height: 1688,
+      },
+    ],
+  },
+  attribution: {
+    project: "InvenTree",
+    url: "https://github.com/inventree/InvenTree",
+    license: "MIT",
+    licenseUrl: "https://opensource.org/licenses/MIT",
+    copyright: "InvenTree Contributors",
+    originalWork:
+      "Reference open-source inventory domain architecture for multi-location stock items, barcode scanning workflows, purchase/sales order fulfilment, and immutable stock tracking logs under the MIT License.",
+    modifications: [
+      "Clean-room TypeScript implementation built on Next.js 16 + Drizzle ORM + PostgreSQL (replacing Django/Python + Celery worker stack for lightweight free-tier deployment)",
+      "Designed a unified versioned `/api/v1/*` REST API supporting both Web HttpOnly cookies and Mobile Bearer tokens simultaneously",
+      "Built a dedicated 11-screen React Native + Expo SDK 52 mobile companion app (`apps/stockflow-mobile`) with `expo-camera` barcode scanning and EAS Android APK build configuration",
+      "Added live movement source attribution (`web` vs `mobile`) and one-click seeded multi-warehouse demo reset",
+    ],
+  },
+  caseStudy: {
+    background:
+      "Inventory-heavy e-commerce, sourcing, and distribution teams rarely work only at a desk — warehouse staff scan incoming cartons at receiving docks while operations managers review valuation and purchase orders on desktop. StockFlow was built to demonstrate full-stack SaaS plus real cross-platform mobile engineering backed by one source of truth.",
+    challenge:
+      "Running a traditional Python/Django + Redis + Celery inventory stack alongside a separate mobile app requires multiple paid servers and complex sync layers. The goal was to architect a single, transactional TypeScript/PostgreSQL platform that serves both a full desktop operations console and an 11-screen React Native + Expo mobile app without risking negative inventory or stale balances.",
+    objectives: [
+      "Maintain strict inventory integrity across multiple warehouses with atomic PostgreSQL transactions and an immutable movement ledger",
+      "Support real-time synchronization between the web console and a React Native + Expo mobile companion app via one `/api/v1/*` API",
+      "Implement all 11 operational mobile screens including native camera barcode scanning, adjustments, transfers, orders, and alerts",
+      "Provide clean deployment blueprints (`render.yaml`, `eas.json`) for zero-cost commercial-compatible hosting and Android APK preview builds",
+    ],
+    approach:
+      "Engineered two cohesive workspaces — `apps/stockflow` (Next.js 16 web console + `/api/v1/*` REST API + Drizzle PostgreSQL) and `apps/stockflow-mobile` (React Native + Expo SDK 52 + `expo-camera`). Every inventory mutation executes inside a PostgreSQL transaction that validates available stock, updates `stock_levels`, and appends an immutable `stock_movements` audit entry tagged with `source: \"web\"` or `source: \"mobile\"`.",
+    features: [
+      "Operations dashboard with real-time total units, cost valuation, low-stock alerts, warehouse distribution, and movement feed",
+      "SKU catalog with unique SKU & EAN-13 barcode lookup, category filtering, cost/sell pricing, and per-warehouse bin breakdown",
+      "Multi-warehouse management (Austin, Chicago, Newark demo hubs) with atomic stock receipts, cycle counts, issues, and inter-warehouse transfers",
+      "Supplier & Purchase Order workflow with 1-tap full stock receiving directly into the destination warehouse",
+      "Customer & Sales Order lifecycle enforcing Reserve → Fulfil (stock deduction) → Ship (carrier tracking)",
+      "11-screen React Native + Expo mobile companion app covering Login, Dashboard, Products, Product Details, Barcode Scanner, Stock Adjustment, Warehouse Selection, Stock Transfer, Orders, Notifications, and Profile & Settings",
+    ],
+    decisions: [
+      {
+        title: "Dual cookie + Bearer session tokens on one REST API",
+        text: "Web operators use HttpOnly SameSite cookies while the Expo mobile app sends `Authorization: Bearer <token>` headers stored in AsyncStorage — both validated against the same SHA-256 hashed PostgreSQL `sessions` table.",
+      },
+      {
+        title: "Negative-stock guard & immutable movement ledger",
+        text: "Stock adjustments, transfers, and sales order fulfilments compute resulting on-hand balances inside database transactions and reject any operation that would drop a warehouse bin below zero.",
+      },
+      {
+        title: "Native camera scanner with simulator/web barcode fallback",
+        text: "StockFlow Mobile uses native `expo-camera` `CameraView` for EAN-13/UPC/Code-128 scanning on iOS/Android hardware while providing manual entry and quick-test EAN-13 presets so evaluators can test real barcode lookup without a physical scanner.",
+      },
+    ],
+    process: [
+      "Designed the 11-table PostgreSQL inventory schema, Drizzle migrations, and realistic 3-warehouse seeded catalog",
+      "Built and tested the versioned `/api/v1/*` REST API with atomic inventory ledger helpers and dual Web/Mobile auth",
+      "Implemented the slate-emerald desktop operations console and verified all web CRUD & order workflows in Chromium",
+      "Built all 11 screens of StockFlow Mobile in React Native + Expo SDK 52 with `eas.json` APK & iOS profiles",
+      "Ran live end-to-end integration tests and 390×844 mobile browser QA confirming mobile scans and adjustments persist immediately to PostgreSQL",
+    ],
+    solution:
+      "A complete multi-warehouse inventory platform (`apps/stockflow`) and 11-screen React Native + Expo mobile companion (`apps/stockflow-mobile`) verified end-to-end against a shared PostgreSQL backend.",
+    results: [
+      "StockFlow backend: 3/3 unit & full PostgreSQL workflow tests pass (product CRUD, multi-warehouse transfers, PO receiving, SO reserve/fulfil/ship, low-stock alerts, demo reset) alongside Next.js production build, typecheck, and ESLint.",
+      "StockFlow Mobile: 4/4 API client & live backend sync tests pass against the running StockFlow server, `tsc --noEmit` passes with zero errors, and Expo Web bundles 305 modules cleanly.",
+      "Headless Chromium mobile QA (390×844) verified Login, Dashboard, Products, Product Details, EAN-13 barcode scan (`8901234500101` → `SF-AUD-101`), live stock adjustment persisted with `source: \"mobile\"`, Orders, Alerts, and Warehouse Selection with zero runtime errors and zero overflow.",
+    ],
+  },
+};
+
+export const LIVE_PRODUCT_SLUGS = ["pipelineos-crm", "stockflow-inventory"] as const;
+
 export const PROJECTS: Project[] = [
+  PIPELINEOS, STOCKFLOW,
   COMMERCE, ANALYTICS, SUPPORT_AGENT, VOICE_AGENT, N8N, SUPPLY_CHAIN,
   SOURCING, BLENDER, MOTION, BRAND_SYSTEM, CHAIN_EXPLORER, SECURITY,
 ];
