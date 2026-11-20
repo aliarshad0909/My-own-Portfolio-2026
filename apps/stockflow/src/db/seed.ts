@@ -12,7 +12,7 @@ import {
   users,
   warehouses,
 } from "@/db/schema";
-import { DEMO_ACCOUNT, hashPassword } from "@/lib/crypto";
+import { DEMO_ACCOUNT, generateLockedPassword, hashPassword } from "@/lib/crypto";
 
 function daysAgo(days: number): Date {
   return new Date(Date.now() - days * 86_400_000);
@@ -44,7 +44,7 @@ export async function seedStockFlowDemo(
           email: "warehouse@stockflow.studio",
           name: "Bilal Qureshi (Warehouse Lead)",
           role: "warehouse_staff",
-          passwordHash: hashPassword("StaffLocked2026!"),
+          passwordHash: hashPassword(generateLockedPassword()),
         },
       ])
       .onConflictDoNothing();

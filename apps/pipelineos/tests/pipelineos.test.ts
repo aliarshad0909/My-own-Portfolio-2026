@@ -5,15 +5,50 @@ import { eq } from "drizzle-orm";
 // Run tests against isolated in-memory PGlite PostgreSQL so local ./data is never touched
 process.env.PGLITE_DATA_DIR = "memory://";
 process.env.DATABASE_URL = "";
+process.env.PIPELINEOS_DATABASE_URL = "";
 
 import { getDb, resetDemoWorkspace } from "@/db";
 import { activities, contacts, dealHistory, deals, leads } from "@/db/schema";
 import { getAnalyticsData, getDashboardData } from "@/lib/analytics";
-import { hashPassword, hashSessionToken, verifyPassword } from "@/lib/crypto";
+import { generateLockedPassword, hashPassword, hashSessionToken, resolveSessionSecret, verifyPassword } from "@/lib/crypto";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { verifyCsrfOrigin } from "@/lib/security";
 import { contactCreateSchema, dealCreateSchema, leadCreateSchema } from "@/lib/validation";
 
 describe("PipelineOS security & validation", () => {
+  it("generates unique unguessable passwords for non-demo fixtures and enforces prod secret", () => {
+    const p1 = generateLockedPassword();
+    const p2 = generateLockedPassword();
+    assert.equal(p1.length, 64);
+    assert.notEqual(p1, p2);
+
+    const prevRender = process.env.RENDER;
+    const prevSecret = process.env.SESSION_SECRET;
+    try {
+      process.env.RENDER = "true";
+      process.env.SESSION_SECRET = "too-short";
+      assert.throws(() => resolveSessionSecret(), /at least 32/);
+      process.env.SESSION_SECRET = "a".repeat(64);
+      assert.equal(resolveSessionSecret(), "a".repeat(64));
+    } finally {
+      if (prevRender === undefined) delete process.env.RENDER;
+      else process.env.RENDER = prevRender;
+      if (prevSecret === undefined) delete process.env.SESSION_SECRET;
+      else process.env.SESSION_SECRET = prevSecret;
+    }
+
+    const badReq = new Request("https://crm.aliarshad.co/api/demo/reset", {
+      method: "POST",
+      headers: { host: "crm.aliarshad.co", origin: "https://evil.example" },
+    });
+    assert.equal(verifyCsrfOrigin(badReq)?.status, 403);
+    const okReq = new Request("https://crm.aliarshad.co/api/demo/reset", {
+      method: "POST",
+      headers: { host: "crm.aliarshad.co", origin: "https://crm.aliarshad.co" },
+    });
+    assert.equal(verifyCsrfOrigin(okReq), null);
+  });
+
   it("hashes passwords with per-user salt and verifies cleanly", () => {
     const h1 = hashPassword("PipelineDemo2026!");
     const h2 = hashPassword("PipelineDemo2026!");

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import type { AppDatabase } from "@/db";
 import { activities, companies, contacts, dealHistory, deals, leads, users } from "@/db/schema";
-import { DEMO_ACCOUNT, hashPassword } from "@/lib/crypto";
+import { DEMO_ACCOUNT, generateLockedPassword, hashPassword } from "@/lib/crypto";
 
 function daysAgo(days: number): Date {
   return new Date(Date.now() - days * 86_400_000);
@@ -19,18 +19,12 @@ function isoDateOffset(days: number): string {
  * Seeds realistic fictional B2B demonstration records across all CRM entities.
  * All company names, people, emails and deal values are fictional demo fixtures.
  */
-export async function seedDemoData(db: AppDatabase, opts: { skipUsers?: boolean } = {}): Promise<void> {
-  let demoUserId: string;
-  let nadiaId: string;
-  let omarId: string;
-
-  if (opts.skipUsers) {
-    const existing = await db.select().from(users);
-    demoUserId = existing.find((u) => u.email === DEMO_ACCOUNT.email)?.id ?? existing[0].id;
-    nadiaId = existing.find((u) => u.email === "nadia@pipelineos.studio")?.id ?? demoUserId;
-    omarId = existing.find((u) => u.email === "omar@pipelineos.studio")?.id ?? demoUserId;
-  } else {
-    const insertedUsers = await db
+export async function seedDemoData(
+  db: AppDatabase,
+  opts: { skipUsers?: boolean; usersOnly?: boolean } = {},
+): Promise<void> {
+  if (!opts.skipUsers) {
+    await db
       .insert(users)
       .values([
         {
@@ -44,23 +38,26 @@ export async function seedDemoData(db: AppDatabase, opts: { skipUsers?: boolean 
           email: "nadia@pipelineos.studio",
           name: "Nadia Karim",
           role: "sales_rep",
-          passwordHash: hashPassword("RepLocked2026!"),
+          passwordHash: hashPassword(generateLockedPassword()),
           avatarColor: "#0ea5e9",
         },
         {
           email: "omar@pipelineos.studio",
           name: "Omar Siddiqui",
           role: "sales_rep",
-          passwordHash: hashPassword("RepLocked2026!"),
+          passwordHash: hashPassword(generateLockedPassword()),
           avatarColor: "#10b981",
         },
       ])
-      .returning();
-
-    demoUserId = insertedUsers[0].id;
-    nadiaId = insertedUsers[1].id;
-    omarId = insertedUsers[2].id;
+      .onConflictDoNothing();
   }
+
+  if (opts.usersOnly) return;
+
+  const existing = await db.select().from(users);
+  const demoUserId = existing.find((u) => u.email === DEMO_ACCOUNT.email)?.id ?? existing[0].id;
+  const nadiaId = existing.find((u) => u.email === "nadia@pipelineos.studio")?.id ?? demoUserId;
+  const omarId = existing.find((u) => u.email === "omar@pipelineos.studio")?.id ?? demoUserId;
 
   // 1. Fictional B2B companies
   const insertedCompanies = await db

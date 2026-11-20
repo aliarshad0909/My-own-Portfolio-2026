@@ -149,6 +149,8 @@ export type Project = {
     headline: string;
     summary: string;
     distributionNote: string;
+    interactiveWebUrl?: string;
+    androidApkUrl?: string;
     techBadges: string[];
     screens: (ProjectImage & { label: string })[];
   };
@@ -1433,7 +1435,9 @@ const STOCKFLOW: Project = {
     summary:
       "Built in TypeScript with Expo SDK 52 and native expo-camera barcode scanning, StockFlow Mobile authenticates via Bearer tokens directly against the shared StockFlow /api/v1 backend. Every barcode lookup, stock receipt, cycle count, warehouse transfer, and purchase order receipt writes atomically to the same PostgreSQL ledger tagged with source: \"mobile\".",
     distributionNote:
-      "Configured for Expo Go QR testing (`npx expo start`), standalone Expo Web preview, and EAS internal Android `.apk` builds (`eas build -p android --profile preview`). Not published on the Apple App Store or Google Play Store.",
+      "Distinct preview modes: (1) Verified Mobile Screenshot Preview below, (2) Interactive Expo Web Preview (browser preview with manual/quick EAN-13 lookup; native camera barcode scanning requires the native mobile build on a physical device), and (3) Downloadable Android Preview APK via Expo EAS (`eas build -p android --profile preview`) or Expo Go QR. Not published on the Apple App Store or Google Play Store.",
+    interactiveWebUrl: process.env.NEXT_PUBLIC_STOCKFLOW_MOBILE_WEB_URL?.trim() || undefined,
+    androidApkUrl: process.env.NEXT_PUBLIC_STOCKFLOW_APK_URL?.trim() || undefined,
     techBadges: [
       "React Native 0.76",
       "Expo SDK 52",

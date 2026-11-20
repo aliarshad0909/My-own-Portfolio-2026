@@ -28,10 +28,12 @@ function loadInitMigrationSql(): string {
 function createState(): DbState {
   const databaseUrl = (process.env.STOCKFLOW_DATABASE_URL || process.env.DATABASE_URL || "").trim();
   if (databaseUrl) {
+    const isLocal = databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1");
+    const rejectUnauthorized = process.env.PGSSL_REJECT_UNAUTHORIZED !== "false";
     const pool = new Pool({
       connectionString: databaseUrl,
       max: 8,
-      ssl: databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1") ? false : { rejectUnauthorized: false },
+      ssl: isLocal ? false : { rejectUnauthorized },
     });
     return {
       db: drizzlePg(pool, { schema }),
@@ -42,6 +44,12 @@ function createState(): DbState {
       initialized: false,
       initPromise: null,
     };
+  }
+
+  if (process.env.RENDER === "true") {
+    throw new Error(
+      "STOCKFLOW_DATABASE_URL (or DATABASE_URL) is required in Render production so inventory persists in PostgreSQL.",
+    );
   }
 
   const dataDir = (process.env.PGLITE_DATA_DIR || "").trim() || path.join(process.cwd(), "data", "pgdata");

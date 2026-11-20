@@ -1,79 +1,107 @@
-# Deployment Architecture & Zero-Cost Commercial Hosting Runbook
+# Production Deployment & Security Runbook — Ali Arshad Personal Studio
 
-This runbook documents the verified **$0/month commercial-compatible** deployment architecture for **PipelineOS CRM** (`apps/pipelineos`), **StockFlow Inventory SaaS** (`apps/stockflow`), **StockFlow Mobile** (`apps/stockflow-mobile`), and their integration with the main portfolio at **https://www.aliarshad.co**.
-
-> **Approval & Cost Guardrail:** No paid plans have been purchased, no external hosting accounts have been provisioned, and no production GoDaddy DNS records have been modified. All infrastructure blueprints (`render.yaml`, `.env.example`, `eas.json`) are ready to deploy upon owner approval.
+This runbook documents the verified **$0/month commercial-compatible** production deployment for:
+1. **PipelineOS CRM SaaS** (`apps/pipelineos`) → `https://crm.aliarshad.co`
+2. **StockFlow Inventory SaaS + `/api/v1` API** (`apps/stockflow`) → `https://stock.aliarshad.co`
+3. **StockFlow Mobile** (`apps/stockflow-mobile`) → Expo EAS Android Preview `.apk` + optional free Render Static Expo Web preview
+4. **Portfolio Integration** (`ali-arshad-personal-studio/ali-arshad-personal-studio`) → `https://www.aliarshad.co` (Vercel)
 
 ---
 
-## 1. Domain & DNS Architecture (GoDaddy)
+## 1. Hosting & Database Architecture ($0/mo Commercial-Compatible)
 
-Current verified DNS for `aliarshad.co` (authoritative nameservers: `ns19.domaincontrol.com`, `ns20.domaincontrol.com`):
-- `@` (`A`) → `216.198.79.1` *(keep untouched — portfolio apex)*
-- `www` (`CNAME`) → `f46a51bc3d6609b9.vercel-dns-017.com` *(keep untouched — portfolio)*
-
-### New Subdomains to Add Upon Hosting Provisioning
-| Subdomain | Record Type | Target Value | Product |
+| Component | Provider | Plan | Notes |
 | --- | --- | --- | --- |
-| `crm` (`crm.aliarshad.co`) | `CNAME` | `<pipelineos-service>.onrender.com` | PipelineOS CRM |
-| `stock` (`stock.aliarshad.co`) | `CNAME` | `<stockflow-service>.onrender.com` | StockFlow Web + `/api/v1/*` Mobile Backend |
-
-TLS/HTTPS certificates are issued automatically via Let's Encrypt once each Render Custom Domain verifies its CNAME record.
-
----
-
-## 2. Hosting & Database Selection ($0/mo Commercial-Compatible)
-
-| Component | Recommended Provider | Plan Cost | Commercial Use Permitted? | Notes & Free-Tier Limits |
-| --- | --- | --- | --- | --- |
-| **PostgreSQL Databases** (2 separate DBs) | **Neon Free** | $0/mo | Yes | 0.5–1 GB storage per project, does **not** expire after 30 days (avoid Render Free Postgres which expires after 30 days). |
-| **PipelineOS Web & API** | **Render Free Web Service** | $0/mo | Yes | 512 MB RAM, 0.1 CPU, spins down after 15 min idle (~30–50s cold start), custom domain + TLS included. |
-| **StockFlow Web & `/api/v1` API** | **Render Free Web Service** | $0/mo | Yes | 512 MB RAM, 0.1 CPU, serves both StockFlow web UI and StockFlow Mobile Bearer API. |
-| **StockFlow Mobile Builds** | **Expo Go + EAS Free** | $0/mo | Yes | 30 free cloud builds/month on Expo EAS for installable Android `.apk` previews (`eas build -p android --profile preview`). |
-
-> **Why not Vercel Hobby for PipelineOS / StockFlow?** Vercel's Hobby tier prohibits commercial / agency showcase deployments. Hosting the two standalone SaaS apps on Render Free + Neon Free stays strictly compliant at $0/month.
+| **PipelineOS DB** | Neon PostgreSQL | Free ($0/mo) | Separate project/database `pipelineos`; TLS verified (`?sslmode=require`); never expires. |
+| **StockFlow DB** | Neon PostgreSQL | Free ($0/mo) | Separate project/database `stockflow`; TLS verified (`?sslmode=require`); shared by Web & Mobile. |
+| **PipelineOS Web** | Render Web Service | Free ($0/mo) | Defined in root `render.yaml` (`pipelineos-crm`); 512 MB RAM; spins down after 15m idle (~30–50s cold start). |
+| **StockFlow Web + API** | Render Web Service | Free ($0/mo) | Defined in root `render.yaml` (`stockflow-ops`); 512 MB RAM; serves Web console + `/api/v1/*` mobile REST API. |
+| **StockFlow Mobile Web Preview** | Render Static Site | Free ($0/mo) | Defined in root `render.yaml` (`stockflow-mobile-web`); always-on static bundle; manual/quick EAN-13 lookup (native camera requires Android APK / Expo Go). |
+| **StockFlow Android APK** | Expo EAS Build | Free ($0/mo) | `eas build --platform android --profile preview` generates a sideloadable `.apk` download link. |
+| **Portfolio** | Vercel (existing) | Existing | Auto-deploys `main` to `https://www.aliarshad.co`. |
+| **DNS** | GoDaddy | Existing | Add `crm` and `stock` CNAME records only; leave `@` and `www` untouched. |
 
 ---
 
-## 3. Step-by-Step Provisioning Checklist
+## 2. Complete Environment Variable Inventory
 
-### Step A — Provision Neon PostgreSQL Databases
-1. Create two separate databases in Neon Free: `pipelineos` and `stockflow`.
-2. Copy each pooled `postgresql://...` connection string (with `?sslmode=require`).
+> Never commit real secrets or database URLs to GitHub. Configure all secrets directly in the hosting dashboard.
 
-### Step B — Deploy PipelineOS (`crm.aliarshad.co`)
-1. Connect repository `aliarshad0909/My-own-Portfolio-2026` in Render using Blueprint `apps/pipelineos/render.yaml` (root directory: `apps/pipelineos`).
-2. Set environment variables:
-   - `DATABASE_URL=<neon-pipelineos-connection-string>`
-   - `NEXT_PUBLIC_APP_URL=https://crm.aliarshad.co`
-   - `NODE_ENV=production`
-3. Render builds with `npm ci && npm run build` and starts `npm run start -- -p $PORT`.
-4. Database tables and demo seed records initialize automatically on first request (or manually via `npm run db:seed`).
-5. Add Custom Domain `crm.aliarshad.co` in Render and add the GoDaddy `CNAME` record.
+### A. PipelineOS (`pipelineos-crm` on Render)
+| Variable | Required | Production Value / Source |
+| --- | --- | --- |
+| `NODE_ENV` | Yes | `production` |
+| `DATABASE_URL` | Yes | Neon Free `pipelineos` pooled connection string (`postgresql://...?sslmode=require`) |
+| `SESSION_SECRET` | Yes | >= 32 random bytes (auto-generated by Render Blueprint `generateValue: true` or `openssl rand -hex 32`) |
+| `NEXT_PUBLIC_APP_URL` | Yes | `https://crm.aliarshad.co` |
+| `ALLOW_DEMO_RESET` | Optional | `"true"` (set `"false"` to disable public workspace reset) |
 
-### Step C — Deploy StockFlow (`stock.aliarshad.co`)
-1. Connect repository in Render using Blueprint `apps/stockflow/render.yaml` (root directory: `apps/stockflow`).
-2. Set environment variables:
-   - `STOCKFLOW_DATABASE_URL=<neon-stockflow-connection-string>` (or `DATABASE_URL`)
-   - `NEXT_PUBLIC_APP_URL=https://stock.aliarshad.co`
-   - `NODE_ENV=production`
-3. Verify `https://stock.aliarshad.co/api/v1/health` returns `{"ok":true,"service":"stockflow-inventory",...}`.
-4. Add Custom Domain `stock.aliarshad.co` in Render and add the GoDaddy `CNAME` record.
+### B. StockFlow (`stockflow-ops` on Render)
+| Variable | Required | Production Value / Source |
+| --- | --- | --- |
+| `NODE_ENV` | Yes | `production` |
+| `STOCKFLOW_DATABASE_URL` | Yes | Neon Free `stockflow` pooled connection string (`postgresql://...?sslmode=require`) |
+| `SESSION_SECRET` | Yes | >= 32 random bytes (auto-generated by Render Blueprint `generateValue: true` or `openssl rand -hex 32`) |
+| `NEXT_PUBLIC_APP_URL` | Yes | `https://stock.aliarshad.co` |
+| `CORS_ALLOWED_ORIGINS` | Optional | `"*"` (Bearer-only API; never emits `Access-Control-Allow-Credentials: true`) or your mobile web origin |
+| `ALLOW_DEMO_RESET` | Optional | `"true"` (set `"false"` to disable public demo inventory reset) |
 
-### Step D — Activate Live Demo Links on the Portfolio (`www.aliarshad.co`)
-Once both subdomains are live and verified over HTTPS, add these two environment variables to the portfolio deployment and redeploy:
-```bash
-NEXT_PUBLIC_PIPELINEOS_URL=https://crm.aliarshad.co
-NEXT_PUBLIC_STOCKFLOW_URL=https://stock.aliarshad.co
-```
-Setting these environment variables automatically switches the portfolio's **Live Product Demonstrations** buttons from internal case-study demo anchors to live external **Launch Live Demo** links — guaranteeing zero broken links prior to deployment.
+### C. StockFlow Mobile (`apps/stockflow-mobile` — EAS & Static Web)
+| Variable | Required | Production Value |
+| --- | --- | --- |
+| `EXPO_PUBLIC_API_URL` | Yes | `https://stock.aliarshad.co` (pre-configured in `eas.json` and root `render.yaml`) |
 
-### Step E — Build StockFlow Mobile Android Preview APK
+### D. Portfolio (`www.aliarshad.co` on Vercel — Production Environment)
+| Variable | Required | Production Value |
+| --- | --- | --- |
+| `NEXT_PUBLIC_PIPELINEOS_URL` | After Phase 3 | `https://crm.aliarshad.co` |
+| `NEXT_PUBLIC_STOCKFLOW_URL` | After Phase 4 | `https://stock.aliarshad.co` |
+| `NEXT_PUBLIC_STOCKFLOW_MOBILE_WEB_URL` | Optional | Render static URL of `stockflow-mobile-web` |
+| `NEXT_PUBLIC_STOCKFLOW_APK_URL` | After Phase 5 | Expo EAS Android preview `.apk` distribution URL |
+
+---
+
+## 3. Execution Steps (Owner-Authenticated Dashboards)
+
+### Step 1 — Neon PostgreSQL (2 Isolated Databases)
+1. Open https://console.neon.tech and create two databases/projects: `pipelineos` and `stockflow`.
+2. Copy each pooled `postgresql://...?sslmode=require` connection string.
+3. Optional pre-flight migration & seed test from local terminal:
+   ```bash
+   cd apps/pipelineos && DATABASE_URL="<neon-pipelineos-url>" SESSION_SECRET="$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")" npm run db:seed
+   cd apps/stockflow && STOCKFLOW_DATABASE_URL="<neon-stockflow-url>" SESSION_SECRET="$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")" npm run db:seed
+   ```
+   *(Migrations and idempotent demo seeding also execute automatically on first request / health check.)*
+
+### Step 2 — Render Blueprint Deploy (All 3 Services at Once)
+1. Open https://dashboard.render.com → **New +** → **Blueprint** → select `aliarshad0909/My-own-Portfolio-2026` (`main` branch).
+2. Render automatically detects root `render.yaml` (`pipelineos-crm`, `stockflow-ops`, `stockflow-mobile-web`).
+3. Paste the Neon `DATABASE_URL` for `pipelineos-crm` and `STOCKFLOW_DATABASE_URL` for `stockflow-ops`.
+4. Confirm both health endpoints return HTTP 200 with `"driver": "postgres"`:
+   - `https://<pipelineos-service>.onrender.com/api/health`
+   - `https://<stockflow-service>.onrender.com/api/v1/health`
+
+### Step 3 — Custom Domains & GoDaddy DNS
+1. In Render → `pipelineos-crm` → **Settings → Custom Domains** → add `crm.aliarshad.co` and copy the exact CNAME target.
+2. In Render → `stockflow-ops` → **Settings → Custom Domains** → add `stock.aliarshad.co` and copy the exact CNAME target.
+3. In GoDaddy DNS for `aliarshad.co` (do **not** alter `@` or `www`):
+   - Add `CNAME` host `crm` → `<exact Render CNAME target>`
+   - Add `CNAME` host `stock` → `<exact Render CNAME target>`
+4. Click **Verify** in Render and wait for automatic Let's Encrypt HTTPS issuance.
+
+### Step 4 — StockFlow Mobile Android Preview APK (Expo EAS)
 ```bash
 cd apps/stockflow-mobile
-npm install
+npm ci
 npx eas login
 npx eas build --platform android --profile preview
 ```
-`eas.json` pre-configures `EXPO_PUBLIC_API_URL=https://stock.aliarshad.co` for preview/production builds.
+Copy the resulting EAS `.apk` install link for testing on a physical Android device and set `NEXT_PUBLIC_STOCKFLOW_APK_URL` in Vercel.
 
+### Step 5 — Activate Live Links on `https://www.aliarshad.co` (Vercel)
+1. In Vercel → Project **Settings → Environment Variables** (Production), add:
+   - `NEXT_PUBLIC_PIPELINEOS_URL=https://crm.aliarshad.co`
+   - `NEXT_PUBLIC_STOCKFLOW_URL=https://stock.aliarshad.co`
+   - `NEXT_PUBLIC_STOCKFLOW_MOBILE_WEB_URL=<render-static-url>` *(optional)*
+   - `NEXT_PUBLIC_STOCKFLOW_APK_URL=<eas-apk-url>` *(after Step 4)*
+2. Trigger a Production Redeploy and verify every button on `https://www.aliarshad.co/`.
