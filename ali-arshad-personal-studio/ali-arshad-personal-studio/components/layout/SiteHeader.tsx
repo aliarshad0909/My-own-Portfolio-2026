@@ -8,7 +8,7 @@ import { BrandMark } from "@/components/ui/BrandMark";
 import { Icon } from "@/components/ui/Icon";
 import { NAV_ITEMS, SITE } from "@/lib/site";
 
-const DESKTOP_NAV = "(min-width: 1100px)";
+const DESKTOP_NAV = "(min-width: 860px)";
 
 const isActive = (pathname: string, href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`));
 
@@ -40,9 +40,8 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="container site-header__inner">
         <Link href="/" className="brand" aria-label={`${SITE.name}, ${SITE.descriptor}, home`}>
-          <BrandMark size={30} />
-          <span className="brand__name">{SITE.name}</span>
-          <span className="brand__descriptor">{SITE.descriptor}</span>
+          <BrandMark size={28} />
+          <span className="brand__name brand__name--caps">{SITE.brandMarkText}</span>
         </Link>
 
         <nav className="site-nav" aria-label="Primary">
@@ -61,7 +60,7 @@ export function SiteHeader() {
         </nav>
 
         <Link href="/contact" className="btn btn--primary btn--sm site-header__cta">
-          <span>Let&rsquo;s Talk</span>
+          <span>Start a Project</span>
           <Icon name="arrow-up-right" size={16} className="btn__icon" />
         </Link>
 

@@ -4,18 +4,14 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { SITE } from "@/lib/site";
 
 const DISCIPLINES: { icon: IconName; label: string }[] = [
-  { icon: "clapperboard", label: "Creative production" },
-  { icon: "code", label: "Software development" },
-  { icon: "bot", label: "AI automation" },
+  { icon: "clapperboard", label: "Creative Production" },
+  { icon: "code", label: "Software Development" },
+  { icon: "bot", label: "AI & Automation" },
 ];
 
 /**
- * Editorial hero.
- *
- * The composition is deliberately asymmetric: an oversized three-line
- * headline on the left, the portrait bleeding off the right edge, and a
- * single coral rule tying the two together. The portrait is the approved
- * photograph from the repository, never regenerated.
+ * Conversion-focused editorial hero.
+ * Preserves the approved portrait-hero.webp photograph and studio identity.
  */
 export function Hero() {
   return (
@@ -23,27 +19,29 @@ export function Hero() {
       <div className="hero__accent" aria-hidden="true" />
       <div className="container hero__inner">
         <div className="hero__copy enter">
-          <p className="eyebrow">{SITE.name}, Personal Studio</p>
+          <p className="eyebrow">
+            {SITE.name} — {SITE.descriptor}
+          </p>
 
           <h1 className="hero__title" id="hero-title">
+            <span className="hero__line">Creative thinking.</span>
+            <span className="hero__line hero__line--accent">Technical execution.</span>
             <span className="hero__line">One studio.</span>
-            <span className="hero__line hero__line--accent">Multiple disciplines.</span>
-            <span className="hero__line">Endless possibilities.</span>
           </h1>
 
           <p className="hero__lead">
-            Creative production, software development and AI automation from one
-            independent studio: the full arc of a project, without the hand-offs.
+            Creative production, software development, AI automation and business strategy — delivered directly by one independent studio without
+            agency hand-offs.
           </p>
 
           <div className="hero__actions">
-            <ButtonLink href="/work">Explore Work</ButtonLink>
-            <ButtonLink href="/contact" variant="secondary" icon={null}>
-              Start a Project
+            <ButtonLink href="/contact">Start a Project</ButtonLink>
+            <ButtonLink href="/work" variant="secondary" icon={null}>
+              Explore My Work
             </ButtonLink>
           </div>
 
-          <ul className="hero__disciplines" aria-label="Disciplines">
+          <ul className="hero__disciplines" aria-label="Core studio capabilities">
             {DISCIPLINES.map((d) => (
               <li key={d.label}>
                 <Icon name={d.icon} size={17} />
@@ -56,11 +54,11 @@ export function Hero() {
         <div className="hero__visual enter enter--portrait">
           <Image
             src="/images/portraits/portrait-hero.webp"
-            alt="Ali Arshad, standing, wearing a dark suit"
+            alt="Ali Arshad, founder of Ali Arshad Personal Studio"
             width={1024}
             height={1536}
             priority
-            sizes="(min-width: 1024px) 560px, 80vw"
+            sizes="(min-width: 1024px) 520px, 80vw"
             className="hero__portrait"
           />
         </div>

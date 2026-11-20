@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Capabilities } from "@/components/sections/Capabilities";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { FeaturedWork } from "@/components/sections/FeaturedWork";
+import { FreelanceConnect } from "@/components/sections/FreelanceConnect";
 import { Hero } from "@/components/sections/Hero";
 import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
-import { StudioStory } from "@/components/sections/StudioStory";
+import { WhyWorkWithMe } from "@/components/sections/WhyWorkWithMe";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { personSchema, webSiteSchema } from "@/lib/structured-data";
@@ -21,23 +21,23 @@ export default function HomePage() {
     <>
       <JsonLd data={personSchema()} />
       <JsonLd data={webSiteSchema()} />
-      {/* Hero → Services → Selected work → Capabilities → About → Start a project.
-          Credentials, certifications and process detail live on their own pages
-          (/experience, /about, /services) rather than crowding the homepage. */}
+      {/* Streamlined conversion architecture:
+          1. Hero → 2. Services → 3. Selected Work (7 priority builds) →
+          4. Why Work With Me → 5. Freelance & Social Connect → 6. Final CTA. */}
       <Hero />
       <ServiceShowcaseHome />
       <FeaturedWork />
-      <Capabilities />
-      <StudioStory />
+      <WhyWorkWithMe />
+      <FreelanceConnect />
       <ContactCTA
         standalone
         signature
-        eyebrow="Start here"
-        title="Have something worth building?"
-        text="From your first idea to a working digital product, creative campaign, or automated business process, let's discuss what you need."
-        button="Start a Project"
-        secondaryHref="/work"
-        secondaryLabel="Explore Work"
+        eyebrow="Start a conversation"
+        title="Have an idea worth building?"
+        text="Let's turn your next idea into something functional, effective and beautifully executed."
+        button="Let's Discuss Your Project"
+        secondaryHref="/tools"
+        secondaryLabel="Open Calculator Centre"
       />
     </>
   );

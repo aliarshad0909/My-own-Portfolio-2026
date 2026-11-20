@@ -39,11 +39,25 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
 
-  // Record when the form became interactive, and preselect ?service= from /services.
+  // Record when the form became interactive, and preselect query params from /services or /tools.
   useEffect(() => {
     startedAt.current = Date.now();
-    const requested = new URLSearchParams(window.location.search).get("service");
-    if (requested && SERVICE_OPTIONS.includes(requested)) setValues((v) => ({ ...v, service: requested }));
+    const params = new URLSearchParams(window.location.search);
+    const requestedService = params.get("service");
+    const requestedBudget = params.get("budget");
+    const requestedTimeline = params.get("timeline");
+    const requestedSummary = params.get("summary");
+
+    setValues((v) => ({
+      ...v,
+      service: requestedService && SERVICE_OPTIONS.includes(requestedService) ? requestedService : v.service,
+      budget: requestedBudget && BUDGET_OPTIONS.includes(requestedBudget) ? requestedBudget : v.budget,
+      timeline: requestedTimeline && TIMELINE_OPTIONS.includes(requestedTimeline) ? requestedTimeline : v.timeline,
+      description:
+        requestedSummary && requestedSummary.trim().length > 0 && v.description.trim().length === 0
+          ? requestedSummary.trim().slice(0, LIMITS.description)
+          : v.description,
+    }));
   }, []);
 
   const set = <K extends keyof InquiryInput>(key: K, value: InquiryInput[K]) => {

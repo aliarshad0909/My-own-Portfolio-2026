@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Currency exchange calculator architecture diagram showing server-cached reference exchange rates, instant currency pair swap and manual exchange-rate fallback.">
+  <title>Currency Exchange Calculator Architecture Diagram</title>
+  <defs>
+    <linearGradient id="bg-fx" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1116"/>
+      <stop offset="100%" stop-color="#131b21"/>
+    </linearGradient>
+    <marker id="arrc-fx" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L9 5 L0 9 Z" fill="#ff7a5c"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="16" fill="url(#bg-fx)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="15" fill="none" stroke="#253038" stroke-width="2"/>
+  <text x="56" y="64" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" font-weight="600" letter-spacing="2.2" fill="#ff7a5c">CURRENCY EXCHANGE CALCULATOR · SERVER-CACHED FX</text>
+  <text x="56" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="29" font-weight="600" fill="#f9f6f0">Reference Rates With Transparent Manual Override</text>
+  <g transform="translate(896, 68)">
+    <rect width="248" height="38" rx="19" fill="#171e25" stroke="#2f3b45" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="4.5" fill="#ff7a5c"/>
+    <text x="36" y="24" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" font-weight="500" fill="#f9f6f0">14 Currencies · Hourly Cache</text>
+  </g>
+  <line x1="56" y1="132" x2="1144" y2="132" stroke="#1e2830" stroke-width="1.5"/>
+
+  <!-- Step 1: Server Proxy -->
+  <g transform="translate(56, 184)">
+    <rect width="320" height="454" rx="12" fill="#141d22" stroke="#26323b" stroke-width="1.5"/>
+    <text x="26" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">01 · SERVER API ROUTE</text>
+    <text x="26" y="80" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">/api/exchange-rates</text>
+    <text x="26" y="114" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">Fetches mid-market rates server-side</text>
+    <text x="26" y="136" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">with 1-hour revalidation &amp; zero</text>
+    <text x="26" y="158" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14.5" fill="#a9abb2">private credentials in the browser.</text>
+
+    <rect x="26" y="196" width="268" height="106" rx="10" fill="#0d1116" stroke="#253038"/>
+    <text x="42" y="228" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">SUPPORTED CURRENCIES</text>
+    <text x="42" y="256" font-family="ui-monospace, Consolas, monospace" font-size="14" fill="#f9f6f0">USD · PKR · EUR · GBP · AED</text>
+    <text x="42" y="280" font-family="ui-monospace, Consolas, monospace" font-size="14" fill="#a9abb2">CNY · CAD · AUD · SAR · JPY+</text>
+
+    <rect x="26" y="324" width="268" height="96" rx="10" fill="#171f26" stroke="#253038"/>
+    <text x="42" y="356" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#7ed3a0">HONEST FAILOVER</text>
+    <text x="42" y="382" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#d9d7d2">Offline or upstream timeout?</text>
+    <text x="42" y="404" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="13.5" fill="#a9abb2">Never fakes rates — prompts manual.</text>
+  </g>
+
+  <path d="M376 410 L432 410" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrc-fx)"/>
+
+  <!-- Step 2: Cross-Rate Engine -->
+  <g transform="translate(440, 184)">
+    <rect width="320" height="454" rx="12" fill="#171f26" stroke="#ff7a5c" stroke-width="1.6"/>
+    <text x="26" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">02 · CONVERSION ENGINE</text>
+    <text x="26" y="80" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Pure Cross-Rate Math</text>
+
+    <rect x="26" y="114" width="268" height="86" rx="10" fill="#0d1116" stroke="#253038"/>
+    <text x="42" y="146" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">CROSS-RATE FORMULA</text>
+    <text x="42" y="178" font-family="ui-monospace, Consolas, monospace" font-size="16" fill="#ff7a5c">rate = rates[to] / rates[from]</text>
+
+    <rect x="26" y="220" width="268" height="86" rx="10" fill="#0d1116" stroke="#253038"/>
+    <text x="42" y="252" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">MANUAL RATE OVERRIDE</text>
+    <text x="42" y="284" font-family="ui-monospace, Consolas, monospace" font-size="15.5" fill="#f9f6f0">1 FROM = [Bank / FX Quote]</text>
+
+    <rect x="26" y="326" width="268" height="94" rx="10" fill="#0d1116" stroke="#253038"/>
+    <text x="42" y="358" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">QUICK CONTROLS</text>
+    <text x="42" y="384" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">• One-click currency swap</text>
+    <text x="42" y="406" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#f9f6f0">• Popular pairs &amp; copy summary</text>
+  </g>
+
+  <path d="M760 410 L816 410" stroke="#ff7a5c" stroke-width="2" fill="none" marker-end="url(#arrc-fx)"/>
+
+  <!-- Step 3: Output -->
+  <g transform="translate(824, 184)">
+    <rect width="320" height="454" rx="12" fill="#12181e" stroke="#2f3b45" stroke-width="1.5"/>
+    <text x="26" y="42" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="#ff7a5c">03 · DECISION OUTPUT</text>
+    <text x="26" y="80" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Invoice &amp; Sourcing Clarity</text>
+
+    <g transform="translate(26, 114)">
+      <rect width="268" height="94" rx="10" fill="#1f1716" stroke="#ff7a5c" stroke-opacity="0.55"/>
+      <text x="18" y="34" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" font-weight="600" fill="#ff7a5c">CONVERTED RESULT</text>
+      <text x="18" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="21" font-weight="600" fill="#f9f6f0">Amount × Active Rate</text>
+
+      <rect y="114" width="268" height="84" rx="10" fill="#171f26" stroke="#253038"/>
+      <text x="18" y="146" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">INVERSE RATE SHOWN</text>
+      <text x="18" y="176" font-family="ui-monospace, Consolas, monospace" font-size="15" fill="#f9f6f0">1 TO = 1 / rate FROM</text>
+
+      <rect y="218" width="268" height="88" rx="10" fill="#171f26" stroke="#253038"/>
+      <text x="18" y="250" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="12.5" fill="#a9abb2">SOURCE TIMESTAMP</text>
+      <text x="18" y="280" font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-size="14" fill="#d9d7d2">Displays provider &amp; last update</text>
+    </g>
+  </g>
+</svg>
+

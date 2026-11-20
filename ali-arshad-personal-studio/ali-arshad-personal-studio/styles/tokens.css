@@ -48,7 +48,7 @@
   --section-tight: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem); /* 24 → 36px */
   --radius: 14px;
   --radius-sm: 10px;
-  --header-h: 68px;
+  --header-h: 62px;
 
   /* Motion */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);

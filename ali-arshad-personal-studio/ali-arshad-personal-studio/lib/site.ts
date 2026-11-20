@@ -8,18 +8,42 @@ export type SocialLink = {
   label: string;
   /** Leave empty until the profile is live; empty links are not rendered. */
   url: string;
-  icon: "linkedin" | "github" | "instagram" | "behance" | "dribbble" | "youtube" | "x";
+  icon: "linkedin" | "github" | "instagram" | "facebook" | "behance" | "dribbble" | "youtube" | "x";
+};
+
+export type FreelanceProfile = {
+  id: "upwork" | "fiverr";
+  label: string;
+  ctaLabel: string;
+  /** Empty string keeps the platform cleanly inactive until a verified URL is supplied. */
+  url: string;
+};
+
+export const FREELANCE: Record<"upwork" | "fiverr", FreelanceProfile> = {
+  upwork: {
+    id: "upwork",
+    label: "Upwork",
+    ctaLabel: "Hire Me on Upwork",
+    url: "https://www.upwork.com/freelancers/~011274422835620f07",
+  },
+  fiverr: {
+    id: "fiverr",
+    label: "Fiverr",
+    ctaLabel: "Find Me on Fiverr",
+    url: (process.env.NEXT_PUBLIC_FIVERR_URL ?? "").trim(),
+  },
 };
 
 export const SITE = {
   name: "Ali Arshad",
+  brandMarkText: "ALI ARSHAD",
   descriptor: "Personal Studio",
   positioning: "Independent Creative & Digital Studio",
   role: "Designer, Developer & Creative Technologist",
   tagline: "Creative thinking. Technical execution. Business understanding.",
   description:
     "Ali Arshad is an independent designer, developer and creative technologist. He builds custom web applications with Next.js, AI agents and n8n workflow automation, produces video editing, motion graphics and Blender 3D product visualization, and brings brand management and supply chain experience to every project.",
-  /** Production URL, e.g. https://aliarshad.studio — set NEXT_PUBLIC_SITE_URL. */
+  /** Production URL, e.g. https://aliarshad.co — set NEXT_PUBLIC_SITE_URL. */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, ""),
   /** Public contact email — set NEXT_PUBLIC_CONTACT_EMAIL. Hidden when empty. */
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "",
@@ -28,12 +52,12 @@ export const SITE = {
    * e.g. "Taking on new projects from February".
    */
   availability: "",
-  /** Add URLs once profiles are live. Empty URLs are filtered out everywhere. */
+  /** Verified social profiles; optional profiles remain hidden until configured. */
   socials: [
-    { label: "LinkedIn", url: "", icon: "linkedin" },
-    { label: "GitHub", url: "", icon: "github" },
-    { label: "Instagram", url: "", icon: "instagram" },
-    { label: "Behance", url: "", icon: "behance" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/aliarshad09/", icon: "linkedin" },
+    { label: "Instagram", url: "https://www.instagram.com/aliarshad.co/", icon: "instagram" },
+    { label: "Facebook", url: "https://www.facebook.com/profile.php?id=61589134283009", icon: "facebook" },
+    { label: "GitHub", url: (process.env.NEXT_PUBLIC_GITHUB_URL ?? "").trim(), icon: "github" },
   ] as SocialLink[],
 };
 
@@ -41,14 +65,30 @@ export const activeSocials = (): SocialLink[] => SITE.socials.filter((s) => s.ur
 
 export type NavItem = { label: string; href: string };
 
+/** Minimal primary header navigation — keeps focus on work, services and inquiry conversion. */
 export const NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+/** Secondary quick links shown in the mobile drawer below the primary links. */
+export const MOBILE_SECONDARY_ITEMS: NavItem[] = [
+  { label: "Calculator Centre", href: "/tools" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Experience", href: "/experience" },
-  { label: "Contact", href: "/contact" },
+];
+
+/** Core top-level pages included in the XML sitemap regardless of header nav trimming. */
+export const CORE_SITEMAP_PAGES: string[] = [
+  "/",
+  "/work",
+  "/case-studies",
+  "/services",
+  "/experience",
+  "/about",
+  "/contact",
 ];
 
 /** Resolve the absolute base URL for metadata. Falls back to Vercel's URL, then localhost. */
