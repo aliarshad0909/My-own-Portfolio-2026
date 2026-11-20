@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "StockFlow Mobile",
+    "slug": "stockflow-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "stockflow",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "co.aliarshad.stockflow.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "StockFlow Mobile uses the camera to scan product EAN-13, UPC, and Code-128 warehouse barcodes."
+      }
+    },
+    "android": {
+      "package": "co.aliarshad.stockflow.mobile",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0f172a"
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow StockFlow Mobile to scan warehouse product barcodes."
+        }
+      ],
+      "expo-asset",
+      "expo-font"
+    ],
+    "extra": {
+      "defaultApiUrl": "http://localhost:3020"
+    }
+  }
+}
