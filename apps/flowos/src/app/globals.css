@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@import "@xyflow/react/dist/style.css";
+
+:root {
+  --obsidian: #0c0a16;
+  --obsidian-elevated: #151126;
+  --obsidian-border: #251f3d;
+  --violet-primary: #7c3aed;
+  --violet-bright: #8b5cf6;
+  --violet-soft: #f3efff;
+  --surface: #f7f6fb;
+  --card: #ffffff;
+  --border-subtle: #e5e1f2;
+  --ink-primary: #141024;
+  --ink-muted: #5b5575;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--surface);
+  color: var(--ink-primary);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+code,
+pre,
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Custom React Flow styling aligned with Obsidian / Electric Violet */
+.react-flow__node {
+  border-radius: 14px;
+}
+
+.react-flow__edge-path {
+  stroke: #7c3aed;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #4c1d95;
+  stroke-width: 2.5;
+}
+
+.react-flow__controls {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #dfd9f2;
+  box-shadow: 0 4px 16px rgba(12, 10, 22, 0.08);
+}
+
+.react-flow__minimap {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #dfd9f2;
+  box-shadow: 0 4px 16px rgba(12, 10, 22, 0.08);
+}
