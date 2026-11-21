@@ -1,0 +1,59 @@
+import crypto from "node:crypto";
+
+/**
+ * Cryptographic password hashing (scrypt) and HMAC-SHA256 session token helpers.
+ * Plaintext passwords and raw session tokens are never stored in PostgreSQL.
+ */
+
+export const DEMO_ACCOUNT = {
+  email: "analyst@insightos.studio",
+  password: "InsightDemo2026!",
+  name: "Maya Lin (Demo Analyst)",
+  role: "demo" as const,
+};
+
+export const SESSION_COOKIE_NAME = "insightos_session";
+export const SESSION_TTL_DAYS = 7;
+
+export function hashPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const derived = crypto.scryptSync(password, salt, 64).toString("hex");
+  return `${salt}:${derived}`;
+}
+
+/** Generates an unguessable random password for non-interactive seeded team accounts. */
+export function generateLockedPassword(): string {
+  return crypto.randomBytes(32).toString("hex");
+}
+
+export function verifyPassword(password: string, storedHash: string): boolean {
+  const [salt, expectedHex] = storedHash.split(":");
+  if (!salt || !expectedHex) return false;
+  const derived = crypto.scryptSync(password, salt, 64);
+  const expected = Buffer.from(expectedHex, "hex");
+  if (derived.length !== expected.length) return false;
+  return crypto.timingSafeEqual(derived, expected);
+}
+
+export function generateSessionToken(): string {
+  return crypto.randomBytes(32).toString("hex");
+}
+
+export function resolveSessionSecret(): string {
+  const configured = (process.env.SESSION_SECRET || "").trim();
+  const isProdExternalDb =
+    process.env.RENDER === "true" ||
+    (process.env.NODE_ENV === "production" &&
+      Boolean((process.env.INSIGHTOS_DATABASE_URL || process.env.DATABASE_URL || "").trim()));
+
+  if (isProdExternalDb && configured.length < 32) {
+    throw new Error(
+      "SESSION_SECRET must be configured with at least 32 random characters in production.",
+    );
+  }
+  return configured || "insightos-local-dev-secret-change-in-prod-32chars";
+}
+
+export function hashSessionToken(token: string): string {
+  return crypto.createHmac("sha256", resolveSessionSecret()).update(token).digest("hex");
+}
