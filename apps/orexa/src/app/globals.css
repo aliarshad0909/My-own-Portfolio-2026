@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --obsidian-950: #0d0f14;
+  --obsidian-900: #12151d;
+  --obsidian-850: #171b25;
+  --obsidian-800: #1d2230;
+  --border-subtle: #262d3d;
+  --border-strong: #353f54;
+  --text-primary: #f3f5f8;
+  --text-secondary: #a8b2c5;
+  --text-muted: #7e8a9f;
+  --coral-primary: #ff6b4a;
+  --coral-warm: #f97316;
+  --coral-hover: #ff5530;
+}
+
+html,
+body {
+  background-color: var(--obsidian-950);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), var(--font-inter), system-ui, sans-serif;
+}
+
+code,
+pre,
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Crisp dark scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #10131a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2b3346;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3d4862;
+}

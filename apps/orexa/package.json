@@ -1,0 +1,38 @@
+{
+  "name": "orexa-learning-os",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Orexa — Interactive AI Learning Operating System Demonstration for Ali Arshad Personal Studio.",
+  "scripts": {
+    "dev": "next dev -p 3060",
+    "build": "next build",
+    "start": "next start",
+    "start:local": "next start -p 3060",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "db:seed": "tsx src/db/seed-cli.ts",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "drizzle-orm": "^0.45.4",
+    "lucide-react": "^0.544.0",
+    "next": "^16.1.6",
+    "pg": "^8.16.3",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/node": "^22.18.0",
+    "@types/pg": "^8.15.5",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "^16.1.6",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  }
+}
