@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: projectos-studio
+    runtime: node
+    plan: free
+    rootDir: apps/projectos
+    buildCommand: npm ci && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://projects.aliarshad.co
+      - key: ALLOW_DEMO_RESET
+        value: "true"

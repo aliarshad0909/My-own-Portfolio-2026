@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --bg-canvas: #f8f8fb;
+  --bg-sidebar: #18181b;
+  --bg-card: #ffffff;
+  --border-subtle: #e6e6ee;
+  --ink-primary: #18181b;
+  --ink-secondary: #52525b;
+  --ink-muted: #71717a;
+  --accent-violet: #7c3aed;
+  --accent-violet-soft: #8b5cf6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--bg-canvas);
+  color: var(--ink-primary);
+  overflow-x: hidden;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+}
