@@ -15,6 +15,7 @@ import {
 import type { DocStatus, DocType, PoStatus, ShipmentMode, ShipmentStatus } from "@/db/schema";
 import { useToast } from "@/components/ToastProvider";
 import { formatUsdCents } from "@/lib/format";
+import { getOrdersSnapshotKey, reconcileRequiredId } from "@/lib/workspace-sync";
 
 type PoRow = {
   id: string;
@@ -99,6 +100,34 @@ export function OrdersClient({
   initialDocuments: DocumentRow[];
   suppliers: SupplierOption[];
 }) {
+  const snapshotKey = getOrdersSnapshotKey(
+    initialPos,
+    initialShipments,
+    initialDocuments,
+    suppliers,
+  );
+  return (
+    <OrdersWorkspace
+      key={snapshotKey}
+      initialPos={initialPos}
+      initialShipments={initialShipments}
+      initialDocuments={initialDocuments}
+      suppliers={suppliers}
+    />
+  );
+}
+
+function OrdersWorkspace({
+  initialPos,
+  initialShipments,
+  initialDocuments,
+  suppliers,
+}: {
+  initialPos: PoRow[];
+  initialShipments: ShipmentRow[];
+  initialDocuments: DocumentRow[];
+  suppliers: SupplierOption[];
+}) {
   const { notify } = useToast();
   const [pos, setPos] = useState<PoRow[]>(initialPos);
   const [shipmentsList, setShipmentsList] = useState<ShipmentRow[]>(initialShipments);
@@ -109,14 +138,18 @@ export function OrdersClient({
   const [activeForm, setActiveForm] = useState<"po" | "shipment" | "doc" | null>(null);
 
   // New PO state
-  const [poSupplierId, setPoSupplierId] = useState(suppliers[0]?.id ?? "");
+  const [poSupplierId, setPoSupplierId] = useState<string>(() =>
+    reconcileRequiredId(null, suppliers),
+  );
   const [poItemName, setPoItemName] = useState("");
   const [poQty, setPoQty] = useState("500");
   const [poUnitUsd, setPoUnitUsd] = useState("48.00");
   const [poIncoterms, setPoIncoterms] = useState("FOB");
 
   // New Shipment state
-  const [shipPoId, setShipPoId] = useState(initialPos[0]?.id ?? "");
+  const [shipPoId, setShipPoId] = useState<string>(() =>
+    reconcileRequiredId(null, initialPos),
+  );
   const [shipCarrier, setShipCarrier] = useState("MSC Mediterranean Shipping");
   const [shipMode, setShipMode] = useState<ShipmentMode>("sea");
   const [shipOrigin, setShipOrigin] = useState("Hamburg (DEHAM)");

@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { resetDemoWorkspace } from "@/db";
 import { requireApiUser } from "@/lib/auth";
@@ -38,5 +39,6 @@ export async function POST(request: Request) {
   }
 
   await resetDemoWorkspace();
+  revalidatePath("/", "layout");
   return NextResponse.json({ ok: true, message: "SourceOS procurement demo reset cleanly." });
 }

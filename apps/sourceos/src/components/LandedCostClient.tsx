@@ -13,6 +13,7 @@ import {
 import { useToast } from "@/components/ToastProvider";
 import { formatCurrencyCents, formatPct, formatUsdCents } from "@/lib/format";
 import { CURRENCY_DEFAULTS, calculateLandedCost } from "@/lib/landed-cost";
+import { getLandedCostSnapshotKey } from "@/lib/workspace-sync";
 
 type ScenarioRow = {
   id: string;
@@ -31,6 +32,15 @@ type ScenarioRow = {
 };
 
 export function LandedCostClient({
+  initialScenarios,
+}: {
+  initialScenarios: ScenarioRow[];
+}) {
+  const snapshotKey = getLandedCostSnapshotKey(initialScenarios);
+  return <LandedCostWorkspace key={snapshotKey} initialScenarios={initialScenarios} />;
+}
+
+function LandedCostWorkspace({
   initialScenarios,
 }: {
   initialScenarios: ScenarioRow[];

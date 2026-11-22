@@ -91,6 +91,9 @@ CREATE TABLE IF NOT EXISTS purchase_orders (
 
 CREATE INDEX IF NOT EXISTS idx_purchase_orders_supplier ON purchase_orders(supplier_id);
 CREATE INDEX IF NOT EXISTS idx_purchase_orders_status ON purchase_orders(status);
+CREATE UNIQUE INDEX IF NOT EXISTS purchase_orders_rfq_id_uidx
+  ON purchase_orders (rfq_id)
+  WHERE rfq_id IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS shipments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -142,3 +145,35 @@ CREATE TABLE IF NOT EXISTS documents (
 
 CREATE INDEX IF NOT EXISTS idx_documents_doc_type ON documents(doc_type);
 CREATE INDEX IF NOT EXISTS idx_documents_status ON documents(status);
+
+-- Collision-safe database-backed sequences for procurement identifiers
+CREATE SEQUENCE IF NOT EXISTS sourceos_rfq_seq START WITH 1001 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS sourceos_po_seq START WITH 4501 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS sourceos_ship_seq START WITH 10001 INCREMENT BY 1;
+
+SELECT setval(
+  'sourceos_rfq_seq',
+  GREATEST(
+    (SELECT last_value FROM sourceos_rfq_seq),
+    COALESCE((SELECT MAX((regexp_match(rfq_number, '(\d+)$'))[1]::bigint) FROM rfqs), 1000)
+  ),
+  true
+);
+
+SELECT setval(
+  'sourceos_po_seq',
+  GREATEST(
+    (SELECT last_value FROM sourceos_po_seq),
+    COALESCE((SELECT MAX((regexp_match(po_number, '(\d+)$'))[1]::bigint) FROM purchase_orders), 4500)
+  ),
+  true
+);
+
+SELECT setval(
+  'sourceos_ship_seq',
+  GREATEST(
+    (SELECT last_value FROM sourceos_ship_seq),
+    COALESCE((SELECT MAX((regexp_match(tracking_code, '(\d+)$'))[1]::bigint) FROM shipments), 10000)
+  ),
+  true
+);

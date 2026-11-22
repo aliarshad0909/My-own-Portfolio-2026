@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   bigint,
   boolean,
@@ -6,6 +7,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -77,22 +79,30 @@ export const quotations = pgTable("quotations", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
-export const purchaseOrders = pgTable("purchase_orders", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  poNumber: text("po_number").notNull().unique(),
-  supplierId: uuid("supplier_id")
-    .notNull()
-    .references(() => suppliers.id, { onDelete: "restrict" }),
-  rfqId: uuid("rfq_id").references(() => rfqs.id, { onDelete: "set null" }),
-  itemName: text("item_name").notNull(),
-  quantity: integer("quantity").notNull(),
-  unitCostCents: integer("unit_cost_cents").notNull(),
-  totalCents: bigint("total_cents", { mode: "number" }).notNull(),
-  incoterms: text("incoterms").notNull().default("FOB"),
-  status: text("status").notNull().default("ordered"),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-});
+export const purchaseOrders = pgTable(
+  "purchase_orders",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    poNumber: text("po_number").notNull().unique(),
+    supplierId: uuid("supplier_id")
+      .notNull()
+      .references(() => suppliers.id, { onDelete: "restrict" }),
+    rfqId: uuid("rfq_id").references(() => rfqs.id, { onDelete: "set null" }),
+    itemName: text("item_name").notNull(),
+    quantity: integer("quantity").notNull(),
+    unitCostCents: integer("unit_cost_cents").notNull(),
+    totalCents: bigint("total_cents", { mode: "number" }).notNull(),
+    incoterms: text("incoterms").notNull().default("FOB"),
+    status: text("status").notNull().default("ordered"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("purchase_orders_rfq_id_uidx")
+      .on(table.rfqId)
+      .where(sql`${table.rfqId} IS NOT NULL`),
+  ],
+);
 
 export const shipments = pgTable("shipments", {
   id: uuid("id").defaultRandom().primaryKey(),

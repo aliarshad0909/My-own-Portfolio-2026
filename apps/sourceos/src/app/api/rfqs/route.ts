@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { quotations, rfqs, suppliers } from "@/db/schema";
 import { requireApiUser } from "@/lib/auth";
-import { generateOrderCode } from "@/lib/procurement";
+import { withUniqueCodeRetry } from "@/lib/procurement";
 import { checkRateLimit, clientKey } from "@/lib/rate-limit";
 import { verifyCsrfOrigin } from "@/lib/security";
 import { createRfqSchema } from "@/lib/validation";
@@ -66,19 +66,27 @@ export async function POST(request: Request) {
   }
 
   const db = await getDb();
-  const [created] = await db
-    .insert(rfqs)
-    .values({
-      rfqNumber: generateOrderCode("RFQ"),
-      title: parsed.data.title,
-      targetQty: parsed.data.targetQty,
-      targetUnitCents: parsed.data.targetUnitCents,
-      currency: parsed.data.currency.toUpperCase(),
-      status: "open",
-      dueDate: parsed.data.dueDate,
-      notes: parsed.data.notes,
-    })
-    .returning();
+  const created = await withUniqueCodeRetry(
+    db,
+    "RFQ",
+    "rfqs_rfq_number_key",
+    async (rfqNumber) => {
+      const [row] = await db
+        .insert(rfqs)
+        .values({
+          rfqNumber,
+          title: parsed.data.title,
+          targetQty: parsed.data.targetQty,
+          targetUnitCents: parsed.data.targetUnitCents,
+          currency: parsed.data.currency.toUpperCase(),
+          status: "open",
+          dueDate: parsed.data.dueDate,
+          notes: parsed.data.notes,
+        })
+        .returning();
+      return row;
+    },
+  );
 
   return NextResponse.json({ rfq: created }, { status: 201 });
 }

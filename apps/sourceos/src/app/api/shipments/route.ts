@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { purchaseOrders, shipments, suppliers } from "@/db/schema";
 import { requireApiUser } from "@/lib/auth";
-import { generateOrderCode } from "@/lib/procurement";
+import { withUniqueCodeRetry } from "@/lib/procurement";
 import { verifyCsrfOrigin } from "@/lib/security";
 import { createShipmentSchema } from "@/lib/validation";
 
@@ -53,22 +53,30 @@ export async function POST(request: Request) {
   }
 
   const db = await getDb();
-  const [created] = await db
-    .insert(shipments)
-    .values({
-      trackingCode: generateOrderCode("SHP"),
-      poId: parsed.data.poId,
-      carrier: parsed.data.carrier,
-      mode: parsed.data.mode,
-      originPort: parsed.data.originPort,
-      destPort: parsed.data.destPort,
-      status: "booked",
-      etaDate: parsed.data.etaDate,
-      freightCents: parsed.data.freightCents,
-      insuranceCents: parsed.data.insuranceCents,
-      dutyCents: parsed.data.dutyCents,
-    })
-    .returning();
+  const created = await withUniqueCodeRetry(
+    db,
+    "SHP",
+    "shipments_tracking_code_key",
+    async (trackingCode) => {
+      const [row] = await db
+        .insert(shipments)
+        .values({
+          trackingCode,
+          poId: parsed.data.poId,
+          carrier: parsed.data.carrier,
+          mode: parsed.data.mode,
+          originPort: parsed.data.originPort,
+          destPort: parsed.data.destPort,
+          status: "booked",
+          etaDate: parsed.data.etaDate,
+          freightCents: parsed.data.freightCents,
+          insuranceCents: parsed.data.insuranceCents,
+          dutyCents: parsed.data.dutyCents,
+        })
+        .returning();
+      return row;
+    },
+  );
 
   return NextResponse.json({ shipment: created }, { status: 201 });
 }

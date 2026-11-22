@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
 import { formatPct, formatUsdCents } from "@/lib/format";
+import { getRfqsSnapshotKey, reconcileRequiredId } from "@/lib/workspace-sync";
 
 type QuoteItem = {
   id: string;
@@ -66,9 +67,22 @@ export function RfqsClient({
   initialRfqs: RfqItem[];
   suppliers: SupplierOption[];
 }) {
+  const snapshotKey = getRfqsSnapshotKey(initialRfqs, suppliers);
+  return <RfqsWorkspace key={snapshotKey} initialRfqs={initialRfqs} suppliers={suppliers} />;
+}
+
+function RfqsWorkspace({
+  initialRfqs,
+  suppliers,
+}: {
+  initialRfqs: RfqItem[];
+  suppliers: SupplierOption[];
+}) {
   const { notify } = useToast();
   const [rfqList, setRfqList] = useState<RfqItem[]>(initialRfqs);
-  const [selectedRfqId, setSelectedRfqId] = useState<string>(initialRfqs[0]?.id ?? "");
+  const [selectedRfqId, setSelectedRfqId] = useState<string>(() =>
+    reconcileRequiredId(null, initialRfqs),
+  );
   const [showNewRfq, setShowNewRfq] = useState(false);
   const [showNewQuote, setShowNewQuote] = useState(false);
   const [busyAwardId, setBusyAwardId] = useState<string | null>(null);
@@ -85,7 +99,9 @@ export function RfqsClient({
   const [savingRfq, setSavingRfq] = useState(false);
 
   // Submit Quotation form
-  const [quoteSupplierId, setQuoteSupplierId] = useState(suppliers[0]?.id ?? "");
+  const [quoteSupplierId, setQuoteSupplierId] = useState<string>(() =>
+    reconcileRequiredId(null, suppliers),
+  );
   const [quoteUnitUsd, setQuoteUnitUsd] = useState("43.50");
   const [quoteMoq, setQuoteMoq] = useState("500");
   const [quoteLeadDays, setQuoteLeadDays] = useState("20");
@@ -114,9 +130,7 @@ export function RfqsClient({
     if (!res.ok) return;
     const data = await res.json();
     setRfqList(data.rfqs);
-    if (keepSelectedId) {
-      setSelectedRfqId(keepSelectedId);
-    }
+    setSelectedRfqId((prev) => reconcileRequiredId(keepSelectedId ?? prev, data.rfqs));
   }
 
   async function handleCreateRfq(e: FormEvent) {

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { purchaseOrders, suppliers } from "@/db/schema";
 import { requireApiUser } from "@/lib/auth";
-import { generateOrderCode } from "@/lib/procurement";
+import { isUniqueViolation, withUniqueCodeRetry } from "@/lib/procurement";
 import { verifyCsrfOrigin } from "@/lib/security";
 import { createPurchaseOrderSchema } from "@/lib/validation";
 
@@ -47,20 +47,39 @@ export async function POST(request: Request) {
 
   const db = await getDb();
   const totalCents = parsed.data.quantity * parsed.data.unitCostCents;
-  const [created] = await db
-    .insert(purchaseOrders)
-    .values({
-      poNumber: generateOrderCode("PO"),
-      supplierId: parsed.data.supplierId,
-      rfqId: parsed.data.rfqId ?? null,
-      itemName: parsed.data.itemName,
-      quantity: parsed.data.quantity,
-      unitCostCents: parsed.data.unitCostCents,
-      totalCents,
-      incoterms: parsed.data.incoterms,
-      status: "ordered",
-    })
-    .returning();
 
-  return NextResponse.json({ purchaseOrder: created }, { status: 201 });
+  try {
+    const created = await withUniqueCodeRetry(
+      db,
+      "PO",
+      "purchase_orders_po_number_key",
+      async (poNumber) => {
+        const [row] = await db
+          .insert(purchaseOrders)
+          .values({
+            poNumber,
+            supplierId: parsed.data.supplierId,
+            rfqId: parsed.data.rfqId ?? null,
+            itemName: parsed.data.itemName,
+            quantity: parsed.data.quantity,
+            unitCostCents: parsed.data.unitCostCents,
+            totalCents,
+            incoterms: parsed.data.incoterms,
+            status: "ordered",
+          })
+          .returning();
+        return row;
+      },
+    );
+
+    return NextResponse.json({ purchaseOrder: created }, { status: 201 });
+  } catch (err) {
+    if (isUniqueViolation(err, "purchase_orders_rfq_id_uidx")) {
+      return NextResponse.json(
+        { error: "A purchase order already exists for this RFQ." },
+        { status: 409 },
+      );
+    }
+    throw err;
+  }
 }

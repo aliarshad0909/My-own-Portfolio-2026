@@ -25,6 +25,60 @@ function loadInitMigrationSql(): string {
   return fs.readFileSync(path.join(process.cwd(), "src", "db", "migrations", "0000_init.sql"), "utf8");
 }
 
+const SYNC_SEQUENCES_SQL = `
+  SELECT setval(
+    'sourceos_rfq_seq',
+    GREATEST(
+      (SELECT last_value FROM sourceos_rfq_seq),
+      COALESCE((SELECT MAX((regexp_match(rfq_number, '(\\d+)$'))[1]::bigint) FROM rfqs), 1000)
+    ),
+    true
+  );
+  SELECT setval(
+    'sourceos_po_seq',
+    GREATEST(
+      (SELECT last_value FROM sourceos_po_seq),
+      COALESCE((SELECT MAX((regexp_match(po_number, '(\\d+)$'))[1]::bigint) FROM purchase_orders), 4500)
+    ),
+    true
+  );
+  SELECT setval(
+    'sourceos_ship_seq',
+    GREATEST(
+      (SELECT last_value FROM sourceos_ship_seq),
+      COALESCE((SELECT MAX((regexp_match(tracking_code, '(\\d+)$'))[1]::bigint) FROM shipments), 10000)
+    ),
+    true
+  );
+`;
+
+const RESET_SEQUENCES_SQL = `
+  SELECT setval(
+    'sourceos_rfq_seq',
+    GREATEST(
+      1000,
+      COALESCE((SELECT MAX((regexp_match(rfq_number, '(\\d+)$'))[1]::bigint) FROM rfqs), 1000)
+    ),
+    true
+  );
+  SELECT setval(
+    'sourceos_po_seq',
+    GREATEST(
+      4500,
+      COALESCE((SELECT MAX((regexp_match(po_number, '(\\d+)$'))[1]::bigint) FROM purchase_orders), 4500)
+    ),
+    true
+  );
+  SELECT setval(
+    'sourceos_ship_seq',
+    GREATEST(
+      10000,
+      COALESCE((SELECT MAX((regexp_match(tracking_code, '(\\d+)$'))[1]::bigint) FROM shipments), 10000)
+    ),
+    true
+  );
+`;
+
 function createState(): DbState {
   const databaseUrl = (process.env.SOURCEOS_DATABASE_URL || process.env.DATABASE_URL || "").trim();
   if (databaseUrl) {
@@ -95,6 +149,7 @@ export async function getDb(): Promise<SourceOsDb> {
         } else if (existingSuppliers.length === 0) {
           await seedSourceOsDemo(state.db, { skipUsers: true });
         }
+        await state.execRaw(SYNC_SEQUENCES_SQL);
         state.initialized = true;
       })();
     }
@@ -122,4 +177,5 @@ export async function resetDemoWorkspace(): Promise<void> {
     RESTART IDENTITY CASCADE;
   `);
   await seedSourceOsDemo(state.db, { skipUsers: true });
+  await state.execRaw(RESET_SEQUENCES_SQL);
 }

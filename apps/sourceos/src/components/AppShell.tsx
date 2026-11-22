@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useState, useTransition, type ReactNode } from "react";
 import {
   Calculator,
   Container,
@@ -32,7 +32,9 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
   const { notify } = useToast();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [isRefreshing, startRefreshTransition] = useTransition();
   const [signingOut, setSigningOut] = useState(false);
+  const isResetBusy = resetting || isRefreshing;
 
   async function handleResetDemo() {
     setResetting(true);
@@ -43,8 +45,11 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
         notify(data.error || "Unable to reset workspace.", "error");
         return;
       }
+      setMobileOpen(false);
       notify("SourceOS procurement dataset reset to clean baseline.");
-      router.refresh();
+      startRefreshTransition(() => {
+        router.refresh();
+      });
     } catch {
       notify("Network error while resetting demo.", "error");
     } finally {
@@ -117,12 +122,12 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
             <div className="mt-3 flex flex-col gap-1.5">
               <button
                 type="button"
-                disabled={resetting}
+                disabled={isResetBusy}
                 onClick={handleResetDemo}
                 className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-slate-600 bg-[#0f1d33] px-2.5 py-1.5 text-xs font-medium text-slate-200 transition hover:border-orange-400 hover:text-white disabled:opacity-60"
               >
                 <RotateCcw className="h-3.5 w-3.5 text-[#f97316]" />
-                <span>{resetting ? "Resetting…" : "Reset Demo Data"}</span>
+                <span>{isResetBusy ? "Resetting…" : "Reset Demo Data"}</span>
               </button>
               <button
                 type="button"
@@ -166,12 +171,12 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
             <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-800 pt-3">
               <button
                 type="button"
-                disabled={resetting}
+                disabled={isResetBusy}
                 onClick={handleResetDemo}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-slate-600 bg-[#162744] px-3 py-1.5 text-xs font-medium text-slate-200"
               >
                 <RotateCcw className="h-3.5 w-3.5 text-[#f97316]" />
-                <span>{resetting ? "Resetting…" : "Reset Demo"}</span>
+                <span>{isResetBusy ? "Resetting…" : "Reset Demo"}</span>
               </button>
               <button
                 type="button"

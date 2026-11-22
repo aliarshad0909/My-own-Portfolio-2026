@@ -17,6 +17,7 @@ import {
 import type { QualificationStatus } from "@/db/schema";
 import { useToast } from "@/components/ToastProvider";
 import { formatPct } from "@/lib/format";
+import { getSuppliersSnapshotKey, reconcileSelectedId } from "@/lib/workspace-sync";
 
 type SupplierRow = {
   id: string;
@@ -44,13 +45,20 @@ function statusChip(status: string) {
 }
 
 export function SuppliersClient({ initialSuppliers }: { initialSuppliers: SupplierRow[] }) {
+  const snapshotKey = getSuppliersSnapshotKey(initialSuppliers);
+  return <SuppliersWorkspace key={snapshotKey} initialSuppliers={initialSuppliers} />;
+}
+
+function SuppliersWorkspace({ initialSuppliers }: { initialSuppliers: SupplierRow[] }) {
   const { notify } = useToast();
   const [list, setList] = useState<SupplierRow[]>(initialSuppliers);
   const [search, setSearch] = useState("");
   const [countryFilter, setCountryFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedId, setSelectedId] = useState<string | null>(initialSuppliers[0]?.id ?? null);
+  const [selectedId, setSelectedId] = useState<string | null>(() =>
+    reconcileSelectedId(null, initialSuppliers),
+  );
   const [showCreate, setShowCreate] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [savingNew, setSavingNew] = useState(false);
