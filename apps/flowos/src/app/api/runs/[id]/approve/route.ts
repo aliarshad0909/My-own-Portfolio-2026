@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiUser } from "@/lib/auth";
-import { resolveApproval } from "@/lib/engine";
+import { ApprovalConflictError, resolveApproval, RunNotFoundError } from "@/lib/engine";
 import { verifyCsrfOrigin } from "@/lib/security";
 
 const approvalSchema = z.object({
@@ -41,6 +41,18 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     );
     return NextResponse.json(result);
   } catch (err) {
+    if (err instanceof ApprovalConflictError) {
+      return NextResponse.json(
+        { error: err.message, code: err.code },
+        { status: err.statusCode },
+      );
+    }
+    if (err instanceof RunNotFoundError) {
+      return NextResponse.json(
+        { error: err.message, code: err.code },
+        { status: err.statusCode },
+      );
+    }
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Unable to process approval." },
       { status: 400 },

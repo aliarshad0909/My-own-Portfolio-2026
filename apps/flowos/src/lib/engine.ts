@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, isNotNull } from "drizzle-orm";
 import { getDb, type FlowOsDb } from "@/db";
 import { runSteps, workflowRuns, workflows } from "@/db/schema";
 import { validateSafeExternalUrl } from "@/lib/security";
@@ -7,9 +7,31 @@ import type {
   FlowEdge,
   FlowNode,
   FlowNodeConfig,
+  PendingTraversalState,
+  RunGraphSnapshot,
   RunStatus,
   StepStatus,
 } from "@/lib/types";
+
+export class ApprovalConflictError extends Error {
+  readonly statusCode = 409;
+  readonly code = "APPROVAL_CONFLICT";
+
+  constructor(message = "Run is no longer awaiting approval.") {
+    super(message);
+    this.name = "ApprovalConflictError";
+  }
+}
+
+export class RunNotFoundError extends Error {
+  readonly statusCode = 404;
+  readonly code = "RUN_NOT_FOUND";
+
+  constructor(message = "Workflow run not found.") {
+    super(message);
+    this.name = "RunNotFoundError";
+  }
+}
 
 export type ExecutionContext = {
   payload: Record<string, unknown>;
@@ -24,7 +46,33 @@ export type ExecutionContext = {
     approvalGranted?: boolean;
     approvedBy?: string;
   };
+  traversal?: PendingTraversalState;
 };
+
+function createGraphSnapshot(wf: {
+  id: string;
+  name: string;
+  updatedAt?: Date | string | null;
+  nodesJson: FlowNode[] | null;
+  edgesJson: FlowEdge[] | null;
+}): RunGraphSnapshot {
+  const nodes = structuredClone((wf.nodesJson || []) as FlowNode[]);
+  const edges = structuredClone((wf.edgesJson || []) as FlowEdge[]);
+  const workflowUpdatedAt =
+    wf.updatedAt instanceof Date
+      ? wf.updatedAt.toISOString()
+      : typeof wf.updatedAt === "string"
+        ? wf.updatedAt
+        : null;
+
+  return {
+    workflowId: wf.id,
+    workflowName: wf.name,
+    workflowUpdatedAt,
+    nodes,
+    edges,
+  };
+}
 
 export function getByPath(source: Record<string, unknown>, dotPath: string): unknown {
   if (!dotPath) return undefined;
@@ -264,12 +312,13 @@ function findNextEdges(
   return matched;
 }
 
-async function runGraphFromNode(params: {
+async function runGraphFromNodes(params: {
   db: FlowOsDb;
   runId: string;
   nodes: FlowNode[];
   edges: FlowEdge[];
-  startNode: FlowNode | undefined;
+  startNodes: FlowNode[];
+  initialVisitedIds?: Iterable<string>;
   context: ExecutionContext;
   startingStepOrder: number;
   initialDurationMs: number;
@@ -283,14 +332,28 @@ async function runGraphFromNode(params: {
 }> {
   const { db, runId, nodes, edges, context } = params;
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
-  const queue: FlowNode[] = params.startNode ? [params.startNode] : [];
-  const visited = new Set<string>();
+  const visited = new Set<string>(params.initialVisitedIds ?? []);
+  const queue: FlowNode[] = [];
+  const queuedIds = new Set<string>();
+
+  const enqueue = (candidate: FlowNode | undefined) => {
+    if (!candidate) return;
+    if (visited.has(candidate.id) || queuedIds.has(candidate.id)) return;
+    queuedIds.add(candidate.id);
+    queue.push(candidate);
+  };
+
+  for (const startNode of params.startNodes) {
+    enqueue(startNode);
+  }
+
   let stepOrder = params.startingStepOrder;
   let totalDuration = params.initialDurationMs;
   let lastOutput: Record<string, unknown> = context.transform || context.ai || context.payload;
 
   while (queue.length > 0) {
     const node = queue.shift()!;
+    queuedIds.delete(node.id);
     if (visited.has(node.id)) continue;
     visited.add(node.id);
     stepOrder += 1;
@@ -355,6 +418,25 @@ async function runGraphFromNode(params: {
           "Operator review required before executing downstream external actions.";
         const durationMs = Math.max(4, Date.now() - stepStart + 8);
         totalDuration += durationMs;
+
+        const approvalOutgoingNodeIds = findNextEdges(node, edges)
+          .map((e) => e.target)
+          .filter(
+            (targetId, idx, arr) =>
+              nodeMap.has(targetId) &&
+              !visited.has(targetId) &&
+              arr.indexOf(targetId) === idx,
+          );
+        const remainingQueuedNodeIds = queue
+          .map((queuedNode) => queuedNode.id)
+          .filter((id) => !visited.has(id));
+
+        context.traversal = {
+          pausedNodeId: node.id,
+          approvalOutgoingNodeIds,
+          queuedNodeIds: remainingQueuedNodeIds,
+          visitedNodeIds: Array.from(visited),
+        };
 
         const gateOutput = {
           gateStatus: "awaiting_approval",
@@ -464,15 +546,13 @@ async function runGraphFromNode(params: {
 
       const nextEdges = findNextEdges(node, edges, branchResult);
       for (const edge of nextEdges) {
-        const targetNode = nodeMap.get(edge.target);
-        if (targetNode && !visited.has(targetNode.id)) {
-          queue.push(targetNode);
-        }
+        enqueue(nodeMap.get(edge.target));
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Node execution failed";
       const durationMs = Math.max(5, Date.now() - stepStart + 10);
       totalDuration += durationMs;
+      delete context.traversal;
 
       await db.insert(runSteps).values({
         runId,
@@ -510,6 +590,8 @@ async function runGraphFromNode(params: {
       };
     }
   }
+
+  delete context.traversal;
 
   await db
     .update(workflowRuns)
@@ -555,6 +637,8 @@ export async function executeWorkflow(
       ? triggerPayload
       : (wf.samplePayload as Record<string, unknown>) || {};
 
+  const graphSnapshot = createGraphSnapshot(wf);
+
   const [createdRun] = await db
     .insert(workflowRuns)
     .values({
@@ -564,6 +648,7 @@ export async function executeWorkflow(
       triggerType: options?.triggerType || wf.triggerType,
       triggerPayload: payload,
       contextJson: {},
+      graphSnapshotJson: graphSnapshot,
       outputJson: {},
       retryCount: 0,
       durationMs: 0,
@@ -581,16 +666,14 @@ export async function executeWorkflow(
     },
   };
 
-  const nodes = (wf.nodesJson || []) as FlowNode[];
-  const edges = (wf.edgesJson || []) as FlowEdge[];
-  const startNode = findEntryNode(nodes, edges);
+  const startNode = findEntryNode(graphSnapshot.nodes, graphSnapshot.edges);
 
-  const result = await runGraphFromNode({
+  const result = await runGraphFromNodes({
     db,
     runId: createdRun.id,
-    nodes,
-    edges,
-    startNode,
+    nodes: graphSnapshot.nodes,
+    edges: graphSnapshot.edges,
+    startNodes: startNode ? [startNode] : [],
     context,
     startingStepOrder: 0,
     initialDurationMs: 0,
@@ -621,24 +704,59 @@ export async function resolveApproval(
   options?: { db?: FlowOsDb },
 ) {
   const db = options?.db ?? (await getDb());
-  const runRows = await db
-    .select()
-    .from(workflowRuns)
-    .where(eq(workflowRuns.id, runId))
-    .limit(1);
-  const run = runRows[0];
-  if (!run) throw new Error("Workflow run not found.");
-  if (run.status !== "awaiting_approval" || !run.pausedNodeId) {
-    throw new Error("This run is not currently awaiting human approval.");
+
+  const rejectionOutput =
+    decision === "reject"
+      ? {
+          gateStatus: "rejected",
+          rejectedBy: actorName,
+          note: note || "Rejected by operator at human approval gate.",
+          externalDispatchBlocked: true,
+          decidedAt: new Date().toISOString(),
+        }
+      : null;
+
+  // Atomically claim the awaiting_approval run BEFORE modifying steps or executing downstream nodes.
+  // Only one concurrent caller can win this conditional transition; all other callers get a 409 conflict.
+  const [claimedRun] = await db
+    .update(workflowRuns)
+    .set(
+      decision === "reject"
+        ? {
+            status: "rejected" satisfies RunStatus,
+            approvedBy: actorName,
+            approvalNote: note || "Rejected at human approval gate.",
+            outputJson: rejectionOutput!,
+            completedAt: new Date(),
+          }
+        : {
+            status: "running" satisfies RunStatus,
+            approvedBy: actorName,
+            approvalNote: note || "Approved by operator.",
+          },
+    )
+    .where(
+      and(
+        eq(workflowRuns.id, runId),
+        eq(workflowRuns.status, "awaiting_approval"),
+        isNotNull(workflowRuns.pausedNodeId),
+      ),
+    )
+    .returning();
+
+  if (!claimedRun || !claimedRun.pausedNodeId) {
+    const existingRows = await db
+      .select({ id: workflowRuns.id })
+      .from(workflowRuns)
+      .where(eq(workflowRuns.id, runId))
+      .limit(1);
+    if (existingRows.length === 0) {
+      throw new RunNotFoundError("Workflow run not found.");
+    }
+    throw new ApprovalConflictError("Run is no longer awaiting approval.");
   }
 
-  const wfRows = await db
-    .select()
-    .from(workflows)
-    .where(eq(workflows.id, run.workflowId))
-    .limit(1);
-  const wf = wfRows[0];
-  if (!wf) throw new Error("Associated workflow no longer exists.");
+  const pausedNodeId = claimedRun.pausedNodeId;
 
   const existingSteps = await db
     .select()
@@ -647,16 +765,9 @@ export async function resolveApproval(
   const sortedSteps = existingSteps.sort((a, b) => a.stepOrder - b.stepOrder);
   const pausedStep = [...sortedSteps]
     .reverse()
-    .find((s) => s.nodeId === run.pausedNodeId && s.status === "awaiting_approval");
+    .find((s) => s.nodeId === pausedNodeId && s.status === "awaiting_approval");
 
   if (decision === "reject") {
-    const rejectionOutput = {
-      gateStatus: "rejected",
-      rejectedBy: actorName,
-      note: note || "Rejected by operator at human approval gate.",
-      externalDispatchBlocked: true,
-      decidedAt: new Date().toISOString(),
-    };
     if (pausedStep) {
       await db
         .update(runSteps)
@@ -664,22 +775,21 @@ export async function resolveApproval(
           status: "rejected" satisfies StepStatus,
           outputJson: {
             ...(pausedStep.outputJson as Record<string, unknown>),
-            ...rejectionOutput,
+            ...rejectionOutput!,
           },
           errorMessage: note || "Rejected by operator.",
         })
         .where(eq(runSteps.id, pausedStep.id));
     }
 
+    const cleanedContext = { ...((claimedRun.contextJson || {}) as Record<string, unknown>) };
+    delete cleanedContext.traversal;
+
     await db
       .update(workflowRuns)
       .set({
-        status: "rejected" satisfies RunStatus,
         pausedNodeId: null,
-        approvedBy: actorName,
-        approvalNote: note || "Rejected at human approval gate.",
-        outputJson: rejectionOutput,
-        completedAt: new Date(),
+        contextJson: cleanedContext,
       })
       .where(eq(workflowRuns.id, runId));
 
@@ -690,7 +800,40 @@ export async function resolveApproval(
     return { run: finalRun, steps };
   }
 
-  // Decision === "approve": mark gate step completed and resume downstream nodes
+  // Decision === "approve": always resume against the run's original snapshotted graph (falling back only for legacy rows)
+  let nodes: FlowNode[];
+  let edges: FlowEdge[];
+  let workflowName = claimedRun.workflowName;
+
+  const snapshot = claimedRun.graphSnapshotJson;
+  if (snapshot && Array.isArray(snapshot.nodes) && Array.isArray(snapshot.edges)) {
+    nodes = structuredClone(snapshot.nodes);
+    edges = structuredClone(snapshot.edges);
+    workflowName = snapshot.workflowName || workflowName;
+  } else {
+    const wfRows = await db
+      .select()
+      .from(workflows)
+      .where(eq(workflows.id, claimedRun.workflowId))
+      .limit(1);
+    const wf = wfRows[0];
+    if (!wf) {
+      await db
+        .update(workflowRuns)
+        .set({
+          status: "failed" satisfies RunStatus,
+          pausedNodeId: null,
+          errorMessage: "Associated workflow no longer exists.",
+          completedAt: new Date(),
+        })
+        .where(eq(workflowRuns.id, runId));
+      throw new Error("Associated workflow no longer exists.");
+    }
+    nodes = structuredClone((wf.nodesJson || []) as FlowNode[]);
+    edges = structuredClone((wf.edgesJson || []) as FlowEdge[]);
+    workflowName = wf.name;
+  }
+
   const approvalOutput = {
     gateStatus: "approved",
     approvedBy: actorName,
@@ -711,20 +854,25 @@ export async function resolveApproval(
       .where(eq(runSteps.id, pausedStep.id));
   }
 
-  const savedContext = (run.contextJson || {}) as unknown as ExecutionContext;
+  const savedContext = (claimedRun.contextJson || {}) as unknown as ExecutionContext;
+  const savedTraversal =
+    savedContext.traversal && savedContext.traversal.pausedNodeId === pausedNodeId
+      ? savedContext.traversal
+      : undefined;
+
   const context: ExecutionContext = {
-    payload: savedContext.payload || (run.triggerPayload as Record<string, unknown>) || {},
+    payload: savedContext.payload || (claimedRun.triggerPayload as Record<string, unknown>) || {},
     ai: savedContext.ai,
     transform: savedContext.transform,
     steps: {
       ...(savedContext.steps || {}),
-      [run.pausedNodeId]: approvalOutput,
+      [pausedNodeId]: approvalOutput,
     },
     meta: {
-      workflowId: wf.id,
-      workflowName: wf.name,
-      runId: run.id,
-      retryCount: run.retryCount,
+      workflowId: claimedRun.workflowId,
+      workflowName,
+      runId: claimedRun.id,
+      retryCount: claimedRun.retryCount,
       approvalGranted: true,
       approvedBy: actorName,
     },
@@ -733,30 +881,51 @@ export async function resolveApproval(
   await db
     .update(workflowRuns)
     .set({
-      status: "running" satisfies RunStatus,
-      approvedBy: actorName,
-      approvalNote: note || "Approved by operator.",
       pausedNodeId: null,
+      contextJson: context as unknown as Record<string, unknown>,
     })
     .where(eq(workflowRuns.id, runId));
 
-  const nodes = (wf.nodesJson || []) as FlowNode[];
-  const edges = (wf.edgesJson || []) as FlowEdge[];
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
-  const outgoing = edges.filter((e) => e.source === run.pausedNodeId);
-  const nextNode = outgoing.length > 0 ? nodeMap.get(outgoing[0].target) : undefined;
+  const visitedIds = new Set<string>([pausedNodeId]);
+  if (savedTraversal) {
+    for (const id of savedTraversal.visitedNodeIds) {
+      visitedIds.add(id);
+    }
+  }
+  for (const step of sortedSteps) {
+    visitedIds.add(step.nodeId);
+  }
+
+  const approvalOutgoingNodeIds = savedTraversal
+    ? savedTraversal.approvalOutgoingNodeIds
+    : edges.filter((e) => e.source === pausedNodeId).map((e) => e.target);
+  const remainingQueuedNodeIds = savedTraversal ? savedTraversal.queuedNodeIds : [];
+
+  const resumeNodeIds: string[] = [];
+  const seenResumeIds = new Set<string>();
+  for (const candidateId of [...approvalOutgoingNodeIds, ...remainingQueuedNodeIds]) {
+    if (visitedIds.has(candidateId) || seenResumeIds.has(candidateId)) continue;
+    seenResumeIds.add(candidateId);
+    resumeNodeIds.push(candidateId);
+  }
+
+  const resumeNodes = resumeNodeIds
+    .map((id) => nodeMap.get(id))
+    .filter((n): n is FlowNode => Boolean(n));
 
   const maxStepOrder = sortedSteps.reduce((acc, s) => Math.max(acc, s.stepOrder), 0);
 
-  await runGraphFromNode({
+  await runGraphFromNodes({
     db,
     runId,
     nodes,
     edges,
-    startNode: nextNode,
+    startNodes: resumeNodes,
+    initialVisitedIds: visitedIds,
     context,
     startingStepOrder: maxStepOrder,
-    initialDurationMs: run.durationMs,
+    initialDurationMs: claimedRun.durationMs,
   });
 
   const [finalRun] = await db.select().from(workflowRuns).where(eq(workflowRuns.id, runId)).limit(1);
@@ -777,7 +946,7 @@ export async function retryWorkflowRun(
     .where(eq(workflowRuns.id, runId))
     .limit(1);
   const run = runRows[0];
-  if (!run) throw new Error("Workflow run not found.");
+  if (!run) throw new RunNotFoundError("Workflow run not found.");
   if (run.status !== "failed") {
     throw new Error("Only failed workflow runs can be retried.");
   }
@@ -796,20 +965,30 @@ export async function retryWorkflowRun(
     delete cleanedPayload._simulateHttpFailure;
   }
 
-  // Clear previous attempt steps so the retried run shows a clean trace
-  await db.delete(runSteps).where(eq(runSteps.runId, runId));
-  await db
+  const graphSnapshot = createGraphSnapshot(wf);
+
+  const [claimedRetry] = await db
     .update(workflowRuns)
     .set({
       status: "running" satisfies RunStatus,
       retryCount: nextRetryCount,
       triggerPayload: cleanedPayload,
+      contextJson: {},
+      graphSnapshotJson: graphSnapshot,
       errorMessage: null,
       pausedNodeId: null,
       completedAt: null,
       durationMs: 0,
     })
-    .where(eq(workflowRuns.id, runId));
+    .where(and(eq(workflowRuns.id, runId), eq(workflowRuns.status, "failed")))
+    .returning();
+
+  if (!claimedRetry) {
+    throw new Error("Only failed workflow runs can be retried.");
+  }
+
+  // Clear previous attempt steps so the retried run shows a clean trace
+  await db.delete(runSteps).where(eq(runSteps.runId, runId));
 
   const context: ExecutionContext = {
     payload: cleanedPayload,
@@ -822,16 +1001,14 @@ export async function retryWorkflowRun(
     },
   };
 
-  const nodes = (wf.nodesJson || []) as FlowNode[];
-  const edges = (wf.edgesJson || []) as FlowEdge[];
-  const startNode = findEntryNode(nodes, edges);
+  const startNode = findEntryNode(graphSnapshot.nodes, graphSnapshot.edges);
 
-  await runGraphFromNode({
+  await runGraphFromNodes({
     db,
     runId: run.id,
-    nodes,
-    edges,
-    startNode,
+    nodes: graphSnapshot.nodes,
+    edges: graphSnapshot.edges,
+    startNodes: startNode ? [startNode] : [],
     context,
     startingStepOrder: 0,
     initialDurationMs: 0,

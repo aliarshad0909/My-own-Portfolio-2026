@@ -94,6 +94,21 @@ export type FlowEdge = {
   animated?: boolean;
 };
 
+export type RunGraphSnapshot = {
+  workflowId: string;
+  workflowName: string;
+  workflowUpdatedAt: string | null;
+  nodes: FlowNode[];
+  edges: FlowEdge[];
+};
+
+export type PendingTraversalState = {
+  pausedNodeId: string;
+  approvalOutgoingNodeIds: string[];
+  queuedNodeIds: string[];
+  visitedNodeIds: string[];
+};
+
 export const NODE_TYPE_META: Record<
   FlowNodeType,
   {

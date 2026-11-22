@@ -7,7 +7,7 @@ import {
   timestamp,
   jsonb,
 } from "drizzle-orm/pg-core";
-import type { FlowEdge, FlowNode } from "@/lib/types";
+import type { FlowEdge, FlowNode, RunGraphSnapshot } from "@/lib/types";
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -55,6 +55,7 @@ export const workflowRuns = pgTable("workflow_runs", {
   triggerType: text("trigger_type").notNull().default("trigger"),
   triggerPayload: jsonb("trigger_payload").$type<Record<string, unknown>>().notNull().default({}),
   contextJson: jsonb("context_json").$type<Record<string, unknown>>().notNull().default({}),
+  graphSnapshotJson: jsonb("graph_snapshot_json").$type<RunGraphSnapshot | null>(),
   outputJson: jsonb("output_json").$type<Record<string, unknown>>().notNull().default({}),
   pausedNodeId: text("paused_node_id"),
   approvalPrompt: text("approval_prompt"),

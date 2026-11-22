@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS workflow_runs (
   trigger_type TEXT NOT NULL DEFAULT 'trigger',
   trigger_payload JSONB NOT NULL DEFAULT '{}'::jsonb,
   context_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+  graph_snapshot_json JSONB,
   output_json JSONB NOT NULL DEFAULT '{}'::jsonb,
   paused_node_id TEXT,
   approval_prompt TEXT,
@@ -60,6 +61,9 @@ CREATE TABLE IF NOT EXISTS workflow_runs (
   started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   completed_at TIMESTAMPTZ
 );
+
+ALTER TABLE workflow_runs
+  ADD COLUMN IF NOT EXISTS graph_snapshot_json JSONB;
 
 CREATE INDEX IF NOT EXISTS idx_workflow_runs_workflow_id ON workflow_runs(workflow_id);
 CREATE INDEX IF NOT EXISTS idx_workflow_runs_status ON workflow_runs(status);
