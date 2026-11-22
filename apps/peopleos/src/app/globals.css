@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --slate-sidebar: #1e293b;
+  --slate-sidebar-hover: #283548;
+  --hr-green: #16a34a;
+  --hr-green-hover: #15803d;
+  --hr-canvas: #f6f8f7;
+  --hr-card: #ffffff;
+  --hr-border: #dde4e0;
+  --hr-ink: #0f172a;
+  --hr-muted: #475569;
+}
+
+html,
+body {
+  background-color: var(--hr-canvas);
+  color: var(--hr-ink);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), var(--font-inter), system-ui, sans-serif;
+}
+
+.people-scroll::-webkit-scrollbar {
+  height: 7px;
+  width: 7px;
+}
+
+.people-scroll::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 999px;
+}
+
+.people-scroll::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 999px;
+}
