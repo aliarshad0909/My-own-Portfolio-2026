@@ -57,7 +57,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: EXPO_PUBLIC_API_URL
-        value: https://stock.aliarshad.co
+        value: https://stockflow-ops.onrender.com
     routes:
       - type: rewrite
         source: /*
