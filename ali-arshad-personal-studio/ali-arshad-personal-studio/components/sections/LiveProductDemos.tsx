@@ -192,8 +192,7 @@ export function LiveProductDemos() {
         </div>
 
         <p className="fine-print live-demos__note">
-          All twelve applications are built and locally verified with automated PostgreSQL, security,
-          and Chromium E2E test suites; public demo links activate as each subdomain deploys.
+          PipelineOS and StockFlow are live at their custom domains; other products remain available in the full studio ecosystem directory.
         </p>
       </div>
     </section>
