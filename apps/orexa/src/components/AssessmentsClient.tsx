@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   Award,
@@ -10,12 +10,18 @@ import {
   GraduationCap,
   History,
   RotateCcw,
+  SlidersHorizontal,
   Sparkles,
   XCircle,
 } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
 import type { DifficultyTier } from "@/db/schema";
 import type { AdaptiveEvaluation, ReadinessProfile } from "@/lib/adaptive";
+import {
+  filterAssessmentsByCourse,
+  reconcileAssessmentCourseFilter,
+  resolveActiveAssessment,
+} from "@/lib/assessment-state";
 import type { AssessmentAttemptRecord, AssessmentCatalogItem } from "@/lib/queries";
 
 type Props = {
@@ -34,20 +40,27 @@ function tierBadge(tier: DifficultyTier) {
   return "border-emerald-500/35 bg-emerald-500/15 text-emerald-200";
 }
 
+function resolveInitialFilter(
+  courses: Props["initialData"]["courses"],
+  initialCourseId?: string,
+): string {
+  if (initialCourseId && courses.some((c) => c.id === initialCourseId)) {
+    return initialCourseId;
+  }
+  return "all";
+}
+
 export function AssessmentsClient({ initialData, initialCourseId }: Props) {
   const { toast } = useToast();
   const [data, setData] = useState(initialData);
-  const [courseFilter, setCourseFilter] = useState<string>(() => {
-    if (initialCourseId && initialData.courses.some((c) => c.id === initialCourseId)) {
-      return initialCourseId;
-    }
-    return "all";
-  });
-  const [activeAssessmentId, setActiveAssessmentId] = useState<string>(() => {
-    const match = initialCourseId
-      ? initialData.assessments.find((a) => a.courseId === initialCourseId)
-      : initialData.assessments[0];
-    return match?.id ?? initialData.assessments[0]?.id ?? "";
+  const [prevInitialData, setPrevInitialData] = useState(initialData);
+  const [courseFilter, setCourseFilter] = useState<string>(() =>
+    resolveInitialFilter(initialData.courses, initialCourseId),
+  );
+  const [activeAssessmentId, setActiveAssessmentId] = useState<string | null>(() => {
+    const initialFilter = resolveInitialFilter(initialData.courses, initialCourseId);
+    const initialVisible = filterAssessmentsByCourse(initialData.assessments, initialFilter);
+    return resolveActiveAssessment(initialVisible, null)?.id ?? null;
   });
 
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
@@ -57,43 +70,126 @@ export function AssessmentsClient({ initialData, initialCourseId }: Props) {
     evaluation: AdaptiveEvaluation;
   } | null>(null);
 
+  if (initialData !== prevInitialData) {
+    const previousCourseTitle = data.courses.find((c) => c.id === courseFilter)?.title ?? null;
+    const nextFilter = reconcileAssessmentCourseFilter(
+      initialData.courses,
+      courseFilter,
+      previousCourseTitle,
+    );
+    const nextVisible = filterAssessmentsByCourse(initialData.assessments, nextFilter);
+    const nextActive = resolveActiveAssessment(nextVisible, activeAssessmentId);
+
+    setPrevInitialData(initialData);
+    setData(initialData);
+    setCourseFilter(nextFilter);
+    setActiveAssessmentId(nextActive?.id ?? null);
+    setSelectedAnswers({});
+    setLastResult(null);
+  }
+
+  const filterContextRef = useRef<{
+    courseFilter: string;
+    activeAssessmentId: string | null;
+    courseTitle: string | null;
+  }>({
+    courseFilter,
+    activeAssessmentId,
+    courseTitle: data.courses.find((c) => c.id === courseFilter)?.title ?? null,
+  });
+  const refreshSeqRef = useRef(0);
+  const refreshAbortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    filterContextRef.current = {
+      courseFilter,
+      activeAssessmentId,
+      courseTitle: data.courses.find((c) => c.id === courseFilter)?.title ?? null,
+    };
+  }, [courseFilter, activeAssessmentId, data.courses]);
+
+  useEffect(() => {
+    return () => {
+      refreshAbortRef.current?.abort();
+    };
+  }, []);
+
   useEffect(() => {
     const onRefresh = async () => {
-      const res = await fetch("/api/assessments", { cache: "no-store" });
-      if (res.ok) {
-        const refreshed = await res.json();
+      const seq = ++refreshSeqRef.current;
+      refreshAbortRef.current?.abort();
+      const controller = new AbortController();
+      refreshAbortRef.current = controller;
+
+      try {
+        const res = await fetch("/api/assessments", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (!res.ok || seq !== refreshSeqRef.current || controller.signal.aborted) {
+          return;
+        }
+
+        const refreshed = (await res.json()) as Props["initialData"];
+        const current = filterContextRef.current;
+        const nextFilter = reconcileAssessmentCourseFilter(
+          refreshed.courses,
+          current.courseFilter,
+          current.courseTitle,
+        );
+        const nextVisible = filterAssessmentsByCourse(refreshed.assessments, nextFilter);
+        const nextActive = resolveActiveAssessment(nextVisible, current.activeAssessmentId);
+
         setData(refreshed);
+        setCourseFilter(nextFilter);
+        setActiveAssessmentId(nextActive?.id ?? null);
         setSelectedAnswers({});
         setLastResult(null);
+      } catch (error) {
+        if ((error as { name?: string })?.name !== "AbortError") {
+          toast("Unable to refresh assessments.", "error");
+        }
       }
     };
     window.addEventListener("orexa:refresh", onRefresh);
     return () => window.removeEventListener("orexa:refresh", onRefresh);
-  }, []);
+  }, [toast]);
 
-  const visibleAssessments = useMemo(() => {
-    if (courseFilter === "all") return data.assessments;
-    return data.assessments.filter((a) => a.courseId === courseFilter);
-  }, [data.assessments, courseFilter]);
+  const visibleAssessments = useMemo(
+    () => filterAssessmentsByCourse(data.assessments, courseFilter),
+    [data.assessments, courseFilter],
+  );
 
-  const activeAssessment = useMemo(() => {
-    return (
-      data.assessments.find((a) => a.id === activeAssessmentId) ??
-      visibleAssessments[0] ??
-      null
-    );
-  }, [data.assessments, visibleAssessments, activeAssessmentId]);
+  const activeAssessment = useMemo(
+    () => resolveActiveAssessment(visibleAssessments, activeAssessmentId),
+    [visibleAssessments, activeAssessmentId],
+  );
+
+  const selectedCourseTitle = useMemo(() => {
+    if (courseFilter === "all") return null;
+    return data.courses.find((c) => c.id === courseFilter)?.title ?? null;
+  }, [data.courses, courseFilter]);
 
   const currentResult =
     lastResult && activeAssessment && lastResult.assessmentId === activeAssessment.id
       ? lastResult.evaluation
       : null;
 
-  function chooseAssessment(id: string) {
+  const chooseAssessment = useCallback((id: string | null) => {
     setActiveAssessmentId(id);
     setSelectedAnswers({});
     setLastResult(null);
-  }
+  }, []);
+
+  const handleCourseFilterChange = useCallback(
+    (nextFilter: string) => {
+      setCourseFilter(nextFilter);
+      const nextVisible = filterAssessmentsByCourse(data.assessments, nextFilter);
+      const nextActive = resolveActiveAssessment(nextVisible, null);
+      chooseAssessment(nextActive?.id ?? null);
+    },
+    [data.assessments, chooseAssessment],
+  );
 
   async function handleSubmitQuiz() {
     if (!activeAssessment) return;
@@ -164,15 +260,7 @@ export function AssessmentsClient({ initialData, initialCourseId }: Props) {
           <div className="flex flex-wrap items-center gap-2">
             <select
               value={courseFilter}
-              onChange={(e) => {
-                const next = e.target.value;
-                setCourseFilter(next);
-                const first =
-                  next === "all"
-                    ? data.assessments[0]
-                    : data.assessments.find((a) => a.courseId === next);
-                if (first) chooseAssessment(first.id);
-              }}
+              onChange={(e) => handleCourseFilterChange(e.target.value)}
               aria-label="Filter assessments by course"
               className="rounded-xl border border-[#2d3548] bg-[#0d0f14] px-3 py-2 text-xs font-medium text-white focus:border-[#ff6b4a] focus:outline-none"
             >
@@ -196,42 +284,48 @@ export function AssessmentsClient({ initialData, initialCourseId }: Props) {
               <h2 className="text-sm font-bold text-white">Available Assessments</h2>
             </div>
 
-            <div className="mt-3 space-y-2.5">
-              {visibleAssessments.map((assess) => {
-                const selected = activeAssessment?.id === assess.id;
-                return (
-                  <button
-                    key={assess.id}
-                    type="button"
-                    onClick={() => chooseAssessment(assess.id)}
-                    className={`w-full rounded-xl border p-3 text-left transition ${
-                      selected
-                        ? "border-[#ff6b4a] bg-[#1a1f2c]"
-                        : "border-[#242c3e] bg-[#0f131b] hover:border-[#39455e]"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span
-                        className={`rounded border px-2 py-0.5 text-[10px] font-semibold capitalize ${tierBadge(assess.difficulty)}`}
-                      >
-                        {assess.difficulty}
-                      </span>
-                      {assess.bestScorePct !== null ? (
-                        <span className="text-xs font-bold text-emerald-400">
-                          Best: {assess.bestScorePct}%
+            {visibleAssessments.length === 0 ? (
+              <p className="mt-3 text-xs text-[#8d99ae]">
+                No assessments yet for {selectedCourseTitle ? `"${selectedCourseTitle}"` : "this filter"}.
+              </p>
+            ) : (
+              <div className="mt-3 space-y-2.5">
+                {visibleAssessments.map((assess) => {
+                  const selected = activeAssessment?.id === assess.id;
+                  return (
+                    <button
+                      key={assess.id}
+                      type="button"
+                      onClick={() => chooseAssessment(assess.id)}
+                      className={`w-full rounded-xl border p-3 text-left transition ${
+                        selected
+                          ? "border-[#ff6b4a] bg-[#1a1f2c]"
+                          : "border-[#242c3e] bg-[#0f131b] hover:border-[#39455e]"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span
+                          className={`rounded border px-2 py-0.5 text-[10px] font-semibold capitalize ${tierBadge(assess.difficulty)}`}
+                        >
+                          {assess.difficulty}
                         </span>
-                      ) : (
-                        <span className="text-[11px] text-[#7e8a9f]">Not attempted</span>
-                      )}
-                    </div>
-                    <p className="mt-2 text-xs font-bold text-white">{assess.title}</p>
-                    <p className="mt-0.5 truncate text-[11px] text-[#8d99ae]">
-                      {assess.courseTitle} · {assess.questionCount} questions
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
+                        {assess.bestScorePct !== null ? (
+                          <span className="text-xs font-bold text-emerald-400">
+                            Best: {assess.bestScorePct}%
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-[#7e8a9f]">Not attempted</span>
+                        )}
+                      </div>
+                      <p className="mt-2 text-xs font-bold text-white">{assess.title}</p>
+                      <p className="mt-0.5 truncate text-[11px] text-[#8d99ae]">
+                        {assess.courseTitle} · {assess.questionCount} questions
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Attempt History */}
@@ -440,8 +534,39 @@ export function AssessmentsClient({ initialData, initialCourseId }: Props) {
               ) : null}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-[#2d3548] bg-[#141821] p-10 text-center text-sm text-[#9ca7bc]">
-              No assessments available for this filter.
+            <div className="rounded-2xl border border-dashed border-[#2d3548] bg-[#141821] p-10 text-center">
+              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff6b4a]/15 text-[#ff6b4a]">
+                <GraduationCap className="h-6 w-6" />
+              </span>
+              <h2 className="mt-4 text-base font-bold text-white">
+                {selectedCourseTitle
+                  ? `No assessments yet for ${selectedCourseTitle}`
+                  : "No assessments available yet"}
+              </h2>
+              <p className="mx-auto mt-1.5 max-w-md text-xs leading-relaxed text-[#9ca7bc]">
+                {selectedCourseTitle
+                  ? "This course does not have an adaptive quiz attached yet. Select another course from the filter above or manage curriculum content in Instructor Studio."
+                  : "There are no published adaptive quizzes matching this view. Check back after adding assessments or courses in Instructor Studio."}
+              </p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+                {courseFilter !== "all" ? (
+                  <button
+                    type="button"
+                    onClick={() => handleCourseFilterChange("all")}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#ff6b4a] to-[#f97316] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#ff6b4a]/20 transition hover:brightness-110"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                    <span>View All Courses</span>
+                  </button>
+                ) : null}
+                <Link
+                  href="/studio"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#2d3548] bg-[#0f131b] px-4 py-2 text-xs font-semibold text-[#cbd4e4] transition hover:border-[#ff6b4a]/60 hover:text-white"
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5 text-[#ff6b4a]" />
+                  <span>Open Instructor Studio</span>
+                </Link>
+              </div>
             </div>
           )}
         </section>

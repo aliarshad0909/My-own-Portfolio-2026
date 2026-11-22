@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   BookOpen,
   Bot,
@@ -13,6 +13,11 @@ import {
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import { useToast } from "@/components/ToastProvider";
 import type { CourseCatalogItem, TutorMessageView } from "@/lib/queries";
+import {
+  extractTutorSelectionHint,
+  reconcileTutorSelection,
+  type TutorSelectionHint,
+} from "@/lib/tutor-state";
 
 type Props = {
   courses: CourseCatalogItem[];
@@ -29,6 +34,25 @@ const QUICK_PROMPTS = [
   "What are the top pitfalls to avoid in this module?",
 ];
 
+type TutorSelectionState = {
+  courseId: string;
+  lessonId: string;
+  hint: TutorSelectionHint;
+};
+
+function buildInitialSelection(
+  courses: CourseCatalogItem[],
+  initialCourseId: string,
+  initialLessonId?: string,
+): TutorSelectionState {
+  const reconciled = reconcileTutorSelection(courses, initialCourseId, initialLessonId ?? "");
+  return {
+    courseId: reconciled.courseId,
+    lessonId: reconciled.lessonId,
+    hint: extractTutorSelectionHint(courses, reconciled.courseId, reconciled.lessonId),
+  };
+}
+
 export function TutorClient({
   courses,
   initialCourseId,
@@ -37,16 +61,73 @@ export function TutorClient({
   engineMode,
 }: Props) {
   const { toast } = useToast();
-  const [courseId, setCourseId] = useState(initialCourseId);
-  const [lessonId, setLessonId] = useState(initialLessonId ?? "");
+  const [catalog, setCatalog] = useState<CourseCatalogItem[]>(courses);
+  const [prevCoursesProp, setPrevCoursesProp] = useState<CourseCatalogItem[]>(courses);
+  const [selection, setSelection] = useState<TutorSelectionState>(() =>
+    buildInitialSelection(courses, initialCourseId, initialLessonId),
+  );
   const [messages, setMessages] = useState<TutorMessageView[]>(initialMessages);
   const [prompt, setPrompt] = useState("");
   const [sending, setSending] = useState(false);
   const [loadingThread, setLoadingThread] = useState(false);
 
+  if (courses !== prevCoursesProp) {
+    setPrevCoursesProp(courses);
+    setCatalog(courses);
+    const reconciled = reconcileTutorSelection(
+      courses,
+      selection.courseId,
+      selection.lessonId,
+      selection.hint,
+    );
+    const nextHint = extractTutorSelectionHint(courses, reconciled.courseId, reconciled.lessonId);
+    if (
+      reconciled.courseChanged ||
+      reconciled.lessonChanged ||
+      nextHint.courseSlug !== selection.hint.courseSlug ||
+      nextHint.courseTitle !== selection.hint.courseTitle ||
+      nextHint.lessonTitle !== selection.hint.lessonTitle
+    ) {
+      setSelection({
+        courseId: reconciled.courseId,
+        lessonId: reconciled.lessonId,
+        hint: nextHint,
+      });
+    }
+  }
+
+  const reconciledSelection = useMemo(
+    () =>
+      reconcileTutorSelection(catalog, selection.courseId, selection.lessonId, selection.hint),
+    [catalog, selection],
+  );
+  const courseId = reconciledSelection.courseId;
+  const lessonId = reconciledSelection.lessonId;
+
+  const selectionRef = useRef<TutorSelectionState>(selection);
+  const loadedCourseIdRef = useRef<string>(
+    buildInitialSelection(courses, initialCourseId, initialLessonId).courseId,
+  );
+  const requestSeqRef = useRef(0);
+  const activeAbortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    selectionRef.current = {
+      courseId,
+      lessonId,
+      hint: selection.hint,
+    };
+  }, [courseId, lessonId, selection.hint]);
+
+  useEffect(() => {
+    return () => {
+      activeAbortRef.current?.abort();
+    };
+  }, []);
+
   const activeCourse = useMemo(
-    () => courses.find((c) => c.id === courseId) ?? courses[0] ?? null,
-    [courses, courseId],
+    () => catalog.find((c) => c.id === courseId) ?? null,
+    [catalog, courseId],
   );
 
   const courseLessons = useMemo(() => {
@@ -56,41 +137,159 @@ export function TutorClient({
     );
   }, [activeCourse]);
 
-  useEffect(() => {
-    const onRefresh = async () => {
-      if (!courseId) return;
-      const res = await fetch(`/api/tutor?courseId=${encodeURIComponent(courseId)}`, {
-        cache: "no-store",
-      });
-      if (res.ok) {
-        const data = (await res.json()) as { messages: TutorMessageView[] };
-        setMessages(data.messages);
-      }
-    };
-    window.addEventListener("orexa:refresh", onRefresh);
-    return () => window.removeEventListener("orexa:refresh", onRefresh);
-  }, [courseId]);
+  const loadThreadForCourse = useCallback(async (targetCourseId: string) => {
+    const seq = ++requestSeqRef.current;
+    activeAbortRef.current?.abort();
+    const controller = new AbortController();
+    activeAbortRef.current = controller;
+    loadedCourseIdRef.current = targetCourseId;
 
-  async function handleSelectCourse(nextCourseId: string) {
-    setCourseId(nextCourseId);
-    setLessonId("");
+    if (!targetCourseId) {
+      setMessages([]);
+      setLoadingThread(false);
+      return;
+    }
+
     setLoadingThread(true);
     try {
-      const res = await fetch(`/api/tutor?courseId=${encodeURIComponent(nextCourseId)}`, {
+      const res = await fetch(`/api/tutor?courseId=${encodeURIComponent(targetCourseId)}`, {
         cache: "no-store",
+        signal: controller.signal,
       });
-      if (res.ok) {
-        const data = (await res.json()) as { messages: TutorMessageView[] };
-        setMessages(data.messages);
+      if (!res.ok || seq !== requestSeqRef.current || controller.signal.aborted) {
+        return;
+      }
+      const data = (await res.json()) as { messages: TutorMessageView[] };
+      setMessages(data.messages);
+    } catch (error) {
+      if ((error as { name?: string })?.name !== "AbortError") {
+        toast("Unable to load tutor conversation history.", "error");
       }
     } finally {
-      setLoadingThread(false);
+      if (seq === requestSeqRef.current) {
+        setLoadingThread(false);
+      }
     }
+  }, [toast]);
+
+  // Reload the conversation thread whenever reconciliation updates the active courseId
+  // (e.g., after router.refresh() replaces course UUIDs following a demo workspace reset).
+  useEffect(() => {
+    if (loadedCourseIdRef.current === courseId) return;
+    let cancelled = false;
+    void Promise.resolve().then(() => {
+      if (!cancelled) {
+        void loadThreadForCourse(courseId);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [courseId, loadThreadForCourse]);
+
+  // On workspace reset/refresh events, fetch the latest course catalog first and
+  // reconcile courseId/lessonId before fetching thread messages so stale deleted
+  // IDs are never queried or submitted.
+  useEffect(() => {
+    const onRefresh = async () => {
+      const seq = ++requestSeqRef.current;
+      activeAbortRef.current?.abort();
+      const controller = new AbortController();
+      activeAbortRef.current = controller;
+
+      setLoadingThread(true);
+      try {
+        const coursesRes = await fetch("/api/courses", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (!coursesRes.ok || seq !== requestSeqRef.current || controller.signal.aborted) {
+          return;
+        }
+
+        const coursesPayload = (await coursesRes.json()) as { courses: CourseCatalogItem[] };
+        const freshCourses = Array.isArray(coursesPayload.courses) ? coursesPayload.courses : [];
+        const current = selectionRef.current;
+        const reconciled = reconcileTutorSelection(
+          freshCourses,
+          current.courseId,
+          current.lessonId,
+          current.hint,
+        );
+        const nextHint = extractTutorSelectionHint(
+          freshCourses,
+          reconciled.courseId,
+          reconciled.lessonId,
+        );
+
+        loadedCourseIdRef.current = reconciled.courseId;
+        setCatalog(freshCourses);
+        setSelection({
+          courseId: reconciled.courseId,
+          lessonId: reconciled.lessonId,
+          hint: nextHint,
+        });
+
+        if (!reconciled.courseId) {
+          setMessages([]);
+          return;
+        }
+
+        const threadRes = await fetch(
+          `/api/tutor?courseId=${encodeURIComponent(reconciled.courseId)}`,
+          {
+            cache: "no-store",
+            signal: controller.signal,
+          },
+        );
+        if (!threadRes.ok || seq !== requestSeqRef.current || controller.signal.aborted) {
+          return;
+        }
+
+        const threadPayload = (await threadRes.json()) as { messages: TutorMessageView[] };
+        setMessages(threadPayload.messages);
+      } catch (error) {
+        if ((error as { name?: string })?.name !== "AbortError") {
+          toast("Unable to refresh tutor conversation.", "error");
+        }
+      } finally {
+        if (seq === requestSeqRef.current) {
+          setLoadingThread(false);
+        }
+      }
+    };
+
+    window.addEventListener("orexa:refresh", onRefresh);
+    return () => window.removeEventListener("orexa:refresh", onRefresh);
+  }, [toast]);
+
+  async function handleSelectCourse(nextCourseId: string) {
+    const reconciled = reconcileTutorSelection(catalog, nextCourseId, "");
+    const nextHint = extractTutorSelectionHint(catalog, reconciled.courseId, "");
+    setSelection({
+      courseId: reconciled.courseId,
+      lessonId: "",
+      hint: nextHint,
+    });
+    await loadThreadForCourse(reconciled.courseId);
+  }
+
+  function handleSelectLesson(nextLessonId: string) {
+    const reconciled = reconcileTutorSelection(catalog, courseId, nextLessonId);
+    const nextHint = extractTutorSelectionHint(catalog, reconciled.courseId, reconciled.lessonId);
+    setSelection({
+      courseId: reconciled.courseId,
+      lessonId: reconciled.lessonId,
+      hint: nextHint,
+    });
   }
 
   async function sendQuestion(questionText: string) {
     const trimmed = questionText.trim();
-    if (!trimmed || !courseId) return;
+    if (!trimmed || !courseId || loadingThread) return;
+
+    const targetCourseId = courseId;
+    const targetLessonId = lessonId || null;
 
     setSending(true);
     try {
@@ -98,8 +297,8 @@ export function TutorClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          courseId,
-          lessonId: lessonId || null,
+          courseId: targetCourseId,
+          lessonId: targetLessonId,
           message: trimmed,
         }),
       });
@@ -109,7 +308,9 @@ export function TutorClient({
         return;
       }
 
-      setMessages((prev) => [...prev, data.studentMessage, data.tutorMessage]);
+      if (selectionRef.current.courseId === targetCourseId) {
+        setMessages((prev) => [...prev, data.studentMessage, data.tutorMessage]);
+      }
       setPrompt("");
     } finally {
       setSending(false);
@@ -122,12 +323,15 @@ export function TutorClient({
   }
 
   async function handleClearThread() {
-    if (!courseId) return;
-    const res = await fetch(`/api/tutor?courseId=${encodeURIComponent(courseId)}`, {
+    if (!courseId || loadingThread) return;
+    const targetCourseId = courseId;
+    const res = await fetch(`/api/tutor?courseId=${encodeURIComponent(targetCourseId)}`, {
       method: "DELETE",
     });
     if (res.ok) {
-      setMessages([]);
+      if (selectionRef.current.courseId === targetCourseId) {
+        setMessages([]);
+      }
       toast("Cleared tutor conversation thread for this course.", "info");
     }
   }
@@ -158,7 +362,7 @@ export function TutorClient({
         <button
           type="button"
           onClick={handleClearThread}
-          disabled={messages.length === 0}
+          disabled={messages.length === 0 || loadingThread || !courseId}
           className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-xl border border-[#2d3548] bg-[#0f131b] px-3 py-2 text-xs font-semibold text-[#cbd4e4] hover:border-red-500/50 hover:text-red-300 disabled:opacity-40 lg:self-auto"
         >
           <Trash2 className="h-3.5 w-3.5" />
@@ -178,9 +382,10 @@ export function TutorClient({
                 id="tutor-course"
                 value={courseId}
                 onChange={(e) => handleSelectCourse(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-[#2d3548] bg-[#0d0f14] px-3 py-2 text-xs font-medium text-white focus:border-[#ff6b4a] focus:outline-none"
+                disabled={catalog.length === 0}
+                className="mt-1.5 w-full rounded-xl border border-[#2d3548] bg-[#0d0f14] px-3 py-2 text-xs font-medium text-white focus:border-[#ff6b4a] focus:outline-none disabled:opacity-50"
               >
-                {courses.map((c) => (
+                {catalog.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.title}
                   </option>
@@ -195,8 +400,9 @@ export function TutorClient({
               <select
                 id="tutor-lesson"
                 value={lessonId}
-                onChange={(e) => setLessonId(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-[#2d3548] bg-[#0d0f14] px-3 py-2 text-xs font-medium text-[#cbd4e4] focus:border-[#ff6b4a] focus:outline-none"
+                onChange={(e) => handleSelectLesson(e.target.value)}
+                disabled={!activeCourse}
+                className="mt-1.5 w-full rounded-xl border border-[#2d3548] bg-[#0d0f14] px-3 py-2 text-xs font-medium text-[#cbd4e4] focus:border-[#ff6b4a] focus:outline-none disabled:opacity-50"
               >
                 <option value="">Entire Course Syllabus ({courseLessons.length} lessons)</option>
                 {courseLessons.map((l) => (
@@ -235,7 +441,7 @@ export function TutorClient({
                   <button
                     key={q}
                     type="button"
-                    disabled={sending}
+                    disabled={sending || loadingThread || !courseId}
                     onClick={() => sendQuestion(q)}
                     className="flex w-full items-start gap-2 rounded-xl border border-[#262e40] bg-[#0f131b] px-3 py-2 text-left text-xs text-[#cbd4e4] transition hover:border-[#ff6b4a]/60 hover:text-white disabled:opacity-50"
                   >
@@ -334,7 +540,7 @@ export function TutorClient({
             />
             <button
               type="submit"
-              disabled={sending || !prompt.trim()}
+              disabled={sending || loadingThread || !courseId || !prompt.trim()}
               className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#ff6b4a] to-[#f97316] px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-[#ff6b4a]/20 transition hover:brightness-110 disabled:opacity-50"
             >
               <Send className="h-3.5 w-3.5" />

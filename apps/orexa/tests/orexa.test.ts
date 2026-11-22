@@ -23,6 +23,11 @@ import {
 } from "@/db/schema";
 import { computeAdaptiveTier, gradeAssessment } from "@/lib/adaptive";
 import {
+  filterAssessmentsByCourse,
+  reconcileAssessmentCourseFilter,
+  resolveActiveAssessment,
+} from "@/lib/assessment-state";
+import {
   DEMO_ACCOUNT,
   generateLockedPassword,
   hashPassword,
@@ -31,6 +36,7 @@ import {
   verifyPassword,
 } from "@/lib/crypto";
 import {
+  getAssessmentsPageData,
   getCourseGroundingContext,
   getCoursesCatalog,
   getDashboardData,
@@ -40,6 +46,7 @@ import {
 import { checkRateLimit } from "@/lib/rate-limit";
 import { verifyCsrfOrigin } from "@/lib/security";
 import { buildDeterministicTutorReply, generateDeterministicLessonOutline } from "@/lib/tutor";
+import { extractTutorSelectionHint, reconcileTutorSelection } from "@/lib/tutor-state";
 import { courseCreateSchema, lessonCreateSchema, tutorAskSchema } from "@/lib/validation";
 
 describe("Orexa security, validation & adaptive tier unit tests", () => {
@@ -308,5 +315,274 @@ describe("Orexa PostgreSQL end-to-end learning workflows", () => {
     const resetDash = await getDashboardData(demoUser.id);
     assert.equal(resetDash.kpis.activeCourses, 4);
     assert.equal(resetDash.kpis.completedLessons, initialDash.kpis.completedLessons);
+  });
+
+  it("reconciles tutor course/lesson IDs after demo dataset reset and submits questions cleanly", async () => {
+    const db = await getDb();
+    const [demoUser] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, DEMO_ACCOUNT.email))
+      .limit(1);
+    assert.ok(demoUser?.id);
+
+    // Pure unit checks for reconcileTutorSelection
+    const sampleCatalog = [
+      {
+        id: "course-new-1",
+        slug: "applied-llm-systems",
+        title: "Applied LLM Systems",
+        modules: [
+          {
+            lessons: [
+              { id: "lesson-new-1", title: "Chunking Invariants" },
+              { id: "lesson-new-2", title: "Hybrid Search" },
+            ],
+          },
+        ],
+      },
+      {
+        id: "course-new-2",
+        slug: "distributed-systems",
+        title: "Distributed Systems",
+        modules: [{ lessons: [{ id: "lesson-new-3", title: "Consensus Basics" }] }],
+      },
+    ];
+
+    // Preserves valid IDs when unchanged
+    const unchanged = reconcileTutorSelection(sampleCatalog, "course-new-2", "lesson-new-3");
+    assert.deepEqual(unchanged, {
+      courseId: "course-new-2",
+      lessonId: "lesson-new-3",
+      courseChanged: false,
+      lessonChanged: false,
+    });
+
+    // Matches recreated course by slug & lesson by title when UUIDs were regenerated
+    const matchedByHint = reconcileTutorSelection(
+      sampleCatalog,
+      "course-old-deleted",
+      "lesson-old-deleted",
+      {
+        courseSlug: "applied-llm-systems",
+        courseTitle: "Applied LLM Systems",
+        lessonTitle: "Hybrid Search",
+      },
+    );
+    assert.deepEqual(matchedByHint, {
+      courseId: "course-new-1",
+      lessonId: "lesson-new-2",
+      courseChanged: true,
+      lessonChanged: true,
+    });
+
+    // Falls back to first course and clears stale lesson when prior custom course no longer exists
+    const fallbackToFirst = reconcileTutorSelection(
+      sampleCatalog,
+      "custom-deleted-course",
+      "custom-deleted-lesson",
+      {
+        courseSlug: "removed-custom-course",
+        courseTitle: "Removed Custom Course",
+        lessonTitle: "Removed Lesson",
+      },
+    );
+    assert.deepEqual(fallbackToFirst, {
+      courseId: "course-new-1",
+      lessonId: "",
+      courseChanged: true,
+      lessonChanged: true,
+    });
+
+    // Empty catalog produces empty IDs without throwing
+    assert.deepEqual(reconcileTutorSelection([], "stale-course", "stale-lesson"), {
+      courseId: "",
+      lessonId: "",
+      courseChanged: true,
+      lessonChanged: true,
+    });
+
+    // End-to-end DB reset + tutor submit flow
+    const beforeCatalog = await getCoursesCatalog(demoUser.id);
+    assert.ok(beforeCatalog.length >= 2);
+    const activeCourseBefore = beforeCatalog[1];
+    const activeLessonBefore = activeCourseBefore.modules[0]?.lessons[0];
+    assert.ok(activeLessonBefore, "expected seeded course to have at least one lesson");
+
+    const previousHint = extractTutorSelectionHint(
+      beforeCatalog,
+      activeCourseBefore.id,
+      activeLessonBefore.id,
+    );
+    assert.equal(previousHint.courseSlug, activeCourseBefore.slug);
+    assert.equal(previousHint.lessonTitle, activeLessonBefore.title);
+
+    // Resetting the demo dataset regenerates all course & lesson UUIDs
+    await resetDemoWorkspace();
+
+    // Confirm old deleted courseId is genuinely invalid (reproducing "Selected course not found.")
+    const staleGrounding = await getCourseGroundingContext(activeCourseBefore.id);
+    assert.equal(staleGrounding, null);
+
+    // Reconcile against refreshed catalog
+    const afterCatalog = await getCoursesCatalog(demoUser.id);
+    const reconciled = reconcileTutorSelection(
+      afterCatalog,
+      activeCourseBefore.id,
+      activeLessonBefore.id,
+      previousHint,
+    );
+
+    assert.equal(reconciled.courseChanged, true);
+    assert.equal(reconciled.lessonChanged, true);
+    assert.notEqual(reconciled.courseId, activeCourseBefore.id);
+    assert.notEqual(reconciled.lessonId, activeLessonBefore.id);
+
+    const matchedCourseAfter = afterCatalog.find((c) => c.id === reconciled.courseId);
+    assert.ok(matchedCourseAfter);
+    assert.equal(matchedCourseAfter.slug, activeCourseBefore.slug);
+
+    const matchedLessonAfter = matchedCourseAfter.modules
+      .flatMap((m) => m.lessons)
+      .find((l) => l.id === reconciled.lessonId);
+    assert.ok(matchedLessonAfter);
+    assert.equal(matchedLessonAfter.title, activeLessonBefore.title);
+
+    // Submitting a tutor question using the reconciled IDs succeeds cleanly
+    const freshGrounding = await getCourseGroundingContext(reconciled.courseId);
+    assert.ok(freshGrounding, "reconciled courseId must resolve grounding context");
+
+    const promptText = "Summarize the core engineering principles from this lesson.";
+    const reply = buildDeterministicTutorReply(freshGrounding, promptText, reconciled.lessonId);
+    assert.equal(reply.mode, "deterministic");
+    assert.ok(reply.content.length > 0);
+
+    await db.insert(tutorMessages).values([
+      {
+        userId: demoUser.id,
+        courseId: reconciled.courseId,
+        role: "student",
+        content: promptText,
+        mode: "deterministic",
+      },
+      {
+        userId: demoUser.id,
+        courseId: reconciled.courseId,
+        role: "tutor",
+        content: reply.content,
+        mode: reply.mode,
+      },
+    ]);
+
+    const persistedThread = await getTutorThread(demoUser.id, reconciled.courseId);
+    assert.ok(persistedThread.some((m) => m.role === "student" && m.content === promptText));
+    assert.ok(persistedThread.some((m) => m.role === "tutor" && m.content === reply.content));
+  });
+
+  it("restricts active assessment strictly to filtered visible assessments including courses with zero quizzes", async () => {
+    const db = await getDb();
+    const [demoUser] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, DEMO_ACCOUNT.email))
+      .limit(1);
+    assert.ok(demoUser?.id);
+
+    // Pure unit checks for assessment state helpers
+    const mockAssessments = [
+      { id: "quiz-a1", courseId: "course-a" },
+      { id: "quiz-a2", courseId: "course-a" },
+      { id: "quiz-b1", courseId: "course-b" },
+    ];
+
+    const emptyVisible = filterAssessmentsByCourse(mockAssessments, "course-empty");
+    assert.deepEqual(emptyVisible, []);
+    // Must NEVER fall back to another course's quiz when visibleAssessments is empty
+    assert.equal(resolveActiveAssessment(emptyVisible, "quiz-a1"), null);
+
+    // When activeAssessmentId belongs to another course, selects first visible assessment only
+    const courseBVisible = filterAssessmentsByCourse(mockAssessments, "course-b");
+    assert.equal(resolveActiveAssessment(courseBVisible, "quiz-a1")?.id, "quiz-b1");
+
+    // Preserves activeAssessmentId when it belongs to visibleAssessments
+    const courseAVisible = filterAssessmentsByCourse(mockAssessments, "course-a");
+    assert.equal(resolveActiveAssessment(courseAVisible, "quiz-a2")?.id, "quiz-a2");
+
+    // Reconciles course filter after reset by title or falls back to "all"
+    assert.equal(
+      reconcileAssessmentCourseFilter(
+        [{ id: "new-id-1", title: "Applied LLM Systems" }],
+        "old-id-1",
+        "Applied LLM Systems",
+      ),
+      "new-id-1",
+    );
+    assert.equal(
+      reconcileAssessmentCourseFilter(
+        [{ id: "new-id-1", title: "Applied LLM Systems" }],
+        "removed-course-id",
+        "Removed Course",
+      ),
+      "all",
+    );
+
+    // End-to-end DB check: create a published course with 0 assessments
+    const [emptyCourse] = await db
+      .insert(courses)
+      .values({
+        slug: "test-zero-assessments-course",
+        title: "Zero Assessments Course",
+        category: "AI Engineering",
+        difficulty: "foundation",
+        description: "A brand-new course authored in Instructor Studio before any quiz is attached.",
+        instructorName: "Dr. Kavita Patel",
+        published: true,
+      })
+      .returning();
+    assert.ok(emptyCourse.id);
+
+    try {
+      const pageData = await getAssessmentsPageData(demoUser.id);
+      assert.ok(
+        pageData.courses.some((c) => c.id === emptyCourse.id),
+        "new published course should appear in assessment filter options",
+      );
+
+      // Start on a seeded course that has assessments
+      const seededCourseWithQuiz = pageData.courses.find((c) =>
+        pageData.assessments.some((a) => a.courseId === c.id),
+      );
+      assert.ok(seededCourseWithQuiz, "expected at least one seeded course with assessments");
+
+      const seededVisible = filterAssessmentsByCourse(
+        pageData.assessments,
+        seededCourseWithQuiz.id,
+      );
+      assert.ok(seededVisible.length > 0);
+      const initialActive = resolveActiveAssessment(seededVisible, null);
+      assert.ok(initialActive);
+      assert.equal(initialActive.courseId, seededCourseWithQuiz.id);
+
+      // Switch filter to the newly created course with 0 assessments
+      const emptyCourseVisible = filterAssessmentsByCourse(pageData.assessments, emptyCourse.id);
+      assert.equal(emptyCourseVisible.length, 0);
+      const activeForEmptyCourse = resolveActiveAssessment(emptyCourseVisible, initialActive.id);
+      assert.equal(
+        activeForEmptyCourse,
+        null,
+        "switching to a course with 0 assessments must clear activeAssessment instead of keeping another course's quiz",
+      );
+
+      // Switch back to the seeded course -> selects a valid quiz belonging to that course
+      const backVisible = filterAssessmentsByCourse(
+        pageData.assessments,
+        seededCourseWithQuiz.id,
+      );
+      const activeBack = resolveActiveAssessment(backVisible, null);
+      assert.ok(activeBack);
+      assert.equal(activeBack.courseId, seededCourseWithQuiz.id);
+    } finally {
+      await resetDemoWorkspace();
+    }
   });
 });
