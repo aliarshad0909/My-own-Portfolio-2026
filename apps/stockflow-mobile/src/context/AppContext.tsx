@@ -7,8 +7,10 @@ const STORAGE_URL_KEY = "stockflow_mobile_api_url";
 const STORAGE_TOKEN_KEY = "stockflow_mobile_token";
 const STORAGE_WAREHOUSE_KEY = "stockflow_mobile_active_warehouse";
 
-const DEFAULT_API_URL =
-  (typeof process !== "undefined" && process.env?.EXPO_PUBLIC_API_URL) || "http://localhost:3020";
+// Expo inlines direct EXPO_PUBLIC_* member expressions during the web build.
+const EXPO_API_URL =
+  typeof process !== "undefined" ? process.env.EXPO_PUBLIC_API_URL : undefined;
+const DEFAULT_API_URL = EXPO_API_URL || "http://localhost:3020";
 
 export type ToastMessage = {
   id: number;
@@ -33,7 +35,7 @@ type AppContextValue = {
   refreshKey: number;
   bumpRefresh: () => void;
   toast: ToastMessage | null;
-  showToast: (text: string, kind?: "success" | "error" | "info") => void;
+  showToast: (text: string, kind?: "error" | "success" | "info") => void;
 };
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -216,4 +218,3 @@ export function useApp(): AppContextValue {
   if (!ctx) throw new Error("useApp must be used inside AppProvider");
   return ctx;
 }
-
