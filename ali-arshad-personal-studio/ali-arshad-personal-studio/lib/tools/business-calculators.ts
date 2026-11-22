@@ -225,6 +225,7 @@ export type SupplierComparisonInput = {
 export type SupplierScoreRow = {
   id: string;
   name: string;
+  moq: number;
   effectiveUnitCost: number;
   totalOrderCost: number;
   usableUnits: number;
@@ -242,6 +243,14 @@ export type SupplierComparisonResult = {
 export function calculateSupplierComparison(
   input: SupplierComparisonInput,
 ): SupplierComparisonResult {
+  if (!input.suppliers || input.suppliers.length === 0) {
+    return {
+      rows: [],
+      recommendedId: null,
+      savingsVsHighest: 0,
+    };
+  }
+
   const qty = clampMin(input.orderQuantity, 1);
   const totalW = Math.max(1, clampMin(input.costWeight) + clampMin(input.qualityWeight) + clampMin(input.speedWeight));
   const wCost = clampMin(input.costWeight) / totalW;
@@ -251,6 +260,7 @@ export function calculateSupplierComparison(
   const base = input.suppliers.map((s) => {
     const unit = clampMin(s.unitPrice);
     const freight = clampMin(s.freightTotal);
+    const moq = clampMin(s.moq);
     const defect = Math.min(99, clampMin(s.defectRatePct)) / 100;
     const onTime = Math.min(100, clampMin(s.onTimePct));
     const lead = clampMin(s.leadTimeDays, 1);
@@ -260,6 +270,7 @@ export function calculateSupplierComparison(
     const effectiveCostPerGoodUnit = round2(totalOrderCost / usableUnits);
     return {
       ...s,
+      moq,
       totalOrderCost,
       effectiveUnitCost,
       usableUnits,
@@ -267,16 +278,20 @@ export function calculateSupplierComparison(
       lead,
       defect,
       onTime,
-      moqMet: qty >= clampMin(s.moq),
+      moqMet: qty >= moq,
     };
   });
 
-  const minCost = Math.min(...base.map((b) => b.effectiveCostPerGoodUnit), Infinity);
-  const maxCost = Math.max(...base.map((b) => b.effectiveCostPerGoodUnit), 0);
-  const minLead = Math.min(...base.map((b) => b.lead), Infinity);
+  const minCost = Math.min(...base.map((b) => b.effectiveCostPerGoodUnit));
+  const minLead = Math.min(...base.map((b) => b.lead));
 
   const rows: SupplierScoreRow[] = base.map((b) => {
-    const costScore = b.effectiveCostPerGoodUnit > 0 ? Math.min(100, (minCost / b.effectiveCostPerGoodUnit) * 100) : 0;
+    const costScore =
+      b.effectiveCostPerGoodUnit === 0
+        ? 100
+        : b.effectiveCostPerGoodUnit > 0
+          ? Math.min(100, (minCost / b.effectiveCostPerGoodUnit) * 100)
+          : 0;
     const qualityScore = Math.max(0, (1 - b.defect) * 60 + (b.onTime / 100) * 40);
     const speedScore = b.lead > 0 ? Math.min(100, (minLead / b.lead) * 100) : 0;
     const moqPenalty = b.moqMet ? 0 : 12;
@@ -285,6 +300,7 @@ export function calculateSupplierComparison(
     return {
       id: b.id,
       name: b.name,
+      moq: b.moq,
       effectiveUnitCost: b.effectiveUnitCost,
       totalOrderCost: b.totalOrderCost,
       usableUnits: b.usableUnits,
@@ -294,10 +310,15 @@ export function calculateSupplierComparison(
     };
   });
 
-  const sorted = [...rows].sort((a, b) => b.weightedScore - a.weightedScore);
+  const sorted = [...rows].sort((a, b) => {
+    if (b.weightedScore !== a.weightedScore) return b.weightedScore - a.weightedScore;
+    if (a.moqMet !== b.moqMet) return a.moqMet ? -1 : 1;
+    return a.effectiveCostPerGoodUnit - b.effectiveCostPerGoodUnit;
+  });
   const recommendedId = sorted[0]?.id ?? null;
-  const minTotal = Math.min(...rows.map((r) => r.totalOrderCost), 0);
-  const maxTotal = Math.max(...rows.map((r) => r.totalOrderCost), 0);
+  const totals = rows.map((r) => r.totalOrderCost);
+  const minTotal = Math.min(...totals);
+  const maxTotal = Math.max(...totals);
 
   return {
     rows,

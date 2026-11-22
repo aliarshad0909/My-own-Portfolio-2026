@@ -82,8 +82,62 @@ describe("Expanded Business Calculators (6–10)", () => {
       ],
     });
     assert.equal(r.recommendedId, "a");
-    assert.ok(r.savingsVsHighest > 0);
+    // Supplier A total = 500*10 + 500 = 5500; Supplier B total = 500*13 + 900 = 7400; spread = 1900 (not 7400!)
+    assert.equal(r.savingsVsHighest, 1900);
     assert.ok(r.rows[0].effectiveCostPerGoodUnit < r.rows[1].effectiveCostPerGoodUnit);
+  });
+
+  it("handles empty supplier lists cleanly with zero savings and null recommendation", () => {
+    const r = calculateSupplierComparison({
+      currency: "USD",
+      orderQuantity: 500,
+      costWeight: 50,
+      qualityWeight: 30,
+      speedWeight: 20,
+      suppliers: [],
+    });
+    assert.deepEqual(r.rows, []);
+    assert.equal(r.recommendedId, null);
+    assert.equal(r.savingsVsHighest, 0);
+  });
+
+  it("computes zero savings spread when all suppliers have identical quotes", () => {
+    const r = calculateSupplierComparison({
+      currency: "USD",
+      orderQuantity: 400,
+      costWeight: 50,
+      qualityWeight: 30,
+      speedWeight: 20,
+      suppliers: [
+        { id: "a", name: "Alpha", unitPrice: 12, freightTotal: 400, moq: 200, leadTimeDays: 14, defectRatePct: 1, onTimePct: 98 },
+        { id: "b", name: "Beta", unitPrice: 12, freightTotal: 400, moq: 200, leadTimeDays: 14, defectRatePct: 1, onTimePct: 98 },
+      ],
+    });
+    assert.equal(r.rows[0].totalOrderCost, 5200);
+    assert.equal(r.rows[1].totalOrderCost, 5200);
+    assert.equal(r.savingsVsHighest, 0);
+  });
+
+  it("applies user-entered MOQ feasibility to supplier ranking", () => {
+    const r = calculateSupplierComparison({
+      currency: "USD",
+      orderQuantity: 300,
+      costWeight: 50,
+      qualityWeight: 30,
+      speedWeight: 20,
+      suppliers: [
+        // Slightly cheaper, but MOQ 500 is NOT met for a 300-unit order
+        { id: "cheap-high-moq", name: "Bulk Factory", unitPrice: 10, freightTotal: 300, moq: 500, leadTimeDays: 14, defectRatePct: 2, onTimePct: 95 },
+        // Slightly pricier, but MOQ 250 IS met for a 300-unit order
+        { id: "feasible-moq", name: "Flexible Factory", unitPrice: 10.5, freightTotal: 300, moq: 250, leadTimeDays: 14, defectRatePct: 2, onTimePct: 95 },
+      ],
+    });
+    const bulk = r.rows.find((row) => row.id === "cheap-high-moq")!;
+    const flex = r.rows.find((row) => row.id === "feasible-moq")!;
+    assert.equal(bulk.moqMet, false);
+    assert.equal(flex.moqMet, true);
+    assert.equal(r.recommendedId, "feasible-moq");
+    assert.equal(r.savingsVsHighest, 150);
   });
 
   it("calculates Project Budget labor subtotal, contingency reserve, and weekly burn rate", () => {

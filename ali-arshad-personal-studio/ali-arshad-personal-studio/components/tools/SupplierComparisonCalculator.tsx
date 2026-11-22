@@ -48,7 +48,7 @@ export function SupplierComparisonCalculator() {
     `Weights: Cost ${input.costWeight}% / Quality ${input.qualityWeight}% / Speed ${input.speedWeight}%`,
     ...r.rows.map(
       (row) =>
-        `- ${row.name}: Score ${row.weightedScore}/100 | Effective Cost/Good Unit: ${fmt(row.effectiveCostPerGoodUnit, input.currency)} | Total: ${fmt(row.totalOrderCost, input.currency)}`,
+        `- ${row.name}: Score ${row.weightedScore}/100 | Effective Cost/Good Unit: ${fmt(row.effectiveCostPerGoodUnit, input.currency)} | Total: ${fmt(row.totalOrderCost, input.currency)} | MOQ ${row.moq}: ${row.moqMet ? "Met" : "Not met (-12pt penalty)"}`,
     ),
     `Recommended Supplier: ${winner?.name ?? "N/A"} (Spread vs highest bid: ${fmt(r.savingsVsHighest, input.currency)})`,
   ].join("\n");
@@ -110,6 +110,10 @@ export function SupplierComparisonCalculator() {
             </div>
             <div className="calc__row">
               <label className="calc__field">
+                <span>MOQ (units)</span>
+                <input type="number" min={0} step={1} value={sup.moq} onChange={(e) => updateSupplier(idx, "moq", e.target.value)} />
+              </label>
+              <label className="calc__field">
                 <span>Lead time (days)</span>
                 <input type="number" min={1} value={sup.leadTimeDays} onChange={(e) => updateSupplier(idx, "leadTimeDays", e.target.value)} />
               </label>
@@ -132,16 +136,24 @@ export function SupplierComparisonCalculator() {
         <p className="fine-print">
           Top weighted score: <strong>{winner?.weightedScore ?? 0} / 100</strong> · Cost spread vs highest quote:{" "}
           <strong>{fmt(r.savingsVsHighest, input.currency)}</strong>
+          {winner ? (
+            <>
+              {" "}· MOQ ({winner.moq} units): <strong>{winner.moqMet ? "Feasible" : "Below MOQ"}</strong>
+            </>
+          ) : null}
         </p>
 
         <dl className="calc__breakdown">
           {r.rows.map((row) => (
             <div key={row.id}>
               <dt>
-                {row.name} {row.id === r.recommendedId ? "(Recommended)" : ""}
+                {row.name} {row.id === r.recommendedId ? "(Recommended)" : ""} ·{" "}
+                <span style={{ color: row.moqMet ? "var(--accent, #22c55e)" : "#f97316" }}>
+                  {row.moqMet ? `MOQ met (${row.moq})` : `Below MOQ (min ${row.moq})`}
+                </span>
               </dt>
               <dd>
-                <strong>{row.weightedScore}/100</strong> · {fmt(row.effectiveCostPerGoodUnit, input.currency)}/good unit
+                <strong>{row.weightedScore}/100</strong> · {fmt(row.effectiveCostPerGoodUnit, input.currency)}/good unit · Total {fmt(row.totalOrderCost, input.currency)}
               </dd>
             </div>
           ))}
