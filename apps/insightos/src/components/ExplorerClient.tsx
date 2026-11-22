@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   BookmarkPlus,
@@ -13,6 +13,11 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { AnalyticsChart } from "@/components/AnalyticsChart";
+import {
+  ExplorerRequestTracker,
+  isAbortError,
+  isExplorerActionReady,
+} from "@/lib/explorer-state";
 import { formatCategoryBadge, formatFieldLabel, formatMetricValue } from "@/lib/format";
 import type {
   AggregationType,
@@ -48,8 +53,20 @@ export function ExplorerClient({
     showForecast: true,
   });
   const [result, setResult] = useState<AnalyticsQueryResult | null>(null);
+  const [loadedDatasetId, setLoadedDatasetId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [querying, setQuerying] = useState(false);
+
+  // Monotonic request sequencing + AbortController lifecycle for stale-response gating
+  const requestTrackerRef = useRef<ExplorerRequestTracker | null>(null);
+  const selectedDatasetIdRef = useRef<string>(initialDatasetId);
+
+  const getRequestTracker = useCallback(() => {
+    if (!requestTrackerRef.current) {
+      requestTrackerRef.current = new ExplorerRequestTracker();
+    }
+    return requestTrackerRef.current;
+  }, []);
 
   // Save Dashboard state
   const [dashName, setDashName] = useState("");
@@ -57,82 +74,127 @@ export function ExplorerClient({
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 
-  const runQuery = useCallback(async (targetDatasetId: string, partialConfig?: Partial<DashboardConfig>) => {
-    if (!targetDatasetId) return;
-    setQuerying(true);
-    try {
-      const res = await fetch("/api/analytics/query", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          datasetId: targetDatasetId,
-          ...partialConfig,
-        }),
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      setResult(data.result);
-      setColumns(data.columns || []);
-      setConfig(data.result.config);
-    } finally {
-      setQuerying(false);
-    }
-  }, []);
-
-  const bootstrap = useCallback(async () => {
-    setLoading(true);
-    try {
-      const dsRes = await fetch("/api/datasets");
-      if (!dsRes.ok) return;
-      const dsData = await dsRes.json();
-      const list: DatasetSummary[] = dsData.datasets || [];
-      setDatasets(list);
-
-      if (initialDashboardId) {
-        const dashRes = await fetch(`/api/dashboards/${initialDashboardId}`);
-        if (dashRes.ok) {
-          const dashData = await dashRes.json();
-          setDatasetId(dashData.dashboard.datasetId);
-          setResult(dashData.analytics);
-          setColumns(dashData.columns || []);
-          setConfig(dashData.analytics.config);
-          setDashName(`${dashData.dashboard.name} (Copy)`);
-          setDashDesc(dashData.dashboard.description || "");
+  const runQuery = useCallback(
+    async (targetDatasetId: string, partialConfig?: Partial<DashboardConfig>) => {
+      if (!targetDatasetId) return;
+      selectedDatasetIdRef.current = targetDatasetId;
+      const tracker = getRequestTracker();
+      const ticket = tracker.begin(targetDatasetId);
+      setQuerying(true);
+      try {
+        const res = await fetch("/api/analytics/query", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: ticket.signal,
+          body: JSON.stringify({
+            datasetId: targetDatasetId,
+            ...partialConfig,
+          }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const responseDatasetId: string = data?.result?.datasetId ?? "";
+        if (!tracker.shouldApplyResponse(ticket, responseDatasetId, selectedDatasetIdRef.current)) {
           return;
         }
+        setResult(data.result);
+        setColumns(data.columns || []);
+        setConfig(data.result.config);
+        setLoadedDatasetId(responseDatasetId);
+      } catch (err) {
+        if (isAbortError(err)) return;
+      } finally {
+        if (tracker.isLatest(ticket.seq)) {
+          setQuerying(false);
+        }
       }
+    },
+    [getRequestTracker],
+  );
 
-      const chosenId =
-        (initialDatasetId && list.some((d) => d.id === initialDatasetId) ? initialDatasetId : "") ||
-        list.find((d) => d.slug === "sales-regional-2026")?.id ||
-        list[0]?.id ||
-        "";
+  const bootstrap = useCallback(
+    async (signal: AbortSignal) => {
+      setLoading(true);
+      try {
+        const dsRes = await fetch("/api/datasets", { signal });
+        if (!dsRes.ok || signal.aborted) return;
+        const dsData = await dsRes.json();
+        if (signal.aborted) return;
+        const list: DatasetSummary[] = dsData.datasets || [];
+        setDatasets(list);
 
-      if (chosenId) {
-        setDatasetId(chosenId);
-        await runQuery(chosenId);
+        if (initialDashboardId) {
+          const dashRes = await fetch(`/api/dashboards/${initialDashboardId}`, { signal });
+          if (dashRes.ok && !signal.aborted) {
+            const dashData = await dashRes.json();
+            if (signal.aborted) return;
+            const dashDatasetId: string = dashData.dashboard.datasetId;
+            selectedDatasetIdRef.current = dashDatasetId;
+            getRequestTracker().commitExternal(dashDatasetId);
+            setDatasetId(dashDatasetId);
+            setLoadedDatasetId(dashData.analytics.datasetId ?? dashDatasetId);
+            setResult(dashData.analytics);
+            setColumns(dashData.columns || []);
+            setConfig(dashData.analytics.config);
+            setDashName(`${dashData.dashboard.name} (Copy)`);
+            setDashDesc(dashData.dashboard.description || "");
+            return;
+          }
+        }
+
+        const chosenId =
+          (initialDatasetId && list.some((d) => d.id === initialDatasetId) ? initialDatasetId : "") ||
+          list.find((d) => d.slug === "sales-regional-2026")?.id ||
+          list[0]?.id ||
+          "";
+
+        if (chosenId && !signal.aborted) {
+          selectedDatasetIdRef.current = chosenId;
+          setDatasetId(chosenId);
+          setLoadedDatasetId(null);
+          await runQuery(chosenId);
+        }
+      } catch (err) {
+        if (isAbortError(err)) return;
+      } finally {
+        if (!signal.aborted) {
+          setLoading(false);
+        }
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [initialDashboardId, initialDatasetId, runQuery]);
+    },
+    [getRequestTracker, initialDashboardId, initialDatasetId, runQuery],
+  );
 
   useEffect(() => {
+    const controller = new AbortController();
     const timer = window.setTimeout(() => {
-      void bootstrap();
+      void bootstrap(controller.signal);
     }, 0);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+      requestTrackerRef.current?.abort();
+    };
   }, [bootstrap]);
 
   function updateConfig(patch: Partial<DashboardConfig>) {
+    if (!datasetId || loadedDatasetId !== datasetId) return;
     const merged: DashboardConfig = { ...config, ...patch };
     setConfig(merged);
     void runQuery(datasetId, merged);
   }
 
+  const canCommitActions = isExplorerActionReady({
+    loading,
+    querying,
+    datasetId,
+    loadedDatasetId,
+    resultDatasetId: result?.datasetId ?? null,
+  });
+
   async function handleSaveDashboard(e: React.FormEvent) {
     e.preventDefault();
-    if (!datasetId || !dashName.trim()) return;
+    if (!canCommitActions || !dashName.trim()) return;
     setSaving(true);
     setSaveMessage(null);
     try {
@@ -169,7 +231,7 @@ export function ExplorerClient({
   const filterValues = config.filterField ? result?.filterOptions[config.filterField] || [] : [];
 
   const exportUrl = (() => {
-    if (!datasetId) return "#";
+    if (!canCommitActions) return "#";
     const qs = new URLSearchParams();
     if (config.filterField && config.filterValue) {
       qs.set("filterField", config.filterField);
@@ -193,15 +255,26 @@ export function ExplorerClient({
             Slice any seeded or uploaded PostgreSQL dataset by dimension, aggregation, category, and date range — then save reusable dashboards.
           </p>
         </div>
-        {datasetId && (
-          <a
-            href={exportUrl}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-xs transition hover:border-[#06b6d4] hover:text-[#0891b2]"
-          >
-            <Download className="h-3.5 w-3.5 text-[#0891b2]" />
-            <span>Export Filtered CSV</span>
-          </a>
-        )}
+        {datasetId &&
+          (canCommitActions ? (
+            <a
+              href={exportUrl}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-xs transition hover:border-[#06b6d4] hover:text-[#0891b2]"
+            >
+              <Download className="h-3.5 w-3.5 text-[#0891b2]" />
+              <span>Export Filtered CSV</span>
+            </a>
+          ) : (
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="inline-flex shrink-0 cursor-not-allowed items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-400 opacity-60 shadow-xs"
+            >
+              <Download className="h-3.5 w-3.5 text-slate-400" />
+              <span>Export Filtered CSV</span>
+            </button>
+          ))}
       </div>
 
       {/* Main Workbench Grid */}
@@ -215,10 +288,13 @@ export function ExplorerClient({
             </div>
             <button
               type="button"
+              disabled={!canCommitActions}
               onClick={() => {
-                if (datasetId) void runQuery(datasetId, { filterValue: null, dateFrom: null, dateTo: null });
+                if (canCommitActions) {
+                  void runQuery(datasetId, { filterValue: null, dateFrom: null, dateTo: null });
+                }
               }}
-              className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-[#0891b2]"
+              className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-[#0891b2] disabled:cursor-not-allowed disabled:opacity-50"
             >
               <RotateCcw className="h-3 w-3" />
               <span>Reset Filters</span>
@@ -232,7 +308,12 @@ export function ExplorerClient({
                 value={datasetId}
                 onChange={(e) => {
                   const nextId = e.target.value;
+                  selectedDatasetIdRef.current = nextId;
                   setDatasetId(nextId);
+                  setLoadedDatasetId(null);
+                  setResult(null);
+                  setColumns([]);
+                  setSaveMessage(null);
                   void runQuery(nextId);
                 }}
                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-900 outline-none focus:border-[#06b6d4]"
@@ -436,7 +517,7 @@ export function ExplorerClient({
             />
             <button
               type="submit"
-              disabled={saving || !dashName.trim() || !datasetId}
+              disabled={saving || !dashName.trim() || !canCommitActions}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#111827] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#0891b2] disabled:opacity-50"
             >
               <BookmarkPlus className="h-4 w-4 text-[#22d3ee]" />
@@ -520,9 +601,9 @@ export function ExplorerClient({
               )}
             </div>
 
-            {loading ? (
+            {loading || (querying && !result) ? (
               <div className="flex h-[360px] items-center justify-center text-sm text-slate-400">
-                Loading Explorer...
+                {loading ? "Loading Explorer..." : "Loading dataset..."}
               </div>
             ) : (
               <AnalyticsChart

@@ -13,6 +13,12 @@ import {
   resolveSessionSecret,
   verifyPassword,
 } from "@/lib/crypto";
+import {
+  ExplorerRequestTracker,
+  isAbortError,
+  isExplorerActionReady,
+  shouldApplyExplorerResponse,
+} from "@/lib/explorer-state";
 import { neutralizeCsvFormula } from "@/lib/security";
 
 // Force isolated in-memory PGlite for PostgreSQL integration tests
@@ -249,4 +255,231 @@ test("PostgreSQL integration: seeded 5 datasets, custom CSV persistence, dashboa
   const afterResetDashboards = await db.select().from(savedDashboards);
   assert.equal(afterResetDatasets.length, 5);
   assert.equal(afterResetDashboards.length, 4);
+});
+
+test("CSV parser enforces globally unique renamed headers without overwriting row values", () => {
+  // Case 1: duplicate appears before explicit suffixed header (sales,sales,sales_2)
+  const csvFirst = [
+    "sales,sales,sales_2",
+    "100,200,300",
+    "400,500,600",
+  ].join("\n");
+  const parsedFirst = parseAndValidateCsv(csvFirst);
+  const headersFirst = parsedFirst.columns.map((c) => c.name);
+  assert.equal(headersFirst.length, 3);
+  assert.equal(new Set(headersFirst).size, 3, "All headers must be globally unique");
+  assert.deepEqual(headersFirst, ["sales", "sales_2", "sales_2_2"]);
+  assert.deepEqual(parsedFirst.rows[0], {
+    sales: 100,
+    sales_2: 200,
+    sales_2_2: 300,
+  });
+  assert.deepEqual(parsedFirst.rows[1], {
+    sales: 400,
+    sales_2: 500,
+    sales_2_2: 600,
+  });
+
+  // Case 2: explicit suffixed header appears before duplicate (sales,sales_2,sales)
+  const csvSecond = [
+    "sales,sales_2,sales",
+    "10,20,30",
+    "40,50,60",
+  ].join("\n");
+  const parsedSecond = parseAndValidateCsv(csvSecond);
+  const headersSecond = parsedSecond.columns.map((c) => c.name);
+  assert.equal(headersSecond.length, 3);
+  assert.equal(new Set(headersSecond).size, 3, "All headers must be globally unique");
+  assert.deepEqual(headersSecond, ["sales", "sales_2", "sales_3"]);
+  assert.deepEqual(parsedSecond.rows[0], {
+    sales: 10,
+    sales_2: 20,
+    sales_3: 30,
+  });
+  assert.deepEqual(parsedSecond.rows[1], {
+    sales: 40,
+    sales_2: 50,
+    sales_3: 60,
+  });
+});
+
+test("Explorer stale-response gate rejects out-of-order responses and guards Save/Export mismatches", async () => {
+  const tracker = new ExplorerRequestTracker();
+  const applied: string[] = [];
+
+  // Simulate rapid dataset switch: A starts first (slow), B starts second (fast)
+  const ticketA = tracker.begin("dataset-A");
+  assert.equal(ticketA.signal.aborted, false);
+
+  const ticketB = tracker.begin("dataset-B");
+  assert.equal(ticketA.signal.aborted, true, "Switching to dataset B must abort dataset A request");
+  assert.equal(ticketB.signal.aborted, false);
+  assert.equal(tracker.isLatest(ticketA.seq), false);
+  assert.equal(tracker.isLatest(ticketB.seq), true);
+
+  // While dataset B is loading (loadedDatasetId is null or still A), Save/Export must be blocked
+  assert.equal(
+    isExplorerActionReady({
+      loading: false,
+      querying: true,
+      datasetId: "dataset-B",
+      loadedDatasetId: null,
+      resultDatasetId: null,
+    }),
+    false,
+  );
+  assert.equal(
+    isExplorerActionReady({
+      loading: false,
+      querying: false,
+      datasetId: "dataset-B",
+      loadedDatasetId: "dataset-A",
+      resultDatasetId: "dataset-A",
+    }),
+    false,
+  );
+
+  // Simulate B resolving first, then stale A resolving afterwards out-of-order
+  await Promise.all([
+    (async () => {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+      if (tracker.shouldApplyResponse(ticketA, "dataset-A", "dataset-B")) {
+        applied.push("dataset-A");
+      }
+    })(),
+    (async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      if (tracker.shouldApplyResponse(ticketB, "dataset-B", "dataset-B")) {
+        applied.push("dataset-B");
+      }
+    })(),
+  ]);
+
+  assert.deepEqual(applied, ["dataset-B"], "Stale dataset A response must be ignored");
+
+  // Once B finishes and loaded/result datasetIds match selected datasetId, Save/Export is ready
+  assert.equal(
+    isExplorerActionReady({
+      loading: false,
+      querying: false,
+      datasetId: "dataset-B",
+      loadedDatasetId: "dataset-B",
+      resultDatasetId: "dataset-B",
+    }),
+    true,
+  );
+
+  // Verify pure gating rejects mismatched payload datasetId even on latest seq
+  assert.equal(
+    shouldApplyExplorerResponse({
+      requestSeq: 2,
+      latestSeq: 2,
+      requestedDatasetId: "dataset-B",
+      selectedDatasetId: "dataset-B",
+      responseDatasetId: "dataset-A",
+    }),
+    false,
+  );
+  assert.equal(isAbortError(new DOMException("Aborted", "AbortError")), true);
+  assert.equal(isAbortError(new Error("Other")), false);
+});
+
+test("OLS forecast derives projection dates from observed series cadence (daily, weekly, monthly, irregular)", () => {
+  // 1. Daily YYYY-MM-DD cadence
+  const daily = computeLinearForecast(
+    [
+      { label: "2026-01-01", value: 10 },
+      { label: "2026-01-02", value: 20 },
+      { label: "2026-01-03", value: 30 },
+    ],
+    3,
+  );
+  assert.deepEqual(
+    daily.projectedPoints.map((p) => p.label),
+    ["2026-01-04 (F)", "2026-01-05 (F)", "2026-01-06 (F)"],
+  );
+
+  // 2. Weekly YYYY-MM-DD cadence
+  const weekly = computeLinearForecast(
+    [
+      { label: "2026-01-05", value: 100 },
+      { label: "2026-01-12", value: 120 },
+      { label: "2026-01-19", value: 140 },
+    ],
+    3,
+  );
+  assert.deepEqual(
+    weekly.projectedPoints.map((p) => p.label),
+    ["2026-01-26 (F)", "2026-02-02 (F)", "2026-02-09 (F)"],
+  );
+
+  // 3. Monthly YYYY-MM-DD cadence (exact calendar months without 30-day drift)
+  const monthlyYmd = computeLinearForecast(
+    [
+      { label: "2026-01-01", value: 100 },
+      { label: "2026-02-01", value: 150 },
+      { label: "2026-03-01", value: 200 },
+    ],
+    3,
+  );
+  assert.deepEqual(
+    monthlyYmd.projectedPoints.map((p) => p.label),
+    ["2026-04-01 (F)", "2026-05-01 (F)", "2026-06-01 (F)"],
+  );
+
+  // 4. Monthly month-end clamping (Jan 31 -> Feb 28 -> Mar 31 -> Apr 30 -> May 31 -> Jun 30)
+  const monthlyEnd = computeLinearForecast(
+    [
+      { label: "2026-01-31", value: 50 },
+      { label: "2026-02-28", value: 75 },
+      { label: "2026-03-31", value: 100 },
+    ],
+    3,
+  );
+  assert.deepEqual(
+    monthlyEnd.projectedPoints.map((p) => p.label),
+    ["2026-04-30 (F)", "2026-05-31 (F)", "2026-06-30 (F)"],
+  );
+
+  // 5. Monthly YYYY-MM cadence
+  const monthlyYm = computeLinearForecast(
+    [
+      { label: "2026-01", value: 10 },
+      { label: "2026-02", value: 20 },
+      { label: "2026-03", value: 30 },
+    ],
+    3,
+  );
+  assert.deepEqual(
+    monthlyYm.projectedPoints.map((p) => p.label),
+    ["2026-04 (F)", "2026-05 (F)", "2026-06 (F)"],
+  );
+
+  // 6. Irregular date cadence falls back to neutral Forecast +N labels
+  const irregular = computeLinearForecast(
+    [
+      { label: "2026-01-01", value: 10 },
+      { label: "2026-01-04", value: 25 },
+      { label: "2026-01-19", value: 40 },
+    ],
+    3,
+  );
+  assert.deepEqual(
+    irregular.projectedPoints.map((p) => p.label),
+    ["Forecast +1", "Forecast +2", "Forecast +3"],
+  );
+
+  // 7. Non-date categorical series falls back to neutral Forecast +N labels
+  const nonDate = computeLinearForecast(
+    [
+      { label: "North America", value: 500 },
+      { label: "EMEA", value: 400 },
+      { label: "APAC", value: 300 },
+    ],
+    3,
+  );
+  assert.deepEqual(
+    nonDate.projectedPoints.map((p) => p.label),
+    ["Forecast +1", "Forecast +2", "Forecast +3"],
+  );
 });

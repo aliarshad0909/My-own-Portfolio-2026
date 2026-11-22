@@ -145,16 +145,22 @@ export function parseAndValidateCsv(csvText: string): ParsedCsvResult {
 
   const warnings: string[] = [];
   const duplicateHeaders: string[] = [];
-  const seenHeaders = new Map<string, number>();
+  const usedHeaders = new Set<string>();
   const headers: string[] = rawHeaderRow.map((raw, idx) => {
     const base = normalizeHeader(raw, idx);
-    const count = seenHeaders.get(base) ?? 0;
-    seenHeaders.set(base, count + 1);
-    if (count > 0) {
-      duplicateHeaders.push(base);
-      return `${base}_${count + 1}`;
+    if (!usedHeaders.has(base)) {
+      usedHeaders.add(base);
+      return base;
     }
-    return base;
+    duplicateHeaders.push(base);
+    let suffix = 2;
+    let candidate = `${base}_${suffix}`;
+    while (usedHeaders.has(candidate)) {
+      suffix += 1;
+      candidate = `${base}_${suffix}`;
+    }
+    usedHeaders.add(candidate);
+    return candidate;
   });
 
   if (duplicateHeaders.length > 0) {
@@ -361,22 +367,180 @@ function normalizeComparableDate(val: string): string {
   return trimmed.slice(0, 10);
 }
 
-function nextPeriodLabel(lastLabel: string, step: number): string {
-  const ymMatch = /^(\d{4})-(\d{2})$/.exec(lastLabel.trim());
-  if (ymMatch) {
-    const year = Number(ymMatch[1]);
-    const month = Number(ymMatch[2]) - 1; // 0-indexed
-    const d = new Date(Date.UTC(year, month + step, 1));
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-    return `${y}-${m} (F)`;
+type ParsedYm = { year: number; month: number };
+type ParsedYmd = { year: number; month: number; day: number; utcMs: number };
+
+type SeriesCadence =
+  | { kind: "ym"; last: ParsedYm; monthStep: number }
+  | { kind: "ymd-days"; last: ParsedYmd; dayStep: number }
+  | { kind: "ymd-months"; last: ParsedYmd; monthStep: number; anchorDay: number; pinToMonthEnd: boolean }
+  | { kind: "neutral" };
+
+const MS_PER_DAY = 86_400_000;
+
+function daysInUtcMonth(year: number, month1Based: number): number {
+  return new Date(Date.UTC(year, month1Based, 0)).getUTCDate();
+}
+
+function parseYmLabel(label: string): ParsedYm | null {
+  const m = /^(\d{4})-(\d{2})$/.exec(label.trim());
+  if (!m) return null;
+  const year = Number(m[1]);
+  const month = Number(m[2]);
+  if (month < 1 || month > 12) return null;
+  return { year, month };
+}
+
+function parseYmdLabel(label: string): ParsedYmd | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(label.trim());
+  if (!m) return null;
+  const year = Number(m[1]);
+  const month = Number(m[2]);
+  const day = Number(m[3]);
+  if (month < 1 || month > 12) return null;
+  const maxDay = daysInUtcMonth(year, month);
+  if (day < 1 || day > maxDay) return null;
+  return { year, month, day, utcMs: Date.UTC(year, month - 1, day) };
+}
+
+function addCalendarMonths(
+  year: number,
+  month1Based: number,
+  day: number,
+  monthsToAdd: number,
+  pinToMonthEnd: boolean,
+): { year: number; month: number; day: number } {
+  const totalMonths = year * 12 + (month1Based - 1) + monthsToAdd;
+  const targetYear = Math.floor(totalMonths / 12);
+  const targetMonth = (((totalMonths % 12) + 12) % 12) + 1;
+  const maxDay = daysInUtcMonth(targetYear, targetMonth);
+  const targetDay = pinToMonthEnd ? maxDay : Math.min(day, maxDay);
+  return { year: targetYear, month: targetMonth, day: targetDay };
+}
+
+function formatYm(year: number, month1Based: number): string {
+  return `${String(year).padStart(4, "0")}-${String(month1Based).padStart(2, "0")}`;
+}
+
+function formatYmd(year: number, month1Based: number, day: number): string {
+  return `${formatYm(year, month1Based)}-${String(day).padStart(2, "0")}`;
+}
+
+function inferSeriesCadence(labels: string[]): SeriesCadence {
+  if (labels.length < 2) return { kind: "neutral" };
+
+  // 1. Check YYYY-MM monthly (or fixed multi-month) series
+  const ymParsed: ParsedYm[] = [];
+  let allYm = true;
+  for (const label of labels) {
+    const parsed = parseYmLabel(label);
+    if (!parsed) {
+      allYm = false;
+      break;
+    }
+    ymParsed.push(parsed);
   }
-  const ymdMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(lastLabel.trim());
-  if (ymdMatch) {
-    const d = new Date(
-      Date.UTC(Number(ymdMatch[1]), Number(ymdMatch[2]) - 1, Number(ymdMatch[3]) + step * 30),
+  if (allYm) {
+    const monthDeltas: number[] = [];
+    for (let i = 1; i < ymParsed.length; i++) {
+      const prev = ymParsed[i - 1];
+      const curr = ymParsed[i];
+      const delta = curr.year * 12 + curr.month - (prev.year * 12 + prev.month);
+      if (delta <= 0) return { kind: "neutral" };
+      monthDeltas.push(delta);
+    }
+    const step = monthDeltas[0];
+    if (monthDeltas.every((d) => d === step)) {
+      return { kind: "ym", last: ymParsed[ymParsed.length - 1], monthStep: step };
+    }
+    return { kind: "neutral" };
+  }
+
+  // 2. Check full ISO YYYY-MM-DD series
+  const ymdParsed: ParsedYmd[] = [];
+  let allYmd = true;
+  for (const label of labels) {
+    const parsed = parseYmdLabel(label);
+    if (!parsed) {
+      allYmd = false;
+      break;
+    }
+    ymdParsed.push(parsed);
+  }
+  if (!allYmd) return { kind: "neutral" };
+
+  const dayDeltas: number[] = [];
+  const monthDeltas: number[] = [];
+  for (let i = 1; i < ymdParsed.length; i++) {
+    const prev = ymdParsed[i - 1];
+    const curr = ymdParsed[i];
+    const dayDelta = Math.round((curr.utcMs - prev.utcMs) / MS_PER_DAY);
+    if (dayDelta <= 0) return { kind: "neutral" };
+    dayDeltas.push(dayDelta);
+    monthDeltas.push(curr.year * 12 + curr.month - (prev.year * 12 + prev.month));
+  }
+
+  // Prefer exact calendar-month cadence (monthly, quarterly, annual, etc.) before fixed-day
+  // so 2-point month intervals like 2026-01-01 -> 2026-02-01 advance by calendar month instead of +31 days.
+  const firstMonthDelta = monthDeltas[0];
+  if (firstMonthDelta >= 1 && monthDeltas.every((d) => d === firstMonthDelta)) {
+    const allMonthEnd = ymdParsed.every((p) => p.day === daysInUtcMonth(p.year, p.month));
+    if (allMonthEnd) {
+      return {
+        kind: "ymd-months",
+        last: ymdParsed[ymdParsed.length - 1],
+        monthStep: firstMonthDelta,
+        anchorDay: 31,
+        pinToMonthEnd: true,
+      };
+    }
+
+    const anchorDay = Math.max(...ymdParsed.map((p) => p.day));
+    const matchesAnchoredDay = ymdParsed.every(
+      (p) => p.day === Math.min(anchorDay, daysInUtcMonth(p.year, p.month)),
     );
-    return `${d.toISOString().slice(0, 10)} (F)`;
+    if (matchesAnchoredDay) {
+      return {
+        kind: "ymd-months",
+        last: ymdParsed[ymdParsed.length - 1],
+        monthStep: firstMonthDelta,
+        anchorDay,
+        pinToMonthEnd: false,
+      };
+    }
+  }
+
+  // Check consistent fixed-day interval (daily = 1, weekly = 7, bi-weekly = 14, etc.)
+  const firstDayDelta = dayDeltas[0];
+  if (dayDeltas.every((d) => d === firstDayDelta)) {
+    return {
+      kind: "ymd-days",
+      last: ymdParsed[ymdParsed.length - 1],
+      dayStep: firstDayDelta,
+    };
+  }
+
+  return { kind: "neutral" };
+}
+
+function nextPeriodLabel(cadence: SeriesCadence, step: number): string {
+  if (cadence.kind === "ym") {
+    const next = addCalendarMonths(cadence.last.year, cadence.last.month, 1, step * cadence.monthStep, false);
+    return `${formatYm(next.year, next.month)} (F)`;
+  }
+  if (cadence.kind === "ymd-days") {
+    const d = new Date(cadence.last.utcMs + step * cadence.dayStep * MS_PER_DAY);
+    return `${formatYmd(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate())} (F)`;
+  }
+  if (cadence.kind === "ymd-months") {
+    const next = addCalendarMonths(
+      cadence.last.year,
+      cadence.last.month,
+      cadence.anchorDay,
+      step * cadence.monthStep,
+      cadence.pinToMonthEnd,
+    );
+    return `${formatYmd(next.year, next.month, next.day)} (F)`;
   }
   return `Forecast +${step}`;
 }
@@ -432,7 +596,7 @@ export function computeLinearForecast(
   const rSquared = ssTot === 0 ? 1 : Math.max(0, Math.min(1, 1 - ssRes / ssTot));
 
   const allNonNegative = series.every((p) => p.value >= 0);
-  const lastLabel = series[series.length - 1].label;
+  const cadence = inferSeriesCadence(series.map((p) => p.label));
   const projectedPoints: Array<{ label: string; value: number }> = [];
 
   for (let step = 1; step <= periods; step++) {
@@ -440,7 +604,7 @@ export function computeLinearForecast(
     let predicted = intercept + slope * x;
     if (allNonNegative && predicted < 0) predicted = 0;
     projectedPoints.push({
-      label: nextPeriodLabel(lastLabel, step),
+      label: nextPeriodLabel(cadence, step),
       value: Math.round(predicted * 100) / 100,
     });
   }
