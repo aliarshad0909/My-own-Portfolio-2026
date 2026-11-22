@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: flowos-automation
+    runtime: node
+    plan: free
+    rootDir: apps/flowos
+    buildCommand: npm ci && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FLOWOS_DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://flowos.aliarshad.co
+      - key: ALLOW_DEMO_RESET
+        value: "true"
