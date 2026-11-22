@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
+import { TrackedLink } from "@/components/ui/TrackedLink";
 import { FREELANCE, activeSocials } from "@/lib/site";
 
 export function FreelanceConnect() {
@@ -11,54 +12,51 @@ export function FreelanceConnect() {
       <div className="container">
         <div className="connect-band reveal">
           <div className="connect-band__copy">
-            <p className="eyebrow eyebrow--plain">Freelance &amp; social</p>
+            <p className="eyebrow eyebrow--plain">Direct or milestone engagement</p>
             <h2 className="section-title section-title--sm" id="freelance-connect-title">
-              Looking for a reliable creative and technical partner?
+              Work directly with the studio — or start on Upwork
             </h2>
             <p className="section-sub">
-              Engage directly with the studio, hire via Upwork for milestone-based work, or try our free planning calculators to scope your next move.
+              Start a direct conversation through the inquiry form, hire via Upwork for milestone-based billing, or use the free calculators to rough
+              out scope and ROI before we talk.
             </p>
 
             <div className="connect-band__actions">
-              <a
-                href={FREELANCE.upwork.url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <TrackedLink
+                href="/contact"
+                event="cta_click"
+                props={{ placement: "connect-band", label: "Start a Project" }}
                 className="btn btn--primary btn--sm"
-                aria-label="Hire Me on Upwork (opens in a new tab)"
+              >
+                <span>Start a Project</span>
+                <Icon name="arrow-right" size={16} className="btn__icon" />
+              </TrackedLink>
+
+              <TrackedLink
+                href={FREELANCE.upwork.url}
+                external
+                event="cta_click"
+                props={{ placement: "connect-band", label: "Upwork" }}
+                className="btn btn--secondary btn--sm"
+                ariaLabel="Hire Me on Upwork (opens in a new tab)"
               >
                 <span>{FREELANCE.upwork.ctaLabel}</span>
                 <Icon name="arrow-up-right" size={16} className="btn__icon" />
-              </a>
+              </TrackedLink>
 
               {fiverrUrl ? (
-                <a
+                <TrackedLink
                   href={fiverrUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  external
+                  event="cta_click"
+                  props={{ placement: "connect-band", label: "Fiverr" }}
                   className="btn btn--secondary btn--sm"
-                  aria-label="Find Me on Fiverr (opens in a new tab)"
+                  ariaLabel="Find Me on Fiverr (opens in a new tab)"
                 >
                   <span>{FREELANCE.fiverr.ctaLabel}</span>
                   <Icon name="arrow-up-right" size={16} className="btn__icon" />
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  className="btn btn--secondary btn--sm btn--inactive"
-                  disabled
-                  aria-disabled="true"
-                  title="Fiverr profile link will be enabled once configured"
-                >
-                  <span>Find Me on Fiverr</span>
-                  <span className="connect-band__soon">Soon</span>
-                </button>
-              )}
-
-              <Link href="/work" className="btn btn--ghost btn--sm connect-band__ghost">
-                <span>View Portfolio</span>
-                <Icon name="arrow-right" size={16} className="btn__icon" />
-              </Link>
+                </TrackedLink>
+              ) : null}
             </div>
           </div>
 
@@ -89,8 +87,8 @@ export function FreelanceConnect() {
                 <Icon name="calculator" size={20} />
               </span>
               <span className="connect-tools-card__text">
-                <strong>Calculator Centre</strong>
-                <small>Shipping, landed cost, currency, automation ROI &amp; project estimator</small>
+                <strong>Business Calculators</strong>
+                <small>Project estimator, automation ROI, landed cost &amp; shipping tools</small>
               </span>
               <Icon name="arrow-right" size={16} className="connect-tools-card__arrow" />
             </Link>
@@ -100,4 +98,3 @@ export function FreelanceConnect() {
     </section>
   );
 }
-

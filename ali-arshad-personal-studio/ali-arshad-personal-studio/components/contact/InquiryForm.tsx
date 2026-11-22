@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Icon } from "@/components/ui/Icon";
+import { trackEvent } from "@/lib/analytics";
 import {
   BUDGET_OPTIONS,
   LIMITS,
@@ -94,6 +95,7 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
 
       // Success is only shown when the server confirms delivery.
       if (res.ok && data?.ok === true) {
+        trackEvent("contact_submit", { service: input.service });
         setStatus({ kind: "success" });
         setValues(EMPTY);
       } else if (data && data.ok === false) {

@@ -1,38 +1,40 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
-import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
+import { TrackedLink } from "@/components/ui/TrackedLink";
 import { LIVE_PRODUCT_SLUGS, PROJECTS, type Project } from "@/lib/projects";
-import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
 
-const PRODUCT_META: Record<
+const PRODUCT_PRESENTATION: Record<
   (typeof LIVE_PRODUCT_SLUGS)[number],
   {
     badgeLabel: string;
     subtitle: string;
+    plainSummary: string;
     highlights: string[];
     accentClass: string;
   }
 > = {
   "pipelineos-crm": {
-    badgeLabel: "CRM & Sales SaaS",
-    subtitle: "Full-stack B2B pipeline, contacts, leads & revenue analytics",
+    badgeLabel: "Live CRM Demo",
+    subtitle: "B2B sales pipeline, contacts, lead conversion & live revenue reporting",
+    plainSummary:
+      "A working sales CRM you can test right now: sign in to the sandbox workspace, add contacts, convert leads into deals, drag opportunities across stages, and see analytics update in real time.",
     highlights: [
-      "Persistent PostgreSQL CRUD across contacts, leads, deals & tasks",
-      "Atomic 1-click Lead → Contact + Deal conversion with stage history",
-      "6-stage Kanban pipeline board & live database-computed analytics",
-      "scrypt/HttpOnly RBAC auth, rate limiting & 1-click demo reset",
+      "Contacts, lead qualification & one-click lead-to-deal conversion",
+      "Six-stage Kanban sales pipeline with follow-up tasks",
+      "Real PostgreSQL persistence with one-click sandbox reset",
     ],
     accentClass: "demo-card--pipeline",
   },
   "stockflow-inventory": {
-    badgeLabel: "Inventory SaaS + Mobile App",
-    subtitle: "Multi-warehouse inventory platform + 11-screen React Native Expo app",
+    badgeLabel: "Live Inventory + Mobile Demo",
+    subtitle: "Multi-warehouse inventory platform paired with a mobile web companion",
+    plainSummary:
+      "A live multi-warehouse inventory system connected to an interactive mobile preview: manage SKUs and barcodes, transfer stock across warehouses, receive purchase orders, and test live web-to-mobile sync.",
     highlights: [
-      "Atomic stock receipts, cycle counts, issues & inter-warehouse transfers",
-      "Purchase Order receiving & Sales Order reserve → fulfil → ship",
-      "Real 11-screen React Native + Expo mobile app with barcode scanner",
-      "Shared /api/v1 REST backend syncing web & mobile in real time",
+      "Multi-warehouse stock levels, receipts, adjustments & transfers",
+      "Purchase order receiving & sales order reservation and fulfillment",
+      "Live mobile web companion sharing the same backend & database",
     ],
     accentClass: "demo-card--stockflow",
   },
@@ -56,12 +58,11 @@ export function LiveProductDemos() {
           <div>
             <p className="eyebrow eyebrow--plain">Live Product Demonstrations</p>
             <h2 className="section-title" id="live-demos-title">
-              Real, interactive SaaS products — not static mockups
+              Test two live full-stack applications — not static mockups
             </h2>
             <p className="lead live-demos__lead">
-              Two complete full-stack applications engineered on permissively licensed open-source
-              foundations with persistent PostgreSQL databases, authentication, seeded workspaces,
-              and a real React Native + Expo mobile companion.
+              Before hiring a developer, try the actual software. Both products run live with real databases and safe sandbox demo accounts so you can
+              evaluate code quality and UX firsthand.
             </p>
           </div>
         </div>
@@ -69,15 +70,16 @@ export function LiveProductDemos() {
         <div className="demo-grid">
           {products.map((product) => {
             const slug = product.slug as (typeof LIVE_PRODUCT_SLUGS)[number];
-            const meta = PRODUCT_META[slug];
-            const hasPublicUrl = Boolean(product.liveUrl);
+            const meta = PRODUCT_PRESENTATION[slug];
+            const liveUrl = product.liveUrl;
+            const mobileWebUrl = product.mobilePreview?.interactiveWebUrl;
 
             return (
               <article key={product.slug} className={`demo-card ${meta.accentClass} reveal`}>
                 <Link
                   href={`/case-studies/${product.slug}`}
                   className="demo-card__media"
-                  aria-label={`Inspect ${product.title} case study`}
+                  aria-label={`Read the ${product.title} case study`}
                 >
                   <Image
                     src={product.cover.src}
@@ -92,17 +94,17 @@ export function LiveProductDemos() {
 
                 <div className="demo-card__body">
                   <div className="demo-card__badges">
-                    <TypeBadge type={product.projectType} />
-                    <StatusBadge status={product.status} />
+                    <span className="badge badge--live">Live Sandbox</span>
+                    <span className="badge badge--type">Studio Demonstration</span>
                   </div>
 
                   <h3 className="demo-card__title">
                     <Link href={`/case-studies/${product.slug}`}>{product.title}</Link>
                   </h3>
                   <p className="demo-card__subtitle">{meta.subtitle}</p>
-                  <p className="demo-card__desc">{product.summary}</p>
+                  <p className="demo-card__desc">{meta.plainSummary}</p>
 
-                  <ul className="demo-card__features" aria-label={`${product.title} core features`}>
+                  <ul className="demo-card__features" aria-label={`${product.title} highlights`}>
                     {meta.highlights.map((item) => (
                       <li key={item}>
                         <Icon name="check" size={15} />
@@ -111,48 +113,42 @@ export function LiveProductDemos() {
                     ))}
                   </ul>
 
-                  <ul className="tag-list demo-card__stack" aria-label="Technology stack">
-                    {product.technologies.slice(0, 6).map((tech) => (
-                      <li key={tech}>{tech}</li>
-                    ))}
-                  </ul>
-
                   <div className="demo-card__actions">
-                    {hasPublicUrl ? (
-                      <a
-                        href={product.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {liveUrl ? (
+                      <TrackedLink
+                        href={liveUrl}
+                        external
+                        event="demo_launch"
+                        props={{ product: product.slug, placement: "homepage" }}
                         className="btn btn--primary btn--sm"
+                        ariaLabel={`Launch live ${product.title} demo (opens in a new tab)`}
                       >
                         <span>Launch Live Demo</span>
                         <Icon name="arrow-up-right" size={16} className="btn__icon" />
-                      </a>
-                    ) : (
-                      <Link
-                        href={`/case-studies/${product.slug}#demo-access`}
-                        className="btn btn--primary btn--sm"
+                      </TrackedLink>
+                    ) : null}
+
+                    {mobileWebUrl ? (
+                      <TrackedLink
+                        href={mobileWebUrl}
+                        external
+                        event="mobile_preview_launch"
+                        props={{ product: product.slug, placement: "homepage" }}
+                        className="btn btn--secondary btn--sm"
+                        ariaLabel="Open StockFlow interactive mobile web preview (opens in a new tab)"
                       >
-                        <span>Launch Live Demo</span>
-                        <Icon name="arrow-right" size={16} className="btn__icon" />
-                      </Link>
-                    )}
+                        <span>Mobile Web Preview</span>
+                        <Icon name="arrow-up-right" size={15} className="btn__icon" />
+                      </TrackedLink>
+                    ) : null}
 
                     <Link
-                      href={`/case-studies/${product.slug}#architecture`}
-                      className="btn btn--secondary btn--sm"
+                      href={`/case-studies/${product.slug}`}
+                      className="btn btn--ghost btn--sm"
                     >
-                      <span>View Architecture</span>
+                      <span>Case Study</span>
+                      <Icon name="arrow-right" size={15} className="btn__icon" />
                     </Link>
-
-                    {product.mobilePreview ? (
-                      <Link
-                        href={`/case-studies/${product.slug}#mobile-preview`}
-                        className="btn btn--secondary btn--sm"
-                      >
-                        <span>Mobile Preview</span>
-                      </Link>
-                    ) : null}
                   </div>
                 </div>
               </article>
@@ -160,42 +156,12 @@ export function LiveProductDemos() {
           })}
         </div>
 
-        <div className="ecosystem-strip reveal" aria-label="Full 12-product software ecosystem">
-          <div className="ecosystem-strip__head">
-            <div>
-              <p className="eyebrow eyebrow--plain">Full 12-Product Studio Ecosystem</p>
-              <h3 className="ecosystem-strip__title">
-                CRM, Inventory, ERP, AI Workflows, Sourcing, EdTech, Support, PM, BI, HR &amp; Booking
-              </h3>
-            </div>
-            <Link href="/products" className="btn btn--primary btn--sm">
-              <span>Explore All {STUDIO_PRODUCTS.length} Products</span>
-              <Icon name="arrow-right" size={16} className="btn__icon" />
-            </Link>
-          </div>
-
-          <ul className="ecosystem-strip__pills">
-            {STUDIO_PRODUCTS.map((p) => (
-              <li key={p.slug}>
-                <Link href={`/products/${p.slug}`} className="ecosystem-pill">
-                  <span
-                    className="ecosystem-pill__dot"
-                    style={{ backgroundColor: p.accentColor }}
-                    aria-hidden="true"
-                  />
-                  <span className="ecosystem-pill__name">{p.name}</span>
-                  <span className="ecosystem-pill__cat">{p.category}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
         <p className="fine-print live-demos__note">
-          PipelineOS and StockFlow are live at their custom domains; other products remain available in the full studio ecosystem directory.
+          Both live demos are self-initiated studio demonstrations using fictional data — not paid client deployments. Technical architecture,
+          open-source attribution, and sandbox credentials are documented in each case study, and broader software concepts live in the{" "}
+          <Link href="/products">product directory</Link>.
         </p>
       </div>
     </section>
   );
 }
-

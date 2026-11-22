@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00.000 --> 00:09.000
+This is StockFlow — a live multi-warehouse inventory platform at stock.aliarshad.co paired with an interactive mobile web preview.
+
+00:09.000 --> 00:19.000
+Track real-time stock valuation, low-stock alerts, unique SKUs, EAN-13 barcodes, and per-warehouse balances across three hubs.
+
+00:19.000 --> 00:30.000
+Transfers and stock adjustments execute inside atomic PostgreSQL transactions so negative inventory can never occur.
+
+00:30.000 --> 00:40.000
+Receive supplier purchase orders into a destination warehouse and move sales orders from reserved to fulfilled and shipped.
+
+00:40.000 --> 00:53.000
+In the mobile web preview at stockflow-mobile-web.onrender.com, look up a seeded EAN-13 barcode and commit a stock receipt synced live to the desktop console.
+
+00:53.000 --> 01:00.000
+Native camera scanning requires a physical mobile build. Test the live web and mobile preview today at stock.aliarshad.co.

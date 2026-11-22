@@ -6,18 +6,16 @@ import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { PROJECTS, type Project } from "@/lib/projects";
 
 /**
- * All seven priority studio demonstrations in intentional showcase order.
- * Every record reads directly from lib/projects.ts so imagery, type and status
- * honesty labels stay strictly aligned with project and case-study pages.
+ * Restrained homepage selection of four additional demonstrations spanning
+ * e-commerce, AI agents, workflow automation, and business dashboards.
+ * PipelineOS and StockFlow are featured directly above in LiveProductDemos;
+ * all 14 projects remain browsable at /work and /case-studies.
  */
 const PRIORITY_SLUGS = [
   "tessera-clayworks-storefront",
-  "northwind-analytics-dashboard",
   "tideline-support-agent",
-  "kestrel-voice-sales-agent",
   "inbound-lead-qualification-workflow",
-  "meridian-inventory-operations",
-  "lantern-sourcing-platform",
+  "northwind-analytics-dashboard",
 ] as const;
 
 function shortHook(p: Project): string {
@@ -46,7 +44,7 @@ export function FeaturedWork() {
           <div>
             <p className="eyebrow eyebrow--plain">Selected work</p>
             <h2 className="section-title" id="featured-work-title">
-              Built to prove capability
+              More studio case studies
             </h2>
           </div>
           <ArrowLink href="/work">View all {PROJECTS.length} projects</ArrowLink>
@@ -90,7 +88,7 @@ export function FeaturedWork() {
           </div>
         </article>
 
-        {/* Six-project balanced studio grid */}
+        {/* Three-project balanced studio grid */}
         <div className="fw-grid">
           {gridProjects.map((p) => (
             <article key={p.slug} className="fw-card reveal">
@@ -133,8 +131,8 @@ export function FeaturedWork() {
         </div>
 
         <p className="fine-print fw__note">
-          Every showcase project above is an original studio demonstration built to verify real architecture and execution: the brands and data are
-          fictional, and none is presented as a paid client deployment.
+          Every project above is an original studio demonstration built to verify real architecture and execution: the brands and data are fictional,
+          and none is presented as a paid client deployment.
         </p>
       </div>
     </section>

@@ -1,17 +1,17 @@
 import Image from "next/image";
-import { ButtonLink } from "@/components/ui/Button";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { TrackedLink } from "@/components/ui/TrackedLink";
 import { SITE } from "@/lib/site";
 
 const DISCIPLINES: { icon: IconName; label: string }[] = [
-  { icon: "clapperboard", label: "Creative Production" },
-  { icon: "code", label: "Software Development" },
-  { icon: "bot", label: "AI & Automation" },
+  { icon: "code", label: "Custom Web Apps & SaaS" },
+  { icon: "bot", label: "AI Agents & Automation" },
+  { icon: "clapperboard", label: "Creative & Brand Production" },
 ];
 
 /**
- * Conversion-focused editorial hero.
- * Preserves the approved portrait-hero.webp photograph and studio identity.
+ * Conversion-focused editorial hero tailored to US & international business clients.
+ * Preserves the approved portrait-hero.webp photograph and obsidian/coral studio identity.
  */
 export function Hero() {
   return (
@@ -24,21 +24,34 @@ export function Hero() {
           </p>
 
           <h1 className="hero__title" id="hero-title">
-            <span className="hero__line">Creative thinking.</span>
-            <span className="hero__line hero__line--accent">Technical execution.</span>
-            <span className="hero__line">One studio.</span>
+            <span className="hero__line">Custom software,</span>
+            <span className="hero__line hero__line--accent">AI automation &amp; creative</span>
+            <span className="hero__line">built in one studio.</span>
           </h1>
 
           <p className="hero__lead">
-            Creative production, software development, AI automation and business strategy — delivered directly by one independent studio without
-            agency hand-offs.
+            I help US and international businesses ship Next.js web applications, practical workflow automation, and sharp brand visuals — working
+            directly with one accountable builder instead of layered agency hand-offs.
           </p>
 
           <div className="hero__actions">
-            <ButtonLink href="/contact">Start a Project</ButtonLink>
-            <ButtonLink href="/work" variant="secondary" icon={null}>
-              Explore My Work
-            </ButtonLink>
+            <TrackedLink
+              href="/contact"
+              event="cta_click"
+              props={{ placement: "hero", label: "Start a Project" }}
+              className="btn btn--primary btn--md"
+            >
+              <span>Start a Project</span>
+              <Icon name="arrow-up-right" size={18} className="btn__icon" />
+            </TrackedLink>
+            <TrackedLink
+              href="/#live-product-demonstrations"
+              event="cta_click"
+              props={{ placement: "hero", label: "Try Live Product Demos" }}
+              className="btn btn--secondary btn--md"
+            >
+              <span>Try Live Product Demos</span>
+            </TrackedLink>
           </div>
 
           <ul className="hero__disciplines" aria-label="Core studio capabilities">

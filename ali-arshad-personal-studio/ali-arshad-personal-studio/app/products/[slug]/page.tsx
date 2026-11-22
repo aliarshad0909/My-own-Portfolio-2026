@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
 import { STUDIO_PRODUCTS, getStudioProduct } from "@/lib/products/catalog";
 import { pageMetadata } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = getStudioProduct(slug);
   if (!product) return {};
   return pageMetadata({
-    title: `${product.name} — ${product.tagline} | Ali Arshad Personal Studio`,
+    title: `${product.name} — ${product.tagline}`,
     description: product.shortDescription,
     path: `/products/${product.slug}`,
   });
@@ -38,10 +40,17 @@ export default async function ProductDetailPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Product Directory", path: "/products" },
+          { name: product.name, path: `/products/${product.slug}` },
+        ])}
+      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },
-          { name: "Product Ecosystem", path: "/products" },
+          { name: "Product Directory", path: "/products" },
           { name: product.name, path: `/products/${product.slug}` },
         ]}
       />
@@ -146,26 +155,24 @@ export default async function ProductDetailPage({ params }: Props) {
                     {product.status} · {product.secondaryStatus}
                   </dd>
                 </div>
+                {product.liveUrl ? (
+                  <div>
+                    <dt>Live Demo URL</dt>
+                    <dd>
+                      <a href={product.liveUrl} target="_blank" rel="noopener noreferrer">
+                        {product.liveUrl.replace(/^https?:\/\//, "")}
+                      </a>
+                    </dd>
+                  </div>
+                ) : null}
                 <div>
-                  <dt>Repository Path</dt>
+                  <dt>Source Directory</dt>
                   <dd>
                     <code>{product.repoPath}</code>
                   </dd>
                 </div>
                 <div>
-                  <dt>Feature Branch</dt>
-                  <dd>
-                    <code>{product.branchName}</code>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Target Subdomain</dt>
-                  <dd>
-                    <code>{product.targetSubdomain}</code>
-                  </dd>
-                </div>
-                <div>
-                  <dt>OSS Compliance</dt>
+                  <dt>License Compliance</dt>
                   <dd>{product.ossCompliance}</dd>
                 </div>
               </dl>
@@ -224,32 +231,30 @@ export default async function ProductDetailPage({ params }: Props) {
 
               <section id="demo-access" aria-labelledby="demo-title">
                 <h2 className="section-title section-title--sm" id="demo-title">
-                  6. Demo Access &amp; Local Run Instructions
+                  6. Sandbox Demo Access
                 </h2>
                 <div className="demo-access-panel">
                   <dl className="demo-access-panel__grid">
+                    {product.liveUrl ? (
+                      <div>
+                        <dt>Live Demo</dt>
+                        <dd>
+                          <a href={product.liveUrl} target="_blank" rel="noopener noreferrer">
+                            {product.liveUrl}
+                          </a>
+                        </dd>
+                      </div>
+                    ) : null}
                     <div>
-                      <dt>Demo Credentials</dt>
+                      <dt>Sandbox Demo Credentials</dt>
                       <dd>
                         <code>{product.demoEmail}</code> / <code>{product.demoPassword}</code>
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>Local Development URL</dt>
-                      <dd>
-                        <code>{product.localPort}</code>
                       </dd>
                     </div>
                     <div>
                       <dt>Run Locally</dt>
                       <dd>
                         <code>cd {product.repoPath} &amp;&amp; npm install &amp;&amp; npm run dev</code>
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>Planned Production Target</dt>
-                      <dd>
-                        <code>{product.targetSubdomain}</code> (consolidated deployment pending owner approval)
                       </dd>
                     </div>
                   </dl>
