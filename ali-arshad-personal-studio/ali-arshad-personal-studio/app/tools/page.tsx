@@ -9,9 +9,9 @@ import { shouldRender } from "@/lib/seo/publication";
 import { TOOLS, toolState } from "@/lib/tools/catalog";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Calculator Centre: Shipping, Landed Cost, Currency, Automation ROI & Project Estimator",
+  title: "Calculator Centre: 10 Free Business, SaaS, Sourcing & Finance Calculators",
   description:
-    "Five free browser-based business calculators: Shipping Cost, Landed Cost, Currency Exchange, Automation ROI and Project Estimation. No sign-up required.",
+    "Ten free browser-based business calculators: Shipping Cost, Landed Cost, Currency Exchange, Automation ROI, Project Estimator, SaaS Cost, Inventory Reorder, Profit Margin, Supplier Comparison and Project Budget.",
   path: "/tools",
 });
 

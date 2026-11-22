@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { LIVE_PRODUCT_SLUGS, PROJECTS, type Project } from "@/lib/projects";
+import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
 
 const PRODUCT_META: Record<
   (typeof LIVE_PRODUCT_SLUGS)[number],
@@ -159,11 +160,40 @@ export function LiveProductDemos() {
           })}
         </div>
 
+        <div className="ecosystem-strip reveal" aria-label="Full 12-product software ecosystem">
+          <div className="ecosystem-strip__head">
+            <div>
+              <p className="eyebrow eyebrow--plain">Full 12-Product Studio Ecosystem</p>
+              <h3 className="ecosystem-strip__title">
+                CRM, Inventory, ERP, AI Workflows, Sourcing, EdTech, Support, PM, BI, HR &amp; Booking
+              </h3>
+            </div>
+            <Link href="/products" className="btn btn--primary btn--sm">
+              <span>Explore All {STUDIO_PRODUCTS.length} Products</span>
+              <Icon name="arrow-right" size={16} className="btn__icon" />
+            </Link>
+          </div>
+
+          <ul className="ecosystem-strip__pills">
+            {STUDIO_PRODUCTS.map((p) => (
+              <li key={p.slug}>
+                <Link href={`/products/${p.slug}`} className="ecosystem-pill">
+                  <span
+                    className="ecosystem-pill__dot"
+                    style={{ backgroundColor: p.accentColor }}
+                    aria-hidden="true"
+                  />
+                  <span className="ecosystem-pill__name">{p.name}</span>
+                  <span className="ecosystem-pill__cat">{p.category}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <p className="fine-print live-demos__note">
-          Both products are built and verified locally with automated database and Chromium E2E test
-          suites; open-source attributions (MIT) and deployment blueprints for{" "}
-          <code>crm.aliarshad.co</code> and <code>stock.aliarshad.co</code> are documented inside
-          each case study.
+          All twelve applications are built and locally verified with automated PostgreSQL, security,
+          and Chromium E2E test suites; public demo links activate as each subdomain deploys.
         </p>
       </div>
     </section>
