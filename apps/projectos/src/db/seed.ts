@@ -1,4 +1,4 @@
-import type { AppDatabase } from "@/db";
+import type { DbOrTx } from "@/db";
 import {
   activityLogs,
   milestones,
@@ -11,12 +11,12 @@ import {
 } from "@/db/schema";
 import { DEMO_ACCOUNT, generateLockedPassword, hashPassword } from "@/lib/crypto";
 
-type SeedOptions = {
+export type SeedOptions = {
   usersOnly?: boolean;
   skipUsers?: boolean;
 };
 
-export async function seedDemoData(db: AppDatabase, options: SeedOptions = {}): Promise<void> {
+export async function seedDemoData(db: DbOrTx, options: SeedOptions = {}): Promise<void> {
   if (!options.skipUsers) {
     await db
       .insert(users)

@@ -214,6 +214,102 @@ export function computeDashboardMetrics(
   };
 }
 
+export type UtilizationPeriod = {
+  weekStart: string;
+  weekEnd: string;
+};
+
+export type TeamUtilizationOptions = {
+  referenceDate?: string;
+  weekStart?: string;
+  weekEnd?: string;
+};
+
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function parseIsoDateUtc(dateStr: string): Date | null {
+  if (!ISO_DATE_RE.test(dateStr)) return null;
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return null;
+  }
+  return date;
+}
+
+function formatIsoDateUtc(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+function addDaysIso(dateStr: string, days: number): string {
+  const parsed = parseIsoDateUtc(dateStr);
+  if (!parsed) return dateStr;
+  parsed.setUTCDate(parsed.getUTCDate() + days);
+  return formatIsoDateUtc(parsed);
+}
+
+/**
+ * Computes the ISO Monday–Sunday 7-day calendar week containing `dateStr` (YYYY-MM-DD).
+ */
+export function getIsoWeekRange(dateStr: string): UtilizationPeriod {
+  const parsed = parseIsoDateUtc(dateStr) ?? new Date();
+  const dayOfWeek = parsed.getUTCDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+  const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const monday = new Date(
+    Date.UTC(parsed.getUTCFullYear(), parsed.getUTCMonth(), parsed.getUTCDate() + diffToMonday),
+  );
+  const sunday = new Date(
+    Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate() + 6),
+  );
+  return {
+    weekStart: formatIsoDateUtc(monday),
+    weekEnd: formatIsoDateUtc(sunday),
+  };
+}
+
+/**
+ * Resolves the single 7-day capacity period used for weekly utilization calculations.
+ * Honors explicit `weekStart`/`weekEnd` or `referenceDate` when supplied; otherwise
+ * anchors on the ISO week of the latest logged entry date (or today if no entries exist).
+ */
+export function resolveUtilizationPeriod(
+  entries: Array<Pick<TimeEntryRow, "loggedDate">>,
+  options: TeamUtilizationOptions = {},
+): UtilizationPeriod {
+  const validWeekStart =
+    options.weekStart && parseIsoDateUtc(options.weekStart) ? options.weekStart : null;
+  const validWeekEnd =
+    options.weekEnd && parseIsoDateUtc(options.weekEnd) ? options.weekEnd : null;
+
+  if (validWeekStart && validWeekEnd && validWeekStart <= validWeekEnd) {
+    return { weekStart: validWeekStart, weekEnd: validWeekEnd };
+  }
+  if (validWeekStart) {
+    return { weekStart: validWeekStart, weekEnd: addDaysIso(validWeekStart, 6) };
+  }
+  if (validWeekEnd) {
+    return { weekStart: addDaysIso(validWeekEnd, -6), weekEnd: validWeekEnd };
+  }
+  if (options.referenceDate && parseIsoDateUtc(options.referenceDate)) {
+    return getIsoWeekRange(options.referenceDate);
+  }
+
+  let latestDate: string | null = null;
+  for (const entry of entries) {
+    if (entry.loggedDate && parseIsoDateUtc(entry.loggedDate)) {
+      if (!latestDate || entry.loggedDate > latestDate) {
+        latestDate = entry.loggedDate;
+      }
+    }
+  }
+
+  return getIsoWeekRange(latestDate ?? formatIsoDateUtc(new Date()));
+}
+
 export type TeamUtilizationRow = {
   id: string;
   name: string;
@@ -221,9 +317,14 @@ export type TeamUtilizationRow = {
   email: string;
   avatarColor: string;
   capacityHours: number;
+  weekStart: string;
+  weekEnd: string;
   loggedHours: number;
   billableHours: number;
   nonBillableHours: number;
+  lifetimeHours: number;
+  totalBillableHours: number;
+  lifetimeNonBillableHours: number;
   utilizationPct: number;
   openTasks: number;
   completedTasks: number;
@@ -233,14 +334,33 @@ export function computeTeamUtilization(
   members: TeamMemberRow[],
   entries: TimeEntryRow[],
   tasksList: TaskRow[],
+  options: TeamUtilizationOptions = {},
 ): TeamUtilizationRow[] {
+  const period = resolveUtilizationPeriod(entries, options);
+
   return members.map((member) => {
     const memberEntries = entries.filter((e) => e.memberName === member.name);
-    const loggedHours = roundHours(memberEntries.reduce((acc, e) => acc + Number(e.hours || 0), 0));
+    const weeklyEntries = memberEntries.filter(
+      (e) =>
+        Boolean(e.loggedDate) &&
+        e.loggedDate >= period.weekStart &&
+        e.loggedDate <= period.weekEnd,
+    );
+
+    const loggedHours = roundHours(weeklyEntries.reduce((acc, e) => acc + Number(e.hours || 0), 0));
     const billableHours = roundHours(
-      memberEntries.filter((e) => e.billable).reduce((acc, e) => acc + Number(e.hours || 0), 0),
+      weeklyEntries.filter((e) => e.billable).reduce((acc, e) => acc + Number(e.hours || 0), 0),
     );
     const nonBillableHours = roundHours(loggedHours - billableHours);
+
+    const lifetimeHours = roundHours(
+      memberEntries.reduce((acc, e) => acc + Number(e.hours || 0), 0),
+    );
+    const totalBillableHours = roundHours(
+      memberEntries.filter((e) => e.billable).reduce((acc, e) => acc + Number(e.hours || 0), 0),
+    );
+    const lifetimeNonBillableHours = roundHours(lifetimeHours - totalBillableHours);
+
     const memberTasks = tasksList.filter((t) => t.assigneeName === member.name);
     const completedTasks = memberTasks.filter((t) => t.stage === "done").length;
     const openTasks = memberTasks.length - completedTasks;
@@ -254,9 +374,14 @@ export function computeTeamUtilization(
       email: member.email,
       avatarColor: member.avatarColor,
       capacityHours: member.capacityHours,
+      weekStart: period.weekStart,
+      weekEnd: period.weekEnd,
       loggedHours,
       billableHours,
       nonBillableHours,
+      lifetimeHours,
+      totalBillableHours,
+      lifetimeNonBillableHours,
       utilizationPct,
       openTasks,
       completedTasks,

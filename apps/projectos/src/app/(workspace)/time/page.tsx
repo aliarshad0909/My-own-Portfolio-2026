@@ -10,7 +10,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import type { TeamUtilizationRow } from "@/lib/analytics";
+import type { TeamUtilizationRow, UtilizationPeriod } from "@/lib/analytics";
 
 type TimeEntryItem = {
   id: string;
@@ -33,7 +33,11 @@ type TimeApiResponse = {
     nonBillableHours: number;
     billablePct: number;
     avgUtilizationPct: number;
+    weeklyLoggedHours: number;
+    weeklyBillableHours: number;
+    utilizationPeriod: UtilizationPeriod;
   };
+  utilizationPeriod: UtilizationPeriod;
   timeEntries: TimeEntryItem[];
   teamUtilization: TeamUtilizationRow[];
   projects: Array<{ id: string; code: string; name: string }>;
@@ -193,25 +197,27 @@ export default function TimeAndTeamPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="rounded-2xl bg-white border border-[#e6e6ee] p-5">
               <div className="flex items-center justify-between text-xs text-zinc-500">
-                <span>Total Logged Hours</span>
+                <span>All-Time Logged Hours</span>
                 <Clock className="h-4 w-4 text-[#7c3aed]" />
               </div>
               <div className="mt-2.5 text-2xl font-semibold tabular-nums text-[#18181b]">
                 {data.summary.totalHours}h
               </div>
-              <div className="text-xs text-zinc-500 mt-1">Across all active programs</div>
+              <div className="text-xs text-zinc-500 mt-1 tabular-nums">
+                {data.summary.weeklyLoggedHours}h logged in active week
+              </div>
             </div>
 
             <div className="rounded-2xl bg-white border border-[#e6e6ee] p-5">
               <div className="flex items-center justify-between text-xs text-zinc-500">
-                <span>Billable Hours</span>
+                <span>All-Time Billable Hours</span>
                 <DollarSign className="h-4 w-4 text-emerald-600" />
               </div>
               <div className="mt-2.5 text-2xl font-semibold tabular-nums text-emerald-700">
                 {data.summary.billableHours}h
               </div>
               <div className="text-xs text-zinc-500 mt-1 tabular-nums">
-                {data.summary.billablePct}% billable ratio
+                {data.summary.billablePct}% billable ({data.summary.weeklyBillableHours}h this week)
               </div>
             </div>
 
@@ -223,19 +229,20 @@ export default function TimeAndTeamPage() {
               <div className="mt-2.5 text-2xl font-semibold tabular-nums text-[#18181b]">
                 {data.summary.nonBillableHours}h
               </div>
-              <div className="text-xs text-zinc-500 mt-1">Planning, QA & studio ops</div>
+              <div className="text-xs text-zinc-500 mt-1">All-time planning, QA & ops</div>
             </div>
 
             <div className="rounded-2xl bg-white border border-[#e6e6ee] p-5">
               <div className="flex items-center justify-between text-xs text-zinc-500">
-                <span>Avg Team Utilization</span>
+                <span>Weekly Team Utilization</span>
                 <Users className="h-4 w-4 text-[#7c3aed]" />
               </div>
               <div className="mt-2.5 text-2xl font-semibold tabular-nums text-[#18181b]">
                 {data.summary.avgUtilizationPct}%
               </div>
-              <div className="text-xs text-zinc-500 mt-1">
-                {data.teamUtilization.length} studio specialists
+              <div className="text-xs text-zinc-500 mt-1 tabular-nums">
+                Week {data.summary.utilizationPeriod.weekStart} to{" "}
+                {data.summary.utilizationPeriod.weekEnd}
               </div>
             </div>
           </div>
@@ -366,27 +373,32 @@ export default function TimeAndTeamPage() {
 
             {/* Team Capacity & Utilization Table */}
             <section className="xl:col-span-2 rounded-2xl bg-white border border-[#e6e6ee] p-5 sm:p-6 shadow-xs min-w-0">
-              <div className="flex items-center justify-between pb-4 border-b border-[#efeff5]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[#efeff5]">
                 <div>
                   <h2 className="text-base font-semibold text-[#18181b]">
-                    Team Capacity & Utilization
+                    Team Capacity & Weekly Utilization
                   </h2>
                   <p className="text-xs text-zinc-500 mt-0.5">
-                    Logged hours against weekly capacity and active task load per specialist.
+                    Weekly utilization is calculated strictly within the active 7-day window; all-time
+                    billable totals are shown separately.
                   </p>
                 </div>
+                <span className="inline-flex items-center rounded-full bg-violet-50 border border-violet-200 px-3 py-1 text-[11px] font-medium text-[#7c3aed] tabular-nums shrink-0 self-start sm:self-auto">
+                  Active Week: {data.summary.utilizationPeriod.weekStart} →{" "}
+                  {data.summary.utilizationPeriod.weekEnd}
+                </span>
               </div>
 
               <div className="mt-4 overflow-x-auto">
-                <table className="w-full text-left text-xs min-w-[560px]">
+                <table className="w-full text-left text-xs min-w-[600px]">
                   <thead className="text-zinc-500 border-b border-[#ececf4]">
                     <tr>
                       <th className="pb-2.5 font-medium">Member</th>
-                      <th className="pb-2.5 font-medium text-right">Capacity</th>
-                      <th className="pb-2.5 font-medium text-right">Logged</th>
-                      <th className="pb-2.5 font-medium text-right">Billable</th>
+                      <th className="pb-2.5 font-medium text-right">Weekly Cap</th>
+                      <th className="pb-2.5 font-medium text-right">Week Logged</th>
+                      <th className="pb-2.5 font-medium text-right">All-Time Billable</th>
                       <th className="pb-2.5 font-medium text-center">Open Tasks</th>
-                      <th className="pb-2.5 font-medium w-36">Utilization</th>
+                      <th className="pb-2.5 font-medium w-36">Weekly Utilization</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#f2f2f7]">
@@ -409,11 +421,15 @@ export default function TimeAndTeamPage() {
                         <td className="py-3 text-right tabular-nums text-zinc-600">
                           {m.capacityHours}h
                         </td>
-                        <td className="py-3 text-right tabular-nums font-medium text-[#18181b]">
-                          {m.loggedHours}h
+                        <td className="py-3 text-right tabular-nums">
+                          <div className="font-medium text-[#18181b]">{m.loggedHours}h</div>
+                          <div className="text-[10px] text-zinc-400">{m.billableHours}h billable</div>
                         </td>
-                        <td className="py-3 text-right tabular-nums text-emerald-700">
-                          {m.billableHours}h
+                        <td className="py-3 text-right tabular-nums">
+                          <div className="font-medium text-emerald-700">
+                            {m.totalBillableHours}h
+                          </div>
+                          <div className="text-[10px] text-zinc-400">{m.lifetimeHours}h total</div>
                         </td>
                         <td className="py-3 text-center tabular-nums text-zinc-600">
                           {m.openTasks}

@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import { describe, it } from "node:test";
 import { eq } from "drizzle-orm";
 
@@ -17,6 +19,8 @@ import {
   teamMembers,
   timeEntries,
   users,
+  type TeamMemberRow,
+  type TimeEntryRow,
 } from "@/db/schema";
 import {
   buildProjectReport,
@@ -24,6 +28,7 @@ import {
   computeTaskBlockedState,
   computeTeamUtilization,
   escapeCsvCell,
+  resolveUtilizationPeriod,
   serializeProjectReportCsv,
 } from "@/lib/analytics";
 import {
@@ -297,5 +302,205 @@ describe("ProjectOS — Full End-to-End PostgreSQL Workflow Integration", () => 
       .from(sessions)
       .where(eq(sessions.tokenHash, sessionTokenHash));
     assert.equal(preservedSessions.length, 1, "Active user session must survive demo reset");
+  });
+});
+
+describe("ProjectOS — Codex Review Regression Tests", () => {
+  it("limits weekly utilization to the 7-day capacity period while preserving all-time billable totals", () => {
+    const now = new Date();
+    const members: TeamMemberRow[] = [
+      {
+        id: "m-1",
+        name: "Marcus Chen",
+        roleTitle: "Staff Full-Stack Engineer",
+        email: "marcus@projectos.studio",
+        capacityHours: 40,
+        avatarColor: "#2563eb",
+        createdAt: now,
+      },
+    ];
+
+    const entries: TimeEntryRow[] = [
+      {
+        id: "te-old",
+        projectId: "p-1",
+        taskId: null,
+        memberName: "Marcus Chen",
+        hours: 20,
+        billable: true,
+        note: "Work logged 3 weeks ago",
+        loggedDate: "2026-10-28",
+        createdAt: now,
+      },
+      {
+        id: "te-current",
+        projectId: "p-1",
+        taskId: null,
+        memberName: "Marcus Chen",
+        hours: 16,
+        billable: true,
+        note: "Work logged in current ISO week",
+        loggedDate: "2026-11-18",
+        createdAt: now,
+      },
+    ];
+
+    // Default period resolves to ISO Monday–Sunday week containing latest loggedDate (2026-11-18)
+    const period = resolveUtilizationPeriod(entries);
+    assert.equal(period.weekStart, "2026-11-16");
+    assert.equal(period.weekEnd, "2026-11-22");
+
+    const rows = computeTeamUtilization(members, entries, [], { referenceDate: "2026-11-18" });
+    assert.equal(rows.length, 1);
+    const marcus = rows[0];
+
+    // 16h in current week / 40h capacity = 40%, NOT 36h / 40h = 90%
+    assert.equal(marcus.loggedHours, 16);
+    assert.equal(marcus.billableHours, 16);
+    assert.equal(marcus.utilizationPct, 40);
+    assert.equal(marcus.weekStart, "2026-11-16");
+    assert.equal(marcus.weekEnd, "2026-11-22");
+
+    // Lifetime totals still reflect all 36h across both weeks
+    assert.equal(marcus.lifetimeHours, 36);
+    assert.equal(marcus.totalBillableHours, 36);
+  });
+
+  it("removes fixed positioning, max-height, and scroll clipping on printable project reports", () => {
+    const globalsCss = fs.readFileSync(
+      path.join(process.cwd(), "src", "app", "globals.css"),
+      "utf8",
+    );
+    const projectsPage = fs.readFileSync(
+      path.join(process.cwd(), "src", "app", "(workspace)", "projects", "page.tsx"),
+      "utf8",
+    );
+
+    // Extract @media print block from globals.css
+    const printIdx = globalsCss.indexOf("@media print");
+    assert.ok(printIdx !== -1, "globals.css must declare an @media print section");
+    const printCss = globalsCss.slice(printIdx);
+
+    // Overlay and modal print classes must be wired in projects/page.tsx
+    assert.ok(
+      projectsPage.includes("print-report-overlay"),
+      "projects/page.tsx must apply print-report-overlay on the report backdrop",
+    );
+    assert.ok(
+      projectsPage.includes("print-report-modal"),
+      "projects/page.tsx must apply print-report-modal on the report container",
+    );
+    assert.ok(
+      projectsPage.includes("print:hidden"),
+      "projects/page.tsx must keep print:hidden on non-report chrome",
+    );
+    assert.ok(
+      projectsPage.includes("print:static") && projectsPage.includes("print:max-h-none"),
+      "projects/page.tsx must override fixed positioning and max-h-[90vh] in print mode",
+    );
+
+    // Verify @media print CSS resets position, max-height, and overflow constraints
+    assert.match(printCss, /\.print-report-overlay[\s\S]*?position:\s*static\s*!important/);
+    assert.match(printCss, /\.print-report-overlay[\s\S]*?overflow:\s*visible\s*!important/);
+    assert.match(printCss, /\.print-report-modal[\s\S]*?max-height:\s*none\s*!important/);
+    assert.match(printCss, /\.print-report-modal[\s\S]*?height:\s*auto\s*!important/);
+    assert.match(printCss, /\.print-report-modal[\s\S]*?overflow:\s*visible\s*!important/);
+    assert.match(printCss, /\.no-print[\s\S]*?display:\s*none\s*!important/);
+  });
+
+  it("rolls back TRUNCATE and partial writes if resetDemoWorkspace fails mid-seed, and succeeds atomically otherwise", async () => {
+    const db = await getDb();
+
+    // Create a custom pre-reset project and task to verify rollback preservation
+    const [customProject] = await db
+      .insert(projects)
+      .values({
+        code: "PRJ-ROLLBACK",
+        name: "Transactional Safety Verification",
+        clientName: "Safety Corp",
+        description: "Must survive a failed resetDemoWorkspace attempt",
+        status: "active",
+        budgetHours: 80,
+        startDate: "2026-11-22",
+        targetDate: "2026-12-31",
+        clientPortalEnabled: true,
+      })
+      .returning();
+
+    const [customTask] = await db
+      .insert(tasks)
+      .values({
+        projectId: customProject.id,
+        title: "Verify rollback preserves pre-reset task",
+        stage: "in_progress",
+        priority: "high",
+        assigneeName: "Morgan Ellis",
+        estimatedHours: 6,
+        dueDate: "2026-12-05",
+      })
+      .returning();
+
+    const projectsBefore = await db.select().from(projects);
+    const tasksBefore = await db.select().from(tasks);
+    const membersBefore = await db.select().from(teamMembers);
+
+    // Inject a failure AFTER TRUNCATE and AFTER a partial insert inside the same transaction
+    await assert.rejects(
+      () =>
+        resetDemoWorkspace({
+          seeder: async (tx) => {
+            const insideTxProjects = await tx.select().from(projects);
+            assert.equal(
+              insideTxProjects.length,
+              0,
+              "TRUNCATE must have cleared projects inside the active transaction",
+            );
+            await tx.insert(teamMembers).values({
+              name: "Mid-Seed Ghost",
+              roleTitle: "Transient",
+              email: "ghost@projectos.studio",
+              capacityHours: 40,
+              avatarColor: "#000000",
+            });
+            throw new Error("Simulated mid-seed failure");
+          },
+        }),
+      /Simulated mid-seed failure/,
+    );
+
+    // Assert full rollback: custom project/task AND baseline rows are 100% intact, ghost row absent
+    const projectsAfterFail = await db.select().from(projects);
+    const tasksAfterFail = await db.select().from(tasks);
+    const membersAfterFail = await db.select().from(teamMembers);
+
+    assert.equal(projectsAfterFail.length, projectsBefore.length);
+    assert.equal(tasksAfterFail.length, tasksBefore.length);
+    assert.equal(membersAfterFail.length, membersBefore.length);
+    assert.ok(
+      projectsAfterFail.some((p) => p.id === customProject.id && p.code === "PRJ-ROLLBACK"),
+      "Custom pre-reset project must remain intact after rolled-back reset",
+    );
+    assert.ok(
+      tasksAfterFail.some((t) => t.id === customTask.id),
+      "Custom pre-reset task must remain intact after rolled-back reset",
+    );
+    assert.equal(
+      membersAfterFail.some((m) => m.email === "ghost@projectos.studio"),
+      false,
+      "Partial mid-seed insert must be rolled back",
+    );
+
+    // Now verify a normal resetDemoWorkspace() succeeds atomically
+    await resetDemoWorkspace();
+    const projectsAfterSuccess = await db.select().from(projects);
+    const membersAfterSuccess = await db.select().from(teamMembers);
+
+    assert.equal(projectsAfterSuccess.length, 4, "Normal reset must restore 4 baseline projects");
+    assert.equal(
+      projectsAfterSuccess.some((p) => p.code === "PRJ-ROLLBACK"),
+      false,
+      "Normal reset must clear custom project",
+    );
+    assert.equal(membersAfterSuccess.length, 5, "Normal reset must restore 5 baseline team members");
   });
 });

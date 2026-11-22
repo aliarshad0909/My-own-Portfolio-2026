@@ -86,9 +86,9 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
   }
 
   return (
-    <div className="min-h-screen flex bg-[#f8f8fb] text-[#18181b] overflow-x-hidden">
+    <div className="min-h-screen flex bg-[#f8f8fb] text-[#18181b] overflow-x-hidden print:block print:overflow-visible print:bg-white">
       {/* Desktop Charcoal Sidebar (#18181b) */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[#18181b] text-white border-r border-zinc-800 z-30">
+      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[#18181b] text-white border-r border-zinc-800 z-30 no-print print:hidden">
         <div className="h-16 px-5 flex items-center gap-3 border-b border-zinc-800/90">
           <div className="h-8 w-8 rounded-lg bg-[#7c3aed] flex items-center justify-center shrink-0">
             <Layers className="h-4 w-4 text-white" />
@@ -142,7 +142,7 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
+        <div className="fixed inset-0 z-50 lg:hidden flex no-print print:hidden">
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-[1px]"
             onClick={() => setMobileOpen(false)}
@@ -189,9 +189,9 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0 print-main-shell print:pl-0 print:block">
         {/* Mobile Header */}
-        <header className="lg:hidden sticky top-0 z-20 h-14 bg-[#18181b] text-white border-b border-zinc-800 px-4 flex items-center justify-between gap-3">
+        <header className="lg:hidden sticky top-0 z-20 h-14 bg-[#18181b] text-white border-b border-zinc-800 px-4 flex items-center justify-between gap-3 no-print print:hidden">
           <div className="flex items-center gap-2.5 min-w-0">
             <button
               type="button"
@@ -210,7 +210,7 @@ export function AppShell({ user, children }: { user: SafeUser; children: ReactNo
         </header>
 
         {notice && (
-          <div className="bg-violet-50 border-b border-violet-200 px-4 sm:px-6 py-2 text-xs text-violet-800 flex items-center justify-between gap-3">
+          <div className="bg-violet-50 border-b border-violet-200 px-4 sm:px-6 py-2 text-xs text-violet-800 flex items-center justify-between gap-3 no-print print:hidden">
             <span>{notice}</span>
             <button
               type="button"

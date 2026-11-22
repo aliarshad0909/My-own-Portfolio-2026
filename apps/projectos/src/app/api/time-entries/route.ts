@@ -3,14 +3,19 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { projects, tasks, teamMembers, timeEntries } from "@/db/schema";
 import { recordActivity } from "@/lib/activity";
-import { computeTeamUtilization, roundHours } from "@/lib/analytics";
+import { computeTeamUtilization, resolveUtilizationPeriod, roundHours } from "@/lib/analytics";
 import { requireApiUser } from "@/lib/auth";
 import { verifyCsrfOrigin } from "@/lib/security";
 import { createTimeEntrySchema } from "@/lib/validation";
 
-export async function GET() {
+export async function GET(request: Request) {
   const auth = await requireApiUser();
   if ("error" in auth) return auth.error;
+
+  const url = new URL(request.url);
+  const referenceDate = url.searchParams.get("referenceDate") ?? undefined;
+  const weekStart = url.searchParams.get("weekStart") ?? undefined;
+  const weekEnd = url.searchParams.get("weekEnd") ?? undefined;
 
   const db = await getDb();
   const [entriesList, membersList, projectsList, tasksList] = await Promise.all([
@@ -30,7 +35,23 @@ export async function GET() {
   const nonBillableHours = roundHours(totalHours - billableHours);
   const billablePct = totalHours > 0 ? Math.round((billableHours / totalHours) * 100) : 0;
 
-  const teamUtilization = computeTeamUtilization(membersList, entriesList, tasksList);
+  const utilizationPeriod = resolveUtilizationPeriod(entriesList, {
+    referenceDate,
+    weekStart,
+    weekEnd,
+  });
+  const teamUtilization = computeTeamUtilization(
+    membersList,
+    entriesList,
+    tasksList,
+    utilizationPeriod,
+  );
+  const weeklyLoggedHours = roundHours(
+    teamUtilization.reduce((acc, m) => acc + m.loggedHours, 0),
+  );
+  const weeklyBillableHours = roundHours(
+    teamUtilization.reduce((acc, m) => acc + m.billableHours, 0),
+  );
   const avgUtilizationPct =
     teamUtilization.length > 0
       ? Math.round(
@@ -56,7 +77,11 @@ export async function GET() {
       nonBillableHours,
       billablePct,
       avgUtilizationPct,
+      weeklyLoggedHours,
+      weeklyBillableHours,
+      utilizationPeriod,
     },
+    utilizationPeriod,
     timeEntries: enrichedEntries,
     teamUtilization,
     projects: projectsList,

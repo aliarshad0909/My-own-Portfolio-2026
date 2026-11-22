@@ -223,7 +223,7 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-6 min-w-0">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print print:hidden">
         <div>
           <div className="text-xs font-medium uppercase tracking-[0.14em] text-[#7c3aed]">
             Delivery Programs & Roadmaps
@@ -247,18 +247,18 @@ export default function ProjectsPage() {
       </div>
 
       {error && (
-        <div className="rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-xs text-rose-700 no-print">
+        <div className="rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-xs text-rose-700 no-print print:hidden">
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-pulse">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-pulse no-print print:hidden">
           <div className="h-96 bg-white rounded-2xl border border-[#e6e6ee]" />
           <div className="lg:col-span-2 h-96 bg-white rounded-2xl border border-[#e6e6ee]" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 no-print">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 no-print print:hidden">
           {/* Left: Project Selector List */}
           <div className="space-y-3 min-w-0">
             {projects.map((project) => {
@@ -574,8 +574,8 @@ export default function ProjectsPage() {
 
       {/* Printable / Executive Project Report Modal */}
       {report && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-[#e6e6ee] shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto print-report-overlay print:static print:inset-auto print:block print:bg-transparent print:p-0 print:overflow-visible">
+          <div className="bg-white rounded-2xl border border-[#e6e6ee] shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 print-report-modal print:max-h-none print:h-auto print:max-w-none print:overflow-visible print:shadow-none print:border-0 print:rounded-none print:p-0">
             <div className="flex items-start justify-between gap-4 border-b border-[#ececf4] pb-4">
               <div>
                 <div className="text-xs font-mono uppercase tracking-wider text-[#7c3aed]">
@@ -589,7 +589,7 @@ export default function ProjectsPage() {
                   {report.project.targetDate}
                 </p>
               </div>
-              <div className="flex items-center gap-2 no-print">
+              <div className="flex items-center gap-2 no-print print:hidden">
                 <a
                   href={`/api/projects/${report.project.id}/report?format=csv`}
                   className="inline-flex items-center gap-1.5 rounded-xl border border-[#e6e6ee] px-3 py-1.5 text-xs font-medium text-[#18181b] hover:bg-zinc-50"
@@ -676,7 +676,7 @@ export default function ProjectsPage() {
               <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2">
                 Tasks Breakdown ({report.tasks.length})
               </h3>
-              <div className="overflow-x-auto border border-[#ececf4] rounded-xl">
+              <div className="overflow-x-auto print:overflow-visible border border-[#ececf4] rounded-xl">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#f8f8fb] text-zinc-500 border-b border-[#ececf4]">
                     <tr>
@@ -716,7 +716,7 @@ export default function ProjectsPage() {
 
       {/* Create Project Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 no-print print:hidden">
           <div className="bg-white rounded-2xl border border-[#e6e6ee] shadow-2xl w-full max-w-lg p-6 space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-[#18181b]">Create New Project</h2>
