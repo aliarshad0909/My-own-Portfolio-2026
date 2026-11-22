@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  --source-navy: #0f1d33;
+  --source-navy-deep: #091324;
+  --source-orange: #ea580c;
+  --source-orange-bright: #f97316;
+  --source-canvas: #f2f4f8;
+  --source-steel: #d7dee8;
+}
+
+html,
+body {
+  background-color: var(--source-canvas);
+  color: #0f172a;
+  overflow-x: clip;
+}
+
+.industrial-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
