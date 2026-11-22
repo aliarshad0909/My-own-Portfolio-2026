@@ -1218,7 +1218,7 @@ const PIPELINEOS: Project = {
   ],
   technologies: ["Next.js 16", "TypeScript", "PostgreSQL", "Drizzle ORM", "Tailwind CSS", "Zod", "Node.js Test Runner"],
   featured: true,
-  liveUrl: process.env.NEXT_PUBLIC_PIPELINEOS_URL?.trim() || undefined,
+  liveUrl: process.env.NEXT_PUBLIC_PIPELINEOS_URL?.trim() || "https://crm.aliarshad.co",
   sourceUrl: "https://github.com/aliarshad0909/My-own-Portfolio-2026",
   cover: {
     src: "/images/projects/pipelineos/dashboard.png",
@@ -1276,7 +1276,7 @@ const PIPELINEOS: Project = {
     demoPassword: "PipelineDemo2026!",
     localRunCommand: "cd apps/pipelineos && npm install && npm run dev -- -p 3010",
     hostingNote:
-      "Verified locally with full PostgreSQL persistence and Chromium E2E tests. Public subdomain hosting at crm.aliarshad.co is configured via apps/pipelineos/render.yaml and awaiting owner hosting/DNS activation.",
+      "Public demo is live at https://crm.aliarshad.co with verified HTTPS and persistent PostgreSQL data.",
   },
   attribution: {
     project: "Atomic CRM (Marmelab)",
@@ -1377,7 +1377,7 @@ const STOCKFLOW: Project = {
     "Zod",
   ],
   featured: true,
-  liveUrl: process.env.NEXT_PUBLIC_STOCKFLOW_URL?.trim() || undefined,
+  liveUrl: process.env.NEXT_PUBLIC_STOCKFLOW_URL?.trim() || "https://stock.aliarshad.co",
   sourceUrl: "https://github.com/aliarshad0909/My-own-Portfolio-2026",
   cover: {
     src: "/images/projects/stockflow/dashboard.png",
@@ -1423,12 +1423,12 @@ const STOCKFLOW: Project = {
     caption: "StockFlow unified web + mobile architecture: shared /api/v1 REST API serving both the Next.js operations console and the 11-screen Expo mobile app from one PostgreSQL ledger.",
   },
   demoAccess: {
-    deploymentTarget: "stock.aliarshad.co (Render Free + Neon Free PostgreSQL blueprint + Expo EAS preview APK)",
+    deploymentTarget: "stock.aliarshad.co (live Render web app + Neon PostgreSQL; mobile companion preview is hosted separately)",
     demoEmail: "ops@stockflow.studio",
     demoPassword: "StockFlowDemo2026!",
     localRunCommand: "cd apps/stockflow && npm install && npm run dev -- -p 3020",
     hostingNote:
-      "Both the StockFlow web/API backend and the StockFlow Mobile Expo companion app are verified locally with live end-to-end PostgreSQL sync. Public hosting at stock.aliarshad.co is configured via apps/stockflow/render.yaml and awaiting owner hosting/DNS activation.",
+      "The StockFlow web app is live at https://stock.aliarshad.co with verified HTTPS and PostgreSQL data. The mobile companion preview is live at https://stockflow-mobile-web.onrender.com and uses the same custom-domain API.",
   },
   mobilePreview: {
     headline: "StockFlow Mobile — Real React Native + Expo Companion App (11 Screens)",
