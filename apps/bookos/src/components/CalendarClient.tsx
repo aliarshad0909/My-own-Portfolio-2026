@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   BellRing,
@@ -18,6 +18,11 @@ import {
 } from "lucide-react";
 import { useWorkspaceTimezone } from "@/components/AppShell";
 import { useToast } from "@/components/ToastProvider";
+import {
+  buildAvailabilityKey,
+  canConfirmBooking,
+  shouldApplyAvailabilityResponse,
+} from "@/lib/booking-form-state";
 import {
   SUPPORTED_TIMEZONES,
   formatCurrency,
@@ -92,8 +97,13 @@ export function CalendarClient() {
   const [rescheduleSlots, setRescheduleSlots] = useState<SlotOption[]>([]);
   const [rescheduleSelectedUtc, setRescheduleSelectedUtc] = useState("");
   const [rescheduleLoadingSlots, setRescheduleLoadingSlots] = useState(false);
+  const [rescheduleLoadedKey, setRescheduleLoadedKey] = useState<string | null>(null);
   const [rescheduleError, setRescheduleError] = useState<string | null>(null);
   const [mutatingId, setMutatingId] = useState<string | null>(null);
+
+  const rescheduleSeqRef = useRef(0);
+  const rescheduleAbortRef = useRef<AbortController | null>(null);
+  const rescheduleActiveKeyRef = useRef("");
 
   const loadAll = useCallback(async () => {
     setLoading(true);
@@ -151,8 +161,37 @@ export function CalendarClient() {
 
   const loadRescheduleSlots = useCallback(
     async (target: BookingItem, dateStr: string) => {
+      const requestKey = buildAvailabilityKey({
+        serviceId: target.serviceId,
+        staffId: target.staffId,
+        date: dateStr,
+        timezone,
+      });
+
+      rescheduleAbortRef.current?.abort();
+      if (!requestKey) {
+        rescheduleAbortRef.current = null;
+        rescheduleSeqRef.current += 1;
+        rescheduleActiveKeyRef.current = "";
+        setRescheduleSlots([]);
+        setRescheduleSelectedUtc("");
+        setRescheduleLoadedKey(null);
+        setRescheduleLoadingSlots(false);
+        return;
+      }
+
+      const controller = new AbortController();
+      rescheduleAbortRef.current = controller;
+      const requestSeq = rescheduleSeqRef.current + 1;
+      rescheduleSeqRef.current = requestSeq;
+      rescheduleActiveKeyRef.current = requestKey;
+
       setRescheduleLoadingSlots(true);
+      setRescheduleSelectedUtc("");
+      setRescheduleSlots([]);
+      setRescheduleLoadedKey(null);
       setRescheduleError(null);
+
       try {
         const params = new URLSearchParams({
           serviceId: target.serviceId,
@@ -161,29 +200,105 @@ export function CalendarClient() {
           timezone,
           excludeBookingId: target.id,
         });
-        const res = await fetch(`/api/slots?${params.toString()}`);
+        const res = await fetch(`/api/slots?${params.toString()}`, {
+          signal: controller.signal,
+        });
+
+        if (
+          !shouldApplyAvailabilityResponse({
+            requestSeq,
+            latestRequestSeq: rescheduleSeqRef.current,
+            requestKey,
+            currentKey: rescheduleActiveKeyRef.current,
+            aborted: controller.signal.aborted,
+          })
+        ) {
+          return;
+        }
+
         if (res.ok) {
           const j = (await res.json()) as { slots: SlotOption[] };
+          if (
+            !shouldApplyAvailabilityResponse({
+              requestSeq,
+              latestRequestSeq: rescheduleSeqRef.current,
+              requestKey,
+              currentKey: rescheduleActiveKeyRef.current,
+              aborted: controller.signal.aborted,
+            })
+          ) {
+            return;
+          }
           setRescheduleSlots(j.slots);
+          setRescheduleLoadedKey(requestKey);
           setRescheduleSelectedUtc(j.slots.find((s) => s.available)?.startUtc || "");
         }
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return;
+        }
       } finally {
-        setRescheduleLoadingSlots(false);
+        if (
+          shouldApplyAvailabilityResponse({
+            requestSeq,
+            latestRequestSeq: rescheduleSeqRef.current,
+            requestKey,
+            currentKey: rescheduleActiveKeyRef.current,
+            aborted: controller.signal.aborted,
+          })
+        ) {
+          setRescheduleLoadingSlots(false);
+        }
       }
     },
     [timezone],
   );
 
+  function closeRescheduleModal() {
+    rescheduleAbortRef.current?.abort();
+    rescheduleAbortRef.current = null;
+    rescheduleSeqRef.current += 1;
+    rescheduleActiveKeyRef.current = "";
+    setRescheduleTarget(null);
+    setRescheduleSlots([]);
+    setRescheduleSelectedUtc("");
+    setRescheduleLoadedKey(null);
+    setRescheduleError(null);
+  }
+
   function openReschedule(item: BookingItem) {
     const currentDate = getDateKeyInTimezone(item.startUtc, timezone);
     setRescheduleTarget(item);
     setRescheduleDate(currentDate);
+    setRescheduleSelectedUtc("");
+    setRescheduleSlots([]);
+    setRescheduleLoadedKey(null);
     setRescheduleError(null);
     void loadRescheduleSlots(item, currentDate);
   }
 
+  const rescheduleCriteriaKey = rescheduleTarget
+    ? buildAvailabilityKey({
+        serviceId: rescheduleTarget.serviceId,
+        staffId: rescheduleTarget.staffId,
+        date: rescheduleDate,
+        timezone,
+      })
+    : "";
+
+  const isRescheduleConfirmReady =
+    Boolean(rescheduleTarget) &&
+    canConfirmBooking({
+      submitting: Boolean(rescheduleTarget && mutatingId === rescheduleTarget.id),
+      slotsLoading: rescheduleLoadingSlots,
+      currentCriteriaKey: rescheduleCriteriaKey,
+      loadedCriteriaKey: rescheduleLoadedKey,
+      selectedSlotUtc: rescheduleSelectedUtc,
+      slots: rescheduleSlots,
+    });
+
   async function submitReschedule() {
-    if (!rescheduleTarget || !rescheduleSelectedUtc) return;
+    if (!rescheduleTarget || !isRescheduleConfirmReady) return;
     setMutatingId(rescheduleTarget.id);
     setRescheduleError(null);
     try {
@@ -203,7 +318,7 @@ export function CalendarClient() {
         return;
       }
       pushToast("success", `Booking ${rescheduleTarget.bookingRef} rescheduled & reminders updated.`);
-      setRescheduleTarget(null);
+      closeRescheduleModal();
       void loadAll();
     } finally {
       setMutatingId(null);
@@ -246,10 +361,14 @@ export function CalendarClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "complete" }),
       });
-      if (res.ok) {
-        pushToast("success", `Marked ${item.bookingRef} as completed.`);
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      if (!res.ok) {
+        pushToast("error", data.error || "Unable to complete booking.");
         void loadAll();
+        return;
       }
+      pushToast("success", `Marked ${item.bookingRef} as completed.`);
+      void loadAll();
     } finally {
       setMutatingId(null);
     }
@@ -604,7 +723,7 @@ export function CalendarClient() {
               </div>
               <button
                 type="button"
-                onClick={() => setRescheduleTarget(null)}
+                onClick={closeRescheduleModal}
                 className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
                 aria-label="Close reschedule dialog"
               >
@@ -623,6 +742,9 @@ export function CalendarClient() {
                   onChange={(e) => {
                     const nextDate = e.target.value;
                     setRescheduleDate(nextDate);
+                    setRescheduleSelectedUtc("");
+                    setRescheduleSlots([]);
+                    setRescheduleLoadedKey(null);
                     void loadRescheduleSlots(rescheduleTarget, nextDate);
                   }}
                   className="w-full rounded-xl border border-stone-200 bg-[#fafaf9] px-3.5 py-2 text-sm text-[#1c1917] focus:border-[#2563eb] focus:bg-white focus:outline-none"
@@ -679,7 +801,7 @@ export function CalendarClient() {
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
-                  onClick={() => setRescheduleTarget(null)}
+                  onClick={closeRescheduleModal}
                   className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-xs font-semibold text-stone-700 hover:bg-stone-50"
                 >
                   Cancel
@@ -687,7 +809,7 @@ export function CalendarClient() {
                 <button
                   type="button"
                   onClick={submitReschedule}
-                  disabled={!rescheduleSelectedUtc || mutatingId === rescheduleTarget.id}
+                  disabled={!isRescheduleConfirmReady}
                   className="rounded-xl bg-[#2563eb] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1d4ed8] disabled:opacity-50"
                 >
                   {mutatingId === rescheduleTarget.id

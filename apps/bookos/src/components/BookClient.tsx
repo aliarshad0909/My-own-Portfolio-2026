@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import {
   AlertTriangle,
   BellRing,
@@ -16,6 +16,11 @@ import {
 } from "lucide-react";
 import { useWorkspaceTimezone } from "@/components/AppShell";
 import { useToast } from "@/components/ToastProvider";
+import {
+  buildAvailabilityKey,
+  canConfirmBooking,
+  shouldApplyAvailabilityResponse,
+} from "@/lib/booking-form-state";
 import {
   SUPPORTED_TIMEZONES,
   formatCurrency,
@@ -97,6 +102,11 @@ export function BookClient() {
   const [slots, setSlots] = useState<SlotItem[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [selectedSlotUtc, setSelectedSlotUtc] = useState<string>("");
+  const [loadedCriteriaKey, setLoadedCriteriaKey] = useState<string | null>(null);
+
+  const requestSeqRef = useRef(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const activeCriteriaKeyRef = useRef("");
 
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
@@ -107,6 +117,47 @@ export function BookClient() {
   const [submitting, setSubmitting] = useState(false);
   const [conflictError, setConflictError] = useState<string | null>(null);
   const [confirmation, setConfirmation] = useState<ConfirmationPayload | null>(null);
+
+  const currentCriteriaKey = buildAvailabilityKey({
+    serviceId: selectedServiceId,
+    staffId: selectedStaffId,
+    date: selectedDate,
+    timezone,
+  });
+
+  const invalidateSlotSelection = useCallback(() => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    requestSeqRef.current += 1;
+    setSelectedSlotUtc("");
+    setSlots([]);
+    setLoadedCriteriaKey(null);
+    setConflictError(null);
+  }, []);
+
+  function handleServiceChange(nextServiceId: string) {
+    if (nextServiceId === selectedServiceId) return;
+    invalidateSlotSelection();
+    setSelectedServiceId(nextServiceId);
+  }
+
+  function handleStaffChange(nextStaffId: string) {
+    if (nextStaffId === selectedStaffId) return;
+    invalidateSlotSelection();
+    setSelectedStaffId(nextStaffId);
+  }
+
+  function handleDateChange(nextDate: string) {
+    if (nextDate === selectedDate) return;
+    invalidateSlotSelection();
+    setSelectedDate(nextDate);
+  }
+
+  function handleTimezoneChange(nextTz: SupportedTimezone) {
+    if (nextTz === timezone) return;
+    invalidateSlotSelection();
+    setTimezone(nextTz);
+  }
 
   const loadCatalog = useCallback(async () => {
     const [svcRes, stfRes] = await Promise.all([fetch("/api/services"), fetch("/api/staff")]);
@@ -133,9 +184,39 @@ export function BookClient() {
   }, [loadCatalog]);
 
   const loadSlots = useCallback(async () => {
-    if (!selectedServiceId || !selectedStaffId || !selectedDate) return;
+    const requestKey = buildAvailabilityKey({
+      serviceId: selectedServiceId,
+      staffId: selectedStaffId,
+      date: selectedDate,
+      timezone,
+    });
+
+    if (!requestKey) {
+      abortControllerRef.current?.abort();
+      abortControllerRef.current = null;
+      requestSeqRef.current += 1;
+      activeCriteriaKeyRef.current = "";
+      setSlots([]);
+      setSelectedSlotUtc("");
+      setLoadedCriteriaKey(null);
+      setLoadingSlots(false);
+      return;
+    }
+
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const requestSeq = requestSeqRef.current + 1;
+    requestSeqRef.current = requestSeq;
+    activeCriteriaKeyRef.current = requestKey;
+
     setLoadingSlots(true);
+    setSelectedSlotUtc("");
+    setSlots([]);
+    setLoadedCriteriaKey(null);
     setConflictError(null);
+
     try {
       const params = new URLSearchParams({
         serviceId: selectedServiceId,
@@ -143,33 +224,107 @@ export function BookClient() {
         date: selectedDate,
         timezone,
       });
-      const res = await fetch(`/api/slots?${params.toString()}`);
+      const res = await fetch(`/api/slots?${params.toString()}`, {
+        signal: controller.signal,
+      });
+
+      if (
+        !shouldApplyAvailabilityResponse({
+          requestSeq,
+          latestRequestSeq: requestSeqRef.current,
+          requestKey,
+          currentKey: activeCriteriaKeyRef.current,
+          aborted: controller.signal.aborted,
+        })
+      ) {
+        return;
+      }
+
       if (res.ok) {
         const json = (await res.json()) as { slots: SlotItem[] };
+        if (
+          !shouldApplyAvailabilityResponse({
+            requestSeq,
+            latestRequestSeq: requestSeqRef.current,
+            requestKey,
+            currentKey: activeCriteriaKeyRef.current,
+            aborted: controller.signal.aborted,
+          })
+        ) {
+          return;
+        }
         setSlots(json.slots);
-        setSelectedSlotUtc((prev) => {
-          const stillOpen = json.slots.some((s) => s.startUtc === prev && s.available);
-          if (stillOpen) return prev;
-          return json.slots.find((s) => s.available)?.startUtc || "";
-        });
+        setLoadedCriteriaKey(requestKey);
+        setSelectedSlotUtc(json.slots.find((s) => s.available)?.startUtc || "");
+      } else {
+        setSlots([]);
+        setSelectedSlotUtc("");
+        setLoadedCriteriaKey(null);
+      }
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        return;
+      }
+      if (
+        shouldApplyAvailabilityResponse({
+          requestSeq,
+          latestRequestSeq: requestSeqRef.current,
+          requestKey,
+          currentKey: activeCriteriaKeyRef.current,
+          aborted: controller.signal.aborted,
+        })
+      ) {
+        setSlots([]);
+        setSelectedSlotUtc("");
+        setLoadedCriteriaKey(null);
       }
     } finally {
-      setLoadingSlots(false);
+      if (
+        shouldApplyAvailabilityResponse({
+          requestSeq,
+          latestRequestSeq: requestSeqRef.current,
+          requestKey,
+          currentKey: activeCriteriaKeyRef.current,
+          aborted: controller.signal.aborted,
+        })
+      ) {
+        setLoadingSlots(false);
+      }
     }
   }, [selectedServiceId, selectedStaffId, selectedDate, timezone]);
 
   useEffect(() => {
+    activeCriteriaKeyRef.current = currentCriteriaKey;
     const timer = window.setTimeout(() => void loadSlots(), 0);
-    return () => window.clearTimeout(timer);
-  }, [loadSlots]);
+    return () => {
+      window.clearTimeout(timer);
+      abortControllerRef.current?.abort();
+    };
+  }, [currentCriteriaKey, loadSlots]);
+
+  const hasFreshSlots = Boolean(currentCriteriaKey) && loadedCriteriaKey === currentCriteriaKey;
+  const visibleSlots = hasFreshSlots ? slots : [];
+  const activeSelectedSlotUtc = hasFreshSlots ? selectedSlotUtc : "";
+  const isSlotsRefreshing =
+    loadingSlots || (Boolean(currentCriteriaKey) && loadedCriteriaKey !== currentCriteriaKey);
+
+  const isConfirmReady = canConfirmBooking({
+    submitting,
+    slotsLoading: loadingSlots,
+    currentCriteriaKey,
+    loadedCriteriaKey,
+    selectedSlotUtc: activeSelectedSlotUtc,
+    slots: visibleSlots,
+  });
 
   const selectedService = services.find((s) => s.id === selectedServiceId) ?? null;
   const selectedStaff = staffList.find((s) => s.id === selectedStaffId) ?? null;
-  const selectedSlot = slots.find((s) => s.startUtc === selectedSlotUtc) ?? null;
+  const selectedSlot =
+    visibleSlots.find((s) => s.startUtc === activeSelectedSlotUtc && s.available) ?? null;
 
   async function handleConfirmBooking(e: FormEvent) {
     e.preventDefault();
-    if (!selectedServiceId || !selectedStaffId || !selectedSlotUtc) {
+    if (!isConfirmReady) {
       pushToast("error", "Please select a service, specialist, and an open time slot.");
       return;
     }
@@ -184,7 +339,7 @@ export function BookClient() {
         body: JSON.stringify({
           serviceId: selectedServiceId,
           staffId: selectedStaffId,
-          startUtc: selectedSlotUtc,
+          startUtc: activeSelectedSlotUtc,
           customerTimezone: timezone,
           customerName,
           customerEmail,
@@ -248,7 +403,7 @@ export function BookClient() {
           <select
             aria-label="Booking timezone selector"
             value={timezone}
-            onChange={(e) => setTimezone(e.target.value as SupportedTimezone)}
+            onChange={(e) => handleTimezoneChange(e.target.value as SupportedTimezone)}
             className="bg-transparent font-medium text-[#1c1917] focus:outline-none"
           >
             {SUPPORTED_TIMEZONES.map((tz) => (
@@ -364,7 +519,7 @@ export function BookClient() {
                     <button
                       key={svc.id}
                       type="button"
-                      onClick={() => setSelectedServiceId(svc.id)}
+                      onClick={() => handleServiceChange(svc.id)}
                       className={`rounded-2xl border p-4 text-left transition-all ${
                         selected
                           ? "border-[#2563eb] bg-blue-50/50 ring-1 ring-[#2563eb]"
@@ -412,7 +567,7 @@ export function BookClient() {
                     <button
                       key={member.id}
                       type="button"
-                      onClick={() => setSelectedStaffId(member.id)}
+                      onClick={() => handleStaffChange(member.id)}
                       className={`flex items-start gap-3 rounded-2xl border p-3.5 text-left transition-all ${
                         selected
                           ? "border-[#2563eb] bg-blue-50/50 ring-1 ring-[#2563eb]"
@@ -450,7 +605,7 @@ export function BookClient() {
                     type="date"
                     required
                     value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
+                    onChange={(e) => handleDateChange(e.target.value)}
                     className="w-full rounded-xl border border-stone-200 bg-[#fafaf9] px-3.5 py-2.5 text-sm text-[#1c1917] focus:border-[#2563eb] focus:bg-white focus:outline-none"
                   />
                 </div>
@@ -460,7 +615,7 @@ export function BookClient() {
                   </label>
                   <select
                     value={timezone}
-                    onChange={(e) => setTimezone(e.target.value as SupportedTimezone)}
+                    onChange={(e) => handleTimezoneChange(e.target.value as SupportedTimezone)}
                     className="w-full rounded-xl border border-stone-200 bg-[#fafaf9] px-3.5 py-2.5 text-sm text-[#1c1917] focus:border-[#2563eb] focus:bg-white focus:outline-none"
                   >
                     {SUPPORTED_TIMEZONES.map((tz) => (
@@ -486,17 +641,17 @@ export function BookClient() {
                 </div>
                 <span className="inline-flex items-center gap-1 text-xs text-stone-500">
                   <ShieldCheck className="h-3.5 w-3.5 text-[#2563eb]" />
-                  {slots.filter((s) => s.available).length} open / {slots.length} total
+                  {visibleSlots.filter((s) => s.available).length} open / {visibleSlots.length} total
                 </span>
               </div>
 
-              {loadingSlots ? (
+              {isSlotsRefreshing ? (
                 <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
                   {[1, 2, 3, 4, 5, 6].map((n) => (
                     <div key={n} className="h-11 animate-pulse rounded-xl bg-stone-100" />
                   ))}
                 </div>
-              ) : slots.length === 0 ? (
+              ) : visibleSlots.length === 0 ? (
                 <div className="rounded-xl border border-stone-200 bg-[#fafaf9] p-4 text-center text-xs text-stone-600">
                   No availability windows configured for{" "}
                   <strong>{selectedStaff?.name ?? "this specialist"}</strong> on {selectedDate}. Try
@@ -504,8 +659,8 @@ export function BookClient() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-                  {slots.map((slot) => {
-                    const isSelected = slot.startUtc === selectedSlotUtc && slot.available;
+                  {visibleSlots.map((slot) => {
+                    const isSelected = slot.startUtc === activeSelectedSlotUtc && slot.available;
                     return (
                       <button
                         key={slot.startUtc}
@@ -639,7 +794,7 @@ export function BookClient() {
               <div className="mt-5 flex justify-end">
                 <button
                   type="submit"
-                  disabled={submitting || !selectedSlotUtc}
+                  disabled={!isConfirmReady}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563eb] px-6 py-3 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                 >
                   <CalendarCheck2 className="h-4 w-4" />

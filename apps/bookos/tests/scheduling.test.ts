@@ -120,6 +120,81 @@ test("generateSlotsForDate computes open vs booked slots with buffers", () => {
   assert.equal(slots[2].available, true);
 });
 
+test("buffer-aware overlap blocks existing appointment buffers and candidate booking buffers symmetrically", () => {
+  // Existing 09:00-09:45 booking with 15m buffer -> effective blocked window 09:00-10:00
+  const existingStart = zonedWallTimeToUtc("2026-06-15", "09:00", "America/New_York");
+  const existingEnd = new Date(existingStart.getTime() + 45 * 60_000);
+  const existing = [
+    {
+      id: "bk-buffered",
+      startUtc: existingStart,
+      endUtc: existingEnd,
+      bufferMins: 15,
+      status: "confirmed",
+    },
+  ];
+
+  // Candidate 09:45-10:00 (0-buffer) falls inside existing 15m buffer -> MUST conflict
+  const slot0945Start = zonedWallTimeToUtc("2026-06-15", "09:45", "America/New_York");
+  const slot0945End = new Date(slot0945Start.getTime() + 15 * 60_000);
+  assert.equal(hasBookingOverlap(existing, slot0945Start, slot0945End, undefined, 0), true);
+
+  // Candidate 10:00-10:15 (0-buffer) starts right when buffer ends -> MUST be allowed
+  const slot1000Start = zonedWallTimeToUtc("2026-06-15", "10:00", "America/New_York");
+  const slot1000End = new Date(slot1000Start.getTime() + 15 * 60_000);
+  assert.equal(hasBookingOverlap(existing, slot1000Start, slot1000End, undefined, 0), false);
+
+  // generateSlotsForDate for a 15-min 0-buffer service excludes 09:45 from available slots and allows 10:00
+  const slots = generateSlotsForDate({
+    dateKey: "2026-06-15",
+    viewerTimezone: "America/New_York",
+    staffTimezone: "America/New_York",
+    durationMins: 15,
+    bufferMins: 0,
+    rules: [{ dayOfWeek: 1, startTime: "09:00", endTime: "10:30" }],
+    existingBookings: existing,
+  });
+  assert.equal(slots.find((s) => s.startUtc === slot0945Start.toISOString())?.available, false);
+  assert.equal(slots.find((s) => s.startUtc === slot1000Start.toISOString())?.available, true);
+
+  // New booking's OWN buffer (09:00-09:15 + 15m buffer => effective end 09:30) collides with 09:20 existing booking
+  const laterStart = zonedWallTimeToUtc("2026-06-15", "09:20", "America/New_York");
+  const laterEnd = new Date(laterStart.getTime() + 30 * 60_000);
+  const candidate0900Start = zonedWallTimeToUtc("2026-06-15", "09:00", "America/New_York");
+  const candidate0900End = new Date(candidate0900Start.getTime() + 15 * 60_000);
+  assert.equal(
+    hasBookingOverlap(
+      [{ id: "bk-later", startUtc: laterStart, endUtc: laterEnd, bufferMins: 0, status: "confirmed" }],
+      candidate0900Start,
+      candidate0900End,
+      undefined,
+      15,
+    ),
+    true,
+  );
+  // Same 09:00-09:15 + 15m buffer against an existing booking at 09:30 -> allowed
+  const nonCollidingStart = zonedWallTimeToUtc("2026-06-15", "09:30", "America/New_York");
+  const nonCollidingEnd = new Date(nonCollidingStart.getTime() + 30 * 60_000);
+  assert.equal(
+    hasBookingOverlap(
+      [
+        {
+          id: "bk-0930",
+          startUtc: nonCollidingStart,
+          endUtc: nonCollidingEnd,
+          bufferMins: 0,
+          status: "confirmed",
+        },
+      ],
+      candidate0900Start,
+      candidate0900End,
+      undefined,
+      15,
+    ),
+    false,
+  );
+});
+
 test("scrypt password hashing, locked password generation, and session secret checks", () => {
   const hash = hashPassword("BookDemo2026!");
   assert.equal(verifyPassword("BookDemo2026!", hash), true);

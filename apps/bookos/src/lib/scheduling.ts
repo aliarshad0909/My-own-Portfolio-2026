@@ -1,5 +1,5 @@
-import { and, eq, gt, lt, ne, sql } from "drizzle-orm";
-import { getDb, withDbTransaction } from "@/db";
+import { and, eq, lt, ne, sql } from "drizzle-orm";
+import { getDb, withDbTransaction, type AppDatabase } from "@/db";
 import {
   activityLogs,
   availabilityRules,
@@ -53,6 +53,7 @@ export type ExistingInterval = {
   id?: string;
   startUtc: Date;
   endUtc: Date;
+  bufferMins?: number;
   status: string;
 };
 
@@ -63,24 +64,33 @@ export type AvailabilityRuleInput = {
 };
 
 /**
- * Pure interval overlap check: returns true if two intervals intersect
- * (`existing.start < newEnd && existing.end > newStart`).
+ * Pure symmetric buffer-aware interval overlap check.
+ * Effective occupied window for every appointment is `[startUtc, endUtc + bufferMins * 60_000]`.
+ * Returns true if `[existingStart, existingEffectiveEnd]` intersects `[newStart, newEffectiveEnd]`.
  */
 export function hasBookingOverlap(
   existingBookings: ExistingInterval[],
   newStartUtc: Date,
   newEndUtc: Date,
   excludeBookingId?: string,
+  newBufferMins = 0,
 ): boolean {
+  const newStartMs = newStartUtc.getTime();
+  const newEffectiveEndMs = newEndUtc.getTime() + Math.max(0, newBufferMins) * 60_000;
+
   return existingBookings.some((b) => {
     if (b.status === "cancelled") return false;
     if (excludeBookingId && b.id === excludeBookingId) return false;
-    return b.startUtc < newEndUtc && b.endUtc > newStartUtc;
+    const existingStartMs = b.startUtc.getTime();
+    const existingEffectiveEndMs =
+      b.endUtc.getTime() + Math.max(0, b.bufferMins ?? 0) * 60_000;
+    return existingStartMs < newEffectiveEndMs && existingEffectiveEndMs > newStartMs;
   });
 }
 
 /**
- * Pure slot generator from weekly staff availability rules minus existing active bookings.
+ * Pure slot generator from weekly staff availability rules minus existing active bookings
+ * (enforcing both existing appointments' buffer windows and the candidate service's own buffer).
  */
 export function generateSlotsForDate(params: {
   dateKey: string; // YYYY-MM-DD in viewerTimezone
@@ -131,7 +141,13 @@ export function generateSlotsForDate(params: {
         if (seenStartMs.has(startUtc.getTime())) continue;
         seenStartMs.add(startUtc.getTime());
 
-        const conflict = hasBookingOverlap(existingBookings, startUtc, endUtc, excludeBookingId);
+        const conflict = hasBookingOverlap(
+          existingBookings,
+          startUtc,
+          endUtc,
+          excludeBookingId,
+          bufferMins,
+        );
 
         slots.push({
           startUtc: startUtc.toISOString(),
@@ -149,8 +165,8 @@ export function generateSlotsForDate(params: {
 }
 
 /**
- * Queries PostgreSQL availability_rules and active bookings for a staff/service/date
- * and computes live slots in the requested timezone.
+ * Queries PostgreSQL availability_rules and active bookings (joined with each booking's
+ * service bufferMins) for a staff/service/date and computes live slots in the requested timezone.
  */
 export async function computeAvailableSlots(params: {
   serviceId: string;
@@ -191,15 +207,17 @@ export async function computeAvailableSlots(params: {
         id: bookings.id,
         startUtc: bookings.startUtc,
         endUtc: bookings.endUtc,
+        bufferMins: services.bufferMins,
         status: bookings.status,
       })
       .from(bookings)
+      .innerJoin(services, eq(bookings.serviceId, services.id))
       .where(
         and(
           eq(bookings.staffId, staffMember.id),
           ne(bookings.status, "cancelled"),
           lt(bookings.startUtc, windowEnd),
-          gt(bookings.endUtc, windowStart),
+          sql`${bookings.endUtc} + make_interval(mins => ${services.bufferMins}) > ${windowStart.toISOString()}::timestamptz`,
         ),
       ),
   ]);
@@ -225,8 +243,47 @@ function isPgUniqueViolation(err: unknown): boolean {
 }
 
 /**
+ * Transactional buffer-aware conflict check against all non-cancelled bookings for a staff member.
+ * Enforces symmetric overlap:
+ *   existing.start_utc < (newEndUtc + newBufferMins)
+ *   AND (existing.end_utc + existingService.buffer_mins) > newStartUtc
+ */
+async function findConflictingBooking(
+  tx: AppDatabase,
+  params: {
+    staffId: string;
+    newStartUtc: Date;
+    newEndUtc: Date;
+    newBufferMins: number;
+    excludeBookingId?: string;
+  },
+) {
+  const newEffectiveEndUtc = new Date(
+    params.newEndUtc.getTime() + Math.max(0, params.newBufferMins) * 60_000,
+  );
+
+  const conditions = [
+    eq(bookings.staffId, params.staffId),
+    ne(bookings.status, "cancelled"),
+    lt(bookings.startUtc, newEffectiveEndUtc),
+    sql`${bookings.endUtc} + make_interval(mins => ${services.bufferMins}) > ${params.newStartUtc.toISOString()}::timestamptz`,
+  ];
+
+  if (params.excludeBookingId) {
+    conditions.push(ne(bookings.id, params.excludeBookingId));
+  }
+
+  return tx
+    .select({ id: bookings.id, bookingRef: bookings.bookingRef })
+    .from(bookings)
+    .innerJoin(services, eq(bookings.serviceId, services.id))
+    .where(and(...conditions))
+    .limit(1);
+}
+
+/**
  * Atomically creates a booking inside a PostgreSQL transaction with row-level staff locking,
- * strict overlap guard (`existing.start_utc < newEndUtc AND existing.end_utc > newStartUtc`),
+ * strict buffer-aware overlap guard (`existing.start_utc < newEffectiveEndUtc AND existingEffectiveEndUtc > newStartUtc`),
  * sandbox payment simulation, automated reminders, and activity log entry.
  */
 export async function createBookingAtomic(input: {
@@ -268,19 +325,13 @@ export async function createBookingAtomic(input: {
       const newStartUtc = input.startUtc;
       const newEndUtc = new Date(newStartUtc.getTime() + serviceRow.durationMins * 60_000);
 
-      // Atomic overlap check against ALL non-cancelled bookings for this staff member
-      const conflicting = await tx
-        .select({ id: bookings.id, bookingRef: bookings.bookingRef })
-        .from(bookings)
-        .where(
-          and(
-            eq(bookings.staffId, staffRow.id),
-            ne(bookings.status, "cancelled"),
-            lt(bookings.startUtc, newEndUtc),
-            gt(bookings.endUtc, newStartUtc),
-          ),
-        )
-        .limit(1);
+      // Atomic buffer-aware overlap check against ALL non-cancelled bookings for this staff member
+      const conflicting = await findConflictingBooking(tx, {
+        staffId: staffRow.id,
+        newStartUtc,
+        newEndUtc,
+        newBufferMins: serviceRow.bufferMins,
+      });
 
       if (conflicting.length > 0) {
         throw new SlotConflictError(DOUBLE_BOOKING_MESSAGE);
@@ -395,8 +446,10 @@ export async function createBookingAtomic(input: {
 }
 
 /**
- * Atomically reschedules an existing booking inside a PostgreSQL transaction,
- * enforcing the exact same overlap guard excluding the booking itself.
+ * Atomically reschedules an existing booking inside a PostgreSQL transaction.
+ * Consistent lock order: lock booking row (`FOR UPDATE`) FIRST to serialize with cancel/complete,
+ * validate non-terminal status, then lock target staff row (`FOR UPDATE`) and enforce the
+ * buffer-aware overlap guard excluding the booking itself.
  */
 export async function rescheduleBookingAtomic(input: {
   bookingId: string;
@@ -408,22 +461,27 @@ export async function rescheduleBookingAtomic(input: {
 }) {
   try {
     return await withDbTransaction(async (tx) => {
+      // Lock booking row FIRST before inspecting status so concurrent cancel/complete cannot race
       const [existing] = await tx
         .select()
         .from(bookings)
         .where(eq(bookings.id, input.bookingId))
+        .for("update")
         .limit(1);
 
       if (!existing) {
         throw new BookingValidationError("Booking not found.", 404);
       }
       if (existing.status === "cancelled") {
-        throw new BookingValidationError("Cancelled bookings cannot be rescheduled.", 400);
+        throw new BookingValidationError("Cancelled bookings cannot be rescheduled.", 409);
+      }
+      if (existing.status === "completed") {
+        throw new BookingValidationError("Completed bookings cannot be rescheduled.", 409);
       }
 
       const targetStaffId = input.newStaffId || existing.staffId;
 
-      // Lock target staff row to serialize concurrent mutations
+      // Lock target staff row (strict DAG: bookings -> staff) to serialize slot allocations
       const [staffRow] = await tx
         .select()
         .from(staff)
@@ -448,19 +506,13 @@ export async function rescheduleBookingAtomic(input: {
       const newStartUtc = input.newStartUtc;
       const newEndUtc = new Date(newStartUtc.getTime() + serviceRow.durationMins * 60_000);
 
-      const conflicting = await tx
-        .select({ id: bookings.id })
-        .from(bookings)
-        .where(
-          and(
-            eq(bookings.staffId, targetStaffId),
-            ne(bookings.id, existing.id),
-            ne(bookings.status, "cancelled"),
-            lt(bookings.startUtc, newEndUtc),
-            gt(bookings.endUtc, newStartUtc),
-          ),
-        )
-        .limit(1);
+      const conflicting = await findConflictingBooking(tx, {
+        staffId: targetStaffId,
+        newStartUtc,
+        newEndUtc,
+        newBufferMins: serviceRow.bufferMins,
+        excludeBookingId: existing.id,
+      });
 
       if (conflicting.length > 0) {
         throw new SlotConflictError(DOUBLE_BOOKING_MESSAGE);
@@ -479,8 +531,21 @@ export async function rescheduleBookingAtomic(input: {
           notes: input.notes !== undefined ? input.notes : existing.notes,
           updatedAt: sql`NOW()`,
         })
-        .where(eq(bookings.id, existing.id))
+        .where(
+          and(
+            eq(bookings.id, existing.id),
+            ne(bookings.status, "cancelled"),
+            ne(bookings.status, "completed"),
+          ),
+        )
         .returning();
+
+      if (!updated) {
+        throw new BookingValidationError(
+          "Booking status changed concurrently and can no longer be rescheduled.",
+          409,
+        );
+      }
 
       // Refresh scheduled reminders for the new time
       await tx.delete(reminders).where(
@@ -529,8 +594,8 @@ export async function rescheduleBookingAtomic(input: {
 }
 
 /**
- * Atomically cancels a booking, immediately releasing its time slot (so another booking
- * can take that exact instant) and setting sandbox_paid payments to refunded.
+ * Atomically cancels a booking, locking the booking row (`FOR UPDATE`) before inspecting status,
+ * immediately releasing its time slot and setting sandbox_paid payments to refunded.
  */
 export async function cancelBookingAtomic(input: {
   bookingId: string;
@@ -549,7 +614,10 @@ export async function cancelBookingAtomic(input: {
       throw new BookingValidationError("Booking not found.", 404);
     }
     if (existing.status === "cancelled") {
-      return existing;
+      throw new BookingValidationError("Booking is already cancelled.", 409);
+    }
+    if (existing.status === "completed") {
+      throw new BookingValidationError("Completed bookings cannot be cancelled.", 409);
     }
 
     const nextPaymentStatus =
@@ -567,8 +635,21 @@ export async function cancelBookingAtomic(input: {
         notes: noteSuffix,
         updatedAt: sql`NOW()`,
       })
-      .where(eq(bookings.id, existing.id))
+      .where(
+        and(
+          eq(bookings.id, existing.id),
+          ne(bookings.status, "cancelled"),
+          ne(bookings.status, "completed"),
+        ),
+      )
       .returning();
+
+    if (!updated) {
+      throw new BookingValidationError(
+        "Booking status changed concurrently and cannot be cancelled.",
+        409,
+      );
+    }
 
     // Remove pending reminders for the cancelled booking
     await tx
@@ -587,19 +668,27 @@ export async function cancelBookingAtomic(input: {
   });
 }
 
+/**
+ * Atomically marks a booking completed, locking the booking row (`FOR UPDATE`) before
+ * validating that it has not been concurrently cancelled or already completed.
+ */
 export async function completeBookingAtomic(input: { bookingId: string; actorName: string }) {
   return withDbTransaction(async (tx) => {
     const [existing] = await tx
       .select()
       .from(bookings)
       .where(eq(bookings.id, input.bookingId))
+      .for("update")
       .limit(1);
 
     if (!existing) {
       throw new BookingValidationError("Booking not found.", 404);
     }
     if (existing.status === "cancelled") {
-      throw new BookingValidationError("Cancelled bookings cannot be marked completed.", 400);
+      throw new BookingValidationError("Cancelled bookings cannot be marked completed.", 409);
+    }
+    if (existing.status === "completed") {
+      throw new BookingValidationError("Booking is already completed.", 409);
     }
 
     const [updated] = await tx
@@ -608,8 +697,21 @@ export async function completeBookingAtomic(input: { bookingId: string; actorNam
         status: "completed",
         updatedAt: sql`NOW()`,
       })
-      .where(eq(bookings.id, existing.id))
+      .where(
+        and(
+          eq(bookings.id, existing.id),
+          ne(bookings.status, "cancelled"),
+          ne(bookings.status, "completed"),
+        ),
+      )
       .returning();
+
+    if (!updated) {
+      throw new BookingValidationError(
+        "Booking status changed concurrently and cannot be marked completed.",
+        409,
+      );
+    }
 
     await tx.insert(activityLogs).values({
       actorName: input.actorName,
