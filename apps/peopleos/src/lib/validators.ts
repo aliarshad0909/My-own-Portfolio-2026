@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { validateLeaveDateWindow } from "@/lib/leave-dates";
 
 export const loginSchema = z.union([
   z.object({ demo: z.literal(true) }),
@@ -55,14 +56,40 @@ export const createAttendanceSchema = z.object({
   notes: z.string().trim().max(240).default(""),
 });
 
-export const createLeaveRequestSchema = z.object({
-  employeeId: z.string().uuid(),
-  leaveType: z.enum(["annual", "sick", "parental", "unpaid"]),
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  daysRequested: z.coerce.number().int().min(1).max(30),
-  reason: z.string().trim().min(3).max(300),
-});
+export const createLeaveRequestSchema = z
+  .object({
+    employeeId: z.string().uuid(),
+    leaveType: z.enum(["annual", "sick", "parental", "unpaid"]),
+    startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format."),
+    endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format."),
+    daysRequested: z.coerce.number().int().min(1).optional(),
+    reason: z.string().trim().min(3).max(300),
+  })
+  .superRefine((data, ctx) => {
+    const validation = validateLeaveDateWindow(
+      data.startDate,
+      data.endDate,
+      data.daysRequested,
+    );
+    if (!validation.ok) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["endDate"],
+        message: validation.error,
+      });
+    }
+  })
+  .transform((data) => {
+    const validation = validateLeaveDateWindow(
+      data.startDate,
+      data.endDate,
+      data.daysRequested,
+    );
+    return {
+      ...data,
+      daysRequested: validation.ok ? validation.days : (data.daysRequested ?? 0),
+    };
+  });
 
 export const reviewLeaveSchema = z.object({
   decision: z.enum(["approved", "rejected"]),

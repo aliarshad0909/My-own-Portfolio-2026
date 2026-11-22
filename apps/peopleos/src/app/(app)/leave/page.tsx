@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
+import { MAX_LEAVE_WINDOW_DAYS, validateLeaveDateWindow } from "@/lib/leave-dates";
 
 type EmployeeLite = {
   id: string;
@@ -52,13 +53,6 @@ function dateDaysFromNow(offset: number): string {
   const d = new Date();
   d.setUTCDate(d.getUTCDate() + offset);
   return d.toISOString().slice(0, 10);
-}
-
-function calcDaysInclusive(start: string, end: string): number {
-  const s = new Date(`${start}T00:00:00Z`).getTime();
-  const e = new Date(`${end}T00:00:00Z`).getTime();
-  if (Number.isNaN(s) || Number.isNaN(e) || e < s) return 1;
-  return Math.max(1, Math.min(30, Math.round((e - s) / 86_400_000) + 1));
 }
 
 export default function LeaveAndAttendancePage() {
@@ -147,9 +141,15 @@ export default function LeaveAndAttendancePage() {
 
   async function handleSubmitLeave(e: FormEvent) {
     e.preventDefault();
+    const validation = validateLeaveDateWindow(leaveForm.startDate, leaveForm.endDate);
+    if (!validation.ok) {
+      toast(validation.error, "error");
+      return;
+    }
+
     setSubmittingLeave(true);
     try {
-      const daysRequested = calcDaysInclusive(leaveForm.startDate, leaveForm.endDate);
+      const daysRequested = validation.days;
       const res = await fetch("/api/leave", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -220,7 +220,7 @@ export default function LeaveAndAttendancePage() {
   }
 
   const canApprove = viewerRole !== "employee";
-  const calculatedDays = calcDaysInclusive(leaveForm.startDate, leaveForm.endDate);
+  const dateValidation = validateLeaveDateWindow(leaveForm.startDate, leaveForm.endDate);
 
   return (
     <div className="space-y-6">
@@ -301,9 +301,24 @@ export default function LeaveAndAttendancePage() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-green-200 bg-green-50/70 px-3 py-2 text-[11px] font-medium text-[#15803d]">
-              Duration: <strong>{calculatedDays} calendar day(s)</strong> will be validated &amp; deducted upon approval.
-            </div>
+            {dateValidation.ok ? (
+              <div className="rounded-lg border border-green-200 bg-green-50/70 px-3 py-2 text-[11px] font-medium text-[#15803d]">
+                Duration: <strong>{dateValidation.days} calendar day(s)</strong> will be validated &amp; deducted upon approval.
+              </div>
+            ) : (
+              <div
+                role="alert"
+                className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[11px] font-medium text-red-700"
+              >
+                {dateValidation.days !== null && dateValidation.days > MAX_LEAVE_WINDOW_DAYS ? (
+                  <>
+                    Selected duration: <strong>{dateValidation.days} calendar days</strong>. {dateValidation.error}
+                  </>
+                ) : (
+                  dateValidation.error
+                )}
+              </div>
+            )}
 
             <div>
               <label className="block font-semibold text-slate-700">Reason</label>
@@ -319,8 +334,8 @@ export default function LeaveAndAttendancePage() {
 
             <button
               type="submit"
-              disabled={submittingLeave || !leaveForm.employeeId}
-              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#16a34a] px-4 py-2.5 text-xs font-semibold text-white hover:bg-[#15803d] disabled:opacity-50"
+              disabled={submittingLeave || !leaveForm.employeeId || !dateValidation.ok}
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#16a34a] px-4 py-2.5 text-xs font-semibold text-white hover:bg-[#15803d] disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Send className="h-3.5 w-3.5" />
               <span>{submittingLeave ? "Submitting…" : "Submit Leave Request"}</span>

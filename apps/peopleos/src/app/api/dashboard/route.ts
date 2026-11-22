@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, lte } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import {
@@ -11,6 +11,7 @@ import {
   leaveRequests,
   onboardingTasks,
 } from "@/db/schema";
+import { computeCurrentAttendanceAnalytics, todayIsoDateUtc } from "@/lib/analytics";
 import { requireApiUser } from "@/lib/auth";
 
 export async function GET() {
@@ -18,6 +19,7 @@ export async function GET() {
   if ("error" in auth) return auth.error;
 
   const db = await getDb();
+  const today = todayIsoDateUtc();
 
   const [
     deptRows,
@@ -51,7 +53,11 @@ export async function GET() {
       .orderBy(desc(leaveRequests.createdAt)),
     db.select().from(candidates),
     db.select().from(onboardingTasks),
-    db.select().from(attendanceLogs).orderBy(desc(attendanceLogs.logDate)),
+    db
+      .select()
+      .from(attendanceLogs)
+      .where(lte(attendanceLogs.logDate, today))
+      .orderBy(desc(attendanceLogs.logDate)),
     db.select().from(employeeDocuments),
     db.select().from(activityLogs).orderBy(desc(activityLogs.createdAt)).limit(8),
   ]);
@@ -67,15 +73,12 @@ export async function GET() {
   const onboardingCompletionPct =
     taskRows.length > 0 ? Math.round((completedTasks / taskRows.length) * 100) : 100;
 
-  // Attendance analytics (from latest logged date or all logs)
-  const latestDate = attRows[0]?.logDate ?? null;
-  const latestAttendance = latestDate ? attRows.filter((a) => a.logDate === latestDate) : [];
-  const presentOrRemote = latestAttendance.filter((a) => a.status === "present" || a.status === "remote").length;
-  const remoteCount = latestAttendance.filter((a) => a.status === "remote").length;
-  const attendanceRatePct =
-    latestAttendance.length > 0 ? Math.round((presentOrRemote / latestAttendance.length) * 100) : 0;
-  const remoteSharePct =
-    presentOrRemote > 0 ? Math.round((remoteCount / presentOrRemote) * 100) : 0;
+  // Attendance analytics (strictly from the latest logged date <= today; excludes future leave entries)
+  const attendanceAnalytics = computeCurrentAttendanceAnalytics(attRows, today);
+  const latestDate = attendanceAnalytics.latestAttendanceDate;
+  const attendanceRatePct = attendanceAnalytics.attendanceRatePct;
+  const remoteSharePct = attendanceAnalytics.remoteSharePct;
+  const totalAttendanceSamples = attendanceAnalytics.totalAttendanceSamples;
 
   // Leave utilization (assuming baseline annual allowance of 20d)
   const totalAllowance = empRows.length * 20;
@@ -118,7 +121,7 @@ export async function GET() {
       remoteSharePct,
       leaveUtilizationPct,
       documentCompliancePct: compliancePct,
-      totalAttendanceSamples: latestAttendance.length,
+      totalAttendanceSamples,
     },
     departmentBreakdown,
     pendingLeaveQueue: pendingLeaves.slice(0, 5),

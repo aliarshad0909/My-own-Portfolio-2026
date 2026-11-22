@@ -65,13 +65,6 @@ export async function POST(request: Request) {
     );
   }
 
-  if (parsed.data.endDate < parsed.data.startDate) {
-    return NextResponse.json(
-      { error: "End date must be on or after the start date." },
-      { status: 400 },
-    );
-  }
-
   if (
     auth.user.role === "employee" &&
     auth.user.employeeId &&
