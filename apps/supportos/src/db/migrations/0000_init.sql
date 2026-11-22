@@ -55,6 +55,8 @@ CREATE INDEX IF NOT EXISTS idx_tickets_status ON tickets(status);
 CREATE INDEX IF NOT EXISTS idx_tickets_priority ON tickets(priority);
 CREATE INDEX IF NOT EXISTS idx_tickets_sla_due_at ON tickets(sla_due_at);
 
+CREATE SEQUENCE IF NOT EXISTS supportos_ticket_seq START WITH 1001 INCREMENT BY 1;
+
 CREATE TABLE IF NOT EXISTS ticket_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   ticket_id UUID NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,

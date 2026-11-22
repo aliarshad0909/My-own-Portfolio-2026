@@ -148,3 +148,67 @@ test("full PostgreSQL ticket lifecycle: portal submit -> auto-categorize -> assi
   const removedPortalTicket = resetTickets.find((t) => t.id === created.ticket.id);
   assert.equal(removedPortalTicket, undefined);
 });
+
+test("concurrent ticket creation via PostgreSQL sequence produces strictly unique sequential SUP-XXXX numbers with zero collisions", async () => {
+  const db = await getDb();
+  await resetDemoWorkspace();
+
+  const existingTickets = await db.select({ ticketNumber: tickets.ticketNumber }).from(tickets);
+  const existingNumbers = new Set(existingTickets.map((t) => t.ticketNumber));
+
+  const batchSize = 14;
+  const results = await Promise.all(
+    Array.from({ length: batchSize }, (_, idx) =>
+      createTicketRecord(db, {
+        customerName: `Concurrent Customer ${idx + 1}`,
+        customerEmail: `concurrent-shared@acme-cloud.io`,
+        customerCompany: "Acme Concurrency Labs",
+        subject: `Concurrent submission #${idx + 1} webhook timeout`,
+        description: `Simultaneous portal ticket payload #${idx + 1} verifying atomic sequence allocation.`,
+        category: "technical",
+        priority: "medium",
+        actorName: "Concurrent Portal",
+        source: "portal",
+      }),
+    ),
+  );
+
+  assert.equal(results.length, batchSize);
+
+  const allocatedNumbers = results.map((r) => r.ticket.ticketNumber);
+  const uniqueNumbers = new Set(allocatedNumbers);
+  assert.equal(uniqueNumbers.size, batchSize, "All concurrent tickets must get unique numbers");
+
+  const numericValues = allocatedNumbers
+    .map((num) => {
+      assert.match(num, /^SUP-\d+$/);
+      assert.equal(existingNumbers.has(num), false, `Must not collide with seeded ${num}`);
+      return Number.parseInt(num.slice(4), 10);
+    })
+    .sort((a, b) => a - b);
+
+  // Verify strictly contiguous sequential integers (each +1 from the previous)
+  for (let i = 1; i < numericValues.length; i += 1) {
+    assert.equal(
+      numericValues[i],
+      numericValues[i - 1] + 1,
+      `Expected sequential ticket numbers, got ${numericValues.join(", ")}`,
+    );
+  }
+
+  // Verify resetDemoWorkspace keeps the sequence synchronized >= seeded max (1010)
+  await resetDemoWorkspace();
+  const postReset = await createTicketRecord(db, {
+    customerName: "Post Reset User",
+    customerEmail: "post-reset@acme-cloud.io",
+    customerCompany: "Acme Cloud Systems",
+    subject: "Post-reset sequence verification ticket",
+    description: "Verifies nextval continues cleanly above seeded SUP-1010 after demo reset.",
+    category: "technical",
+    priority: "low",
+    actorName: "Post Reset User",
+    source: "portal",
+  });
+  const postResetNum = Number.parseInt(postReset.ticket.ticketNumber.slice(4), 10);
+  assert.ok(postResetNum > 1010, `Expected ticket number > 1010, got ${postReset.ticket.ticketNumber}`);
+});

@@ -13,7 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import {
   CategoryBadge,
   PlanBadge,
@@ -31,6 +31,11 @@ import {
   TICKET_PRIORITIES,
   TICKET_STATUSES,
 } from "@/lib/constants";
+import {
+  canMutateSelectedTicket,
+  shouldApplyTicketDetailResponse,
+  shouldApplyTicketScopedResult,
+} from "@/lib/inbox-state";
 import type { AiDraftResult, SlaComputation } from "@/lib/support-engine";
 
 type CustomerSummary = {
@@ -94,6 +99,11 @@ export function InboxClient() {
   const [cannedList, setCannedList] = useState<CannedResponse[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(initialTicketParam);
   const [detail, setDetail] = useState<TicketDetailPayload | null>(null);
+  const [detailLoading, setDetailLoading] = useState<boolean>(Boolean(initialTicketParam));
+
+  const selectedIdRef = useRef<string | null>(initialTicketParam);
+  const requestSeqRef = useRef(0);
+  const detailAbortRef = useRef<AbortController | null>(null);
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -117,6 +127,20 @@ export function InboxClient() {
   const [newAgent, setNewAgent] = useState<string>(SUPPORT_AGENTS[0]);
   const [creating, setCreating] = useState(false);
 
+  const handleSelectTicket = useCallback((nextId: string | null) => {
+    if (nextId === selectedIdRef.current) return;
+    detailAbortRef.current?.abort();
+    detailAbortRef.current = null;
+    requestSeqRef.current += 1;
+    selectedIdRef.current = nextId;
+    setSelectedId(nextId);
+    setDetail(null);
+    setDetailLoading(Boolean(nextId));
+    setAiDraftMeta(null);
+    setCannedOpen(false);
+    setComposerBody("");
+  }, []);
+
   const fetchTickets = useCallback(async () => {
     const qs = new URLSearchParams();
     if (search.trim()) qs.set("search", search.trim());
@@ -127,11 +151,15 @@ export function InboxClient() {
     if (!res.ok) return;
     const data = (await res.json()) as { tickets: TicketListItem[] };
     setTickets(data.tickets);
-    setSelectedId((prev) => {
-      if (prev && data.tickets.some((t) => t.id === prev)) return prev;
-      return data.tickets[0]?.id ?? null;
-    });
-  }, [search, statusFilter, priorityFilter, categoryFilter]);
+    const currentSelected = selectedIdRef.current;
+    const nextSelected =
+      currentSelected && data.tickets.some((t) => t.id === currentSelected)
+        ? currentSelected
+        : (data.tickets[0]?.id ?? null);
+    if (nextSelected !== currentSelected) {
+      handleSelectTicket(nextSelected);
+    }
+  }, [search, statusFilter, priorityFilter, categoryFilter, handleSelectTicket]);
 
   const fetchAux = useCallback(async () => {
     const [custRes, cannedRes] = await Promise.all([
@@ -149,12 +177,50 @@ export function InboxClient() {
     }
   }, []);
 
-  const fetchTicketDetail = useCallback(async (id: string) => {
-    const res = await fetch(`/api/tickets/${id}`, { cache: "no-store" });
-    if (!res.ok) return;
-    const data = (await res.json()) as TicketDetailPayload;
-    setDetail(data);
-  }, []);
+  const fetchTicketDetail = useCallback(
+    async (id: string, options?: { preserveDetail?: boolean }) => {
+      detailAbortRef.current?.abort();
+      const controller = new AbortController();
+      detailAbortRef.current = controller;
+      const requestSeq = ++requestSeqRef.current;
+
+      if (!options?.preserveDetail) {
+        setDetail((prev) => (prev?.ticket.id === id ? prev : null));
+      }
+      setDetailLoading(true);
+
+      try {
+        const res = await fetch(`/api/tickets/${id}`, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as TicketDetailPayload;
+        if (
+          !shouldApplyTicketDetailResponse({
+            requestSeq,
+            latestRequestSeq: requestSeqRef.current,
+            requestedTicketId: id,
+            currentSelectedId: selectedIdRef.current,
+            responseTicketId: data.ticket?.id,
+            aborted: controller.signal.aborted,
+          })
+        ) {
+          return;
+        }
+        setDetail(data);
+      } catch (err) {
+        if ((err instanceof DOMException && err.name === "AbortError") || controller.signal.aborted) {
+          return;
+        }
+      } finally {
+        if (requestSeq === requestSeqRef.current && selectedIdRef.current === id) {
+          setDetailLoading(false);
+        }
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -171,19 +237,55 @@ export function InboxClient() {
   }, [fetchTickets]);
 
   useEffect(() => {
-    if (!selectedId) return;
+    selectedIdRef.current = selectedId;
+    if (!selectedId) {
+      detailAbortRef.current?.abort();
+      detailAbortRef.current = null;
+      requestSeqRef.current += 1;
+      const clearTimer = window.setTimeout(() => {
+        setDetail(null);
+        setDetailLoading(false);
+        setAiDraftMeta(null);
+      }, 0);
+      return () => window.clearTimeout(clearTimer);
+    }
+
     const timer = window.setTimeout(() => {
       void fetchTicketDetail(selectedId);
-      setAiDraftMeta(null);
     }, 0);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      detailAbortRef.current?.abort();
+    };
   }, [selectedId, fetchTicketDetail]);
 
+  const activeTicket =
+    detail && selectedId && detail.ticket.id === selectedId ? detail.ticket : null;
+  const canMutate = canMutateSelectedTicket({
+    selectedId,
+    displayedTicketId: activeTicket?.id,
+    detailLoading,
+  });
+  const metaDisabled = !canMutate || updatingMeta;
+  const composerDisabled = !canMutate || sending;
+  const aiDraftDisabled = !canMutate || generatingDraft;
+
   const handleMetaUpdate = async (patch: Record<string, string | null>) => {
-    if (!selectedId) return;
+    if (
+      !canMutateSelectedTicket({
+        selectedId,
+        displayedTicketId: detail?.ticket.id,
+        detailLoading,
+        busy: updatingMeta,
+      }) ||
+      !selectedId
+    ) {
+      return;
+    }
+    const targetTicketId = selectedId;
     setUpdatingMeta(true);
     try {
-      const res = await fetch(`/api/tickets/${selectedId}`, {
+      const res = await fetch(`/api/tickets/${targetTicketId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patch),
@@ -194,18 +296,45 @@ export function InboxClient() {
         return;
       }
       pushToast("Ticket updated.", "success");
-      await Promise.all([fetchTickets(), fetchTicketDetail(selectedId)]);
+      await fetchTickets();
+      if (
+        shouldApplyTicketScopedResult({
+          targetTicketId,
+          currentSelectedId: selectedIdRef.current,
+        })
+      ) {
+        await fetchTicketDetail(targetTicketId, { preserveDetail: true });
+      }
     } finally {
       setUpdatingMeta(false);
     }
   };
 
   const handleGenerateAiDraft = async () => {
-    if (!selectedId) return;
+    if (
+      !canMutateSelectedTicket({
+        selectedId,
+        displayedTicketId: detail?.ticket.id,
+        detailLoading,
+        busy: generatingDraft,
+      }) ||
+      !selectedId
+    ) {
+      return;
+    }
+    const targetTicketId = selectedId;
     setGeneratingDraft(true);
     try {
-      const res = await fetch(`/api/tickets/${selectedId}/ai-draft`, { method: "POST" });
+      const res = await fetch(`/api/tickets/${targetTicketId}/ai-draft`, { method: "POST" });
       const data = (await res.json().catch(() => ({}))) as AiDraftResult & { error?: string };
+      if (
+        !shouldApplyTicketScopedResult({
+          targetTicketId,
+          currentSelectedId: selectedIdRef.current,
+        })
+      ) {
+        return;
+      }
       if (!res.ok) {
         pushToast(data.error || "Unable to generate AI draft.", "error");
         return;
@@ -221,6 +350,7 @@ export function InboxClient() {
   };
 
   const handleInsertCanned = (item: CannedResponse) => {
+    if (!canMutate) return;
     setComposerBody((prev) => (prev.trim() ? `${prev.trim()}\n\n${item.body}` : item.body));
     setCannedOpen(false);
     pushToast(`Inserted macro ${item.shortcut}`, "info");
@@ -228,15 +358,28 @@ export function InboxClient() {
 
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    if (!selectedId || !composerBody.trim()) return;
+    if (
+      !canMutateSelectedTicket({
+        selectedId,
+        displayedTicketId: detail?.ticket.id,
+        detailLoading,
+        busy: sending,
+      }) ||
+      !selectedId ||
+      !composerBody.trim()
+    ) {
+      return;
+    }
+    const targetTicketId = selectedId;
+    const isInternal = composerMode === "internal";
     setSending(true);
     try {
-      const res = await fetch(`/api/tickets/${selectedId}/messages`, {
+      const res = await fetch(`/api/tickets/${targetTicketId}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           body: composerBody.trim(),
-          isInternalNote: composerMode === "internal",
+          isInternalNote: isInternal,
           authorRole: "agent",
         }),
       });
@@ -245,15 +388,30 @@ export function InboxClient() {
         pushToast(data.error || "Failed to post message.", "error");
         return;
       }
-      setComposerBody("");
-      setAiDraftMeta(null);
+      if (
+        shouldApplyTicketScopedResult({
+          targetTicketId,
+          currentSelectedId: selectedIdRef.current,
+        })
+      ) {
+        setComposerBody("");
+        setAiDraftMeta(null);
+      }
       pushToast(
-        composerMode === "internal"
+        isInternal
           ? "Internal agent note saved (hidden from customer)."
           : "Public reply sent to customer.",
         "success",
       );
-      await Promise.all([fetchTickets(), fetchTicketDetail(selectedId)]);
+      await fetchTickets();
+      if (
+        shouldApplyTicketScopedResult({
+          targetTicketId,
+          currentSelectedId: selectedIdRef.current,
+        })
+      ) {
+        await fetchTicketDetail(targetTicketId, { preserveDetail: true });
+      }
     } finally {
       setSending(false);
     }
@@ -292,14 +450,12 @@ export function InboxClient() {
       setNewPriority("medium");
       await fetchTickets();
       if (data.ticket?.id) {
-        setSelectedId(data.ticket.id);
+        handleSelectTicket(data.ticket.id);
       }
     } finally {
       setCreating(false);
     }
   };
-
-  const activeTicket = detail?.ticket ?? null;
 
   return (
     <div className="mx-auto max-w-[1440px] space-y-4">
@@ -395,7 +551,7 @@ export function InboxClient() {
                 <button
                   key={t.id}
                   type="button"
-                  onClick={() => setSelectedId(t.id)}
+                  onClick={() => handleSelectTicket(t.id)}
                   className={`w-full rounded-xl border p-3.5 text-left transition ${
                     isSelected
                       ? "border-[#2563eb] bg-blue-50/60 ring-1 ring-[#2563eb]/30"
@@ -435,7 +591,11 @@ export function InboxClient() {
           {!activeTicket ? (
             <div className="flex flex-1 flex-col items-center justify-center p-12 text-center text-slate-500">
               <MessageSquare className="h-10 w-10 text-slate-300" />
-              <p className="mt-3 text-sm font-medium">Select a ticket from the queue to inspect.</p>
+              <p className="mt-3 text-sm font-medium">
+                {selectedId && detailLoading
+                  ? "Loading ticket conversation…"
+                  : "Select a ticket from the queue to inspect."}
+              </p>
             </div>
           ) : (
             <>
@@ -466,7 +626,7 @@ export function InboxClient() {
                     {activeTicket.status !== "resolved" && activeTicket.status !== "closed" ? (
                       <button
                         type="button"
-                        disabled={updatingMeta}
+                        disabled={metaDisabled}
                         onClick={() => void handleMetaUpdate({ status: "resolved" })}
                         className="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
                       >
@@ -475,7 +635,7 @@ export function InboxClient() {
                     ) : (
                       <button
                         type="button"
-                        disabled={updatingMeta}
+                        disabled={metaDisabled}
                         onClick={() => void handleMetaUpdate({ status: "open" })}
                         className="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
                       >
@@ -492,9 +652,9 @@ export function InboxClient() {
                     <select
                       aria-label="Ticket status"
                       value={activeTicket.status}
-                      disabled={updatingMeta}
+                      disabled={metaDisabled}
                       onChange={(e) => void handleMetaUpdate({ status: e.target.value })}
-                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800"
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800 disabled:opacity-50"
                     >
                       {TICKET_STATUSES.map((s) => (
                         <option key={s} value={s}>
@@ -511,9 +671,9 @@ export function InboxClient() {
                     <select
                       aria-label="Ticket priority"
                       value={activeTicket.priority}
-                      disabled={updatingMeta}
+                      disabled={metaDisabled}
                       onChange={(e) => void handleMetaUpdate({ priority: e.target.value })}
-                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800"
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800 disabled:opacity-50"
                     >
                       {TICKET_PRIORITIES.map((p) => (
                         <option key={p} value={p}>
@@ -530,9 +690,9 @@ export function InboxClient() {
                     <select
                       aria-label="Ticket category"
                       value={activeTicket.category}
-                      disabled={updatingMeta}
+                      disabled={metaDisabled}
                       onChange={(e) => void handleMetaUpdate({ category: e.target.value })}
-                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800"
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800 disabled:opacity-50"
                     >
                       {TICKET_CATEGORIES.map((c) => (
                         <option key={c} value={c}>
@@ -550,13 +710,13 @@ export function InboxClient() {
                     <select
                       aria-label="Assigned agent"
                       value={activeTicket.assignedAgentName ?? ""}
-                      disabled={updatingMeta}
+                      disabled={metaDisabled}
                       onChange={(e) =>
                         void handleMetaUpdate({
                           assignedAgentName: e.target.value ? e.target.value : null,
                         })
                       }
-                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800"
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-800 disabled:opacity-50"
                     >
                       <option value="">Unassigned</option>
                       {SUPPORT_AGENTS.map((agent) => (
@@ -625,8 +785,9 @@ export function InboxClient() {
                   <div className="inline-flex rounded-xl border border-slate-200 bg-slate-100 p-0.5 text-xs font-semibold">
                     <button
                       type="button"
+                      disabled={composerDisabled}
                       onClick={() => setComposerMode("public")}
-                      className={`rounded-lg px-3 py-1.5 transition ${
+                      className={`rounded-lg px-3 py-1.5 transition disabled:opacity-50 ${
                         composerMode === "public"
                           ? "bg-[#2563eb] text-white shadow-xs"
                           : "text-slate-600 hover:text-slate-900"
@@ -636,8 +797,9 @@ export function InboxClient() {
                     </button>
                     <button
                       type="button"
+                      disabled={composerDisabled}
                       onClick={() => setComposerMode("internal")}
-                      className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 transition ${
+                      className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 transition disabled:opacity-50 ${
                         composerMode === "internal"
                           ? "bg-amber-500 text-white shadow-xs"
                           : "text-slate-600 hover:text-slate-900"
@@ -652,8 +814,9 @@ export function InboxClient() {
                   <div className="relative flex flex-wrap items-center gap-2">
                     <button
                       type="button"
+                      disabled={composerDisabled}
                       onClick={() => setCannedOpen((v) => !v)}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
                     >
                       <Zap className="h-3.5 w-3.5 text-amber-500" />
                       Insert Canned Response
@@ -662,7 +825,7 @@ export function InboxClient() {
                     <button
                       type="button"
                       onClick={() => void handleGenerateAiDraft()}
-                      disabled={generatingDraft}
+                      disabled={aiDraftDisabled}
                       className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-800 transition hover:bg-indigo-100 disabled:opacity-50"
                     >
                       <Sparkles className="h-3.5 w-3.5 text-[#2563eb]" />
@@ -743,13 +906,14 @@ export function InboxClient() {
                 <textarea
                   rows={4}
                   value={composerBody}
+                  disabled={composerDisabled}
                   onChange={(e) => setComposerBody(e.target.value)}
                   placeholder={
                     composerMode === "internal"
                       ? "Write an internal note visible only to SupportOS agents…"
                       : "Write a public reply to the customer…"
                   }
-                  className={`w-full rounded-xl border p-3 text-sm outline-none transition ${
+                  className={`w-full rounded-xl border p-3 text-sm outline-none transition disabled:opacity-50 ${
                     composerMode === "internal"
                       ? "border-amber-300 bg-amber-50/40 text-amber-950 focus:border-amber-500"
                       : "border-slate-200 bg-slate-50 text-slate-900 focus:border-[#2563eb] focus:bg-white"
@@ -764,7 +928,7 @@ export function InboxClient() {
                   </span>
                   <button
                     type="submit"
-                    disabled={sending || !composerBody.trim()}
+                    disabled={composerDisabled || !composerBody.trim()}
                     className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold text-white shadow-xs transition disabled:opacity-50 ${
                       composerMode === "internal"
                         ? "bg-amber-600 hover:bg-amber-700"

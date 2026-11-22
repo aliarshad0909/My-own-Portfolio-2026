@@ -12,6 +12,7 @@ import {
   autoCategorizeTicket,
   calculateSlaDueAt,
   computeSlaStatus,
+  computeSupportAnalytics,
   generateAiDraftSuggestion,
 } from "../src/lib/support-engine";
 
@@ -71,6 +72,114 @@ test("calculateSlaDueAt & computeSlaStatus enforce priority SLA policy windows",
     new Date("2026-11-20T15:00:00.000Z"),
   );
   assert.equal(met.state, "met");
+});
+
+test("computeSlaStatus evaluates first-response SLA independently of ticket closure", () => {
+  const created = new Date("2026-11-20T10:00:00.000Z");
+  const slaDueAt = calculateSlaDueAt("urgent", created); // 11:00:00Z
+  const wellPastDue = new Date("2026-11-20T16:30:00.000Z"); // 5.5h after slaDueAt
+
+  // 1. Agent replied before slaDueAt while ticket stays in_progress -> MUST remain "met"
+  const inProgressMet = computeSlaStatus(
+    {
+      status: "in_progress",
+      priority: "urgent",
+      slaDueAt,
+      firstRespondedAt: new Date("2026-11-20T10:25:00.000Z"),
+      resolvedAt: null,
+    },
+    wellPastDue,
+  );
+  assert.equal(inProgressMet.state, "met");
+  assert.equal(inProgressMet.label, "SLA Met");
+  assert.equal(inProgressMet.remainingMinutes, 0);
+
+  // 2. Agent replied right at slaDueAt while ticket is waiting_customer -> MUST remain "met"
+  const waitingMet = computeSlaStatus(
+    {
+      status: "waiting_customer",
+      priority: "urgent",
+      slaDueAt,
+      firstRespondedAt: new Date(slaDueAt.getTime()),
+      resolvedAt: null,
+    },
+    wellPastDue,
+  );
+  assert.equal(waitingMet.state, "met");
+
+  // 3. Active ticket with firstRespondedAt === null after slaDueAt -> MUST report "breached"
+  const unrespondedBreached = computeSlaStatus(
+    {
+      status: "open",
+      priority: "urgent",
+      slaDueAt,
+      firstRespondedAt: null,
+      resolvedAt: null,
+    },
+    wellPastDue,
+  );
+  assert.equal(unrespondedBreached.state, "breached");
+  assert.ok(unrespondedBreached.remainingMinutes < 0);
+
+  // 4. Active ticket whose firstRespondedAt > slaDueAt -> MUST report "breached"
+  const lateResponseBreached = computeSlaStatus(
+    {
+      status: "in_progress",
+      priority: "urgent",
+      slaDueAt,
+      firstRespondedAt: new Date("2026-11-20T11:20:00.000Z"),
+      resolvedAt: null,
+    },
+    wellPastDue,
+  );
+  assert.equal(lateResponseBreached.state, "breached");
+  assert.equal(lateResponseBreached.remainingMinutes, -20);
+
+  // 5. Analytics MUST NOT inflate breach count or lower agent compliance for responded active tickets
+  const analytics = computeSupportAnalytics({
+    now: wellPastDue,
+    messages: [],
+    kbArticles: [],
+    tickets: [
+      {
+        id: "t-in-progress-met",
+        ticketNumber: "SUP-2001",
+        customerId: "c-1",
+        subject: "Responded in time",
+        description: "desc",
+        category: "incident",
+        priority: "urgent",
+        status: "in_progress",
+        assignedAgentName: "Maya Lin (Lead Agent)",
+        slaDueAt,
+        firstRespondedAt: new Date("2026-11-20T10:25:00.000Z"),
+        resolvedAt: null,
+        createdAt: created,
+        updatedAt: created,
+      },
+      {
+        id: "t-waiting-met",
+        ticketNumber: "SUP-2002",
+        customerId: "c-1",
+        subject: "Waiting on customer after timely reply",
+        description: "desc",
+        category: "technical",
+        priority: "urgent",
+        status: "waiting_customer",
+        assignedAgentName: "Maya Lin (Lead Agent)",
+        slaDueAt,
+        firstRespondedAt: new Date("2026-11-20T10:40:00.000Z"),
+        resolvedAt: null,
+        createdAt: created,
+        updatedAt: created,
+      },
+    ],
+  });
+  assert.equal(analytics.kpis.slaBreachedCount, 0);
+  assert.equal(analytics.kpis.slaCompliancePct, 100);
+  const maya = analytics.agentPerformance.find((a) => a.agentName === "Maya Lin (Lead Agent)");
+  assert.ok(maya);
+  assert.equal(maya.slaCompliancePct, 100);
 });
 
 test("generateAiDraftSuggestion grounds draft in matching published KB articles and never auto-sends", () => {

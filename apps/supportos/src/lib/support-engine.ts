@@ -118,12 +118,30 @@ export function computeSlaStatus(
   const nowMs = now.getTime();
   const isClosed = ticket.status === "resolved" || ticket.status === "closed";
 
+  // First-response SLA is finalized once an agent sends a public reply, regardless of
+  // whether the ticket remains open, in_progress, waiting_customer, resolved, or closed.
+  if (ticket.firstRespondedAt) {
+    const respondedMs = new Date(ticket.firstRespondedAt).getTime();
+    if (respondedMs <= dueMs) {
+      return { state: "met", label: "SLA Met", remainingMinutes: 0 };
+    }
+    const overMins = Math.max(1, Math.round((respondedMs - dueMs) / 60_000));
+    if (isClosed) {
+      return {
+        state: "breached_resolved",
+        label: `Resolved ${formatDurationMinutes(overMins)} after SLA`,
+        remainingMinutes: -overMins,
+      };
+    }
+    return {
+      state: "breached",
+      label: `Responded ${formatDurationMinutes(overMins)} after SLA`,
+      remainingMinutes: -overMins,
+    };
+  }
+
   if (isClosed) {
-    const completedAt = ticket.firstRespondedAt
-      ? new Date(ticket.firstRespondedAt).getTime()
-      : ticket.resolvedAt
-        ? new Date(ticket.resolvedAt).getTime()
-        : nowMs;
+    const completedAt = ticket.resolvedAt ? new Date(ticket.resolvedAt).getTime() : nowMs;
     if (completedAt <= dueMs) {
       return { state: "met", label: "SLA Met", remainingMinutes: 0 };
     }
@@ -135,15 +153,16 @@ export function computeSlaStatus(
     };
   }
 
-  const diffMins = Math.round((dueMs - nowMs) / 60_000);
-  if (diffMins < 0) {
+  if (nowMs > dueMs) {
+    const overMins = Math.max(1, Math.round((nowMs - dueMs) / 60_000));
     return {
       state: "breached",
-      label: `Breached ${formatDurationMinutes(Math.abs(diffMins))} ago`,
-      remainingMinutes: diffMins,
+      label: `Breached ${formatDurationMinutes(overMins)} ago`,
+      remainingMinutes: -overMins,
     };
   }
 
+  const diffMins = Math.max(0, Math.round((dueMs - nowMs) / 60_000));
   const policyHours = SLA_POLICY_HOURS[(ticket.priority as TicketPriority) || "medium"]?.firstResponseHours ?? 12;
   const atRiskThresholdMins = Math.min(120, Math.max(30, policyHours * 60 * 0.35));
 

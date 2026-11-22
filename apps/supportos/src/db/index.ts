@@ -87,6 +87,23 @@ function getState(): DbState {
   return globalForDb.__supportosDb;
 }
 
+async function syncTicketNumberSequence(state: DbState): Promise<void> {
+  await state.execRaw(`
+    CREATE SEQUENCE IF NOT EXISTS supportos_ticket_seq START WITH 1001 INCREMENT BY 1;
+    SELECT setval(
+      'supportos_ticket_seq',
+      GREATEST(
+        COALESCE(
+          (SELECT MAX(SUBSTRING(UPPER(ticket_number) FROM '^SUP-([0-9]+)$')::bigint) FROM tickets),
+          1000
+        ),
+        (SELECT CASE WHEN is_called THEN last_value ELSE last_value - 1 END FROM supportos_ticket_seq)
+      ),
+      true
+    );
+  `);
+}
+
 /**
  * Returns the ready-to-query Drizzle PostgreSQL instance, ensuring migrations
  * and initial realistic demo data are loaded once per process.
@@ -115,6 +132,7 @@ export async function getDb(): Promise<AppDatabase> {
         } else if (existingCustomers.length === 0) {
           await seedDemoData(state.db, { skipUsers: true });
         }
+        await syncTicketNumberSequence(state);
         state.initialized = true;
       })();
     }
@@ -138,6 +156,7 @@ export async function resetDemoWorkspace(): Promise<void> {
     TRUNCATE TABLE activity_logs, ticket_messages, tickets, customers, canned_responses, kb_articles RESTART IDENTITY CASCADE;
   `);
   await seedDemoData(state.db, { skipUsers: true });
+  await syncTicketNumberSequence(state);
 }
 
 export async function closeDbForTests(): Promise<void> {

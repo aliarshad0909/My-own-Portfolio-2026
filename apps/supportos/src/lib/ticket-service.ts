@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import type { AppDatabase } from "@/db";
 import {
   activityLogs,
@@ -29,20 +29,23 @@ export async function logActivity(
   await db.insert(activityLogs).values(entry);
 }
 
-export async function generateNextTicketNumber(db: AppDatabase): Promise<string> {
-  const existing = await db.select({ ticketNumber: tickets.ticketNumber }).from(tickets);
-  let maxNum = 1000;
-  for (const row of existing) {
-    const match = /SUP-(\d+)/i.exec(row.ticketNumber);
-    if (match) {
-      const parsed = Number.parseInt(match[1], 10);
-      if (Number.isFinite(parsed) && parsed > maxNum) {
-        maxNum = parsed;
-      }
-    }
+/**
+ * Atomically allocates the next sequential SUP-XXXX ticket number from the
+ * PostgreSQL `supportos_ticket_seq` sequence so concurrent submissions never collide.
+ */
+export async function allocateTicketNumber(db: AppDatabase): Promise<string> {
+  const result = await db.execute<{ next_num: string | number }>(
+    sql`SELECT nextval('supportos_ticket_seq') AS next_num`,
+  );
+  const raw = result.rows[0]?.next_num;
+  const parsed = typeof raw === "number" ? raw : Number.parseInt(String(raw ?? ""), 10);
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    throw new Error("Failed to allocate next ticket number from supportos_ticket_seq.");
   }
-  return `SUP-${maxNum + 1}`;
+  return `SUP-${parsed}`;
 }
+
+export const generateNextTicketNumber = allocateTicketNumber;
 
 export async function createTicketRecord(
   db: AppDatabase,
@@ -79,8 +82,11 @@ export async function createTicketRecord(
           planTier: "growth",
           notes: "Created automatically via Customer Portal submission.",
         })
+        .onConflictDoNothing({ target: customers.email })
         .returning();
-      customerRecord = createdCustomer;
+      customerRecord =
+        createdCustomer ??
+        (await db.select().from(customers).where(eq(customers.email, normalizedEmail)).limit(1))[0];
     }
   }
 
@@ -96,7 +102,7 @@ export async function createTicketRecord(
   const priority: TicketPriority = input.priority ?? "medium";
   const now = new Date();
   const slaDueAt = calculateSlaDueAt(priority, now);
-  const ticketNumber = await generateNextTicketNumber(db);
+  const ticketNumber = await allocateTicketNumber(db);
 
   const [created] = await db
     .insert(tickets)
