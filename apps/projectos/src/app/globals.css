@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --bg-canvas: #f8f8fb;
+  --bg-sidebar: #18181b;
+  --bg-card: #ffffff;
+  --border-subtle: #e6e6ee;
+  --ink-primary: #18181b;
+  --ink-secondary: #52525b;
+  --ink-muted: #71717a;
+  --accent-violet: #7c3aed;
+  --accent-violet-soft: #8b5cf6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--bg-canvas);
+  color: var(--ink-primary);
+  overflow-x: hidden;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+
+  .print-main-shell {
+    display: block !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+  }
+
+  .print-report-overlay {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .print-report-modal {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .print-report-modal .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  .print-report-modal tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
