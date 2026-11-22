@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/db";
-import { accounts, auditLogs, invoiceItems, invoices } from "@/db/schema";
+import { accounts } from "@/db/schema";
 import { isFinanceWriter, requireApiUser } from "@/lib/auth";
-import { listEnrichedInvoices, toBaseUsdCents } from "@/lib/accounting";
+import { AccountingError, createInvoiceWithItems, listEnrichedInvoices } from "@/lib/accounting";
 import { checkRateLimit, clientKey, verifyCsrfOrigin } from "@/lib/security";
 import { invoiceCreateSchema } from "@/lib/validation";
 
@@ -32,56 +32,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid invoice data" }, { status: 400 });
   }
 
-  const data = parsed.data;
-  const subtotalCents = data.items.reduce((s, item) => s + item.quantity * item.unitPriceCents, 0);
-  const taxCents = Math.round(subtotalCents * (data.taxRatePct / 100));
-  const totalCents = subtotalCents + taxCents;
-  const baseTotalCents = toBaseUsdCents(totalCents, data.exchangeRate);
-  const prefix = data.direction === "receivable" ? "INV" : "BILL";
-  const invoiceNumber = `${prefix}-2026-${Math.floor(500 + Math.random() * 499)}`;
-
-  const db = await getDb();
-  const created = await db.transaction(async (tx) => {
-    const [inv] = await tx
-      .insert(invoices)
-      .values({
-        invoiceNumber,
-        direction: data.direction,
-        accountId: data.accountId,
-        status: "draft",
-        currency: data.currency.toUpperCase(),
-        exchangeRate: data.exchangeRate,
-        subtotalCents,
-        taxRatePct: data.taxRatePct,
-        taxCents,
-        totalCents,
-        baseTotalCents,
-        issueDate: data.issueDate,
-        dueDate: data.dueDate,
-        notes: data.notes,
-      })
-      .returning();
-
-    await tx.insert(invoiceItems).values(
-      data.items.map((item) => ({
-        invoiceId: inv.id,
-        description: item.description,
-        quantity: item.quantity,
-        unitPriceCents: item.unitPriceCents,
-        lineTotalCents: item.quantity * item.unitPriceCents,
-      })),
-    );
-
-    await tx.insert(auditLogs).values({
-      action: "INVOICE_CREATED",
-      entityType: "invoice",
-      entityId: inv.id,
-      summary: `Created ${data.direction} ${invoiceNumber} (${inv.currency} ${(totalCents / 100).toFixed(2)}).`,
-      actor: auth.user.name,
-    });
-
-    return inv;
-  });
-
-  return NextResponse.json({ invoice: created }, { status: 201 });
+  try {
+    const created = await createInvoiceWithItems(parsed.data, auth.user.name);
+    return NextResponse.json({ invoice: created }, { status: 201 });
+  } catch (err) {
+    const status = err instanceof AccountingError ? err.status : 400;
+    return NextResponse.json({ error: err instanceof Error ? err.message : "Could not create invoice" }, { status });
+  }
 }

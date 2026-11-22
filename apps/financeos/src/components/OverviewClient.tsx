@@ -8,6 +8,7 @@ import { formatMoney } from "@/lib/format";
 type OverviewData = {
   companyName: string;
   baseCurrency: string;
+  budgetMonth: string;
   kpis: {
     totalRevenueCents: number;
     totalCogsCents: number;
@@ -210,7 +211,10 @@ export function OverviewClient() {
 
         <section className="bg-white rounded-xl border border-slate-200 p-5 min-w-0">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Budget Utilization</h2>
+            <div>
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Budget Utilization</h2>
+              <p className="text-[11px] text-slate-500 tabular-nums">Monthly actuals ({data.budgetMonth})</p>
+            </div>
             <Link href="/budgets" className="text-xs font-semibold text-teal-700 hover:underline">
               Manage
             </Link>

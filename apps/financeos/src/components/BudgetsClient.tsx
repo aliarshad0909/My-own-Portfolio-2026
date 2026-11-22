@@ -7,6 +7,7 @@ type BudgetRow = {
   id: string;
   category: string;
   monthlyLimitCents: number;
+  actualMonth: string;
   actualCents: number;
   varianceCents: number;
   utilizationPct: number;
@@ -18,6 +19,7 @@ type RateRow = { code: string; name: string; rateToUsd: number; note: string };
 
 export function BudgetsClient() {
   const [budgets, setBudgets] = useState<BudgetRow[]>([]);
+  const [budgetMonth, setBudgetMonth] = useState<string>("");
   const [rates, setRates] = useState<RateRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("Software & SaaS Tools");
@@ -27,7 +29,8 @@ export function BudgetsClient() {
     try {
       const res = await fetch("/api/budgets");
       if (!res.ok) return;
-      const json = (await res.json()) as { budgets: BudgetRow[]; currencyRates: RateRow[] };
+      const json = (await res.json()) as { budgetMonth?: string; budgets: BudgetRow[]; currencyRates: RateRow[] };
+      setBudgetMonth(json.budgetMonth ?? "");
       setBudgets(json.budgets);
       setRates(json.currencyRates);
     } finally {
@@ -93,7 +96,12 @@ export function BudgetsClient() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <section className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
-            <h2 className="text-sm font-bold text-slate-900 uppercase">Category Budgets vs. Actual Spend</h2>
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-sm font-bold text-slate-900 uppercase">Category Budgets vs. Monthly Actual Spend</h2>
+              {budgetMonth ? (
+                <span className="text-xs font-semibold text-slate-500 tabular-nums">Window: {budgetMonth}</span>
+              ) : null}
+            </div>
             {budgets.map((b) => (
               <div key={b.id} className="space-y-1.5 border-b border-slate-100 pb-3 last:border-0">
                 <div className="flex items-center justify-between text-sm">
@@ -109,8 +117,10 @@ export function BudgetsClient() {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-slate-500 tabular-nums">
-                  <span>Actual: {formatMoney(b.actualCents)}</span>
-                  <span>Limit: {formatMoney(b.monthlyLimitCents)}</span>
+                  <span>
+                    Actual ({b.actualMonth}): {formatMoney(b.actualCents)}
+                  </span>
+                  <span>Monthly Limit: {formatMoney(b.monthlyLimitCents)}</span>
                 </div>
               </div>
             ))}

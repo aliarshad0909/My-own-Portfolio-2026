@@ -12,6 +12,7 @@ export async function GET() {
   if ("error" in auth) return auth.error;
   const overview = await getFinancialOverview();
   return NextResponse.json({
+    budgetMonth: overview.budgetMonth,
     budgets: overview.budgetStatus,
     currencyRates: overview.currencyRates,
   });

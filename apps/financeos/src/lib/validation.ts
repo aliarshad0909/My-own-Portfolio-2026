@@ -74,4 +74,12 @@ export const reconcileSchema = z.object({
   statementId: z.string().uuid(),
   transactionId: z.string().uuid().optional(),
   createLedgerCategory: z.string().trim().max(80).optional(),
+  exchangeRate: z
+    .preprocess((val) => {
+      if (val === undefined) return undefined;
+      if (typeof val === "number") return val;
+      if (typeof val === "string" && val.trim() !== "") return Number(val);
+      return Number.NaN;
+    }, z.number().finite("Exchange rate must be a valid positive number").positive("Exchange rate must be greater than zero").max(10000))
+    .optional(),
 });

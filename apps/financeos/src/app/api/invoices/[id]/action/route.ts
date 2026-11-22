@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isFinanceWriter, requireApiUser } from "@/lib/auth";
-import { updateInvoiceStatus } from "@/lib/accounting";
+import { AccountingError, updateInvoiceStatus } from "@/lib/accounting";
 import { checkRateLimit, clientKey, verifyCsrfOrigin } from "@/lib/security";
 import { invoiceActionSchema } from "@/lib/validation";
 
@@ -30,6 +30,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const updated = await updateInvoiceStatus(id, parsed.data.action, auth.user.name);
     return NextResponse.json({ invoice: updated });
   } catch (err) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : "Update failed" }, { status: 400 });
+    const status = err instanceof AccountingError ? err.status : 400;
+    return NextResponse.json({ error: err instanceof Error ? err.message : "Update failed" }, { status });
   }
 }

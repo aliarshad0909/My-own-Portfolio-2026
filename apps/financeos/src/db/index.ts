@@ -109,6 +109,8 @@ export async function resetDemoWorkspace(): Promise<void> {
       audit_logs, bank_statements, budgets, currency_rates,
       invoice_items, invoices, transactions, accounts
     RESTART IDENTITY CASCADE;
+    ALTER SEQUENCE financeos_ar_invoice_seq RESTART WITH 2000;
+    ALTER SEQUENCE financeos_ap_bill_seq RESTART WITH 2000;
   `);
   await seedFinanceDemo(state.db, { skipUsers: true });
 }

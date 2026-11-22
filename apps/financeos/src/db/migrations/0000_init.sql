@@ -112,3 +112,34 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   actor TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE SEQUENCE IF NOT EXISTS financeos_ar_invoice_seq START WITH 2000 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS financeos_ap_bill_seq START WITH 2000 INCREMENT BY 1;
+
+SELECT setval(
+  'financeos_ar_invoice_seq',
+  GREATEST(
+    COALESCE(
+      (SELECT MAX(substring(invoice_number FROM '^INV-\d{4}-(\d+)$')::bigint)
+       FROM invoices
+       WHERE invoice_number ~ '^INV-\d{4}-\d+$'),
+      1999
+    ),
+    (SELECT CASE WHEN is_called THEN last_value ELSE last_value - 1 END FROM financeos_ar_invoice_seq)
+  ),
+  true
+);
+
+SELECT setval(
+  'financeos_ap_bill_seq',
+  GREATEST(
+    COALESCE(
+      (SELECT MAX(substring(invoice_number FROM '^BILL-\d{4}-(\d+)$')::bigint)
+       FROM invoices
+       WHERE invoice_number ~ '^BILL-\d{4}-\d+$'),
+      1999
+    ),
+    (SELECT CASE WHEN is_called THEN last_value ELSE last_value - 1 END FROM financeos_ap_bill_seq)
+  ),
+  true
+);

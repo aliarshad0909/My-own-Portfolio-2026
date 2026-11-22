@@ -1,9 +1,15 @@
-import { desc, eq } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getDb } from "@/db";
-import { auditLogs, bankStatements, transactions } from "@/db/schema";
+import { bankStatements, currencyRates, transactions } from "@/db/schema";
 import { isFinanceWriter, requireApiUser } from "@/lib/auth";
-import { isInflow, logAudit, parseBankStatementCsv } from "@/lib/accounting";
+import {
+  AccountingError,
+  isInflow,
+  logAudit,
+  parseBankStatementCsv,
+  reconcileBankStatement,
+} from "@/lib/accounting";
 import { checkRateLimit, clientKey, verifyCsrfOrigin } from "@/lib/security";
 import { csvImportSchema, reconcileSchema } from "@/lib/validation";
 
@@ -12,22 +18,25 @@ export async function GET() {
   if ("error" in auth) return auth.error;
 
   const db = await getDb();
-  const [statements, allTx] = await Promise.all([
+  const [statements, allTx, allRates] = await Promise.all([
     db.select().from(bankStatements).orderBy(desc(bankStatements.statementDate), desc(bankStatements.importedAt)),
     db.select().from(transactions).orderBy(desc(transactions.occurredAt)),
+    db.select().from(currencyRates),
   ]);
 
   const enriched = statements.map((st) => {
     const absAmount = Math.abs(st.amountCents);
     const expectsInflow = st.amountCents > 0;
+    const stCurrency = (st.currency || "USD").toUpperCase();
     const suggestedMatch =
       st.status === "unmatched"
-        ? allTx.find(
-            (tx) =>
-              tx.reconciled === 0 &&
-              isInflow(tx.type) === expectsInflow &&
-              Math.abs(tx.baseAmountCents - absAmount) <= 100,
-          ) ?? null
+        ? allTx.find((tx) => {
+            if (tx.reconciled !== 0 || isInflow(tx.type) !== expectsInflow) return false;
+            if (stCurrency === "USD") {
+              return Math.abs(tx.baseAmountCents - absAmount) <= 100;
+            }
+            return (tx.currency || "USD").toUpperCase() === stCurrency && Math.abs(tx.amountCents - absAmount) <= 100;
+          }) ?? null
         : null;
 
     return {
@@ -40,6 +49,7 @@ export async function GET() {
   return NextResponse.json({
     statements: enriched,
     unreconciledTransactions: allTx.filter((t) => t.reconciled === 0),
+    currencyRates: allRates,
   });
 }
 
@@ -98,58 +108,17 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid reconciliation request" }, { status: 400 });
   }
 
-  const db = await getDb();
   try {
-    const result = await db.transaction(async (tx) => {
-      const [st] = await tx
-        .select()
-        .from(bankStatements)
-        .where(eq(bankStatements.id, parsed.data.statementId))
-        .limit(1);
-      if (!st) throw new Error("Bank statement line not found");
-
-      let txId = parsed.data.transactionId;
-      if (!txId) {
-        const [newTx] = await tx
-          .insert(transactions)
-          .values({
-            type: st.amountCents > 0 ? "income" : "expense",
-            category: parsed.data.createLedgerCategory || (st.amountCents > 0 ? "Miscellaneous Income" : "Bank Operating Expense"),
-            description: st.description,
-            reference: st.reference,
-            currency: st.currency,
-            exchangeRate: 1,
-            amountCents: Math.abs(st.amountCents),
-            baseAmountCents: Math.abs(st.amountCents),
-            status: "cleared",
-            reconciled: 1,
-            occurredAt: st.statementDate,
-            createdBy: auth.user.name,
-          })
-          .returning();
-        txId = newTx.id;
-      } else {
-        await tx.update(transactions).set({ reconciled: 1 }).where(eq(transactions.id, txId));
-      }
-
-      const [updated] = await tx
-        .update(bankStatements)
-        .set({ status: "reconciled", matchedTransactionId: txId })
-        .where(eq(bankStatements.id, st.id))
-        .returning();
-
-      await tx.insert(auditLogs).values({
-        action: "BANK_RECONCILED",
-        entityType: "bank_statement",
-        entityId: st.id,
-        summary: `Reconciled bank line "${st.description}" (${(st.amountCents / 100).toFixed(2)}) with ledger entry.`,
-        actor: auth.user.name,
-      });
-
-      return updated;
+    const result = await reconcileBankStatement({
+      statementId: parsed.data.statementId,
+      transactionId: parsed.data.transactionId,
+      createLedgerCategory: parsed.data.createLedgerCategory,
+      exchangeRate: parsed.data.exchangeRate,
+      actor: auth.user.name,
     });
-    return NextResponse.json({ statement: result });
+    return NextResponse.json({ statement: result.statement, transactionId: result.transactionId });
   } catch (err) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : "Reconciliation failed" }, { status: 400 });
+    const status = err instanceof AccountingError ? err.status : 400;
+    return NextResponse.json({ error: err instanceof Error ? err.message : "Reconciliation failed" }, { status });
   }
 }
