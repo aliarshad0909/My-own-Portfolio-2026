@@ -1,8 +1,10 @@
 # Unified Render Blueprint for Ali Arshad Personal Studio Live SaaS Ecosystem
-# Deploy all three free-tier commercial-compatible services from one Render Blueprint:
+# Deploy the portfolio foundation and nine additional studio products from one free Render Blueprint:
 #   1. pipelineos-crm        -> https://crm.aliarshad.co   (Node Web Service, Free)
 #   2. stockflow-ops         -> https://stock.aliarshad.co (Node Web Service, Free)
 #   3. stockflow-mobile-web  -> Interactive Expo Web preview (Static Site, Free, always-on)
+#   4–12. FinanceOS, FlowOS, SourceOS, Orexa, SupportOS, ProjectOS, InsightOS, PeopleOS, BookOS
+# New apps use free onrender.com URLs; custom subdomains are not attached to avoid added domain charges.
 #
 # Supply separate Neon Free PostgreSQL connection strings for DATABASE_URL on each web service.
 
@@ -62,3 +64,183 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
+
+  - type: web
+    name: financeos-erp
+    runtime: node
+    plan: free
+    rootDir: apps/financeos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FINANCEOS_DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://financeos-erp.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: flowos-automation
+    runtime: node
+    plan: free
+    rootDir: apps/flowos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FLOWOS_DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://flowos-automation.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: sourceos-procurement
+    runtime: node
+    plan: free
+    rootDir: apps/sourceos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SOURCEOS_DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://sourceos-procurement.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: orexa-learning-os
+    runtime: node
+    plan: free
+    rootDir: apps/orexa
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://orexa-learning-os.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: supportos-helpdesk
+    runtime: node
+    plan: free
+    rootDir: apps/supportos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://supportos-helpdesk.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: projectos-studio
+    runtime: node
+    plan: free
+    rootDir: apps/projectos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://projectos-studio.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: insightos-bi
+    runtime: node
+    plan: free
+    rootDir: apps/insightos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://insightos-bi.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: peopleos-hrm
+    runtime: node
+    plan: free
+    rootDir: apps/peopleos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://peopleos-hrm.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
+
+  - type: web
+    name: bookos-scheduling
+    runtime: node
+    plan: free
+    rootDir: apps/bookos
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://bookos-scheduling.onrender.com
+      - key: ALLOW_DEMO_RESET
+        value: "true"
