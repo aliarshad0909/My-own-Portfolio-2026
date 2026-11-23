@@ -4704,3 +4704,291 @@
   margin-top: 3px;
   accent-color: var(--coral);
 }
+
+
+/* ── Consultation-led RTX GPU Compute & Bidirectional Location Panels ─────── */
+.gpu-node3d {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  padding: 36px 16px 12px;
+}
+
+.gpu-node3d__stage {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  height: 215px;
+  transform-style: preserve-3d;
+  transition: transform 0.22s ease-out;
+}
+
+.gpu-node3d__layer {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 5px;
+  border: 1px solid var(--border);
+  background: #12151b;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38);
+  backface-visibility: hidden;
+}
+
+.gpu-node3d__layer--back,
+.gpu-node3d__layer--mid {
+  justify-content: flex-start;
+  padding: 10px 18px;
+}
+
+.gpu-node3d__layer--back {
+  transform: translate3d(-14px, -48px, -36px);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #0f1218;
+}
+
+.gpu-node3d__layer--mid {
+  transform: translate3d(-7px, -24px, -18px);
+  border-color: rgba(255, 122, 92, 0.28);
+  background: #131720;
+}
+
+.gpu-node3d__layer--front {
+  transform: translate3d(0, 0, 12px);
+  border-color: var(--coral-line);
+  background: linear-gradient(150deg, #241918 0%, #11141c 54%, #0e1117 100%);
+}
+
+.gpu-node3d__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--coral);
+  margin-bottom: auto;
+}
+
+.gpu-node3d__tag {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--coral);
+}
+
+.gpu-node3d__title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.gpu-node3d__sub {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.gpu-workload-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.gpu-workload-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gpu-spec-placeholder {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--coral-line);
+  background: rgba(255, 122, 92, 0.08);
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.location-detail__projects {
+  margin-top: 28px;
+  display: grid;
+  gap: 10px;
+}
+
+.location-fit-strip {
+  margin-top: 24px;
+}
+
+.location-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.location-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color var(--fast) ease, color var(--fast) ease, background var(--fast) ease;
+}
+
+.location-pill:hover,
+.location-pill:focus-visible {
+  border-color: var(--coral-line);
+  background: var(--coral-soft);
+  color: var(--coral);
+}
+
+.location-pill--metro {
+  border-color: rgba(255, 122, 92, 0.34);
+}
+
+.location-pill--all {
+  border-color: var(--coral-line);
+  color: var(--coral);
+}
+
+.location-pill--static {
+  color: var(--muted);
+  cursor: default;
+}
+
+.location-pill--static:hover {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--muted);
+}
+
+/* Preview-only TEST / SAMPLE CONTENT styling (never rendered in production) */
+.preview-samples {
+  margin-top: 28px;
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1.5px dashed rgba(255, 179, 71, 0.55);
+  background: rgba(255, 179, 71, 0.06);
+  display: grid;
+  gap: 16px;
+}
+
+.preview-samples__banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.preview-samples__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 179, 71, 0.2);
+  border: 1px solid rgba(255, 179, 71, 0.6);
+  color: #ffd18a;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.preview-samples__notice {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text);
+  max-width: 72ch;
+}
+
+.preview-samples__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.preview-samples__card {
+  padding: 18px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preview-samples__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview-samples__tag {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffd18a;
+  text-transform: uppercase;
+}
+
+.preview-samples__sector {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.preview-samples__text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.58;
+}
+
+.preview-samples__text strong {
+  color: var(--text);
+}
+
+.preview-samples__foot {
+  margin-top: auto;
+  padding-top: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+@media (max-width: 820px) {
+  .gpu-workload-grid,
+  .preview-samples__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .gpu-node3d__stage {
+    transform: none !important;
+    transition: none;
+  }
+
+  .gpu-node3d__layer--back {
+    transform: translate(-8px, -34px);
+  }
+
+  .gpu-node3d__layer--mid {
+    transform: translate(-4px, -17px);
+  }
+
+  .gpu-node3d__layer--front {
+    transform: none;
+  }
+}

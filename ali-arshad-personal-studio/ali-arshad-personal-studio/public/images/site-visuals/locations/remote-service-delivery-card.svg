@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-label="Remote US engagement architecture connecting discovery, written scope, staged delivery, and hand-off without local branch offices">
+  <defs>
+    <linearGradient id="locBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0d10"/>
+      <stop offset="100%" stop-color="#141822"/>
+    </linearGradient>
+    <linearGradient id="locCard" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#181d27"/>
+      <stop offset="100%" stop-color="#11151d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="620" rx="20" fill="url(#locBg)"/>
+  <g stroke="#ffffff" stroke-opacity="0.035" stroke-width="1">
+    <path d="M0 100 H1200 M0 200 H1200 M0 300 H1200 M0 400 H1200 M0 500 H1200"/>
+    <path d="M200 0 V620 M400 0 V620 M600 0 V620 M800 0 V620 M1000 0 V620"/>
+  </g>
+
+  <rect x="48" y="42" width="290" height="28" rx="14" fill="#ff7a5c" fill-opacity="0.14" stroke="#ff7a5c" stroke-opacity="0.38"/>
+  <text x="66" y="61" fill="#ff7a5c" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">REMOTE US STUDIO DELIVERY</text>
+
+  <text x="48" y="110" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700">One Accountable Studio Across Every US Time Zone</text>
+  <text x="48" y="138" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="15">Structured async delivery plus scheduled live overlap — no implied regional office or local branch staff.</text>
+
+  <!-- Left column: Timezone alignment -->
+  <g transform="translate(48, 178)">
+    <rect width="340" height="390" rx="16" fill="url(#locCard)" stroke="#272f3f"/>
+    <text x="24" y="38" fill="#ff7a5c" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">SCHEDULED CALL OVERLAP</text>
+    <text x="24" y="64" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700">US Working Hours</text>
+
+    <g transform="translate(24, 92)">
+      <rect width="292" height="56" rx="10" fill="#121620" stroke="#2c3547"/>
+      <circle cx="22" cy="28" r="5" fill="#ff7a5c"/>
+      <text x="38" y="25" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Eastern &amp; Central (ET / CT)</text>
+      <text x="38" y="43" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="12">Morning &amp; midday discovery + milestone reviews</text>
+    </g>
+    <g transform="translate(24, 162)">
+      <rect width="292" height="56" rx="10" fill="#121620" stroke="#2c3547"/>
+      <circle cx="22" cy="28" r="5" fill="#ff7a5c" fill-opacity="0.8"/>
+      <text x="38" y="25" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Mountain &amp; Pacific (MT / PT)</text>
+      <text x="38" y="43" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="12">Morning sync calls + async staging hand-offs</text>
+    </g>
+    <g transform="translate(24, 232)">
+      <rect width="292" height="56" rx="10" fill="#121620" stroke="#2c3547"/>
+      <circle cx="22" cy="28" r="5" fill="#ff7a5c" fill-opacity="0.6"/>
+      <text x="38" y="25" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600">Alaska &amp; Hawaii (AKT / HST)</text>
+      <text x="38" y="43" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="12">Async specs, preview URLs &amp; scheduled windows</text>
+    </g>
+    <text x="24" y="340" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="12.5">Written decisions prevent timezone lag:</text>
+    <text x="24" y="360" fill="#d7dce4" font-family="system-ui, -apple-system, sans-serif" font-size="12.5">every milestone ships with a reviewable link.</text>
+  </g>
+
+  <!-- Right area: Delivery lifecycle -->
+  <g transform="translate(418, 178)">
+    <rect width="734" height="390" rx="16" fill="url(#locCard)" stroke="#272f3f"/>
+    <text x="28" y="38" fill="#ff7a5c" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" letter-spacing="1.2">ENGAGEMENT LIFECYCLE</text>
+    <text x="28" y="64" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700">From Problem Statement to Owned Production Delivery</text>
+
+    <g transform="translate(28, 92)">
+      <rect width="326" height="122" rx="12" fill="#121620" stroke="#2a3345"/>
+      <text x="18" y="30" fill="#ff7a5c" font-family="monospace" font-size="12" font-weight="700">01 · DISCOVERY &amp; SCOPE</text>
+      <text x="18" y="56" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600">Plain-Language Written Spec</text>
+      <text x="18" y="80" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Goals, boundaries, milestones and</text>
+      <text x="18" y="99" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">individual quote agreed before build.</text>
+    </g>
+
+    <g transform="translate(380, 92)">
+      <rect width="326" height="122" rx="12" fill="#121620" stroke="#2a3345"/>
+      <text x="18" y="30" fill="#ff7a5c" font-family="monospace" font-size="12" font-weight="700">02 · STAGED BUILD</text>
+      <text x="18" y="56" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600">Visible Preview Checkpoints</text>
+      <text x="18" y="80" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Working code, automated checks,</text>
+      <text x="18" y="99" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">and walkthroughs reviewed early.</text>
+    </g>
+
+    <g transform="translate(28, 236)">
+      <rect width="326" height="122" rx="12" fill="#121620" stroke="#2a3345"/>
+      <text x="18" y="30" fill="#ff7a5c" font-family="monospace" font-size="12" font-weight="700">03 · CONNECTED STACK</text>
+      <text x="18" y="56" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600">Apps, Automation &amp; Creative</text>
+      <text x="18" y="80" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Next.js, PostgreSQL, n8n, AI agents,</text>
+      <text x="18" y="99" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">dashboards, creative or RTX compute.</text>
+    </g>
+
+    <g transform="translate(380, 236)">
+      <rect width="326" height="122" rx="12" fill="#ff7a5c" fill-opacity="0.09" stroke="#ff7a5c" stroke-opacity="0.45"/>
+      <text x="18" y="30" fill="#ff7a5c" font-family="monospace" font-size="12" font-weight="700">04 · FULL HAND-OFF</text>
+      <text x="18" y="56" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600">Client-Owned Code &amp; Docs</text>
+      <text x="18" y="80" fill="#d7dce4" font-family="system-ui, -apple-system, sans-serif" font-size="13">Repositories, workflows and accounts</text>
+      <text x="18" y="99" fill="#d7dce4" font-family="system-ui, -apple-system, sans-serif" font-size="13">live cleanly under your ownership.</text>
+    </g>
+  </g>
+</svg>

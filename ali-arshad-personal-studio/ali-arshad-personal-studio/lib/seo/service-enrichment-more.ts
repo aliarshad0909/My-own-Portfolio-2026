@@ -617,6 +617,12 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
         description: "Custom React and Next.js interfaces that embed agents natively in your product.",
         href: "/services/web-development",
       },
+      {
+        kind: "Service",
+        title: "RTX GPU Compute Rental",
+        description: "Consultation-led RTX server access for AI inference tests, evaluation sweeps, and model experiments.",
+        href: "/services/gpu-compute",
+      },
     ],
     cta: {
       eyebrow: "Scope a grounded agent",

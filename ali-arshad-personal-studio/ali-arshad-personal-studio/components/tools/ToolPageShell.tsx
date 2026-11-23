@@ -92,6 +92,11 @@ export function ToolPageShell({ tool, children }: { tool: ToolDef; children: Rea
               <li>
                 <ArrowLink href={tool.relatedResource}>Read the background guide</ArrowLink>
               </li>
+              {tool.secondaryService ? (
+                <li>
+                  <ArrowLink href={tool.secondaryService.href}>{tool.secondaryService.label}</ArrowLink>
+                </li>
+              ) : null}
             </ul>
 
             <p className="label label--spaced">More calculators</p>

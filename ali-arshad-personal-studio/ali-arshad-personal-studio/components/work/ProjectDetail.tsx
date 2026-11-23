@@ -12,10 +12,15 @@ import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/p
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
 import { servicesForProject } from "@/lib/services";
+import { GPU_COMPUTE_PATH, GPU_RELATED_PROJECT_SLUGS } from "@/lib/gpu-compute";
 
 /** Dedicated published service hubs evidenced by a given project slug. */
 function hubsForProject(slug: string) {
   return SERVICE_HUBS.filter((h) => isIndexable(h.publicationState) && h.projectSlugs.includes(slug));
+}
+
+function isGpuRelatedProject(slug: string): boolean {
+  return (GPU_RELATED_PROJECT_SLUGS as readonly string[]).includes(slug);
 }
 
 type Props = { project: Project; variant: "project" | "case-study" };
@@ -44,6 +49,7 @@ export function ProjectDetail({ project, variant }: Props) {
   const statusNote = STATUS_NOTE[project.status];
   const services = servicesForProject(project.slug);
   const hubs = hubsForProject(project.slug);
+  const gpuRelated = isGpuRelatedProject(project.slug);
   const { prev, next } = isCaseStudy ? neighbours(project.slug) : { prev: undefined, next: undefined };
 
   return (
@@ -139,9 +145,15 @@ export function ProjectDetail({ project, variant }: Props) {
                           <Link href={`/services/${h.slug}`}>{h.h1}</Link>
                         </span>
                       ))}
+                      {gpuRelated ? (
+                        <>
+                          {", "}
+                          <Link href={GPU_COMPUTE_PATH}>RTX GPU compute rental</Link>
+                        </>
+                      ) : null}
                     </dd>
                   </div>
-                ) : services.length > 0 ? (
+                ) : services.length > 0 || gpuRelated ? (
                   <div>
                     <dt>Service</dt>
                     <dd>
@@ -151,6 +163,12 @@ export function ProjectDetail({ project, variant }: Props) {
                           <Link href={`/services#${s.id}`}>{s.title}</Link>
                         </span>
                       ))}
+                      {gpuRelated ? (
+                        <>
+                          {services.length > 0 ? ", " : ""}
+                          <Link href={GPU_COMPUTE_PATH}>RTX GPU compute rental</Link>
+                        </>
+                      ) : null}
                     </dd>
                   </div>
                 ) : null}

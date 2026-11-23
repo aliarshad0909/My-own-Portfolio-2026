@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="Consultation-led RTX GPU compute workflow from workload submission through technical fit meeting, capacity check, and custom hourly quote">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0d10"/>
+      <stop offset="100%" stop-color="#131720"/>
+    </linearGradient>
+    <linearGradient id="coralGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff7a5c" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#ff7a5c" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#171b24"/>
+      <stop offset="100%" stop-color="#11141b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="720" rx="20" fill="url(#bg)"/>
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 120 H1200 M0 240 H1200 M0 360 H1200 M0 480 H1200 M0 600 H1200"/>
+    <path d="M150 0 V720 M300 0 V720 M450 0 V720 M600 0 V720 M750 0 V720 M900 0 V720 M1050 0 V720"/>
+  </g>
+
+  <!-- Header -->
+  <rect x="48" y="42" width="320" height="30" rx="15" fill="#ff7a5c" fill-opacity="0.14" stroke="#ff7a5c" stroke-opacity="0.4"/>
+  <text x="68" y="62" fill="#ff7a5c" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="1.4">CONSULTATION-LED RTX COMPUTE</text>
+  <text x="48" y="114" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="30" font-weight="700">Workload-First GPU Allocation Process</text>
+  <text x="48" y="144" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="16">Scoped directly with Ali before quoting — not a self-serve cloud console. Specs &amp; capacity confirmed per run.</text>
+
+  <!-- Step connector line -->
+  <line x1="175" y1="268" x2="1025" y2="268" stroke="#ff7a5c" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="6 6"/>
+
+  <!-- Step 01 -->
+  <g transform="translate(48, 186)">
+    <rect width="254" height="176" rx="14" fill="url(#cardGrad)" stroke="#2a3140" stroke-width="1.2"/>
+    <rect x="20" y="20" width="44" height="24" rx="12" fill="#ff7a5c" fill-opacity="0.18"/>
+    <text x="33" y="36" fill="#ff7a5c" font-family="monospace" font-size="12" font-weight="700">01</text>
+    <text x="20" y="74" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700">Submit Workload</text>
+    <text x="20" y="100" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Share framework, VRAM need,</text>
+    <text x="20" y="120" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">dataset size, target runtime,</text>
+    <text x="20" y="140" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">and privacy expectations.</text>
+  </g>
+
+  <!-- Step 02 -->
+  <g transform="translate(332, 186)">
+    <rect width="254" height="176" rx="14" fill="url(#cardGrad)" stroke="#2a3140" stroke-width="1.2"/>
+    <rect x="20" y="20" width="44" height="24" rx="12" fill="#ff7a5c" fill-opacity="0.18"/>
+    <text x="33" y="36" fill="#ff7a5c" font-family="monospace" font-size="12" font-weight="700">02</text>
+    <text x="20" y="74" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700">Fit Discussion</text>
+    <text x="20" y="100" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Short technical call with Ali</text>
+    <text x="20" y="120" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">to review stack, container or</text>
+    <text x="20" y="140" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">CLI needs, and bottlenecks.</text>
+  </g>
+
+  <!-- Step 03 -->
+  <g transform="translate(616, 186)">
+    <rect width="254" height="176" rx="14" fill="url(#cardGrad)" stroke="#2a3140" stroke-width="1.2"/>
+    <rect x="20" y="20" width="44" height="24" rx="12" fill="#ff7a5c" fill-opacity="0.18"/>
+    <text x="33" y="36" fill="#ff7a5c" font-family="monospace" font-size="12" font-weight="700">03</text>
+    <text x="20" y="74" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700">Capacity Check</text>
+    <text x="20" y="100" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Verify actual RTX hardware</text>
+    <text x="20" y="120" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">headroom, schedule window,</text>
+    <text x="20" y="140" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">and isolation requirements.</text>
+  </g>
+
+  <!-- Step 04 -->
+  <g transform="translate(900, 186)">
+    <rect width="252" height="176" rx="14" fill="url(#coralGlow)" stroke="#ff7a5c" stroke-opacity="0.55" stroke-width="1.4"/>
+    <rect x="20" y="20" width="44" height="24" rx="12" fill="#ff7a5c"/>
+    <text x="33" y="36" fill="#0b0d10" font-family="monospace" font-size="12" font-weight="700">04</text>
+    <text x="20" y="74" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700">Custom Hourly Quote</text>
+    <text x="20" y="100" fill="#d7dce4" font-family="system-ui, -apple-system, sans-serif" font-size="13">Written hourly rate, agreed</text>
+    <text x="20" y="120" fill="#d7dce4" font-family="system-ui, -apple-system, sans-serif" font-size="13">compute slot, access setup,</text>
+    <text x="20" y="140" fill="#d7dce4" font-family="system-ui, -apple-system, sans-serif" font-size="13">and clean teardown after run.</text>
+  </g>
+
+  <!-- Workload tracks panel -->
+  <g transform="translate(48, 404)">
+    <rect width="1104" height="266" rx="16" fill="#11141c" stroke="#252c3a" stroke-width="1.2"/>
+    <text x="28" y="40" fill="#ff7a5c" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">WORKLOAD CATEGORIES EVALUATED DURING CONSULTATION</text>
+    <text x="28" y="64" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="14">Suitability depends on confirmed RTX VRAM, storage, and scheduling availability — verified before any booking.</text>
+
+    <!-- 4 workload boxes -->
+    <g transform="translate(28, 90)">
+      <rect width="246" height="146" rx="12" fill="#171c26" stroke="#293142"/>
+      <circle cx="24" cy="28" r="5" fill="#ff7a5c"/>
+      <text x="38" y="33" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700">AI Inference</text>
+      <text x="20" y="64" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Batch inference, open-weight</text>
+      <text x="20" y="84" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">model serving tests, RAG</text>
+      <text x="20" y="104" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">embedding &amp; latency runs.</text>
+    </g>
+
+    <g transform="translate(296, 90)">
+      <rect width="246" height="146" rx="12" fill="#171c26" stroke="#293142"/>
+      <circle cx="24" cy="28" r="5" fill="#ff7a5c"/>
+      <text x="38" y="33" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700">Model Testing</text>
+      <text x="20" y="64" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Prompt/eval benchmarks,</text>
+      <text x="20" y="84" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">adapter experiments, and</text>
+      <text x="20" y="104" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">scoped prototype runs.</text>
+    </g>
+
+    <g transform="translate(564, 90)">
+      <rect width="246" height="146" rx="12" fill="#171c26" stroke="#293142"/>
+      <circle cx="24" cy="28" r="5" fill="#ff7a5c"/>
+      <text x="38" y="33" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700">3D GPU Rendering</text>
+      <text x="20" y="64" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Blender Cycles stills,</text>
+      <text x="20" y="84" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">product turntables, and</text>
+      <text x="20" y="104" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">scripted multi-angle passes.</text>
+    </g>
+
+    <g transform="translate(832, 90)">
+      <rect width="244" height="146" rx="12" fill="#171c26" stroke="#293142"/>
+      <circle cx="24" cy="28" r="5" fill="#ff7a5c"/>
+      <text x="38" y="33" fill="#f3f5f8" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700">Batch Media &amp; Compute</text>
+      <text x="20" y="64" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">Video transcode queues,</text>
+      <text x="20" y="84" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">frame pipelines, and custom</text>
+      <text x="20" y="104" fill="#9ba3b0" font-family="system-ui, -apple-system, sans-serif" font-size="13">CUDA workloads within spec.</text>
+    </g>
+  </g>
+</svg>

@@ -8,7 +8,11 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { isDeliveryConfigured } from "@/lib/inquiry-server";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES } from "@/lib/services";
+import { GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
 import { SITE, activeSocials } from "@/lib/site";
+
+// Evaluate delivery env vars per request so Vercel env updates take effect immediately.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact: Start a Project",
@@ -84,7 +88,8 @@ export default function ContactPage() {
                 <Icon name="layers" size={20} />
                 <span>
                   <small>Services</small>
-                  <Link href="/services">{SERVICES.length} areas, from creative production to automation</Link>
+                  <Link href="/services">{SERVICES.length} studio areas</Link>{" "}
+                  + <Link href={GPU_COMPUTE_PATH}>RTX GPU compute consultation</Link>
                 </span>
               </li>
             </ul>
