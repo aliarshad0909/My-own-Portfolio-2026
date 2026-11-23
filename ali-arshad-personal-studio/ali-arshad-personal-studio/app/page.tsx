@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { CredentialsPreview } from "@/components/sections/CredentialsPreview";
 import { FeaturedWork } from "@/components/sections/FeaturedWork";
 import { FreelanceConnect } from "@/components/sections/FreelanceConnect";
 import { Hero } from "@/components/sections/Hero";
 import { LiveProductDemos } from "@/components/sections/LiveProductDemos";
 import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
 import { StudioNetworkIntro } from "@/components/sections/StudioNetworkIntro";
-import { WhyWorkWithMe } from "@/components/sections/WhyWorkWithMe";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { personSchema, webSiteSchema } from "@/lib/structured-data";
@@ -26,13 +26,13 @@ export default function HomePage() {
       <JsonLd data={webSiteSchema()} />
       {/* Focused client conversion flow:
           1. Hero → 2. Core Services → 3. Live Product Demonstrations (PipelineOS & StockFlow) →
-          4. Selected Work (4 projects) → 5. Why Work With Me → 6. Studio Network Intro →
+          4. Selected Work → 5. Credentials → 6. Studio Network Intro →
           7. Direct / Upwork Connect → 8. Final Contact CTA. */}
       <Hero />
       <ServiceShowcaseHome />
       <LiveProductDemos />
       <FeaturedWork />
-      <WhyWorkWithMe />
+      <CredentialsPreview />
       <StudioNetworkIntro />
       <FreelanceConnect />
       <ContactCTA

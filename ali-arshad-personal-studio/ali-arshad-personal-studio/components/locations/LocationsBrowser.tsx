@@ -21,8 +21,7 @@ type Props = {
  * Interactive US coverage directory browser.
  *
  * Lets visitors filter all 50 states + D.C. by region or search by state name,
- * abbreviation or metro. Only links a state when its route is actually live on
- * this deployment — otherwise renders clean text so the directory never 404s.
+ * abbreviation or metro. Every state links to a public, noindex overview page.
  */
 export function LocationsBrowser({ regions, states }: Props) {
   const [region, setRegion] = useState<string>("All");
@@ -87,13 +86,9 @@ export function LocationsBrowser({ regions, states }: Props) {
           {filtered.map((s) => (
             <li key={s.slug} className="loc-state-card">
               <div>
-                {s.live ? (
-                  <Link href={`/locations/${s.slug}`}>
-                    <strong>{s.name}</strong>
-                  </Link>
-                ) : (
-                  <span>{s.name}</span>
-                )}
+                <Link href={`/locations/${s.slug}`}>
+                  <strong>{s.name}</strong>
+                </Link>
                 <div className="loc-state-card__meta">{s.largestMetro}</div>
               </div>
               <span className="loc-state-card__meta">{s.code}</span>

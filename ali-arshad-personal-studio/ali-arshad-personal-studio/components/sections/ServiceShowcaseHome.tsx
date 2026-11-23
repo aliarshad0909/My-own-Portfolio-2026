@@ -29,13 +29,13 @@ export function ServiceShowcaseHome() {
       <div className="container">
         <div className="section-head section-head--row reveal">
           <div>
-            <p className="eyebrow eyebrow--plain">What I do</p>
+            <p className="eyebrow eyebrow--plain">Studio approach &amp; services</p>
             <h2 className="section-title" id="home-services-title">
-              Six ways to work together
+              Agency polish, independent execution
             </h2>
           </div>
           <p className="section-sub section-sub--inline">
-            One point of contact across creative, technical and commercial work, so nothing is lost in the hand-off between them.
+            Six ways to work together, with one direct point of contact across creative, technical and commercial work. I shape and deliver the core work myself, bringing in independent specialists only when a project needs extra depth or capacity.
           </p>
         </div>
 

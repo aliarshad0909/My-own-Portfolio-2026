@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { EditorNote } from "@/components/ui/EditorNote";
 import { PageHero } from "@/components/ui/PageHero";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { pageMetadata } from "@/lib/seo";
@@ -14,9 +13,8 @@ import { stateIntro, stateMeta } from "@/lib/geo/location-content";
 
 type Props = { params: Promise<{ state: string }> };
 
-// Only states whose page is renderable on THIS deployment get built. In
-// production that is Published states only, so gated states 404 — no doorway
-// pages are ever served.
+// State overview pages are public for visitors but remain noindex until they
+// have genuine, locally differentiated evidence.
 export function generateStaticParams() {
   return US_STATES.filter((s) => shouldRender(s.publicationState)).map((s) => ({
     state: s.slug,
@@ -60,42 +58,35 @@ export default async function StatePage({ params }: Props) {
         lead={`Web development, AI automation and creative production for ${record.name} businesses, delivered as an independent remote studio.`}
       />
 
-      <EditorNote>
-        This {record.name} page is a scaffold. It must not be published until
-        there is a genuine local signal (a {record.name} client or a committed
-        service area) and the templated copy below has been rewritten into
-        something unique. Set its record to &ldquo;Published&rdquo; in
-        lib/geo/states.ts only then.
-      </EditorNote>
-
-      <section className="container section">
-        {stateIntro(record).map((p, i) => (
-          <p key={i} className="measure">
-            {p}
-          </p>
-        ))}
+      <section className="container section location-detail">
+        <div className="location-detail__intro">
+          {stateIntro(record).map((p, i) => (
+            <p key={i} className="measure">{p}</p>
+          ))}
+        </div>
+        <div className="location-detail__grid">
+          <article className="location-detail__card">
+            <p className="eyebrow eyebrow--plain">Remote collaboration</p>
+            <h2 className="section-title section-title--sm">A clear process, wherever you work</h2>
+            <p className="section-sub">We start with your goals, agree the scope in writing, then work in visible milestones with regular updates and a documented hand-off. Calls can be scheduled around your team’s time zone.</p>
+            <Link className="text-link" href="/services">Explore services <span aria-hidden="true">→</span></Link>
+          </article>
+          <article className="location-detail__card">
+            <p className="eyebrow eyebrow--plain">Start with something concrete</p>
+            <h2 className="section-title section-title--sm">See the work before we talk</h2>
+            <p className="section-sub">Explore working software demonstrations, project breakdowns, and practical business calculators. Demonstration projects use fictional data and are clearly labeled.</p>
+            <div className="location-detail__links">
+              <Link className="text-link" href="/products">Browse products <span aria-hidden="true">→</span></Link>
+              <Link className="text-link" href="/case-studies">Read case studies <span aria-hidden="true">→</span></Link>
+              <Link className="text-link" href="/tools">Open business calculators <span aria-hidden="true">→</span></Link>
+            </div>
+          </article>
+        </div>
+        {cities.length > 0 ? (
+          <p className="fine-print location-detail__market">Regional market reference: {cities.map((c) => c.name).join(", ")}. These are areas served remotely, not claimed office locations.</p>
+        ) : null}
+        <p className="fine-print location-detail__market">This overview explains remote availability in {record.name}; it does not imply an office, local staff, or a local client engagement.</p>
       </section>
-
-      {cities.length > 0 ? (
-        <section className="container section--tight">
-          <h2 className="section-title">Metros in {record.name}</h2>
-          <ul className="location-grid">
-            {cities.map((c) => {
-              const live = shouldRender(c.publicationState);
-              const href = `/locations/${record.slug}/${c.slug}`;
-              return live ? (
-                <li key={href}>
-                  <Link href={href}>{c.name}</Link>
-                </li>
-              ) : (
-                <li key={href} className="muted">
-                  {c.name}
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ) : null}
 
       <ContactCTA
         standalone
