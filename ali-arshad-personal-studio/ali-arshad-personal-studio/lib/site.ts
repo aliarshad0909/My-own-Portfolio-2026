@@ -75,6 +75,7 @@ export const NAV_ITEMS: NavItem[] = [
 
 /** Secondary quick links shown in the mobile drawer below the primary links. */
 export const MOBILE_SECONDARY_ITEMS: NavItem[] = [
+  { label: "Insights", href: "/insights" },
   { label: "Calculator Centre", href: "/tools" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Experience", href: "/experience" },
@@ -86,10 +87,12 @@ export const CORE_SITEMAP_PAGES: string[] = [
   "/work",
   "/products",
   "/case-studies",
+  "/insights",
   "/services",
   "/experience",
   "/about",
   "/contact",
+  "/privacy",
 ];
 
 /**

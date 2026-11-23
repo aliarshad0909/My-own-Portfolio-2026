@@ -18,6 +18,7 @@
 
 import { PROJECTS, caseStudies } from "@/lib/projects";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
+import { publishedInsights } from "@/lib/content/insights";
 import { KEYWORD_REGISTRY } from "@/lib/seo/keyword-registry";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { cityServiceAreas, serviceAreaMatrix } from "@/lib/seo/service-areas";
@@ -32,8 +33,10 @@ export const STATIC_ROUTES = [
   "/services",
   "/about",
   "/case-studies",
+  "/insights",
   "/experience",
   "/contact",
+  "/privacy",
   "/locations",
   "/resources",
   "/industries",
@@ -48,6 +51,7 @@ export function knownRoutes(): Set<string> {
   for (const p of PROJECTS) routes.add(`/work/${p.slug}`);
   for (const p of caseStudies()) routes.add(`/case-studies/${p.slug}`);
   for (const prod of STUDIO_PRODUCTS) routes.add(`/products/${prod.slug}`);
+  for (const post of publishedInsights()) routes.add(`/insights/${post.slug}`);
 
   // Registry primaryUrls define the tool/resource/industry pages and hub spokes.
   for (const k of KEYWORD_REGISTRY) routes.add(k.primaryUrl);

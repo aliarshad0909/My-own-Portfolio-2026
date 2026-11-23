@@ -6,8 +6,10 @@ import { FREELANCE, SITE, activeSocials } from "@/lib/site";
 const STUDIO_LINKS = [
   { label: "About", href: "/about" },
   { label: "Experience", href: "/experience" },
-  { label: "Contact", href: "/contact" },
+  { label: "Insights", href: "/insights" },
   { label: "Case Studies", href: "/case-studies" },
+  { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy" },
 ];
 
 const SERVICE_LINKS = [

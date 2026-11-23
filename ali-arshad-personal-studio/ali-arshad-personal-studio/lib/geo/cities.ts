@@ -36,16 +36,26 @@ type Row = [name: string, stateSlug: string, primaryService: string];
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
+const PILOT_NOINDEX_SLUGS = new Set(["austin", "chicago", "seattle"]);
+
 function city([name, stateSlug, primaryService]: Row): PilotCity {
+  const slug = slugify(name);
+  const isPilot = PILOT_NOINDEX_SLUGS.has(slug);
   return {
-    slug: slugify(name),
+    slug,
     name,
     stateSlug,
     primaryService,
-    publicationState: "NeedsEvidence",
+    // Tier-1 researched pilots render publicly as `PublicNoIndex` for owner review
+    // (excluded from search & sitemap until owner confirms local signal & approval).
+    publicationState: isPilot ? "PublicNoIndex" : "NeedsEvidence",
     evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY, EDITORIAL_REVIEW],
-    evidenceHave: [],
-    editorialReview: { reviewed: false, hasCustomContent: false },
+    evidenceHave: isPilot ? [UNIQUE_COPY] : [],
+    editorialReview: {
+      reviewed: false,
+      hasCustomContent: isPilot,
+      ...(isPilot ? { reviewerNote: "Tier-1 researched pilot awaiting owner review and local signal before indexing." } : {}),
+    },
   };
 }
 

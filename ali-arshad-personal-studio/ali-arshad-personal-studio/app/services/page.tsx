@@ -10,6 +10,7 @@ import { PendingMedia, RelatedProjectList, ServiceShowcase } from "@/components/
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { StudioEmblem3D } from "@/components/ui/StudioEmblem3D";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES, contactHref, projectsForService, relatedWorkHref, type Service } from "@/lib/services";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
@@ -129,7 +130,8 @@ export default function ServicesPage() {
             Creative and technical solutions, <span className="accent">built around your business</span>
           </>
         }
-        lead="From cinematic content and digital products to intelligent automation and operational support, I help businesses turn complex ideas into practical, well-executed solutions."
+        lead="AI automation and workflows, custom web and software development, AI assistants and agents, data and business analytics, motion graphics and video production, and brand/marketing support — organized clearly under one studio."
+        aside={<StudioEmblem3D />}
       >
         <div className="hero__actions">
           <ButtonLink href="/contact">Discuss your project</ButtonLink>

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { publishedInsights } from "@/lib/content/insights";
 import { PROJECTS, caseStudies, isIndexable } from "@/lib/projects";
 import { CORE_SITEMAP_PAGES, siteBaseUrl } from "@/lib/site";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
@@ -12,6 +13,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Only fully published work is listed; demos and drafts stay out.
   const projects = PROJECTS.filter(isIndexable).map((p) => ({ url: abs(`/work/${p.slug}`), lastModified: now, priority: 0.6 }));
   const studies = caseStudies().filter(isIndexable).map((p) => ({ url: abs(`/case-studies/${p.slug}`), lastModified: now, priority: 0.6 }));
+  const insights = publishedInsights().map((post) => ({
+    url: abs(`/insights/${post.slug}`),
+    lastModified: new Date(post.updatedAt),
+    priority: 0.7,
+  }));
 
   // SEO architecture routes: service hubs, published locations and the section
   // index pages. All gated by publication state, so nothing noindex is listed.
@@ -21,5 +27,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .filter((path) => !coreHrefs.has(path))
     .map((path) => ({ url: abs(path), lastModified: now, priority: 0.7 }));
 
-  return [...pages, ...projects, ...studies, ...seo];
+  return [...pages, ...projects, ...studies, ...insights, ...seo];
 }
