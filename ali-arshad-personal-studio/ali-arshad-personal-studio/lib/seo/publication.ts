@@ -31,6 +31,8 @@ export const PUBLICATION_STATES = [
    * is not yet backed by evidence. Visible on previews only, noindex.
    */
   "NeedsEvidence",
+  /** Public directory page, excluded from search until locally differentiated. */
+  "PublicNoIndex",
   /** Earned: unique content + evidence satisfied. Rendered and indexed. */
   "Published",
   /** Was live, deliberately removed. Does not render; may need a redirect. */
@@ -47,15 +49,15 @@ export function isProductionEnv(): boolean {
 /**
  * States whose routes resolve on the current deployment.
  *
- * Production serves only `Published`. Previews and local builds also serve
- * `Drafted` and `NeedsEvidence` so work in progress can be reviewed, but those
- * are always noindex (see {@link isIndexable}), and robots.ts disallows preview
+ * Production serves `Published` and useful `PublicNoIndex` directory pages.
+ * Previews and local builds also serve `Drafted` and `NeedsEvidence`; those are
+ * always noindex (see {@link isIndexable}), and robots.ts disallows preview
  * crawling entirely.
  */
 export function renderableStates(): PublicationState[] {
   return isProductionEnv()
-    ? ["Published"]
-    : ["Published", "NeedsEvidence", "Drafted"];
+    ? ["Published", "PublicNoIndex"]
+    : ["Published", "PublicNoIndex", "NeedsEvidence", "Drafted"];
 }
 
 /** Does a route in this state resolve on the current deployment? */
@@ -77,6 +79,7 @@ export const PUBLICATION_NOTE: Record<PublicationState, string> = {
   Researched: "Registered opportunity. No page yet.",
   Drafted: "Draft content. Preview only, noindex. Not served in production.",
   NeedsEvidence: "Awaiting evidence before it can be published. Preview only, noindex.",
+  PublicNoIndex: "Public directory page. Excluded from search until locally differentiated.",
   Published: "Live and indexable.",
   Retired: "Removed from the live site.",
 };

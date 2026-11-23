@@ -161,6 +161,16 @@ export function LiveProductDemos() {
           open-source attribution, and sandbox credentials are documented in each case study, and broader software concepts live in the{" "}
           <Link href="/products">product directory</Link>.
         </p>
+        <div className="live-demos__more">
+          <div>
+            <p className="eyebrow eyebrow--plain">More from the studio</p>
+            <p className="section-sub">Browse the complete set of 12 product builds in a compact directory.</p>
+          </div>
+          <Link href="/products" className="btn btn--secondary btn--sm">
+            <span>See all 12 products</span>
+            <Icon name="arrow-right" size={16} className="btn__icon" />
+          </Link>
+        </div>
       </div>
     </section>
   );

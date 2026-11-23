@@ -37,8 +37,8 @@ const REMOTE_PRINCIPLES = [
   },
   {
     icon: "check" as const,
-    title: "Earned local pages only",
-    detail: "A dedicated state or service-location page enters the search index only when genuine local evidence and distinct geographic content exist.",
+    title: "Transparent state overviews",
+    detail: "Every state overview is available to visitors and connected to relevant work. Pages stay out of search results until genuine local evidence and distinct geographic content support indexing.",
   },
 ];
 
@@ -122,7 +122,7 @@ export default function LocationsPage() {
               Browse coverage by region or state
             </h2>
             <p className="section-sub">
-              Every state below is served remotely today. Individual state pages become clickable only when published with real local context.
+              Every state below links to a practical overview of remote services, the working process, relevant examples and next steps. These broad overviews are noindex until supported by genuine local evidence.
             </p>
           </div>
           <figure className="article-figure" style={{ marginBottom: "1.75rem", maxWidth: "58rem" }}>

@@ -1,13 +1,10 @@
 /**
  * Typed records for all 50 US states and Washington, D.C.
  *
- * This is ARCHITECTURE for nationwide service coverage, not 51 published
- * pages. Every record defaults to `NeedsEvidence`: the service travels (remote
- * work), but a *page* targeting "web developer in <state>" is a doorway page
- * until there is a genuine local signal behind it — a client in that state, or
- * a deliberately stated service area. Until then the record exists in data (so
- * the model scales and the directory can show intended coverage), the route
- * does not render in production, and nothing is indexed.
+ * State overviews are public and navigable, but start at `PublicNoIndex`:
+ * remote availability is explained honestly without implying a local office,
+ * staff or clients. A page can become indexable only after genuine local
+ * evidence, distinct copy and editorial review have been added.
  *
  * To publish one state page honestly: set `publicationState` to "Published"
  * and add the matching evidence string to `evidenceHave`. The SEO tests refuse
@@ -64,7 +61,7 @@ function state([code, name, region, largestMetro]: Row): UsState {
     region,
     largestMetro,
     // Nationwide architecture starts un-published. Earn each page.
-    publicationState: "NeedsEvidence",
+    publicationState: "PublicNoIndex",
     evidenceRequired: [LOCAL_SIGNAL, UNIQUE_COPY, EDITORIAL_REVIEW],
     evidenceHave: [],
     editorialReview: { reviewed: false, hasCustomContent: false },
