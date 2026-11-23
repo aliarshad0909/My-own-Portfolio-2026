@@ -28,7 +28,7 @@ import {
   GPU_RELATED_TOOLS,
   GPU_WORKLOADS,
 } from "@/lib/gpu-compute";
-import { breadcrumbSchema, singleServiceSchema } from "@/lib/structured-data";
+import { singleServiceSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = pageMetadata({
   title: "RTX GPU Compute Rental: Consultation-Led Server Access",
@@ -60,13 +60,6 @@ export default function GpuComputePage() {
           path: GPU_COMPUTE_PATH,
           serviceType: "GPU Compute Consultation & Rental",
         })}
-      />
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Services", path: "/services" },
-          { name: "RTX GPU Compute", path: GPU_COMPUTE_PATH },
-        ])}
       />
       <Breadcrumbs
         items={[

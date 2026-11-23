@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { ProductDirectoryClient } from "@/components/products/ProductDirectoryClient";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { PageHero } from "@/components/ui/PageHero";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
 import { pageMetadata } from "@/lib/seo";
-import { breadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = pageMetadata({
   title: "Product Directory — SaaS & AI Software Demonstrations",
@@ -18,12 +16,6 @@ export const metadata: Metadata = pageMetadata({
 export default function ProductsDirectoryPage() {
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Product Directory", path: "/products" },
-        ])}
-      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },

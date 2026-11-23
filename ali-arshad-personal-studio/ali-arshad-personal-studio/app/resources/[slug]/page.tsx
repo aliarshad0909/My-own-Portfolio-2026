@@ -13,7 +13,8 @@ import { getProject } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHub, getSpoke } from "@/lib/seo/service-hubs";
-import { SITE, siteBaseUrl } from "@/lib/site";
+import { SITE } from "@/lib/site";
+import { articleSchema } from "@/lib/structured-data";
 import { TOOLS } from "@/lib/tools/catalog";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -34,21 +35,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: `/resources/${r.slug}`,
     index: isIndexable(r.publicationState),
   });
-}
-
-function articleSchema(slug: string, title: string, description: string, publishedAt?: string, updatedAt?: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: title,
-    description,
-    author: { "@type": "Person", name: SITE.name, url: new URL("/", siteBaseUrl()).toString() },
-    publisher: { "@type": "Person", name: SITE.name },
-    mainEntityOfPage: new URL(`/resources/${slug}`, siteBaseUrl()).toString(),
-    ...(publishedAt ? { datePublished: publishedAt } : {}),
-    ...(updatedAt ?? publishedAt ? { dateModified: updatedAt ?? publishedAt } : {}),
-    inLanguage: "en",
-  };
 }
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -97,7 +83,16 @@ export default async function ResourcePage({ params }: Props) {
 
   return (
     <>
-      <JsonLd data={articleSchema(r.slug, r.title, r.description, r.publishedAt, r.updatedAt)} />
+      <JsonLd
+        data={articleSchema({
+          slug: r.slug,
+          title: r.title,
+          description: r.description,
+          category: r.category,
+          publishedAt: r.publishedAt,
+          updatedAt: r.updatedAt,
+        })}
+      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },

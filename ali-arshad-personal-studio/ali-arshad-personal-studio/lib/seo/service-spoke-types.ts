@@ -56,8 +56,16 @@ export type ServiceSpoke = {
   stack: string[];
   /** Optional candid caveat or scope boundary. */
   scopeNotice?: string;
-  /** Optional related calculator or guide path. */
+  /** Concise description of the target audience / best-fit buyer. */
+  audience?: string;
+  /** Concise, direct 1-2 sentence answer for buyers and answer engines (AEO). */
+  quickAnswer?: string;
+  /** Optional related calculator path. */
   relatedTool?: { href: string; label: string };
+  /** Optional related guide under /resources/*. */
+  relatedResource?: { href: string; label: string };
+  /** Optional related live/demo product entry under /products/*. */
+  relatedProduct?: { href: string; label: string };
   /** Search-intent FAQs rendered with FAQPage JSON-LD. */
   faqs: FaqItem[];
   projectSlugs: string[];

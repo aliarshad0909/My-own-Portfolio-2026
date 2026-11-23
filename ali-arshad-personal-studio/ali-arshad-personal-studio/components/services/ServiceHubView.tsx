@@ -154,6 +154,9 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
           </div>
         ))}
       </dl>
+      <p className="fine-print" style={{ marginTop: "12px" }}>
+        Remote delivery: independent one-person studio working remotely with US and international teams on scheduled time-zone overlap — no physical regional offices claimed.
+      </p>
     </section>
   );
 

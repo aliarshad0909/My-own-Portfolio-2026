@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PreviewSampleScenarios } from "@/components/locations/PreviewSampleScenarios";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { Sources } from "@/components/seo/Sources";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
@@ -23,7 +22,6 @@ import { US_STATES, getState } from "@/lib/geo/states";
 import { pageMetadata } from "@/lib/seo";
 import { shouldRender } from "@/lib/seo/publication";
 import { GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
-import { breadcrumbSchema } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ state: string }> };
 
@@ -64,13 +62,6 @@ export default async function StatePage({ params }: Props) {
 
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Locations", path: "/locations" },
-          { name: record.name, path: `/locations/${record.slug}` },
-        ])}
-      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },

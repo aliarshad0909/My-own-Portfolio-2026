@@ -1,27 +1,48 @@
 /**
  * JSON-LD builders. Every field here must be visible on the page it describes
- * or verifiable from the credential record — no reviews, ratings, addresses,
- * employees, clients or awards are asserted anywhere, because none are
- * verified. The studio is one person, so the honest entity is Person; no
- * Organization node is emitted.
+ * or verifiable from the credential record — no reviews, ratings, physical
+ * branch addresses, employees, clients, prices or awards are asserted anywhere,
+ * because none are verified.
+ *
+ * Entity graph IDs stay consistent across all routes:
+ *   - Person:              https://www.aliarshad.co/#person
+ *   - ProfessionalService: https://www.aliarshad.co/#studio
+ *   - WebSite:             https://www.aliarshad.co/#website
  */
 import { CREDENTIALS } from "@/lib/credentials";
+import type { StudioProduct } from "@/lib/products/catalog";
 import type { Project } from "@/lib/projects";
 import { SERVICES } from "@/lib/services";
-import { SITE, activeSocials, siteBaseUrl } from "@/lib/site";
+import { FREELANCE, SITE, activeSocials, siteBaseUrl } from "@/lib/site";
 
 const abs = (path: string) => new URL(path, siteBaseUrl()).toString();
 
+const personRef = () => ({ "@id": abs("/#person") });
+const studioRef = () => ({ "@id": abs("/#studio") });
+
+function allVerifiedProfileUrls(): string[] {
+  const urls = activeSocials().map((s) => s.url);
+  if (FREELANCE.upwork.url) urls.push(FREELANCE.upwork.url);
+  if (FREELANCE.fiverr.url) urls.push(FREELANCE.fiverr.url);
+  return [...new Set(urls)];
+}
+
 export function personSchema() {
-  const sameAs = activeSocials().map((s) => s.url);
+  const sameAs = allVerifiedProfileUrls();
   return {
     "@context": "https://schema.org",
     "@type": "Person",
     "@id": abs("/#person"),
     name: SITE.name,
+    alternateName: `${SITE.name} — ${SITE.descriptor}`,
     jobTitle: SITE.role,
     description: SITE.description,
     url: abs("/"),
+    image: abs("/opengraph-image.jpg"),
+    alumniOf: {
+      "@type": "CollegeOrUniversity",
+      name: "Bahria University Islamabad",
+    },
     ...(sameAs.length > 0 ? { sameAs } : {}),
     knowsAbout: SERVICES.map((s) => s.title),
     hasCredential: CREDENTIALS.map((c) => ({
@@ -34,6 +55,48 @@ export function personSchema() {
   };
 }
 
+/**
+ * Honest solo-studio ProfessionalService node linked to the Person entity via
+ * @id. Remote-only delivery (US & international); zero physical address, zero
+ * fabricated prices, zero fake ratings or client claims.
+ */
+export function professionalServiceSchema(offerItems?: { name: string; path: string }[]) {
+  const sameAs = allVerifiedProfileUrls();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": abs("/#studio"),
+    name: `${SITE.name} — ${SITE.descriptor}`,
+    description: SITE.description,
+    url: abs("/"),
+    image: abs("/opengraph-image.jpg"),
+    founder: personRef(),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+    areaServed: [{ "@type": "Country", name: "United States" }, "International (Remote)"],
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl: abs("/contact"),
+      availableLanguage: "English",
+    },
+    ...(offerItems && offerItems.length > 0
+      ? {
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Studio Services",
+            itemListElement: offerItems.map((item) => ({
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: item.name,
+                url: abs(item.path),
+              },
+            })),
+          },
+        }
+      : {}),
+  };
+}
+
 export function webSiteSchema() {
   return {
     "@context": "https://schema.org",
@@ -42,7 +105,21 @@ export function webSiteSchema() {
     name: `${SITE.name}: ${SITE.descriptor}`,
     url: abs("/"),
     description: SITE.description,
-    author: { "@id": abs("/#person") },
+    author: personRef(),
+    publisher: studioRef(),
+    inLanguage: "en",
+  };
+}
+
+export function profilePageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    name: `About ${SITE.name} — ${SITE.descriptor}`,
+    url: abs("/about"),
+    description:
+      "Background, disciplines, verified certifications and solo-studio collaboration model of Ali Arshad.",
+    mainEntity: personRef(),
     inLanguage: "en",
   };
 }
@@ -64,6 +141,7 @@ export function serviceListSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    name: `${SITE.name} Studio Services`,
     itemListElement: SERVICES.map((s, i) => ({
       "@type": "ListItem",
       position: i + 1,
@@ -72,7 +150,7 @@ export function serviceListSchema() {
         name: s.title,
         description: s.positioning,
         serviceType: s.title,
-        provider: { "@type": "Person", name: SITE.name, url: abs("/") },
+        provider: personRef(),
         url: abs(`/services#${s.id}`),
       },
     })),
@@ -92,16 +170,93 @@ export function creativeWorkSchema(project: Project, variant: "project" | "case-
     name: project.title,
     description: project.summary,
     url: abs(path),
-    author: { "@type": "Person", name: SITE.name, url: abs("/") },
+    author: personRef(),
     creativeWorkStatus: project.status,
+    ...(project.year ? { dateCreated: project.year } : {}),
+    ...(project.technologies.length > 0 ? { keywords: project.technologies.join(", ") } : {}),
+    ...(!project.usesSampleMedia ? { image: abs(project.cover.src) } : {}),
     inLanguage: "en",
   };
 }
 
 /**
- * A single Service node for a dedicated service-hub page. Honest provider is a
- * Person (the studio is one person); no ratings, no aggregate claims, no area
- * served asserted beyond a remote offering.
+ * Honest SoftwareApplication schema for the studio's standalone demonstration
+ * applications in /products/[slug]. Zero fake ratings, reviews or pricing.
+ */
+export function softwareApplicationSchema(product: StudioProduct) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: `${product.name} — ${product.tagline}`,
+    description: `${product.shortDescription} Studio demonstration application using fictional seeded data.`,
+    url: abs(`/products/${product.slug}`),
+    applicationCategory: "BusinessApplication",
+    operatingSystem:
+      product.slug === "stockflow-mobile"
+        ? "Web browser, iOS, Android (React Native / Expo)"
+        : "Web browser",
+    isAccessibleForFree: true,
+    author: personRef(),
+    image: abs(product.cover.src),
+    ...(product.liveUrl ? { sameAs: product.liveUrl } : {}),
+    inLanguage: "en",
+  };
+}
+
+/**
+ * Honest WebApplication schema for free browser-based calculators under /tools/*.
+ */
+export function webApplicationSchema(input: { slug: string; name: string; description: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: input.name,
+    description: input.description,
+    url: abs(`/tools/${input.slug}`),
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Any (web browser)",
+    isAccessibleForFree: true,
+    author: personRef(),
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    inLanguage: "en",
+  };
+}
+
+/**
+ * Article schema for published studio guides under /resources/[slug], with real
+ * publication and update dates and consistent @id author/publisher references.
+ */
+export function articleSchema(input: {
+  slug: string;
+  title: string;
+  description: string;
+  category?: string;
+  publishedAt?: string;
+  updatedAt?: string;
+}) {
+  const url = abs(`/resources/${input.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: input.title,
+    description: input.description,
+    url,
+    mainEntityOfPage: url,
+    image: abs("/opengraph-image.jpg"),
+    ...(input.category ? { articleSection: input.category } : {}),
+    author: personRef(),
+    publisher: studioRef(),
+    isAccessibleForFree: true,
+    ...(input.publishedAt ? { datePublished: input.publishedAt } : {}),
+    ...(input.updatedAt ?? input.publishedAt ? { dateModified: input.updatedAt ?? input.publishedAt } : {}),
+    inLanguage: "en",
+  };
+}
+
+/**
+ * A single Service node for a dedicated service hub or specialization page.
+ * Honest provider is a Person linked via @id; remote delivery only, zero fake
+ * ratings, prices, or physical offices.
  */
 export function singleServiceSchema(input: { name: string; description: string; path: string; serviceType?: string }) {
   return {
@@ -110,10 +265,15 @@ export function singleServiceSchema(input: { name: string; description: string; 
     name: input.name,
     description: input.description,
     serviceType: input.serviceType ?? input.name,
-    provider: { "@type": "Person", name: SITE.name, url: abs("/") },
+    provider: personRef(),
+    brand: studioRef(),
     url: abs(input.path),
-    areaServed: { "@type": "Country", name: "United States" },
-    availableChannel: { "@type": "ServiceChannel", serviceUrl: abs("/contact") },
+    areaServed: [{ "@type": "Country", name: "United States" }, "International (Remote)"],
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl: abs("/contact"),
+      availableLanguage: "English",
+    },
   };
 }
 

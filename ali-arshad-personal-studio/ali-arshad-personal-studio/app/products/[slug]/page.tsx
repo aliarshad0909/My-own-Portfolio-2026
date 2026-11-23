@@ -8,7 +8,70 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
 import { STUDIO_PRODUCTS, getStudioProduct } from "@/lib/products/catalog";
 import { pageMetadata } from "@/lib/seo";
-import { breadcrumbSchema } from "@/lib/structured-data";
+import { softwareApplicationSchema } from "@/lib/structured-data";
+
+const PRODUCT_SERVICE_LINKS: Record<string, { label: string; href: string; kind: string }[]> = {
+  "pipelineos-crm": [
+    { kind: "Focused niche", label: "Custom CRM & B2B pipeline software", href: "/services/web-development/custom-crm-development" },
+    { kind: "Automation niche", label: "CRM workflow automation (n8n)", href: "/services/n8n-automation/crm-automation" },
+    { kind: "Calculator", label: "SaaS Operating Cost Calculator", href: "/tools/saas-cost-calculator" },
+  ],
+  "stockflow-inventory": [
+    { kind: "Focused niche", label: "Custom inventory & purchasing software", href: "/services/business-dashboards/inventory-software" },
+    { kind: "Backend niche", label: "API & system integration development", href: "/services/web-development/api-integration" },
+    { kind: "Calculator", label: "Inventory Reorder & EOQ Calculator", href: "/tools/inventory-reorder-calculator" },
+  ],
+  "stockflow-mobile": [
+    { kind: "Backend niche", label: "API & system integration development", href: "/services/web-development/api-integration" },
+    { kind: "Focused niche", label: "Custom inventory & purchasing software", href: "/services/business-dashboards/inventory-software" },
+    { kind: "Partner model", label: "Studio Network (specialist mobile QA)", href: "/studio-network" },
+  ],
+  financeos: [
+    { kind: "Focused niche", label: "Custom React analytics dashboards", href: "/services/business-dashboards/react" },
+    { kind: "Service hub", label: "Web & application development", href: "/services/web-development" },
+    { kind: "Calculator", label: "Profit Margin & Break-Even Calculator", href: "/tools/profit-margin-calculator" },
+  ],
+  flowos: [
+    { kind: "Service hub", label: "n8n workflow automation", href: "/services/n8n-automation" },
+    { kind: "Focused niche", label: "Lead qualification automation", href: "/services/n8n-automation/lead-qualification" },
+    { kind: "Calculator", label: "Automation ROI Calculator", href: "/tools/automation-roi-calculator" },
+  ],
+  sourceos: [
+    { kind: "Focused niche", label: "Supplier comparison & weighted scoring", href: "/services/global-sourcing/supplier-comparison" },
+    { kind: "Focused niche", label: "Landed-cost analysis", href: "/services/global-sourcing/landed-cost-analysis" },
+    { kind: "Calculator", label: "Landed Cost Calculator", href: "/tools/landed-cost-calculator" },
+  ],
+  orexa: [
+    { kind: "Service hub", label: "AI agent development", href: "/services/ai-agents" },
+    { kind: "Focused niche", label: "Knowledge-base & RAG assistants", href: "/services/ai-agents/rag" },
+    { kind: "Focused niche", label: "MVP development for startups", href: "/services/web-development/mvp" },
+  ],
+  supportos: [
+    { kind: "Focused niche", label: "AI customer support agents", href: "/services/ai-agents/support" },
+    { kind: "Focused niche", label: "Knowledge-base & RAG assistants", href: "/services/ai-agents/rag" },
+    { kind: "Service hub", label: "n8n workflow automation", href: "/services/n8n-automation" },
+  ],
+  projectos: [
+    { kind: "Focused niche", label: "React application development", href: "/services/web-development/react-applications" },
+    { kind: "Focused niche", label: "MVP development for startups", href: "/services/web-development/mvp" },
+    { kind: "Calculator", label: "Project Budget & Burn Rate Calculator", href: "/tools/project-budget-calculator" },
+  ],
+  insightos: [
+    { kind: "Focused niche", label: "Custom React analytics dashboards", href: "/services/business-dashboards/react" },
+    { kind: "Service hub", label: "Dashboards & data visualisation", href: "/services/business-dashboards" },
+    { kind: "Calculator", label: "SaaS Operating Cost Calculator", href: "/tools/saas-cost-calculator" },
+  ],
+  peopleos: [
+    { kind: "Focused niche", label: "React application development", href: "/services/web-development/react-applications" },
+    { kind: "Focused niche", label: "Business process automation", href: "/services/n8n-automation/business-process-automation" },
+    { kind: "Service hub", label: "Web & application development", href: "/services/web-development" },
+  ],
+  bookos: [
+    { kind: "Focused niche", label: "Next.js development", href: "/services/web-development/nextjs" },
+    { kind: "Focused niche", label: "API & system integration development", href: "/services/web-development/api-integration" },
+    { kind: "Calculator", label: "Web Project Estimator", href: "/tools/web-project-estimator" },
+  ],
+};
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -37,16 +100,11 @@ export default async function ProductDetailPage({ params }: Props) {
   const related = product.relatedSlugs
     .map((s) => getStudioProduct(s))
     .filter((p): p is NonNullable<typeof p> => p !== undefined);
+  const serviceLinks = PRODUCT_SERVICE_LINKS[product.slug] ?? [];
 
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Product Directory", path: "/products" },
-          { name: product.name, path: `/products/${product.slug}` },
-        ])}
-      />
+      <JsonLd data={softwareApplicationSchema(product)} />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },
@@ -290,6 +348,29 @@ export default async function ProductDetailPage({ params }: Props) {
           </section>
         </div>
       </article>
+
+      {serviceLinks.length > 0 ? (
+        <section className="section section--tight section--surface" aria-labelledby="product-services-title">
+          <div className="container">
+            <h2 className="section-title section-title--sm" id="product-services-title">
+              Related Studio Services &amp; Tools
+            </h2>
+            <ul className="hub-card-grid" style={{ marginTop: "16px" }}>
+              {serviceLinks.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="hub-link-card">
+                    <span className="hub-link-card__kind">{item.kind}</span>
+                    <span className="hub-link-card__title">
+                      <span>{item.label}</span>
+                      <Icon name="arrow-up-right" size={16} />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       {related.length > 0 ? (
         <section className="section section--tight" aria-labelledby="related-products-title">

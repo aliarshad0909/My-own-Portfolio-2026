@@ -266,8 +266,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Build", detail: "Catalogue, cart, checkout, admin" },
       { label: "Launch", detail: "Deploy, test, hand-off" },
     ],
-    projectSlugs: ["tessera-clayworks-storefront"],
-    relatedTools: ["/tools/web-project-estimator"],
+    projectSlugs: ["tessera-clayworks-storefront", "stockflow-inventory"],
+    relatedTools: ["/tools/web-project-estimator", "/tools/profit-margin-calculator"],
     relatedHubs: ["/services/web-development", "/services/business-dashboards"],
     faqs: [
       {
@@ -292,7 +292,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["ecommerce-development"] ?? [],
   },
   {
     slug: "business-dashboards",
@@ -531,3 +531,12 @@ export const getSpoke = (hubSlug: string, spokeSlug: string) =>
 
 export const allSpokes = () =>
   SERVICE_HUBS.flatMap((h) => h.spokes.map((s) => ({ hub: h, spoke: s })));
+
+/** Published specialization spokes evidenced by a given project slug (for reciprocal links). */
+export const spokesForProject = (projectSlug: string) =>
+  allSpokes().filter(
+    ({ hub, spoke }) =>
+      hub.publicationState === "Published" &&
+      spoke.publicationState === "Published" &&
+      spoke.projectSlugs.includes(projectSlug),
+  );

@@ -64,6 +64,14 @@ for (const k of KEYWORD_REGISTRY) {
 }
 for (const h of SERVICE_HUBS) {
   for (const b of brokenLinks([...h.relatedTools, ...h.relatedHubs])) linkProblems.push(`${h.slug} → ${b}`);
+  for (const s of h.spokes) {
+    const spokeHrefs = [
+      ...(s.relatedTool ? [s.relatedTool.href] : []),
+      ...(s.relatedResource ? [s.relatedResource.href] : []),
+      ...(s.relatedProduct ? [s.relatedProduct.href] : []),
+    ];
+    for (const b of brokenLinks(spokeHrefs)) linkProblems.push(`${h.slug}/${s.slug} → ${b}`);
+  }
 }
 for (const [slug, enrich] of Object.entries(ALL_HUB_ENRICHMENTS)) {
   const hrefs = [

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PreviewSampleScenarios } from "@/components/locations/PreviewSampleScenarios";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { Sources } from "@/components/seo/Sources";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { EditorNote } from "@/components/ui/EditorNote";
@@ -20,7 +19,6 @@ import { getState } from "@/lib/geo/states";
 import { getProject } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
-import { breadcrumbSchema } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ state: string; city: string }> };
 
@@ -77,14 +75,6 @@ export default async function CityPage({ params }: Props) {
 
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Locations", path: "/locations" },
-          { name: stateRecord.name, path: `/locations/${stateRecord.slug}` },
-          { name: cityRecord.name, path: `/locations/${state}/${city}` },
-        ])}
-      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },

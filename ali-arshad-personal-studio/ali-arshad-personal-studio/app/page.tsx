@@ -8,8 +8,15 @@ import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
 import { StudioNetworkIntro } from "@/components/sections/StudioNetworkIntro";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo";
-import { personSchema, webSiteSchema } from "@/lib/structured-data";
+import { isIndexable } from "@/lib/seo/publication";
+import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { personSchema, professionalServiceSchema, webSiteSchema } from "@/lib/structured-data";
 import { SITE } from "@/lib/site";
+
+const PUBLISHED_OFFERS = SERVICE_HUBS.filter((h) => isIndexable(h.publicationState)).map((h) => ({
+  name: h.h1,
+  path: `/services/${h.slug}`,
+}));
 
 export const metadata: Metadata = pageMetadata({
   title: `${SITE.name}: Custom Web Apps, AI Automation & Creative Studio`,
@@ -22,6 +29,7 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={personSchema()} />
+      <JsonLd data={professionalServiceSchema(PUBLISHED_OFFERS)} />
       <JsonLd data={webSiteSchema()} />
       {/* Focused client conversion flow:
           1. Hero → 2. Core Services → 3. Selected Work → 4. Studio Network →

@@ -1,0 +1,96 @@
+# Ali Arshad — Personal Studio
+
+> Independent creative and technical studio of one operated by Ali Arshad (https://www.aliarshad.co).
+> Builds custom Next.js, React, TypeScript, and PostgreSQL web applications, scoped AI agents, self-hostable n8n workflow automations, brand visual systems, video/motion creative production, and landed-cost sourcing coordination.
+
+## Studio Identity & Delivery Model
+
+- **Founder & Principal**: Ali Arshad — Designer, Developer & Creative Technologist (BBA in Supply Chain Management, Bahria University Islamabad).
+- **Canonical Website**: https://www.aliarshad.co
+- **Delivery Model**: 100% remote studio working with US and international clients with scheduled US time-zone overlap, plain-language written scopes, staged preview milestones, and full client ownership of repositories, workflows, and accounts.
+- **Physical Presence**: Independent remote studio of one — no physical regional branch offices or staffed W-2 agency headcount are claimed. When specialist depth (e.g., security reviews, blockchain, or parallel sprint capacity) is needed, vetted independent collaborators are introduced transparently upfront via https://www.aliarshad.co/studio-network.
+- **Verified Certifications**: HubSpot Academy Social Media Certification; Google Ads AI-Powered Performance Ads Certification (documented with public verification links on https://www.aliarshad.co/experience).
+- **Profiles**:
+  - LinkedIn: https://www.linkedin.com/in/aliarshad09/
+  - Instagram: https://www.instagram.com/aliarshad.co/
+  - Upwork: https://www.upwork.com/freelancers/~011274422835620f07
+
+## Truthfulness & Demonstration Framing
+
+- All 14 portfolio case studies (/work, /case-studies) and 12 software applications in the Product Directory (/products) are clearly labeled **studio demonstrations** built under fictional companies and seeded datasets — **not paid client deployments or client testimonials**.
+- Publicly deployed live interactive sandboxes are explicitly distinguished from locally verified repository builds.
+- State pages (/locations/[state]) and consultation-led RTX GPU compute (/services/gpu-compute) are publicly reviewable but intentionally marked `noindex` (excluded from the production sitemap) until local evidence or final hardware specifications are confirmed.
+
+## Core Services & Dedicated Hubs
+
+- [All Studio Services & Comparison Matrix](https://www.aliarshad.co/services): Overview of all 6 core disciplines, service comparison table, remote delivery workflow, and full niche directory.
+- [Web & Application Development](https://www.aliarshad.co/services/web-development): Custom Next.js App Router sites, React/TypeScript applications, MVPs, custom CRMs, and REST API integrations.
+  - [Next.js Development](https://www.aliarshad.co/services/web-development/nextjs)
+  - [React Application Development](https://www.aliarshad.co/services/web-development/react-applications)
+  - [MVP Development for Startups](https://www.aliarshad.co/services/web-development/mvp)
+  - [Custom CRM & B2B Pipeline Software](https://www.aliarshad.co/services/web-development/custom-crm-development)
+  - [API & System Integration Development](https://www.aliarshad.co/services/web-development/api-integration)
+- [n8n Workflow Automation](https://www.aliarshad.co/services/n8n-automation): Self-hostable multi-step workflows with tested JavaScript Code nodes, retries, and human approval gates.
+  - [Google Workspace Automation](https://www.aliarshad.co/services/n8n-automation/google-workspace-automation)
+  - [CRM Automation (HubSpot, Pipedrive, Webhooks)](https://www.aliarshad.co/services/n8n-automation/crm-automation)
+  - [Lead Qualification Automation](https://www.aliarshad.co/services/n8n-automation/lead-qualification)
+  - [Business Process Automation](https://www.aliarshad.co/services/n8n-automation/business-process-automation)
+- [AI Agent Development](https://www.aliarshad.co/services/ai-agents): Grounded support, sales qualification, and internal knowledge-base assistants with tunable confidence floors and human escalation.
+  - [AI Customer Support Agents](https://www.aliarshad.co/services/ai-agents/support)
+  - [AI Sales & Voice Qualification Agents](https://www.aliarshad.co/services/ai-agents/sales)
+  - [Knowledge-Base & RAG Assistants](https://www.aliarshad.co/services/ai-agents/rag)
+- [Ecommerce Development](https://www.aliarshad.co/services/ecommerce-development): Storefront engineering, honest Shopify vs. custom advisory, and inventory-connected commerce.
+  - [Custom Next.js & Headless Storefronts](https://www.aliarshad.co/services/ecommerce-development/custom-storefronts)
+- [Business Dashboards & Data Visualization](https://www.aliarshad.co/services/business-dashboards): Single-source React analytics dashboards and immutable-ledger inventory platforms.
+  - [Custom Inventory & Purchasing Software](https://www.aliarshad.co/services/business-dashboards/inventory-software)
+  - [Custom React Analytics Dashboards](https://www.aliarshad.co/services/business-dashboards/react)
+- [Brand Identity & Growth](https://www.aliarshad.co/services/branding): WCAG-tested visual identity systems, social operations, table-based HTML email, content strategy, and Google Ads-certified campaign support.
+  - [Brand Identity Design](https://www.aliarshad.co/services/branding/identity)
+  - [Social Media Management](https://www.aliarshad.co/services/branding/social-media-management)
+  - [Email Marketing & HTML Templates](https://www.aliarshad.co/services/branding/email-marketing)
+  - [Content Strategy](https://www.aliarshad.co/services/branding/content-strategy)
+  - [Paid Advertising Support](https://www.aliarshad.co/services/branding/paid-advertising-support)
+- [Global Sourcing Coordination](https://www.aliarshad.co/services/global-sourcing): Supplier research, weighted quote scoring, and landed-cost modelling (coordination only — not a licensed customs broker).
+  - [Supplier Research & Shortlisting](https://www.aliarshad.co/services/global-sourcing/supplier-research)
+  - [Supplier Comparison & Weighted Scoring](https://www.aliarshad.co/services/global-sourcing/supplier-comparison)
+  - [Landed-Cost Analysis](https://www.aliarshad.co/services/global-sourcing/landed-cost-analysis)
+- [Creative Production](https://www.aliarshad.co/services/creative-production): Video editing, motion graphics, social advertising creatives, and web-optimized ffmpeg media pipelines (cleared client showreel and Blender renders marked honestly as in preparation).
+  - [Video Editing](https://www.aliarshad.co/services/creative-production/video-editing)
+  - [Motion Graphics](https://www.aliarshad.co/services/creative-production/motion)
+  - [Social Advertising Creatives](https://www.aliarshad.co/services/creative-production/social-video)
+- [Studio Network (Partner Collaboration)](https://www.aliarshad.co/studio-network): How vetted independent specialists join complex builds transparently.
+- [RTX GPU Compute Rental (Consultation-Led, Noindex Preview)](https://www.aliarshad.co/services/gpu-compute): Consultation-first RTX compute access; hardware specifications currently carry placeholders pending confirmation.
+
+## Live Public Software Demonstrations
+
+- **PipelineOS CRM** (https://crm.aliarshad.co | Case study: https://www.aliarshad.co/case-studies/pipelineos-crm | Directory: https://www.aliarshad.co/products/pipelineos-crm): Live Next.js 16 + PostgreSQL B2B CRM sandbox with contacts, transactional lead conversion, 6-stage Kanban pipeline, live analytics, and one-click reset.
+- **StockFlow Inventory SaaS** (https://stock.aliarshad.co | Case study: https://www.aliarshad.co/case-studies/stockflow-inventory | Directory: https://www.aliarshad.co/products/stockflow-inventory): Live multi-warehouse PostgreSQL inventory platform with EAN-13 lookup, atomic transfers, PO receiving, SO fulfilment, and shared `/api/v1` REST API.
+- **StockFlow Mobile Web Preview** (https://stockflow-mobile-web.onrender.com | Directory: https://www.aliarshad.co/products/stockflow-mobile): Live interactive React Native / Expo companion preview writing directly to the StockFlow `/api/v1` PostgreSQL API.
+
+## Locally Verified Portfolio Demonstrations & Case Studies
+
+- [Portfolio Index](https://www.aliarshad.co/work) & [Case Studies](https://www.aliarshad.co/case-studies): Includes Tessera Clayworks Storefront, Northwind Analytics Dashboard, Tideline BM25 Support Agent, Kestrel Voice Sales Qualification Agent, 15-node Inbound Lead Qualification n8n Workflow, Meridian Append-Only Inventory Ledger, Lantern Sourcing & Landed Cost Platform, Halcyon WCAG Brand System, Ledgerlight Read-Only EVM Explorer, Sentryline Defensive Security Posture Tool, Motion Production Media Pipeline, and Blender Scene System (In Development).
+- [12-Product SaaS Directory](https://www.aliarshad.co/products): Architectural references including FinanceOS, FlowOS, SourceOS, Orexa Interactive Learning Demo, SupportOS, ProjectOS, InsightOS, PeopleOS, and BookOS (verified locally in the repository).
+
+## Free Interactive Business Calculators
+
+- [Calculator Centre](https://www.aliarshad.co/tools) — 10 browser-based tools with zero email gate:
+  - [Web Project Cost Estimator](https://www.aliarshad.co/tools/web-project-estimator)
+  - [Automation ROI Calculator](https://www.aliarshad.co/tools/automation-roi-calculator)
+  - [Landed Cost Calculator](https://www.aliarshad.co/tools/landed-cost-calculator)
+  - [Shipping & Volumetric Weight Calculator](https://www.aliarshad.co/tools/shipping-cost-calculator)
+  - [Currency Exchange Calculator](https://www.aliarshad.co/tools/currency-exchange-calculator)
+  - [SaaS Operating Cost Calculator](https://www.aliarshad.co/tools/saas-cost-calculator)
+  - [Inventory Reorder Point & EOQ Calculator](https://www.aliarshad.co/tools/inventory-reorder-calculator)
+  - [Profit Margin & Break-Even Calculator](https://www.aliarshad.co/tools/profit-margin-calculator)
+  - [Weighted Supplier Comparison Calculator](https://www.aliarshad.co/tools/supplier-comparison-calculator)
+  - [Project Budget & Burn Rate Calculator](https://www.aliarshad.co/tools/project-budget-calculator)
+
+## Guides & Reference Articles
+
+- [Resources & Guides](https://www.aliarshad.co/resources): 15 original guides covering n8n vs. Zapier, AI agents vs. chatbots, custom web app pricing, Shopify vs. custom ecommerce, Next.js SEO, landed cost, motion graphics pricing, brand style guides, and freelancer vs. agency decisions.
+- [Industries Served](https://www.aliarshad.co/industries): [Ecommerce](https://www.aliarshad.co/industries/ecommerce), [SaaS](https://www.aliarshad.co/industries/saas), and [Logistics](https://www.aliarshad.co/industries/logistics).
+
+## Contact
+
+- [Start a Project](https://www.aliarshad.co/contact): Share project goals, constraints, and timeline directly with Ali Arshad. No fixed public rate sheet — every engagement receives an individual plain-language written scope after discovery.

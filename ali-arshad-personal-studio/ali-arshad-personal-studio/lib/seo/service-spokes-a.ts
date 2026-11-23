@@ -47,7 +47,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["n8n", "Google Sheets API", "Gmail API", "Google Drive API", "Google Docs", "JavaScript"],
+      audience: "Operations teams, agencies, and founder-led businesses running daily reporting and client intake inside Gmail, Sheets, and Drive.",
+      quickAnswer:
+        "Google Workspace n8n automation replaces manual CSV exports and fragile Apps Script macros with versioned, error-monitored workflows you host and own outright.",
       relatedTool: { href: "/tools/automation-roi-calculator", label: "Estimate hours saved with the Automation ROI Calculator" },
+      relatedResource: { href: "/resources/what-is-n8n", label: "Read: What is n8n and when does it beat Zapier?" },
       faqs: [
         { q: "Why use n8n instead of Google Apps Script?", a: "Apps Script works for tiny single-sheet helpers, but n8n gives you visual observability, retries, clean webhook handling, multi-app credentials and a separate error workflow when external APIs fail." },
         { q: "Will n8n overwrite formulas in our Google Sheets?", a: "No. Workflows write to dedicated raw-data tabs or structured ranges while keeping your presentation tabs and formulas isolated and protected." },
@@ -97,7 +101,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["n8n", "HubSpot", "Pipedrive", "Airtable", "Webhooks", "REST APIs"],
+      audience: "B2B sales teams using HubSpot, Pipedrive, or Airtable who lose deals to messy manual entry and duplicate records.",
+      quickAnswer:
+        "CRM automation with n8n validates and deduplicates inbound leads before writing to your existing CRM, automating stage hand-offs with retries and Slack owner alerts.",
       relatedTool: { href: "/tools/automation-roi-calculator", label: "Model CRM automation ROI" },
+      relatedResource: { href: "/resources/n8n-vs-zapier", label: "Read: n8n vs. Zapier for multi-step CRM workflows" },
       faqs: [
         { q: "How do you prevent duplicate contacts?", a: "Every workflow normalises email addresses (trimmed, lowercased) and checks both a short-window deduplication store and the CRM's existing records before deciding whether to update or create." },
         { q: "What happens if our CRM API is temporarily rate-limited?", a: "HTTP steps use bounded retries with backoff, and unrecoverable failures drop into an error workflow with the full payload so no lead is silently lost." },
@@ -148,7 +156,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["n8n", "JavaScript Code Nodes", "Webhooks", "HubSpot / Pipedrive", "Slack", "Email Drafts"],
+      audience: "B2B founders, agencies, and inbound sales teams sifting through mixed-quality website and form inquiries.",
+      quickAnswer:
+        "Automated lead qualification validates payloads, deduplicates repeat inquiries, applies transparent 0–100 JavaScript scoring rules, and routes hot leads to sales with human-approved reply drafts.",
       relatedTool: { href: "/tools/automation-roi-calculator", label: "Calculate lead-triage time savings" },
+      relatedProduct: { href: "/products/flowos", label: "Inspect FlowOS visual approval-gated workflow automation" },
       faqs: [
         { q: "Does the workflow auto-email leads without review?", a: "No by default. Drafting structured follow-ups for quick human approval protects your tone and avoids awkward automated replies on nuanced inquiries." },
         { q: "Can we adjust scoring thresholds ourselves later?", a: "Yes — thresholds and weights live in clearly documented configuration inside the workflow, never buried in opaque prompts." },
@@ -198,7 +210,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["n8n", "REST APIs", "Webhooks", "Google Workspace", "PostgreSQL", "TypeScript"],
+      audience: "Growing ecommerce, SaaS, and service teams spending hours every week bridging disconnected apps by hand.",
+      quickAnswer:
+        "Business process automation simplifies repetitive operational steps first, then connects CRMs, billing, Google Workspace, and databases with self-hostable n8n workflows and exception alerts.",
       relatedTool: { href: "/tools/automation-roi-calculator", label: "Check payback with the Automation ROI Calculator" },
+      relatedResource: { href: "/resources/automation-roi", label: "Read: How to measure automation ROI honestly" },
       faqs: [
         { q: "Should we automate a messy process right away?", a: "No. Automating a broken process just produces broken outcomes faster. Every engagement starts by tightening the steps and ownership before building." },
         { q: "What payback period makes an automation worth building?", a: "As a general rule of thumb, payback measured in a few months on a stable process is usually compelling. If payback stretches past a year, it is often better to tackle a higher-friction bottleneck first." },
@@ -259,6 +275,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Okapi BM25", "Hybrid RAG", "TypeScript", "React 19", "n8n Escalation", "Playwright"],
+      audience: "Ecommerce, SaaS, and service support teams handling repetitive policy, billing, or order questions who cannot risk hallucinated answers.",
+      quickAnswer:
+        "I build knowledge-base support agents grounded strictly in your versioned docs — citing source policies verbatim and escalating to human reps whenever confidence drops.",
+      relatedResource: { href: "/resources/ai-agent-vs-chatbot", label: "Read: AI agent vs. chatbot — practical trade-offs" },
+      relatedProduct: { href: "/products/supportos", label: "Inspect SupportOS help-desk & human-reviewed AI drafts" },
       faqs: [
         { q: "Does a support agent always need an LLM?", a: "Not for strict policy deflection. Lexical retrieval with verbatim source quoting eliminates policy hallucination entirely; LLMs can be layered cleanly where conversational synthesis genuinely helps." },
         { q: "What happens when a customer asks something not in our docs?", a: "The score falls below the confidence floor and the agent escalates to a human rep with the transcript instead of guessing." },
@@ -308,6 +329,10 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["TypeScript", "State Machines", "Web Speech API", "React 19", "n8n", "CRM APIs"],
+      audience: "B2B service firms, logistics/fleet operators, and high-ticket teams capturing inbound sales inquiries after hours.",
+      quickAnswer:
+        "Scoped sales qualification agents use deterministic slot-filling state machines with voice support, honest typed fallback, and loop guards to hand clean lead briefs to your sales team.",
+      relatedResource: { href: "/resources/ai-agent-use-cases", label: "Read: Practical AI agent use cases for small businesses" },
       faqs: [
         { q: "Will the agent negotiate prices or make binding quotes?", a: "No. Its scope is strictly qualification and routing — pricing, scoping and closing always stay with your human sales team." },
         { q: "What if a visitor's browser or device blocks microphone access?", a: "Capability detection checks for real available voices and degrades immediately to typed chat while stating the mode plainly." },
@@ -365,6 +390,10 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Okapi BM25", "Hybrid RAG", "OpenAI / Anthropic APIs", "TypeScript", "Next.js"],
+      audience: "Product, support, and operations teams sitting on rich SOPs, help docs, or manuals that staff and customers struggle to search.",
+      quickAnswer:
+        "I build knowledge-base and RAG assistants from the retrieval layer up — combining BM25 or hybrid search with visible source citations, confidence floors, and documentation-gap logging.",
+      relatedResource: { href: "/resources/ai-agent-vs-chatbot", label: "Read: AI agent vs. chatbot — retrieval & guardrails" },
       faqs: [
         { q: "When is lexical BM25 better than vector embeddings?", a: "For structured policies, SKUs, error codes and compact knowledge bases, BM25 is faster, deterministic, zero-cost and completely inspectable. Hybrid search combines both when corpora grow large and varied." },
         { q: "Does our private documentation train external AI models?", a: "Retrieval indexes stay inside your own environment. Where a commercial LLM API is used, data handling follows that provider's published commercial API terms and is reviewed with you during scoping." },
@@ -425,7 +454,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Next.js 16", "App Router", "React 19", "TypeScript", "Vercel", "Playwright"],
+      audience: "Founders, marketing leads, and software teams needing a fast, SEO-ready Next.js App Router website or full-stack web app.",
+      quickAnswer:
+        "I engineer server-first Next.js App Router applications with TypeScript, built-in technical SEO, clean design systems, and automated Playwright QA — delivered remotely with full repo ownership.",
       relatedTool: { href: "/tools/web-project-estimator", label: "Estimate a Next.js project range" },
+      relatedResource: { href: "/resources/nextjs-seo", label: "Read: Next.js App Router SEO architecture guide" },
       faqs: [
         { q: "Do you build on App Router or Pages Router?", a: "All new projects are built on the modern Next.js App Router with TypeScript. I can also maintain or incrementally migrate existing Pages Router apps." },
         { q: "Will our Next.js site be fast on mobile?", a: "Yes — server-first rendering, sized Next/Image assets, minimal client JavaScript and zero bloated UI frameworks keep mobile performance crisp." },
@@ -475,7 +508,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["React 19", "TypeScript", "Next.js", "CSS Tokens", "Node.js Test Runner", "Playwright"],
+      audience: "Product teams and businesses needing interactive, stateful browser applications with reliable calculations and accessible UI.",
+      quickAnswer:
+        "I architect React and TypeScript applications with pure, unit-tested domain modules separated from the UI layer and verified across desktop and mobile viewports with automated browser tests.",
       relatedTool: { href: "/tools/web-project-estimator", label: "Estimate your React app scope" },
+      relatedResource: { href: "/resources/choosing-a-tech-stack", label: "Read: How to choose a maintainable web tech stack" },
       faqs: [
         { q: "Why keep business logic outside React components?", a: "Pure TypeScript functions can be unit tested in milliseconds, reasoned about without DOM mocks, and reused directly on a backend API later without rewriting." },
         { q: "Can you integrate our existing REST or GraphQL backend?", a: "Yes — with typed response schemas, explicit request timeouts and clear error states so the UI never fails silently." },
@@ -525,13 +562,190 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Next.js", "React 19", "TypeScript", "PostgreSQL / Supabase", "Stripe", "Vercel"],
+      audience: "Seed-stage founders, technical operators, and product teams validating a focused v1 workflow.",
+      quickAnswer:
+        "I scope and ship focused Next.js, React, and TypeScript MVPs remotely with weekly preview milestones, separated domain tests, and full Git/hosting ownership.",
       relatedTool: { href: "/tools/web-project-estimator", label: "Estimate MVP budget & timeline" },
+      relatedResource: { href: "/resources/custom-web-app-cost", label: "Read: How much does a custom web app cost?" },
       faqs: [
         { q: "How long does a focused MVP usually take?", a: "Timelines depend on workflow complexity, integrations and review turnaround. Focused first versions typically span several weeks and are agreed in a written milestone schedule after discovery." },
         { q: "Will we have to rewrite the MVP if we raise a round?", a: "No — because it is built on standard Next.js, React and TypeScript with clean separation of logic and tests, a seed-stage engineering team can extend it directly." },
         { q: "Can you help narrow down our feature list before quoting?", a: "Yes — trimming scope to protect your runway and launch date is often the highest-value part of discovery." },
       ],
-      projectSlugs: ["northwind-analytics-dashboard", "tessera-clayworks-storefront"],
+      projectSlugs: ["northwind-analytics-dashboard", "tessera-clayworks-storefront", "pipelineos-crm"],
+      publicationState: "Published",
+    },
+    {
+      slug: "custom-crm-development",
+      keywordId: "spec-custom-crm",
+      title: "Custom CRM & B2B Pipeline Software Development (Next.js & PostgreSQL)",
+      h1: "Custom CRM & B2B pipeline software",
+      lead: "Build a tailored PostgreSQL-backed CRM and sales operations workspace when off-the-shelf seat pricing, rigid pipelines, or AGPL forks slow your team down.",
+      heroVisual: {
+        src: "/images/projects/pipelineos/pipeline.png",
+        alt: "PipelineOS live CRM demonstration showing a six-stage Kanban sales pipeline with stage totals, weighted values and quick stage transitions",
+        width: 1440,
+        height: 900,
+        caption: "Live public demo: PipelineOS 6-stage Kanban CRM (crm.aliarshad.co)",
+        projectSlug: "pipelineos-crm",
+      },
+      audience: "B2B founders, sales-led teams, and operators whose deal workflow, approvals, or quoting rules do not fit rigid off-the-shelf CRM seats.",
+      quickAnswer:
+        "Custom CRM development builds a fast Next.js, TypeScript, and PostgreSQL pipeline owned outright by your company — evidenced by the live PipelineOS CRM sandbox at crm.aliarshad.co.",
+      body: [
+        "Standard CRMs work well when your sales motion is generic and seat count stays low. Teams outgrow them when per-seat add-ons multiply, custom quoting or approval stages require brittle workarounds, or sales needs to share data directly with quoting, fulfilment, or internal portals.",
+        "Demonstrated live in PipelineOS (crm.aliarshad.co — an 8-table PostgreSQL CRM built on Next.js 16 and Drizzle ORM with atomic Lead → Contact + Deal conversion, integer-cent valuation, immutable stage history, and RBAC auth), a focused bespoke CRM gives you exact pipeline mechanics without per-seat lock-in.",
+      ],
+      problems: [
+        "Per-seat CRM tiers punish growing teams whenever operations or finance needs read/write access",
+        "Deals, custom quotes, and follow-up tasks stay split across spreadsheets and disconnected tools",
+        "Lead-to-deal hand-offs create duplicate records or lose the full communication timeline",
+        "AGPL or enterprise-gated open-source CRM forks carry commercial licensing risk and heavy server costs",
+      ],
+      deliverables: [
+        { title: "Relational PostgreSQL CRM schema", detail: "Clean tables for accounts, contacts, leads, deals, notes, tasks, and immutable stage-move audit history with integer-cent valuation." },
+        { title: "Transactional lead conversion & Kanban board", detail: "Convert leads into linked contacts and deals inside one database transaction, with stage totals and weighted forecasting." },
+        { title: "Role-based auth & security controls", detail: "Salted password hashing, HttpOnly cookie sessions, CSRF origin checks, Zod request validation, and audit logs." },
+        { title: "Live analytics & n8n webhook hooks", detail: "Database-computed funnel metrics, win-rate reporting, and clean webhook hand-offs to email, Slack, or billing." },
+      ],
+      workflow: {
+        title: "Custom CRM build & rollout flow",
+        caption: "Backed by the live PipelineOS CRM public sandbox (5/5 PostgreSQL integration tests + Chromium E2E).",
+        steps: [
+          { label: "Map pipeline", detail: "Lock stages, roles, fields & permissions", icon: "briefcase" },
+          { label: "Model Postgres", detail: "Design relational schema & transactions", icon: "layers" },
+          { label: "Build & verify", detail: "Ship Next.js UI, APIs & DB integration tests", icon: "code" },
+          { label: "Team rollout", detail: "Migrate records, wire n8n & hand off repo", icon: "users", human: true },
+        ],
+      },
+      stack: ["Next.js 16", "TypeScript", "PostgreSQL", "Drizzle ORM", "Zod v4", "RBAC Auth", "n8n Webhooks"],
+      scopeNotice:
+        "Honest framing: If HubSpot or Pipedrive fits your workflow cleanly at lower cost, I will recommend automating that CRM with n8n instead of building custom software.",
+      relatedTool: { href: "/tools/saas-cost-calculator", label: "Compare custom hosting vs. per-seat SaaS cost" },
+      relatedProduct: { href: "/products/pipelineos-crm", label: "Launch the live PipelineOS CRM sandbox (crm.aliarshad.co)" },
+      relatedResource: { href: "/resources/custom-web-app-cost", label: "Read: What drives custom web application cost?" },
+      faqs: [
+        { q: "When should we build a custom CRM instead of using HubSpot or Pipedrive?", a: "Use HubSpot or Pipedrive when standard contact and deal pipelines fit your business cleanly. Build custom when your workflow requires bespoke quoting, tight ERP/inventory coupling, high seat counts across ops staff, or full ownership of the codebase and data model." },
+        { q: "Can we test a live example before starting a discovery call?", a: "Yes — PipelineOS is publicly deployed at crm.aliarshad.co as a clearly labeled studio demonstration with fictional B2B data and a one-click workspace reset." },
+        { q: "How do you work with US or international sales teams remotely?", a: "All builds run remotely with scheduled US time-zone overlap for scoping calls, weekly preview links you can click through with your sales lead, and written documentation at hand-off." },
+      ],
+      projectSlugs: ["pipelineos-crm", "inbound-lead-qualification-workflow"],
+      publicationState: "Published",
+    },
+    {
+      slug: "api-integration",
+      keywordId: "spec-api-integration",
+      title: "API, Webhook & Backend Integration Development (REST, Next.js, PostgreSQL)",
+      h1: "API & system integration development",
+      lead: "Connect web applications, mobile companions, CRMs, payment providers, and internal databases through typed, validated REST APIs and resilient webhooks.",
+      heroVisual: {
+        src: "/images/projects/pipelineos/architecture.svg",
+        alt: "System architecture diagram illustrating Next.js App Router UI connected through Zod-validated REST APIs and Drizzle ORM to PostgreSQL",
+        width: 1200,
+        height: 620,
+        caption: "Architecture blueprint: Zod-validated REST APIs, auth boundaries & PostgreSQL",
+        projectSlug: "pipelineos-crm",
+        darkDiagram: true,
+      },
+      audience: "Engineering leads, ecommerce operators, and product teams whose web apps, mobile tools, billing systems, and ERPs need a dependable API layer.",
+      quickAnswer:
+        "I design and implement typed REST APIs, webhook receivers, and cross-system integrations in TypeScript and Next.js — evidenced live by StockFlow's shared /api/v1 web-and-mobile backend (stock.aliarshad.co).",
+      body: [
+        "Integrations fail in the boring places: unvalidated webhook payloads, missing idempotency keys, silent timeouts, mismatched auth models between web and mobile clients, and brittle glue scripts nobody documented.",
+        "Demonstrated live in StockFlow (where one versioned `/api/v1/*` REST API with dual HttpOnly cookie and Bearer-token auth serves both the desktop web operations console at stock.aliarshad.co and the React Native mobile preview) and in PipelineOS, every integration boundary is schema-validated, explicitly timed out, and tested against failure paths.",
+      ],
+      problems: [
+        "Web apps, mobile companions, and back-office systems read contradicting numbers from separate stores",
+        "Third-party webhooks fail silently or create duplicate orders and records on retry",
+        "External API integrations hang UI requests because timeouts and error states were never modelled",
+        "Legacy scripts lack schema validation, rate limiting, or clean authentication boundaries",
+      ],
+      deliverables: [
+        { title: "Versioned, schema-validated REST APIs", detail: "Typed Next.js Route Handlers with Zod input/output validation, clean HTTP status contracts, and explicit error envelopes." },
+        { title: "Dual Web & Mobile auth boundaries", detail: "HttpOnly cookie sessions for browsers alongside CORS-safe Authorization Bearer tokens for mobile apps or partner clients." },
+        { title: "Idempotent webhook ingestion & retries", detail: "Signature verification, deduplication guards, bounded retry handling, and dead-letter logging for Stripe, Shopify, CRM, and n8n events." },
+        { title: "Automated integration & failure tests", detail: "End-to-end API tests asserting auth rejection, malformed payloads, atomic database writes, and upstream timeout handling." },
+      ],
+      workflow: {
+        title: "Contract-first API integration sequence",
+        caption: "Applied in StockFlow's shared /api/v1 web + mobile backend (live at stock.aliarshad.co) and Ledgerlight's typed RPC client.",
+        steps: [
+          { label: "Lock contract", detail: "Define schemas, auth & error codes upfront", icon: "briefcase" },
+          { label: "Validate edge", detail: "Enforce Zod checks, CORS & idempotency", icon: "code" },
+          { label: "Atomic writes", detail: "Guard DB state & upstream timeouts", icon: "layers" },
+          { label: "Verify & hand off", detail: "Run failure-mode tests & deliver API docs", icon: "check" },
+        ],
+      },
+      stack: ["Next.js Route Handlers", "TypeScript", "Zod v4", "PostgreSQL / Drizzle", "REST & JSON-RPC", "Webhooks", "n8n"],
+      relatedTool: { href: "/tools/automation-roi-calculator", label: "Estimate hours saved by replacing manual CSV syncs" },
+      relatedProduct: { href: "/products/stockflow-inventory", label: "Inspect StockFlow's live shared /api/v1 web & mobile backend" },
+      relatedResource: { href: "/resources/what-is-n8n", label: "Compare custom APIs vs. n8n workflow orchestration" },
+      faqs: [
+        { q: "When should we build a custom API integration instead of using n8n?", a: "Use n8n when orchestrating SaaS-to-SaaS workflows where visual observability and fast iteration matter. Build a custom TypeScript API when you need transactional database writes, strict request latency, dual web/mobile authentication, or custom business invariants." },
+        { q: "Can one backend API serve both our web portal and a mobile app?", a: "Yes — StockFlow demonstrates this pattern live: one versioned `/api/v1/*` backend serves browser sessions over HttpOnly cookies and the mobile client over Bearer tokens against the same PostgreSQL ledger." },
+        { q: "How do you prevent duplicate writes when third-party webhooks retry?", a: "Webhook handlers validate signatures and payloads first, check an idempotency key or deduplication window, and wrap multi-table updates inside a single database transaction." },
+      ],
+      projectSlugs: ["stockflow-inventory", "pipelineos-crm", "inbound-lead-qualification-workflow"],
+      publicationState: "Published",
+    },
+  ],
+
+  "ecommerce-development": [
+    {
+      slug: "custom-storefronts",
+      keywordId: "spec-custom-storefronts",
+      title: "Custom Next.js & Headless Storefront Development",
+      h1: "Custom Next.js & headless storefronts",
+      lead: "High-speed custom storefronts with real variant filtering, integer-cent pricing rules, stock-enforced checkouts, and connected product admin or inventory backends.",
+      heroVisual: {
+        src: "/images/projects/commerce/checkout.webp",
+        alt: "Tessera Clayworks custom storefront demonstration showing three-step checkout with delivery validation, shipping tier rules and clear order summary",
+        width: 1600,
+        height: 900,
+        caption: "Demo build: Tessera Clayworks validated cart, promotions & checkout (56 tests)",
+        projectSlug: "tessera-clayworks-storefront",
+      },
+      audience: "Direct-to-consumer and specialty product brands that have outgrown rigid store themes and need fast mobile speed, custom variant logic, or back-office integration.",
+      quickAnswer:
+        "I build custom Next.js and React storefronts with integer-cent pricing logic, live stock validation, and clean technical SEO — while keeping payment processing safely with Stripe or Shopify Checkout.",
+      body: [
+        "Most brands do not need a custom storefront on day one — a clean Shopify setup is faster when your catalogue and shipping rules are standard. Custom Next.js engineering earns its keep when variant configurators, mobile Core Web Vitals, editorial brand presentation, or real-time inventory rules outgrow theme templates.",
+        "Demonstrated in Tessera Clayworks (56 automated unit and browser tests covering multi-facet filtering, live variant stock caps, promotion-code and free-shipping threshold recalculation, and product admin CRUD) alongside StockFlow's live inventory backend, every commerce rule runs in tested integer-cent TypeScript outside the UI.",
+      ],
+      problems: [
+        "Bloated storefront themes and stacked apps slow mobile product pages and hurt conversion",
+        "Promotion codes, shipping thresholds, and variant stock caps conflict at checkout",
+        "Storefront catalogue changes do not stay synchronized with warehouse stock or purchasing",
+        "Filtered collection URLs and variants create duplicate SEO canonicals",
+      ],
+      deliverables: [
+        { title: "Fast faceted catalogue & variant UI", detail: "Instant category, attribute, and price filtering with responsive product views verified from 360px phones to 1440px desktops." },
+        { title: "Integer-cent cart & promotion engine", detail: "Pure TypeScript pricing, coupon, free-shipping threshold, and tax calculations with zero floating-point drift." },
+        { title: "Stock-enforced checkout & payment hand-off", detail: "Server-validated availability checks paired with Stripe or Shopify Checkout so raw card handling never touches custom code." },
+        { title: "Product admin & inventory sync", detail: "Structured catalogue CRUD or live webhook synchronization with Shopify, PostgreSQL, or warehouse inventory systems." },
+      ],
+      workflow: {
+        title: "Custom storefront engineering sequence",
+        caption: "Modeled on Tessera Clayworks (18 unit tests + 38 Playwright checks) and StockFlow's transactional order API.",
+        steps: [
+          { label: "Audit fit", detail: "Confirm custom Next.js beats a theme", icon: "briefcase" },
+          { label: "Model rules", detail: "Lock variants, pricing, shipping & stock", icon: "code" },
+          { label: "Build storefront", detail: "Ship catalogue, cart, checkout & admin", icon: "layers" },
+          { label: "QA & launch", detail: "Test journeys, SEO canonicals & payments", icon: "check" },
+        ],
+      },
+      stack: ["Next.js App Router", "React 19", "TypeScript", "Stripe / Shopify API", "Integer-Cent Pricing", "Playwright"],
+      scopeNotice:
+        "Platform honesty: Standard Shopify is usually the smarter choice for straightforward catalogues. Custom or headless storefronts are recommended only where speed, brand UX, or operational rules justify the investment.",
+      relatedTool: { href: "/tools/profit-margin-calculator", label: "Model product unit economics & break-even margin" },
+      relatedProduct: { href: "/products/stockflow-inventory", label: "Explore live multi-warehouse order fulfilment (StockFlow)" },
+      relatedResource: { href: "/resources/shopify-vs-custom-ecommerce", label: "Read: Shopify vs. custom ecommerce — honest trade-offs" },
+      faqs: [
+        { q: "Should we move off Shopify completely or go headless?", a: "Often keeping Shopify (or Stripe) for checkout and order administration while building a focused Next.js storefront gives you editorial speed without reinventing taxes or payments. We evaluate the simplest architecture during discovery." },
+        { q: "How do you prevent penny rounding errors or overselling?", a: "All prices, discounts, shipping thresholds, and taxes compute in integer cents inside unit-tested modules outside React, and inventory is re-verified at checkout submission." },
+        { q: "Do you work remotely with US ecommerce brands?", a: "Yes — discovery, milestone previews, and hand-off run remotely with scheduled US time-zone overlap and full repository ownership." },
+      ],
+      projectSlugs: ["tessera-clayworks-storefront", "stockflow-inventory"],
       publicationState: "Published",
     },
   ],
@@ -542,18 +756,21 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
       keywordId: "spec-inventory-software",
       title: "Custom Inventory & Purchasing Software Development",
       h1: "Custom inventory software",
-      lead: "Replace fragile stock spreadsheets with append-only movement ledgers, purchase-order receiving, warehouse transfers and reorder logic that never drifts.",
+      lead: "Replace fragile stock spreadsheets with append-only movement ledgers, multi-warehouse transfers, EAN-13 barcode lookup, purchase-order receiving, and reorder logic that never drifts.",
       heroVisual: {
         src: "/images/projects/supply-chain/cover.webp",
         alt: "Meridian inventory software demonstration displaying on-hand stock, on-order quantities and reorder alerts computed from an append-only ledger",
         width: 1500,
         height: 1055,
-        caption: "Demo build: Meridian append-only inventory ledger",
+        caption: "Demo builds: Meridian ledger & live StockFlow multi-warehouse console",
         projectSlug: "meridian-inventory-operations",
       },
+      audience: "Distributors, ecommerce operators, and multi-warehouse teams outgrowing spreadsheets without wanting a bloated legacy ERP.",
+      quickAnswer:
+        "I build custom inventory and purchasing software on immutable PostgreSQL movement ledgers — evidenced by the live StockFlow multi-warehouse sandbox (stock.aliarshad.co + mobile web preview) and Meridian.",
       body: [
         "Most inventory headaches start when stock is stored as an editable number in a spreadsheet or rigid app. One double-click, partial supplier shipment or warehouse transfer leaves your recorded stock contradicting the shelves — with no trail showing why.",
-        "Built on the architecture proven in the Meridian Inventory & Purchasing Operations demonstration (58 automated tests over 1,265 movements), stock is computed directly from an append-only ledger so balances, valuations and reorder flags agree by construction.",
+        "Proven across both the live StockFlow multi-warehouse SaaS + React Native mobile web preview (stock.aliarshad.co) and Meridian Inventory & Purchasing Operations (58 automated tests over 1,265 movements), stock is computed from atomic, immutable movements so balances, valuations, and reorder alerts stay auditable by construction.",
       ],
       problems: [
         "Inventory counts drift out of sync with warehouse reality with no audit trail",
@@ -565,11 +782,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         { title: "Append-only movement ledger", detail: "Every receipt, sale, transfer and adjustment records reason, reference and timestamp; on-hand is always computed." },
         { title: "Posting gate & transfer pairs", detail: "Refuse negative-stock writes, wrong-sign entries and unmatched transfers at the boundary." },
         { title: "Purchase orders & partial receipts", detail: "Automatic PO status derivation, over-receipt refusal and open-order visibility." },
-        { title: "Unified reorder & valuation views", detail: "Reorder suggestions factor in stock already on order, backed by SKU movement history and valuation." },
+        { title: "Multi-warehouse & mobile-ready API", detail: "Unified reorder and valuation views backed by a shared /api/v1 REST layer ready for barcode lookup and warehouse floor updates." },
       ],
       workflow: {
         title: "Append-only inventory & purchasing cycle",
-        caption: "Modeled directly on Meridian: Inventory & Purchasing Operations (31 unit tests + 27 browser checks).",
+        caption: "Modeled on Meridian (58 tests) and live StockFlow (stock.aliarshad.co + mobile web preview).",
         steps: [
           { label: "Post movement", detail: "Receipt, sale, transfer or adjustment", icon: "layers" },
           { label: "Posting gate", detail: "Reject negative stock or over-receipts", icon: "alert" },
@@ -577,13 +794,15 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
           { label: "Reorder action", detail: "Operator approves PO from unified view", icon: "users", human: true },
         ],
       },
-      stack: ["TypeScript", "Append-Only Ledger", "Next.js", "React 19", "PostgreSQL", "Playwright"],
+      stack: ["TypeScript", "Append-Only Ledger", "Next.js", "React 19", "PostgreSQL", "Shared /api/v1 REST", "Playwright"],
+      relatedTool: { href: "/tools/inventory-reorder-calculator", label: "Model reorder point, safety stock & EOQ" },
+      relatedProduct: { href: "/products/stockflow-inventory", label: "Try the live StockFlow multi-warehouse demo (stock.aliarshad.co)" },
       faqs: [
         { q: "Why build custom inventory software instead of buying a giant ERP?", a: "Mid-sized operators often pay tens of thousands for ERP modules they barely use while still falling back to spreadsheets for purchasing or multi-location checks. A focused custom app matches your exact workflow cleanly." },
-        { q: "Can it integrate with Shopify or our ecommerce storefront?", a: "Yes — order webhooks deduct stock via ledger movements while checkout checks real derived availability." },
+        { q: "Can it integrate with Shopify or a warehouse mobile companion?", a: "Yes — StockFlow demonstrates a live shared /api/v1 REST backend syncing web operations and a mobile preview against the same PostgreSQL ledger, and ecommerce order webhooks deduct stock via ledger movements." },
         { q: "How does it handle partial deliveries from suppliers?", a: "Purchase orders track ordered vs received quantities across multiple receipts, automatically deriving open/partial/closed status and blocking accidental over-receipts." },
       ],
-      projectSlugs: ["meridian-inventory-operations", "lantern-sourcing-platform"],
+      projectSlugs: ["meridian-inventory-operations", "stockflow-inventory", "lantern-sourcing-platform"],
       publicationState: "Published",
     },
     {
@@ -627,6 +846,11 @@ export const SPOKES_AI_AND_WEB: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["React 19", "TypeScript", "Custom SVG", "Next.js", "PostgreSQL", "CSV Export"],
+      audience: "Operators, SaaS founders, and commercial leaders needing one trusted, fast analytics interface instead of contradicting spreadsheets or slow BI embeds.",
+      quickAnswer:
+        "Custom React analytics dashboards derive every KPI tile, SVG chart, and CSV export from one pure TypeScript data layer so executive figures never contradict one another.",
+      relatedTool: { href: "/tools/saas-cost-calculator", label: "Estimate hosting & operating cost for a custom portal" },
+      relatedProduct: { href: "/products/insightos", label: "Inspect InsightOS BI dashboard architecture" },
       faqs: [
         { q: "Why draw SVG charts instead of installing a heavy chart library?", a: "Custom SVG keeps production bundles tiny, matches your brand tokens exactly, and gives complete control over axis ticks, mobile responsiveness and screen-reader tables." },
         { q: "Can this live inside our existing SaaS product for customers?", a: "Yes — components are built cleanly in React and TypeScript so they embed natively into your app or run as a standalone internal portal." },
