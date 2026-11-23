@@ -25,15 +25,15 @@ export default function HomePage() {
       <JsonLd data={personSchema()} />
       <JsonLd data={webSiteSchema()} />
       {/* Focused client conversion flow:
-          1. Hero → 2. Core Services → 3. Live Product Demonstrations (PipelineOS & StockFlow) →
-          4. Selected Work → 5. Credentials → 6. Studio Network Intro →
-          7. Direct / Upwork Connect → 8. Final Contact CTA. */}
+          1. Hero → 2. Core Services → 3. Selected Work → 4. Studio Network →
+          5. Live Product Demonstrations → 6. Credentials → 7. Direct / Upwork Connect →
+          8. Final Contact CTA. */}
       <Hero />
       <ServiceShowcaseHome />
-      <LiveProductDemos />
       <FeaturedWork />
-      <CredentialsPreview />
       <StudioNetworkIntro />
+      <LiveProductDemos />
+      <CredentialsPreview />
       <FreelanceConnect />
       <ContactCTA
         standalone
