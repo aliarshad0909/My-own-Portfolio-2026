@@ -40,10 +40,21 @@ export type Resource = {
   /** Short standfirst under the H1. */
   lead: string;
   publicationState: PublicationState;
+  /**
+   * ISO date (YYYY-MM-DD) the guide was first published to the site, and the
+   * date of its last substantive revision. Both are real authored dates, never
+   * bumped to fake freshness. When omitted on an article literal, the composed
+   * `RESOURCES` list fills them from the batch's real git authored dates.
+   */
+  publishedAt?: string;
+  updatedAt?: string;
   /** Internal links to weave in (service hub, tool, work). */
   related: string[];
   body: ArticleBlock[];
 };
+
+/** A resource guaranteed to carry publication and update dates. */
+export type DatedResource = Resource & { publishedAt: string; updatedAt: string };
 
 export const p = (text: string): ArticleBlock => ({ type: "p", text });
 export const h2 = (text: string): ArticleBlock => ({ type: "h2", text });

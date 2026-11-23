@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-function articleSchema(slug: string, title: string, description: string) {
+function articleSchema(slug: string, title: string, description: string, publishedAt?: string, updatedAt?: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -45,8 +45,19 @@ function articleSchema(slug: string, title: string, description: string) {
     author: { "@type": "Person", name: SITE.name, url: new URL("/", siteBaseUrl()).toString() },
     publisher: { "@type": "Person", name: SITE.name },
     mainEntityOfPage: new URL(`/resources/${slug}`, siteBaseUrl()).toString(),
+    ...(publishedAt ? { datePublished: publishedAt } : {}),
+    ...(updatedAt ?? publishedAt ? { dateModified: updatedAt ?? publishedAt } : {}),
     inLanguage: "en",
   };
+}
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+/** Deterministic "D Month YYYY" formatting from an ISO date, no locale dependence. */
+function formatDate(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return iso;
+  return `${d} ${MONTHS[m - 1]} ${y}`;
 }
 
 function resolveRelated(href: string): { kind: string; title: string; description: string } {
@@ -86,7 +97,7 @@ export default async function ResourcePage({ params }: Props) {
 
   return (
     <>
-      <JsonLd data={articleSchema(r.slug, r.title, r.description)} />
+      <JsonLd data={articleSchema(r.slug, r.title, r.description, r.publishedAt, r.updatedAt)} />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },
@@ -98,6 +109,16 @@ export default async function ResourcePage({ params }: Props) {
         <div className="article-meta">
           <span className="article-meta__pill">{r.readMinutes} min read</span>
           <span>Written by {SITE.name}</span>
+          {r.publishedAt ? (
+            <span>
+              Published <time dateTime={r.publishedAt}>{formatDate(r.publishedAt)}</time>
+            </span>
+          ) : null}
+          {r.updatedAt && r.updatedAt !== r.publishedAt ? (
+            <span>
+              Updated <time dateTime={r.updatedAt}>{formatDate(r.updatedAt)}</time>
+            </span>
+          ) : null}
         </div>
       </PageHero>
 
