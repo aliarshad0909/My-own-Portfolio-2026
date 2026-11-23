@@ -10,6 +10,8 @@ import { US_STATES, getState } from "@/lib/geo/states";
 import { citiesInState } from "@/lib/geo/cities";
 import { shouldRender } from "@/lib/seo/publication";
 import { stateIntro, stateMeta } from "@/lib/geo/location-content";
+import { getStateLocalContent } from "@/lib/geo/state-local-content";
+import { Sources } from "@/components/seo/Sources";
 
 type Props = { params: Promise<{ state: string }> };
 
@@ -42,6 +44,7 @@ export default async function StatePage({ params }: Props) {
   if (!record || !shouldRender(record.publicationState)) notFound();
 
   const cities = citiesInState(record.slug);
+  const local = getStateLocalContent(record.slug);
 
   return (
     <>
@@ -64,6 +67,37 @@ export default async function StatePage({ params }: Props) {
             <p key={i} className="measure">{p}</p>
           ))}
         </div>
+
+        {local ? (
+          <div className="location-detail__local">
+            <p className="eyebrow eyebrow--plain">The {record.name} market</p>
+            <p className="section-sub measure">{local.angle}</p>
+            {local.context.map((para, i) => (
+              <p key={i} className="measure">
+                {para.text}
+                {para.sources && para.sources.length > 0 ? (
+                  <sup className="cite">
+                    {para.sources.map((s, j) => (
+                      <a key={j} href={`#source-${s + 1}`} aria-label={`Source ${s + 1}`}>
+                        [{s + 1}]
+                      </a>
+                    ))}
+                  </sup>
+                ) : null}
+              </p>
+            ))}
+            {local.serviceFit.length > 0 ? (
+              <ul className="location-detail__fit">
+                {local.serviceFit.map((f, i) => (
+                  <li key={i}>
+                    <Link className="text-link" href={f.href}>{f.service}</Link> {f.text}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <Sources items={local.sources} />
+          </div>
+        ) : null}
         <div className="location-detail__grid">
           <article className="location-detail__card">
             <p className="eyebrow eyebrow--plain">Remote collaboration</p>

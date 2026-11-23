@@ -4498,6 +4498,67 @@
   margin-top: 20px;
 }
 
+/* Local, cited content block (state pages and service-area pages) */
+.location-detail__local {
+  margin-top: var(--section-tight);
+}
+.location-detail__fit {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: grid;
+  gap: 12px;
+  max-width: var(--measure);
+}
+.location-detail__fit li {
+  color: var(--muted);
+}
+.cite {
+  font-size: 0.7em;
+  line-height: 0;
+  white-space: nowrap;
+}
+.cite a {
+  color: var(--coral);
+  text-decoration: none;
+  padding: 0 1px;
+}
+.cite a:hover,
+.cite a:focus-visible {
+  text-decoration: underline;
+}
+.sources {
+  margin-top: var(--section-tight);
+  padding-top: 18px;
+  border-top: 1px solid var(--border-soft);
+}
+.sources__heading {
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.sources__list {
+  margin: 0;
+  padding-left: 1.4em;
+  display: grid;
+  gap: 10px;
+  max-width: var(--measure);
+}
+.sources__item {
+  font-size: var(--fs-small);
+}
+.sources__link {
+  color: var(--text);
+}
+.sources__meta {
+  display: block;
+  color: var(--muted);
+  font-size: var(--fs-tiny);
+  margin-top: 2px;
+}
+
 .loc-state-card:has(a) {
   transition: border-color var(--med) var(--ease), background var(--med) var(--ease), transform var(--med) var(--ease);
 }

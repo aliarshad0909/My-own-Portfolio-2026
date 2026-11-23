@@ -12,6 +12,8 @@ import type { UsState } from "@/lib/geo/states";
 import type { ServiceArea } from "@/lib/seo/service-areas";
 import { isIndexable } from "@/lib/seo/publication";
 import { serviceAreaIntro } from "@/lib/seo/service-area-content";
+import { getServiceAreaLocal } from "@/lib/seo/service-area-local";
+import { Sources } from "@/components/seo/Sources";
 
 export function ServiceAreaView({
   area,
@@ -22,6 +24,7 @@ export function ServiceAreaView({
   hub: ServiceHub;
   state: UsState;
 }) {
+  const local = getServiceAreaLocal(area.serviceSlug, state.slug);
   return (
     <>
       <JsonLd
@@ -49,21 +52,41 @@ export function ServiceAreaView({
 
       {!isIndexable(area.publicationState) ? (
         <EditorNote>
-          This {hub.h1} × {state.name} service-area page is{" "}
-          {area.publicationState} (scaffold only). It renders on previews only
-          (noindex) and stays unpublished in production until: (1) a genuine{" "}
-          {state.name} local signal exists, (2) template copy is replaced with
-          meaningful, locally differentiated content, and (3) editorialReview is
-          completed and flipped to Published in lib/seo/service-areas.ts.
+          This {hub.h1} × {state.name} service-area page is {area.publicationState}
+          {local
+            ? ": it now carries locally specific, cited content but stays noindex (preview only) pending editorial review before it may be published."
+            : " (scaffold only). It renders on previews only (noindex) and stays unpublished in production until: (1) a genuine " +
+              state.name +
+              " local signal exists, (2) template copy is replaced with meaningful, locally differentiated content, and (3) editorialReview is completed and flipped to Published in lib/seo/service-areas.ts."}
         </EditorNote>
       ) : null}
 
       <section className="container section">
-        {serviceAreaIntro(hub, state).map((p, i) => (
+        {(local?.context.length ? [] : serviceAreaIntro(hub, state)).map((p, i) => (
           <p key={i} className="measure">
             {p}
           </p>
         ))}
+        {local ? (
+          <>
+            <p className="section-sub measure">{local.angle}</p>
+            {local.context.map((para, i) => (
+              <p key={i} className="measure">
+                {para.text}
+                {para.sources && para.sources.length > 0 ? (
+                  <sup className="cite">
+                    {para.sources.map((s, j) => (
+                      <a key={j} href={`#source-${s + 1}`} aria-label={`Source ${s + 1}`}>
+                        [{s + 1}]
+                      </a>
+                    ))}
+                  </sup>
+                ) : null}
+              </p>
+            ))}
+            <Sources items={local.sources} />
+          </>
+        ) : null}
       </section>
 
       <section className="container section--tight">
