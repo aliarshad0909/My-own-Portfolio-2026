@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ContactCTA } from "@/components/sections/ContactCTA";
 import { CredentialsPreview } from "@/components/sections/CredentialsPreview";
 import { FeaturedWork } from "@/components/sections/FeaturedWork";
 import { FreelanceConnect } from "@/components/sections/FreelanceConnect";
@@ -26,8 +25,7 @@ export default function HomePage() {
       <JsonLd data={webSiteSchema()} />
       {/* Focused client conversion flow:
           1. Hero → 2. Core Services → 3. Selected Work → 4. Studio Network →
-          5. Live Product Demonstrations → 6. Credentials → 7. Direct / Upwork Connect →
-          8. Final Contact CTA. */}
+          5. Live Product Demonstrations → 6. Credentials → 7. Direct / Upwork Contact. */}
       <Hero />
       <ServiceShowcaseHome />
       <FeaturedWork />
@@ -35,16 +33,6 @@ export default function HomePage() {
       <LiveProductDemos />
       <CredentialsPreview />
       <FreelanceConnect />
-      <ContactCTA
-        standalone
-        signature
-        eyebrow="Start a conversation"
-        title="Have a software, automation, or creative project in mind?"
-        text="Share what you are trying to build and what is in the way. You will get a direct, plain-language reply on fit, scope, and next steps."
-        button="Let's Discuss Your Project"
-        secondaryHref="/tools"
-        secondaryLabel="Estimate Scope & ROI"
-      />
     </>
   );
 }

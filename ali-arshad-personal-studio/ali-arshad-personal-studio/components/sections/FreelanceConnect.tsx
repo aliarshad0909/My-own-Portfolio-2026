@@ -12,23 +12,22 @@ export function FreelanceConnect() {
       <div className="container">
         <div className="connect-band reveal">
           <div className="connect-band__copy">
-            <p className="eyebrow eyebrow--plain">Direct or milestone engagement</p>
+            <p className="eyebrow eyebrow--plain">Direct or milestone engagement · Start a conversation</p>
             <h2 className="section-title section-title--sm" id="freelance-connect-title">
-              Work directly with the studio — or start on Upwork
+              Have a software, automation, or creative project in mind?
             </h2>
             <p className="section-sub">
-              Start a direct conversation through the inquiry form, hire via Upwork for milestone-based billing, or use the free calculators to rough
-              out scope and ROI before we talk.
+              Share what you are trying to build and what is in the way. You will get a direct, plain-language reply on fit, scope, and next steps. Start through the inquiry form, hire via Upwork for milestone-based billing, or use the free calculators to estimate scope and ROI.
             </p>
 
             <div className="connect-band__actions">
               <TrackedLink
                 href="/contact"
                 event="cta_click"
-                props={{ placement: "connect-band", label: "Start a Project" }}
+                props={{ placement: "connect-band", label: "Discuss Your Project" }}
                 className="btn btn--primary btn--sm"
               >
-                <span>Start a Project</span>
+                <span>Let’s Discuss Your Project</span>
                 <Icon name="arrow-right" size={16} className="btn__icon" />
               </TrackedLink>
 
