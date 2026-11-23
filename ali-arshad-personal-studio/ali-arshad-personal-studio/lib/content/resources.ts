@@ -8,9 +8,9 @@
 
 import { RESOURCES_A } from "@/lib/content/resources-a";
 import { RESOURCES_B } from "@/lib/content/resources-b";
-import type { Resource, ResourceCategory } from "@/lib/content/resource-types";
+import type { DatedResource, Resource, ResourceCategory } from "@/lib/content/resource-types";
 
-export type { ArticleBlock, Resource, ResourceCategory } from "@/lib/content/resource-types";
+export type { ArticleBlock, DatedResource, Resource, ResourceCategory } from "@/lib/content/resource-types";
 
 export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   "AI & Automation",
@@ -19,6 +19,19 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   "Creative & Sourcing",
 ];
 
-export const RESOURCES: Resource[] = [...RESOURCES_A, ...RESOURCES_B];
+/**
+ * The current guide set (resources-a.ts, resources-b.ts) was authored on
+ * 2026-11-19 and last revised on 2026-11-20. These are the real git authored
+ * dates of those files, used as honest publication/update dates. A future
+ * article can override by setting its own `publishedAt` / `updatedAt`.
+ */
+const BATCH_PUBLISHED_AT = "2026-11-19";
+const BATCH_UPDATED_AT = "2026-11-20";
+
+export const RESOURCES: DatedResource[] = [...RESOURCES_A, ...RESOURCES_B].map((r) => ({
+  publishedAt: BATCH_PUBLISHED_AT,
+  updatedAt: BATCH_UPDATED_AT,
+  ...r,
+}));
 
 export const getResource = (slug: string) => RESOURCES.find((r) => r.slug === slug);

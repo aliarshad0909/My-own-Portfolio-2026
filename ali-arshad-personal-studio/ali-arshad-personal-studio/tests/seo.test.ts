@@ -206,6 +206,15 @@ describe("content ↔ registry alignment", () => {
     }
   });
 
+  it("gives every resource real publication and update dates (updated never precedes published)", () => {
+    const iso = /^\d{4}-\d{2}-\d{2}$/;
+    for (const r of RESOURCES) {
+      assert.ok(r.publishedAt && iso.test(r.publishedAt), `${r.slug}: missing or malformed publishedAt`);
+      assert.ok(r.updatedAt && iso.test(r.updatedAt), `${r.slug}: missing or malformed updatedAt`);
+      assert.ok(r.updatedAt! >= r.publishedAt!, `${r.slug}: updatedAt precedes publishedAt`);
+    }
+  });
+
   it("keeps every industry's publication state equal to its registry row", () => {
     for (const i of INDUSTRIES) {
       const row = getKeyword(i.keywordId);
