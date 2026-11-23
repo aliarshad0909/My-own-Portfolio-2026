@@ -30,6 +30,7 @@ export const STATIC_ROUTES = [
   "/work",
   "/products",
   "/services",
+  "/services/gpu-compute",
   "/about",
   "/case-studies",
   "/experience",

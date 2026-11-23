@@ -90,7 +90,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Build", detail: "Delivered in reviewable stages" },
       { label: "Launch", detail: "Deploy, documentation, hand-off and support" },
     ],
-    projectSlugs: ["tessera-clayworks-storefront", "northwind-analytics-dashboard"],
+    projectSlugs: ["pipelineos-crm", "stockflow-inventory", "tessera-clayworks-storefront", "northwind-analytics-dashboard"],
     relatedTools: ["/tools/web-project-estimator"],
     relatedHubs: ["/services/ecommerce-development", "/services/ai-agents", "/services/business-dashboards"],
     faqs: [
@@ -150,7 +150,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
     ],
     projectSlugs: ["inbound-lead-qualification-workflow"],
     relatedTools: ["/tools/automation-roi-calculator"],
-    relatedHubs: ["/services/ai-agents", "/services/business-dashboards", "/services/web-development"],
+    relatedHubs: ["/services/ai-agents", "/services/business-dashboards", "/services/web-development", "/services/gpu-compute"],
     faqs: [
       {
         q: "Why choose n8n rather than Zapier or Make?",
@@ -211,7 +211,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
     ],
     projectSlugs: ["tideline-support-agent", "kestrel-voice-sales-agent"],
     relatedTools: [],
-    relatedHubs: ["/services/n8n-automation", "/services/web-development"],
+    relatedHubs: ["/services/n8n-automation", "/services/web-development", "/services/gpu-compute"],
     faqs: [
       {
         q: "How do you stop an AI agent from hallucinating policies or prices?",
@@ -323,7 +323,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Build", detail: "Views, charts, tables" },
       { label: "Iterate", detail: "Refined against real use" },
     ],
-    projectSlugs: ["northwind-analytics-dashboard", "meridian-inventory-operations"],
+    projectSlugs: ["northwind-analytics-dashboard", "meridian-inventory-operations", "stockflow-inventory"],
     relatedTools: [],
     relatedHubs: ["/services/web-development", "/services/global-sourcing"],
     faqs: [
@@ -435,7 +435,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Compare", detail: "Scored, like-for-like" },
       { label: "Cost", detail: "Landed cost modelled honestly" },
     ],
-    projectSlugs: ["lantern-sourcing-platform"],
+    projectSlugs: ["lantern-sourcing-platform", "stockflow-inventory"],
     relatedTools: ["/tools/landed-cost-calculator"],
     relatedHubs: ["/services/business-dashboards"],
     faqs: [
@@ -494,7 +494,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
     ],
     projectSlugs: ["motion-production-pipeline"],
     relatedTools: [],
-    relatedHubs: ["/services/branding", "/services/ecommerce-development"],
+    relatedHubs: ["/services/branding", "/services/ecommerce-development", "/services/gpu-compute"],
     faqs: [
       {
         q: "Can you produce 3D product visuals instead of a physical photo shoot?",

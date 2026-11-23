@@ -102,6 +102,8 @@ export const SERVICES: Service[] = [
       "We need a storefront that handles our real stock and shipping rules",
     ],
     projectSlugs: [
+      "pipelineos-crm",
+      "stockflow-inventory",
       "tessera-clayworks-storefront",
       "northwind-analytics-dashboard",
       "meridian-inventory-operations",
@@ -214,6 +216,7 @@ export const SERVICES: Service[] = [
     ],
     projectSlugs: [
       "lantern-sourcing-platform",
+      "stockflow-inventory",
       "meridian-inventory-operations",
     ],
     examples: [

@@ -16,6 +16,7 @@ import { CredentialCard } from "@/components/credentials/CredentialCard";
 import { getIndustry } from "@/lib/content/industries";
 import { getResource } from "@/lib/content/resources";
 import { visibleCredentials } from "@/lib/credentials";
+import { locationsForServiceHub } from "@/lib/geo/location-connections";
 import { getProject, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHubEnrichment, type ServiceHubEnrichment } from "@/lib/seo/service-enrichment";
@@ -444,6 +445,39 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
     ) : null;
 
   const visibleRelatedLinks = enrichment.relatedLinks.filter((item) => isHrefRenderable(item.href));
+  const locationMatches = locationsForServiceHub(hub.slug, 8);
+
+  const locationsSection =
+    locationMatches.states.length > 0 ? (
+      <section className="section section--tight" aria-labelledby={`${hub.slug}-locations`}>
+        <div className="container">
+          <div className="panel location-fit-strip">
+            <p className="eyebrow eyebrow--plain">Remote US coverage</p>
+            <h2 className="section-title section-title--sm" id={`${hub.slug}-locations`}>
+              Markets where {hub.h1.toLowerCase()} fits local operations
+            </h2>
+            <p className="section-sub" style={{ marginTop: "6px" }}>
+              Delivered remotely nationwide with scheduled US time-zone overlap — no physical regional branch offices claimed.
+            </p>
+            <div className="location-pill-list" style={{ marginTop: "14px" }}>
+              {locationMatches.states.map((st) => (
+                <Link key={st.slug} href={`/locations/${st.slug}`} className="location-pill">
+                  {st.name}
+                </Link>
+              ))}
+              {locationMatches.cities.map((c) => (
+                <Link key={`${c.stateSlug}-${c.slug}`} href={`/locations/${c.stateSlug}/${c.slug}`} className="location-pill location-pill--metro">
+                  {c.name}
+                </Link>
+              ))}
+              <Link href="/locations" className="location-pill location-pill--all">
+                All 50 states + D.C. →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    ) : null;
 
   const relatedSection =
     visibleRelatedLinks.length > 0 ? (
@@ -661,6 +695,8 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
         items={hub.faqs}
         surface
       />
+
+      {locationsSection}
 
       {relatedSection}
 

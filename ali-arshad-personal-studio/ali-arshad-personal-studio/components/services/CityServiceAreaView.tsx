@@ -12,6 +12,8 @@ import type { UsState } from "@/lib/geo/states";
 import type { CityServiceArea } from "@/lib/seo/service-areas";
 import { isIndexable } from "@/lib/seo/publication";
 import { cityServiceAreaIntro } from "@/lib/seo/service-area-content";
+import { getCityLocalContent } from "@/lib/geo/city-local-content";
+import { Sources } from "@/components/seo/Sources";
 
 export function CityServiceAreaView({
   area,
@@ -22,6 +24,7 @@ export function CityServiceAreaView({
   hub: ServiceHub;
   state: UsState;
 }) {
+  const local = getCityLocalContent(state.slug, area.citySlug);
   return (
     <>
       <JsonLd
@@ -56,11 +59,31 @@ export function CityServiceAreaView({
       ) : null}
 
       <section className="container section">
-        {cityServiceAreaIntro(hub, area, state).map((p, i) => (
+        {(local?.context.length ? [] : cityServiceAreaIntro(hub, area, state)).map((p, i) => (
           <p key={i} className="measure">
             {p}
           </p>
         ))}
+        {local ? (
+          <>
+            <p className="section-sub measure">{local.angle}</p>
+            {local.context.map((para, i) => (
+              <p key={i} className="measure">
+                {para.text}
+                {para.sources && para.sources.length > 0 ? (
+                  <sup className="cite">
+                    {para.sources.map((s, j) => (
+                      <a key={j} href={`#source-${s + 1}`} aria-label={`Source ${s + 1}`}>
+                        [{s + 1}]
+                      </a>
+                    ))}
+                  </sup>
+                ) : null}
+              </p>
+            ))}
+            <Sources items={local.sources} />
+          </>
+        ) : null}
       </section>
 
       <section className="container section--tight">

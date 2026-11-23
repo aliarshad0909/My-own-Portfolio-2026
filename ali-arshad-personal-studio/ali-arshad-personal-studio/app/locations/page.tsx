@@ -206,6 +206,18 @@ export default function LocationsPage() {
               </li>
             ))}
             <li>
+              <Link href="/services/gpu-compute" className="hub-link-card">
+                <span className="hub-link-card__kind">Consultation-led · Remote RTX</span>
+                <span className="hub-link-card__title">
+                  <span>RTX GPU compute rental</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </span>
+                <span className="hub-link-card__desc">
+                  Submit AI inference, model testing, or 3D rendering requirements for capacity verification and a custom hourly quote.
+                </span>
+              </Link>
+            </li>
+            <li>
               <Link href="/studio-network" className="hub-link-card">
                 <span className="hub-link-card__kind">Partner pillar · Coordinated</span>
                 <span className="hub-link-card__title">

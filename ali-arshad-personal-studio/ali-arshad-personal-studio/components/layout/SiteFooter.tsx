@@ -16,6 +16,7 @@ const SERVICE_LINKS = [
   { label: "Web Development", href: "/services/web-development" },
   { label: "AI Agents", href: "/services/ai-agents" },
   { label: "n8n Automation", href: "/services/n8n-automation" },
+  { label: "RTX GPU Compute", href: "/services/gpu-compute" },
   { label: "Branding & Growth", href: "/services/branding" },
   { label: "Sourcing & Supply Chain", href: "/services/global-sourcing" },
 ];

@@ -33,6 +33,8 @@ export type ToolDef = {
   howItWorks: string[];
   relatedHub: string;
   relatedResource: string;
+  /** Optional secondary service link (e.g. consultation-led RTX GPU compute). */
+  secondaryService?: { label: string; href: string };
   heroVisual?: ToolHeroVisual;
 };
 
@@ -133,6 +135,7 @@ export const TOOLS: ToolDef[] = [
     ],
     relatedHub: "/services/n8n-automation",
     relatedResource: "/resources/automation-roi",
+    secondaryService: { label: "Explore RTX GPU compute rental", href: "/services/gpu-compute" },
     heroVisual: {
       src: "/images/site-visuals/tools/automation-roi-model.svg",
       alt: "Visual formula diagram showing weekly hours, team size, loaded hourly rate and capped automation share plotted against one-time build cost to find break-even payback weeks",
@@ -185,6 +188,7 @@ export const TOOLS: ToolDef[] = [
     ],
     relatedHub: "/services/web-development",
     relatedResource: "/resources/custom-web-app-cost",
+    secondaryService: { label: "Explore RTX GPU compute rental", href: "/services/gpu-compute" },
   },
   {
     slug: "inventory-reorder-calculator",
@@ -261,6 +265,7 @@ export const TOOLS: ToolDef[] = [
     ],
     relatedHub: "/services/web-development",
     relatedResource: "/resources/custom-web-app-cost",
+    secondaryService: { label: "Explore RTX GPU compute rental", href: "/services/gpu-compute" },
   },
 ];
 

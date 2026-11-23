@@ -17,6 +17,9 @@ import { breadcrumbSchema } from "@/lib/structured-data";
 import { VERIFIED_COLLABORATORS } from "@/lib/studio-network";
 import { isNetworkDeliveryConfigured } from "@/lib/studio-network-server";
 
+// Evaluate delivery env vars per request so Vercel env updates take effect immediately.
+export const dynamic = "force-dynamic";
+
 const state = getKeyword("net-studio-network")?.state ?? "Researched";
 
 export const metadata: Metadata = pageMetadata({

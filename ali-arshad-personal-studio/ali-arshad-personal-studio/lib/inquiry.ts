@@ -3,8 +3,9 @@
  * and /api/inquiry (server). No secrets in this file.
  */
 import { SERVICES } from "@/lib/services";
+import { GPU_COMPUTE_CONTACT_SERVICE } from "@/lib/gpu-compute";
 
-export const SERVICE_OPTIONS = [...SERVICES.map((s) => s.title), "Not sure yet"];
+export const SERVICE_OPTIONS = [...SERVICES.map((s) => s.title), GPU_COMPUTE_CONTACT_SERVICE, "Not sure yet"];
 
 export const BUDGET_OPTIONS = [
   "Under $1,000",

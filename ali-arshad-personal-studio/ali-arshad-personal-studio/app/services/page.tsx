@@ -12,6 +12,7 @@ import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES, contactHref, projectsForService, relatedWorkHref, type Service } from "@/lib/services";
+import { GPU_COMPUTE_CONTACT_SERVICE, GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
 
@@ -260,7 +261,38 @@ export default function ServicesPage() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href={GPU_COMPUTE_PATH} className="hub-link-card">
+                <span className="hub-link-card__kind">Consultation-led infrastructure</span>
+                <span className="hub-link-card__title">
+                  <span>RTX GPU compute rental</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </span>
+                <span className="hub-link-card__desc">
+                  Rent dedicated RTX server time for AI inference, model testing, or 3D GPU rendering — scoped by meeting with a custom hourly quote.
+                </span>
+              </Link>
+            </li>
           </ul>
+          <div className="panel location-fit-strip" style={{ marginTop: "24px" }}>
+            <p className="eyebrow eyebrow--plain">Consultation-led GPU compute</p>
+            <h3 className="section-title section-title--sm" style={{ marginTop: "6px" }}>
+              Need dedicated RTX compute time instead of a self-serve cloud cluster?
+            </h3>
+            <p className="section-sub" style={{ marginTop: "6px" }}>
+              Submit your workload requirements, review fit with Ali in a short call, verify actual server capacity, and get a custom hourly quote.
+            </p>
+            <div className="hero__actions" style={{ marginTop: "14px" }}>
+              <ButtonLink href={GPU_COMPUTE_PATH}>Review GPU compute process</ButtonLink>
+              <ButtonLink
+                href={`/contact?service=${encodeURIComponent(GPU_COMPUTE_CONTACT_SERVICE)}`}
+                variant="secondary"
+                icon={null}
+              >
+                Submit workload brief
+              </ButtonLink>
+            </div>
+          </div>
         </div>
       </section>
 
