@@ -69,6 +69,9 @@ export function SiteFooter() {
               <Link href="/work">Portfolio / Work</Link>
             </li>
             <li>
+              <Link href="/products">Product Directory</Link>
+            </li>
+            <li>
               <Link href="/tools">Calculator Centre</Link>
             </li>
             <li>
@@ -86,8 +89,8 @@ export function SiteFooter() {
                 <Icon name="arrow-up-right" size={14} />
               </a>
             </li>
-            <li>
-              {fiverrUrl ? (
+            {fiverrUrl ? (
+              <li>
                 <a
                   href={fiverrUrl}
                   target="_blank"
@@ -98,12 +101,8 @@ export function SiteFooter() {
                   <span>Fiverr</span>
                   <Icon name="arrow-up-right" size={14} />
                 </a>
-              ) : (
-                <span className="site-footer__inactive" title="Fiverr profile link will be enabled once configured">
-                  Fiverr (coming soon)
-                </span>
-              )}
-            </li>
+              </li>
+            ) : null}
           </ul>
         </nav>
       </div>

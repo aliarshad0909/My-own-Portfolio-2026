@@ -1,31 +1,39 @@
 import type { Metadata } from "next";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { ProductDirectoryClient } from "@/components/products/ProductDirectoryClient";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { PageHero } from "@/components/ui/PageHero";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
 import { pageMetadata } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = pageMetadata({
-  title: "12-Product SaaS & AI Software Ecosystem | Ali Arshad Personal Studio",
+  title: "Product Directory — SaaS & AI Software Demonstrations",
   description:
-    "Explore twelve full-stack SaaS and AI products built with independent product identities, PostgreSQL persistence, authentication, real workflows, and automated QA — from CRM and ERP to React Flow automation and mobile inventory.",
+    "Explore full-stack SaaS and AI demonstration applications built by Ali Arshad, including live public sandboxes for PipelineOS CRM and StockFlow Inventory + Mobile.",
   path: "/products",
 });
 
 export default function ProductsDirectoryPage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Product Directory", path: "/products" },
+        ])}
+      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },
-          { name: "Product Ecosystem", path: "/products" },
+          { name: "Product Directory", path: "/products" },
         ]}
       />
       <PageHero
-        eyebrow="12-Product SaaS & AI Ecosystem"
-        title="Twelve standalone software products — engineered end to end."
-        lead="Every product below is a working full-stack application with its own visual identity, PostgreSQL schema, authentication, seeded demonstration dataset, and automated test suite. Products marked Locally Tested / Demo Ready are verified locally and queued for consolidated deployment."
+        eyebrow="Studio Software Directory"
+        title="Full-stack SaaS and AI product demonstrations"
+        lead="PipelineOS CRM and StockFlow Inventory (plus its mobile web preview) are live right now at their public domains. Additional studio applications in this directory are verified locally in the repository and available as architectural references for custom builds."
       />
 
       <section className="container section section--tight-top" aria-label="Product directory">

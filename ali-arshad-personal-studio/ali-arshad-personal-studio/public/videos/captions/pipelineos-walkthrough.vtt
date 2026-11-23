@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00.000 --> 00:08.500
+This is PipelineOS — a live full-stack CRM demonstration you can test right now at crm.aliarshad.co.
+
+00:08.500 --> 00:19.500
+Everything runs on Next.js, TypeScript, and PostgreSQL with realistic fictional B2B data. Start with one click on the sandbox demo login.
+
+00:19.500 --> 00:33.500
+Manage contacts with persistent communication notes, then convert qualified leads into a contact and pipeline deal in a single atomic transaction.
+
+00:33.500 --> 00:46.000
+Move deals across the six-stage Kanban pipeline to update stage totals and record an immutable stage history entry.
+
+00:46.000 --> 00:54.000
+Open Analytics to see funnel conversion rates and revenue calculated directly from live PostgreSQL records.
+
+00:54.000 --> 01:00.000
+Try it yourself at crm.aliarshad.co and click Reset Demo Data anytime to restore the sandbox.

@@ -79,12 +79,13 @@ function statusFor(liveUrl?: string): { primary: ProductStatusBadge; secondary: 
 }
 
 function makeProduct(
-  spec: Omit<StudioProduct, "status" | "secondaryStatus" | "liveUrl"> & { envKey: string },
+  spec: Omit<StudioProduct, "status" | "secondaryStatus" | "liveUrl"> & { envKey: string; defaultLiveUrl?: string },
 ): StudioProduct {
-  const liveUrl = envUrl(spec.envKey);
+  const liveUrl = envUrl(spec.envKey) ?? spec.defaultLiveUrl;
   const { primary, secondary } = statusFor(liveUrl);
-  const { envKey: _envKey, ...rest } = spec;
+  const { envKey: _envKey, defaultLiveUrl: _defaultLiveUrl, ...rest } = spec;
   void _envKey;
+  void _defaultLiveUrl;
   return { ...rest, liveUrl, status: primary, secondaryStatus: secondary };
 }
 
@@ -102,9 +103,10 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     shortDescription:
       "Full-stack B2B CRM with persistent PostgreSQL contacts, transactional lead conversion, 6-stage Kanban pipeline, follow-up tasks, and live revenue analytics.",
     envKey: "NEXT_PUBLIC_PIPELINEOS_URL",
+    defaultLiveUrl: "https://crm.aliarshad.co",
     caseStudyUrl: "/case-studies/pipelineos-crm",
     repoPath: "apps/pipelineos",
-    branchName: "main (PR #14 + #18)",
+    branchName: "main",
     localPort: "http://localhost:3010",
     targetSubdomain: "crm.aliarshad.co",
     demoEmail: "demo@pipelineos.studio",
@@ -125,7 +127,7 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     technologies: ["Next.js 16", "TypeScript", "PostgreSQL", "Drizzle ORM", "Tailwind CSS", "Zod v4"],
     ossCompliance: "Clean-room TypeScript implementation inspired by Marmelab Atomic CRM (MIT). Zero AGPL code.",
     interactivePreviewNote:
-      "Verified locally with 6/6 automated PostgreSQL & security tests, 0 high/critical prod vulnerabilities, and Chromium desktop/mobile E2E checks. Public launch to crm.aliarshad.co is queued for consolidated ecosystem deployment.",
+      "Live public sandbox deployed at https://crm.aliarshad.co with HTTPS, persistent PostgreSQL data, and one-click demo reset.",
     cover: {
       src: "/images/projects/pipelineos/dashboard.png",
       alt: "PipelineOS CRM executive dashboard showing pipeline value, won revenue, and tasks",
@@ -153,9 +155,10 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     shortDescription:
       "Transactional multi-warehouse inventory platform with EAN-13 barcode lookup, atomic stock transfers, PO receiving, SO fulfilment, and shared /api/v1 mobile backend.",
     envKey: "NEXT_PUBLIC_STOCKFLOW_URL",
+    defaultLiveUrl: "https://stock.aliarshad.co",
     caseStudyUrl: "/case-studies/stockflow-inventory",
     repoPath: "apps/stockflow",
-    branchName: "main (PR #17 + #18)",
+    branchName: "main",
     localPort: "http://localhost:3020",
     targetSubdomain: "stock.aliarshad.co",
     demoEmail: "ops@stockflow.studio",
@@ -176,7 +179,7 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     technologies: ["Next.js 16", "TypeScript", "PostgreSQL", "Drizzle ORM", "Shared /api/v1 REST", "Zod v4"],
     ossCompliance: "Clean-room TypeScript implementation inspired by InvenTree (MIT). Zero GPL/AGPL code.",
     interactivePreviewNote:
-      "Verified locally with 4/4 PostgreSQL ledger tests, live web-to-mobile Bearer API sync, 0 prod vulnerabilities, and Chromium desktop/mobile E2E checks.",
+      "Live public sandbox deployed at https://stock.aliarshad.co with HTTPS and PostgreSQL persistence, synced live with the mobile web preview at https://stockflow-mobile-web.onrender.com.",
     cover: {
       src: "/images/projects/stockflow/dashboard.png",
       alt: "StockFlow multi-warehouse inventory operations dashboard",
@@ -202,32 +205,33 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     category: "Supply Chain & Operations",
     tagline: "React Native + Expo Warehouse Companion App (11 Screens)",
     shortDescription:
-      "Genuine 11-screen React Native + Expo SDK 52 warehouse app with native expo-camera barcode scanning, stock adjustments, transfers, PO receiving, and live PostgreSQL sync.",
+      "11-screen React Native + Expo SDK 52 warehouse companion with a live mobile web preview connected to https://stock.aliarshad.co, plus native expo-camera barcode scanning in the mobile codebase.",
     envKey: "NEXT_PUBLIC_STOCKFLOW_MOBILE_WEB_URL",
+    defaultLiveUrl: "https://stockflow-mobile-web.onrender.com",
     caseStudyUrl: "/case-studies/stockflow-inventory#mobile-preview",
     repoPath: "apps/stockflow-mobile",
-    branchName: "main (PR #15)",
+    branchName: "main",
     localPort: "npx expo start (port 8081)",
-    targetSubdomain: "Expo EAS APK + Render Static Preview",
+    targetSubdomain: "stockflow-mobile-web.onrender.com",
     demoEmail: "ops@stockflow.studio",
     demoPassword: "StockFlowDemo2026!",
     overview:
-      "StockFlow Mobile brings barcode scanning, bin cycle counts, stock transfers, and receiving dock workflows directly to warehouse operators' phones, writing directly to the shared StockFlow PostgreSQL backend via Bearer tokens.",
+      "StockFlow Mobile brings barcode lookup, bin cycle counts, stock transfers, and receiving dock workflows to mobile screens, writing directly to the live StockFlow PostgreSQL backend at https://stock.aliarshad.co via Bearer tokens.",
     problemSolved:
-      "Removes paper pick-lists and delayed manual spreadsheet entry by synchronizing warehouse floor scans with desktop operations in real time.",
+      "Removes paper pick-lists and delayed manual spreadsheet entry by synchronizing warehouse floor updates with desktop operations in real time.",
     capabilities: [
-      "All 11 native screens: Login, Dashboard, Products, Details, Scanner, Adjust, Warehouses, Transfer, Orders, Alerts, Profile",
-      "Native expo-camera barcode scanner supporting EAN-13, UPC, Code-128 & QR plus simulator/web manual lookup",
+      "All 11 mobile screens: Login, Dashboard, Products, Details, Scanner, Adjust, Warehouses, Transfer, Orders, Alerts, Profile",
+      "Live interactive web preview at https://stockflow-mobile-web.onrender.com with manual & quick-test EAN-13 lookup",
+      "Native expo-camera barcode scanner (EAN-13, UPC, Code-128, QR) in the React Native / Expo codebase for physical devices",
       "Live Stock Adjustment & Inter-Warehouse Transfer writing source: 'mobile' movements to PostgreSQL",
-      "1-tap Purchase Order receiving & Sales Order status transitions on the warehouse floor",
-      "Expo Go QR workflow + pre-configured eas.json for internal Android preview .apk builds",
+      "1-tap Purchase Order receiving & Sales Order status transitions synced with the desktop web app",
     ],
     architectureOverview:
       "React Native 0.76 + Expo SDK 52 TypeScript client with AsyncStorage Bearer session persistence communicating directly with StockFlow's CORS-enabled /api/v1/* REST endpoints.",
     technologies: ["React Native", "Expo SDK 52", "expo-camera", "TypeScript", "AsyncStorage", "EAS Build"],
-    ossCompliance: "100% MIT open-source mobile stack. Explicitly NOT published on App Store / Google Play.",
+    ossCompliance: "100% MIT open-source mobile stack. Not published on the Apple App Store or Google Play Store.",
     interactivePreviewNote:
-      "Distinguishes three modes: (1) Verified mobile screenshots below, (2) Expo Web bundle preview (305 modules verified; browser mode uses manual/quick EAN-13 lookup), and (3) Downloadable Android Preview APK via Expo EAS (native camera scanning requires a physical Android/iOS device).",
+      "Interactive mobile web preview is live at https://stockflow-mobile-web.onrender.com (uses live https://stock.aliarshad.co API with manual/quick EAN-13 lookup; native camera barcode scanning requires a physical mobile build). Android preview APK is not yet publicly distributed.",
     cover: {
       src: "/images/projects/stockflow/mobile-dashboard.png",
       alt: "StockFlow Mobile dashboard screen with Austin warehouse KPIs and quick actions",

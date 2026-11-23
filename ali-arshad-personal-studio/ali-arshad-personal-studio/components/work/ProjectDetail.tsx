@@ -5,6 +5,7 @@ import { ArrowLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
+import { TrackedLink } from "@/components/ui/TrackedLink";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
@@ -70,10 +71,16 @@ export function ProjectDetail({ project, variant }: Props) {
             {project.liveUrl || project.sourceUrl ? (
               <div className="detail__links">
                 {project.liveUrl ? (
-                  <a className="btn btn--primary btn--md" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                    <span>View live demo</span>
+                  <TrackedLink
+                    className="btn btn--primary btn--md"
+                    href={project.liveUrl}
+                    external
+                    event="demo_launch"
+                    props={{ product: project.slug, placement: "case-study-hero" }}
+                  >
+                    <span>Launch Live Demo</span>
                     <Icon name="arrow-up-right" size={18} className="btn__icon" />
-                  </a>
+                  </TrackedLink>
                 ) : null}
                 {project.sourceUrl ? (
                   <a className="btn btn--secondary btn--md" href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
@@ -384,26 +391,28 @@ export function ProjectDetail({ project, variant }: Props) {
                   {project.mobilePreview.interactiveWebUrl || project.mobilePreview.androidApkUrl ? (
                     <div className="detail__links" style={{ marginTop: "16px" }}>
                       {project.mobilePreview.interactiveWebUrl ? (
-                        <a
+                        <TrackedLink
                           className="btn btn--primary btn--sm"
                           href={project.mobilePreview.interactiveWebUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          external
+                          event="mobile_preview_launch"
+                          props={{ product: project.slug, placement: "case-study-mobile" }}
                         >
                           <span>Open Interactive Mobile Web Preview</span>
                           <Icon name="arrow-up-right" size={16} className="btn__icon" />
-                        </a>
+                        </TrackedLink>
                       ) : null}
                       {project.mobilePreview.androidApkUrl ? (
-                        <a
+                        <TrackedLink
                           className="btn btn--secondary btn--sm"
                           href={project.mobilePreview.androidApkUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          external
+                          event="mobile_preview_launch"
+                          props={{ product: project.slug, placement: "case-study-apk" }}
                         >
                           <span>Download Android Preview APK</span>
                           <Icon name="arrow-up-right" size={16} className="btn__icon" />
-                        </a>
+                        </TrackedLink>
                       ) : null}
                     </div>
                   ) : null}

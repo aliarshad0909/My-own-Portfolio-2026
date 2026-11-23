@@ -84,6 +84,7 @@ export const MOBILE_SECONDARY_ITEMS: NavItem[] = [
 export const CORE_SITEMAP_PAGES: string[] = [
   "/",
   "/work",
+  "/products",
   "/case-studies",
   "/services",
   "/experience",
@@ -91,10 +92,16 @@ export const CORE_SITEMAP_PAGES: string[] = [
   "/contact",
 ];
 
-/** Resolve the absolute base URL for metadata. Falls back to Vercel's URL, then localhost. */
+/**
+ * Resolve the absolute base URL for metadata, canonicals, robots.txt, and sitemap.xml.
+ * Normalizes apex `https://aliarshad.co` to `https://www.aliarshad.co` because the
+ * live domain 308-redirects apex to `www`, preventing canonical/sitemap redirect loops.
+ */
 export function siteBaseUrl(): URL {
-  if (SITE.url) return new URL(SITE.url);
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
-  if (vercel) return new URL(`https://${vercel}`);
-  return new URL("http://localhost:3000");
+  const raw = SITE.url || (process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL}` : "http://localhost:3000");
+  const parsed = new URL(raw);
+  if (parsed.hostname === "aliarshad.co") {
+    parsed.hostname = "www.aliarshad.co";
+  }
+  return parsed;
 }

@@ -100,6 +100,10 @@ export type Project = {
   id: string;
   slug: string;
   title: string;
+  /** Optional search-intent-optimized title for the case study metadata. */
+  seoTitle?: string;
+  /** Optional concise meta description for the case study page. */
+  seoDescription?: string;
   /** Only name a client with their written permission. */
   client?: string;
   categories: ProjectCategory[];
@@ -1200,6 +1204,9 @@ const PIPELINEOS: Project = {
   id: "p13",
   slug: "pipelineos-crm",
   title: "PipelineOS — CRM & Sales Management SaaS",
+  seoTitle: "PipelineOS CRM — Live Full-Stack B2B Sales CRM Case Study",
+  seoDescription:
+    "Explore PipelineOS, a live Next.js and PostgreSQL B2B CRM demonstration with contacts, transactional lead conversion, Kanban pipeline, and live analytics.",
   categories: ["Web & Software", "Business Solutions"],
   tags: ["Full-Stack SaaS", "PostgreSQL", "Kanban Pipeline", "Lead Conversion", "RBAC Auth"],
   year: "2026",
@@ -1218,7 +1225,7 @@ const PIPELINEOS: Project = {
   ],
   technologies: ["Next.js 16", "TypeScript", "PostgreSQL", "Drizzle ORM", "Tailwind CSS", "Zod", "Node.js Test Runner"],
   featured: true,
-  liveUrl: process.env.NEXT_PUBLIC_PIPELINEOS_URL?.trim() || undefined,
+  liveUrl: process.env.NEXT_PUBLIC_PIPELINEOS_URL?.trim() || "https://crm.aliarshad.co",
   sourceUrl: "https://github.com/aliarshad0909/My-own-Portfolio-2026",
   cover: {
     src: "/images/projects/pipelineos/dashboard.png",
@@ -1271,12 +1278,12 @@ const PIPELINEOS: Project = {
     caption: "PipelineOS system blueprint: Next.js 16 App Router, scrypt/cookie RBAC authentication, transactional lead conversion, and dual-driver PostgreSQL persistence.",
   },
   demoAccess: {
-    deploymentTarget: "crm.aliarshad.co (Render Free + Neon Free PostgreSQL blueprint ready)",
+    deploymentTarget: "https://crm.aliarshad.co (live production web app with PostgreSQL)",
     demoEmail: "demo@pipelineos.studio",
     demoPassword: "PipelineDemo2026!",
     localRunCommand: "cd apps/pipelineos && npm install && npm run dev -- -p 3010",
     hostingNote:
-      "Verified locally with full PostgreSQL persistence and Chromium E2E tests. Public subdomain hosting at crm.aliarshad.co is configured via apps/pipelineos/render.yaml and awaiting owner hosting/DNS activation.",
+      "Public sandbox demo is live at https://crm.aliarshad.co with HTTPS and persistent PostgreSQL data. The credentials below belong to an intentional fictional sandbox account — use Reset Demo Data inside the app anytime to restore the baseline dataset.",
   },
   attribution: {
     project: "Atomic CRM (Marmelab)",
@@ -1337,7 +1344,7 @@ const PIPELINEOS: Project = {
       "Verified every journey with automated unit/DB tests and headless Chromium desktop (1440px) & mobile (390px) E2E suites",
     ],
     solution:
-      "A production-structured, standalone CRM SaaS (`apps/pipelineos`) ready to deploy to `crm.aliarshad.co` via the included `render.yaml` blueprint and Neon PostgreSQL connection string.",
+      "A live, standalone CRM SaaS deployed at https://crm.aliarshad.co with HTTPS, persistent PostgreSQL storage, and a self-service sandbox workspace.",
     results: [
       "5/5 automated unit and real PostgreSQL integration tests pass (auth, Zod schemas, rate limiting, CRUD, atomic lead conversion, stage history, analytics, and demo reset).",
       "Headless Chromium E2E QA verified unauthenticated redirect, 1-click demo login, contact create/edit, lead conversion, live analytics update, task creation, and demo reset with zero console/page errors and zero overflow at 1440px and 390px.",
@@ -1350,6 +1357,9 @@ const STOCKFLOW: Project = {
   id: "p14",
   slug: "stockflow-inventory",
   title: "StockFlow — Inventory & Operations SaaS + Mobile App",
+  seoTitle: "StockFlow — Multi-Warehouse Inventory SaaS & Mobile Case Study",
+  seoDescription:
+    "Explore StockFlow, a live multi-warehouse inventory platform and React Native mobile preview with atomic PostgreSQL transfers, barcode lookup, and order fulfillment.",
   categories: ["Web & Software", "Business Solutions"],
   tags: ["Inventory SaaS", "React Native & Expo", "Barcode Scanner", "Multi-Warehouse", "PostgreSQL"],
   year: "2026",
@@ -1377,7 +1387,7 @@ const STOCKFLOW: Project = {
     "Zod",
   ],
   featured: true,
-  liveUrl: process.env.NEXT_PUBLIC_STOCKFLOW_URL?.trim() || undefined,
+  liveUrl: process.env.NEXT_PUBLIC_STOCKFLOW_URL?.trim() || "https://stock.aliarshad.co",
   sourceUrl: "https://github.com/aliarshad0909/My-own-Portfolio-2026",
   cover: {
     src: "/images/projects/stockflow/dashboard.png",
@@ -1423,20 +1433,21 @@ const STOCKFLOW: Project = {
     caption: "StockFlow unified web + mobile architecture: shared /api/v1 REST API serving both the Next.js operations console and the 11-screen Expo mobile app from one PostgreSQL ledger.",
   },
   demoAccess: {
-    deploymentTarget: "stock.aliarshad.co (Render Free + Neon Free PostgreSQL blueprint + Expo EAS preview APK)",
+    deploymentTarget: "https://stock.aliarshad.co (live web app & shared REST API) + https://stockflow-mobile-web.onrender.com (interactive mobile web preview)",
     demoEmail: "ops@stockflow.studio",
     demoPassword: "StockFlowDemo2026!",
     localRunCommand: "cd apps/stockflow && npm install && npm run dev -- -p 3020",
     hostingNote:
-      "Both the StockFlow web/API backend and the StockFlow Mobile Expo companion app are verified locally with live end-to-end PostgreSQL sync. Public hosting at stock.aliarshad.co is configured via apps/stockflow/render.yaml and awaiting owner hosting/DNS activation.",
+      "The StockFlow web application is live at https://stock.aliarshad.co with HTTPS and persistent PostgreSQL storage. The interactive mobile web preview is live at https://stockflow-mobile-web.onrender.com and writes to the same backend API using the intentional sandbox credentials below.",
   },
   mobilePreview: {
-    headline: "StockFlow Mobile — Real React Native + Expo Companion App (11 Screens)",
+    headline: "StockFlow Mobile — React Native + Expo Companion App (11 Screens)",
     summary:
-      "Built in TypeScript with Expo SDK 52 and native expo-camera barcode scanning, StockFlow Mobile authenticates via Bearer tokens directly against the shared StockFlow /api/v1 backend. Every barcode lookup, stock receipt, cycle count, warehouse transfer, and purchase order receipt writes atomically to the same PostgreSQL ledger tagged with source: \"mobile\".",
+      "Built in TypeScript with Expo SDK 52 and native expo-camera barcode scanning, StockFlow Mobile authenticates via Bearer tokens directly against the live StockFlow /api/v1 backend at https://stock.aliarshad.co. Every barcode lookup, stock receipt, cycle count, warehouse transfer, and purchase order receipt writes atomically to the same PostgreSQL ledger.",
     distributionNote:
-      "Distinct preview modes: (1) Verified Mobile Screenshot Preview below, (2) Interactive Expo Web Preview (browser preview with manual/quick EAN-13 lookup; native camera barcode scanning requires the native mobile build on a physical device), and (3) Downloadable Android Preview APK via Expo EAS (`eas build -p android --profile preview`) or Expo Go QR. Not published on the Apple App Store or Google Play Store.",
-    interactiveWebUrl: process.env.NEXT_PUBLIC_STOCKFLOW_MOBILE_WEB_URL?.trim() || undefined,
+      "Three clear preview modes: (1) Verified mobile screenshots below, (2) Live Interactive Mobile Web Preview at https://stockflow-mobile-web.onrender.com (supports live API sync plus manual/quick EAN-13 lookup; native camera scanning requires a physical mobile device), and (3) React Native / Expo EAS Android APK source configuration (not yet published as a public APK or on the Apple App Store / Google Play Store).",
+    interactiveWebUrl:
+      process.env.NEXT_PUBLIC_STOCKFLOW_MOBILE_WEB_URL?.trim() || "https://stockflow-mobile-web.onrender.com",
     androidApkUrl: process.env.NEXT_PUBLIC_STOCKFLOW_APK_URL?.trim() || undefined,
     techBadges: [
       "React Native 0.76",
