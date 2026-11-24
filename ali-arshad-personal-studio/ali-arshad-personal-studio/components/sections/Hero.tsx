@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ChangingFocus } from "@/components/ui/ChangingFocus";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { SITE } from "@/lib/site";
@@ -22,6 +23,8 @@ export function Hero() {
           <p className="eyebrow">
             {SITE.name} — {SITE.descriptor}
           </p>
+
+          <ChangingFocus />
 
           <h1 className="hero__title" id="hero-title">
             <span className="hero__line">Custom software,</span>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { InquiryForm } from "@/components/contact/InquiryForm";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
 import { isDeliveryConfigured } from "@/lib/inquiry-server";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES } from "@/lib/services";
@@ -106,14 +107,20 @@ export default function ContactPage() {
               </ul>
             ) : null}
 
-            <div className="portrait-frame portrait-frame--contact">
-              <Image
-                src="/images/portraits/portrait-contact.webp"
-                alt="Portrait of Ali Arshad wearing a dark blazer"
-                width={1173}
-                height={1341}
-                sizes="(min-width: 1024px) 380px, 70vw"
-              />
+            <div className="contact__brand-pair">
+              <div className="portrait-frame portrait-frame--contact">
+                <Image
+                  src="/images/portraits/portrait-contact.webp"
+                  alt="Portrait of Ali Arshad wearing a dark blazer"
+                  width={1173}
+                  height={1341}
+                  sizes="(min-width: 1024px) 320px, 60vw"
+                />
+              </div>
+              <div className="contact__mark-card panel">
+                <SignatureMark3D variant="contact" />
+                <p className="fine-print">Ali Arshad Personal Studio · Remote nationwide &amp; international</p>
+              </div>
             </div>
           </div>
 

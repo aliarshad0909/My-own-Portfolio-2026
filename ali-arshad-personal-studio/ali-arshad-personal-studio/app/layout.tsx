@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Space_Grotesk } from "next/font/google";
+import { Bricolage_Grotesque, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -10,8 +10,24 @@ import "@/styles/components.css";
 import "@/styles/sections.css";
 import "@/styles/motion.css";
 
-const heading = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--ff-heading", display: "swap" });
-const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--ff-body", display: "swap" });
+const heading = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--ff-heading",
+  display: "swap",
+});
+const body = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--ff-body",
+  display: "swap",
+});
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--ff-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: siteBaseUrl(),
@@ -38,7 +54,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
+    <html lang="en" className={`${heading.variable} ${body.variable} ${mono.variable}`}>
       <body>
         <a href="#main" className="skip-link">
           Skip to content

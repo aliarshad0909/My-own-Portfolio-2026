@@ -76,6 +76,9 @@ export function SiteFooter() {
               <Link href="/games">Games &amp; Experiments</Link>
             </li>
             <li>
+              <Link href="/blog">Studio Blog</Link>
+            </li>
+            <li>
               <Link href="/tools">Calculator Centre</Link>
             </li>
             <li>

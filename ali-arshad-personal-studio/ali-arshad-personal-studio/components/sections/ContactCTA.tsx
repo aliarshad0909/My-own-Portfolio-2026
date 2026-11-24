@@ -1,5 +1,5 @@
 import { ButtonLink } from "@/components/ui/Button";
-import { MotionMedia } from "@/components/ui/MotionMedia";
+import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
 
 type Props = {
   eyebrow?: string;
@@ -13,11 +13,11 @@ type Props = {
   /** Optional second action beside the primary button. */
   secondaryHref?: string;
   secondaryLabel?: string;
-  /** Homepage only: the rendered 3D studio mark, as a slow loop over the panel. */
+  /** Show the restored 3D studio "A" emblem beside the CTA copy (enabled by default). */
   signature?: boolean;
 };
 
-/** Coral-accented conversion panel used on the homepage and at the end of inner pages. */
+/** Luminous obsidian-and-coral conversion panel featuring the restored 3D "A" mark. */
 export function ContactCTA({
   eyebrow = "Get in touch",
   title = "Have a project in mind?",
@@ -27,23 +27,11 @@ export function ContactCTA({
   standalone = false,
   secondaryHref,
   secondaryLabel,
-  signature = false,
+  signature = true,
 }: Props) {
   const panel = (
     <div className={`cta-panel ${signature ? "cta-panel--signature" : ""} reveal`.trim()}>
       <div className="cta-panel__texture" aria-hidden="true" />
-      {signature ? (
-        <div className="cta-panel__mark" aria-hidden="true">
-          <MotionMedia
-            still={{ src: "/images/signature/mark-3d.webp", alt: "", width: 720, height: 720 }}
-            sources={[
-              { src: "/videos/mark-3d.webm", type: "video/webm" },
-              { src: "/videos/mark-3d.mp4", type: "video/mp4" },
-            ]}
-            minWidth={900}
-          />
-        </div>
-      ) : null}
       <div className="cta-panel__content">
         <p className="eyebrow eyebrow--plain">{eyebrow}</p>
         <h2 className="cta-panel__title">{title}</h2>
@@ -59,6 +47,11 @@ export function ContactCTA({
           ) : null}
         </div>
       </div>
+      {signature ? (
+        <div className="cta-panel__mark-wrap">
+          <SignatureMark3D variant="cta" />
+        </div>
+      ) : null}
     </div>
   );
   if (!standalone) return panel;

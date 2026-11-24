@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { FictionalCustomerShowcase } from "@/components/locations/FictionalCustomerShowcase";
 import { LocationsBrowser } from "@/components/locations/LocationsBrowser";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { PILOT_CITIES } from "@/lib/geo/cities";
+import { FICTIONAL_DEMO_PROFILES } from "@/lib/geo/fictional-profiles";
 import { US_REGIONS, US_STATES } from "@/lib/geo/states";
 import { pageMetadata } from "@/lib/seo";
 import { shouldRender } from "@/lib/seo/publication";
@@ -147,12 +149,13 @@ export default function LocationsPage() {
       <section className="section section--tight" aria-labelledby="pilot-metros">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow eyebrow--plain">Pilot metros</p>
+            <p className="eyebrow eyebrow--plain">Researched city architecture</p>
             <h2 className="section-title section-title--sm" id="pilot-metros">
-              Twelve priority US metros tracked for future local depth
+              {PILOT_CITIES.length} tracked US metros across 24 states + D.C.
             </h2>
             <p className="section-sub">
-              Listed openly as part of the studio&apos;s expansion architecture; each metro page remains unindexed until genuine regional engagement warrants a dedicated page.
+              Listed openly as part of the studio&apos;s state → city architecture; each city page carries verified BLS/BEA economic sources in
+              preview environments and remains gated (NeedsEvidence, out of the production sitemap) until verified local engagement warrants indexing.
             </p>
           </div>
           <ul className="location-grid">
@@ -175,6 +178,13 @@ export default function LocationsPage() {
               );
             })}
           </ul>
+
+          <div style={{ marginTop: "36px" }}>
+            <FictionalCustomerShowcase
+              locationLabel="US remote engagements"
+              profiles={FICTIONAL_DEMO_PROFILES}
+            />
+          </div>
         </div>
       </section>
 

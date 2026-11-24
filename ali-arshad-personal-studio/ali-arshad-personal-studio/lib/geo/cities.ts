@@ -1,13 +1,12 @@
 /**
- * Twelve pilot cities — the first metros where a city-level page could be
- * justified if a local signal appears. Same rule as states (lib/geo/states.ts):
- * these are typed records, not twelve published pages. All default to
- * `NeedsEvidence`; a city page only renders in production and enters the index
- * once it is `Published` with a genuine local signal.
+ * Thirty-two registered US pilot & expansion cities across 24 states + Washington, D.C.
  *
- * The pilot set is deliberately small and high-intent. It is NOT a seed for
- * mass-generating a page per US city — that is the doorway pattern this
- * architecture exists to avoid.
+ * Anti-doorway governance:
+ *  - Every city starts strictly at `NeedsEvidence` (preview-only, noindex,
+ *    404 in production, excluded from `sitemap.xml`).
+ *  - Each city carries distinct, non-templated business context backed by exact
+ *    HTTP-200 verified BLS Economy at a Glance MSA & BEA/regional sources.
+ *  - Never implies a physical office, local staff, or past local clients.
  */
 
 import type { PublicationState } from "@/lib/seo/publication";
@@ -50,6 +49,7 @@ function city([name, stateSlug, primaryService]: Row): PilotCity {
 }
 
 const ROWS: Row[] = [
+  // Original 12 pilot metros
   ["Austin", "texas", "Web development"],
   ["Dallas", "texas", "Business dashboards"],
   ["Miami", "florida", "Ecommerce development"],
@@ -62,6 +62,27 @@ const ROWS: Row[] = [
   ["Denver", "colorado", "Web development"],
   ["Atlanta", "georgia", "n8n automation"],
   ["Phoenix", "arizona", "Web development"],
+  // 20 additional researched metros across states + Washington, D.C.
+  ["Houston", "texas", "Business dashboards"],
+  ["San Diego", "california", "Web development"],
+  ["Philadelphia", "pennsylvania", "Web development"],
+  ["Pittsburgh", "pennsylvania", "AI agents"],
+  ["Charlotte", "north-carolina", "Business dashboards"],
+  ["Raleigh", "north-carolina", "Web development"],
+  ["Nashville", "tennessee", "Creative production"],
+  ["Minneapolis", "minnesota", "Business dashboards"],
+  ["Detroit", "michigan", "n8n automation"],
+  ["Columbus", "ohio", "Ecommerce development"],
+  ["Portland", "oregon", "Ecommerce development"],
+  ["Salt Lake City", "utah", "Web development"],
+  ["Las Vegas", "nevada", "Creative production"],
+  ["Indianapolis", "indiana", "Business dashboards"],
+  ["Kansas City", "missouri", "n8n automation"],
+  ["Tampa", "florida", "Web development"],
+  ["Baltimore", "maryland", "Web development"],
+  ["Washington", "washington-d-c", "AI agents"],
+  ["Milwaukee", "wisconsin", "Business dashboards"],
+  ["Richmond", "virginia", "Web development"],
 ];
 
 export const PILOT_CITIES: PilotCity[] = ROWS.map(city);

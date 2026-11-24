@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
 import { PILOT_CITIES } from "@/lib/geo/cities";
+import { allStateCityPlans } from "@/lib/geo/city-backlog";
 import { allCityLocalContent, getCityLocalContent } from "@/lib/geo/city-local-content";
+import { FICTIONAL_DEMO_PROFILES, selectFictionalProfilesForServices } from "@/lib/geo/fictional-profiles";
 import {
   locationsForServiceHub,
   projectsForState,
@@ -50,8 +52,9 @@ describe("GPU compute consultation service", () => {
   });
 });
 
-describe("registered city local content (exact 12 cities)", () => {
+describe("registered city local content (all 32 verified preview metros)", () => {
   it("covers every registered city in PILOT_CITIES with valid citations, links, and NeedsEvidence gate", () => {
+    assert.equal(PILOT_CITIES.length, 32);
     assert.equal(allCityLocalContent().length, PILOT_CITIES.length);
 
     for (const city of PILOT_CITIES) {
@@ -143,5 +146,45 @@ describe("preview-only TEST / SAMPLE CONTENT production gate", () => {
       assert.equal(sample.label, "TEST / SAMPLE CONTENT");
       assert.match(sample.disclaimer, /TEST \/ SAMPLE CONTENT/);
     }
+  });
+});
+
+describe("51-jurisdiction city expansion backlog & fictional demo customer profiles", () => {
+  it("tracks all 50 states plus Washington, D.C. cleanly in the city expansion plan", () => {
+    const plans = allStateCityPlans();
+    assert.equal(plans.length, 51);
+    const totalRegistered = plans.reduce((acc, p) => acc + p.registeredPreviewCities.length, 0);
+    assert.equal(totalRegistered, PILOT_CITIES.length);
+    for (const plan of plans) {
+      assert.ok(
+        plan.registeredPreviewCities.length > 0 || plan.backlogCandidateMetros.length > 0,
+        `${plan.stateSlug} must list either registered preview cities or backlog targets`,
+      );
+    }
+  });
+
+  it("defines 3 transparently fictional customer profiles with synthetic markers and valid studio links", () => {
+    assert.equal(FICTIONAL_DEMO_PROFILES.length, 3);
+    assert.ok(
+      FICTIONAL_DEMO_PROFILES.some((p) => p.hasPhysicalStorefrontInScenario),
+      "expected simulated physical store profile",
+    );
+    assert.ok(
+      FICTIONAL_DEMO_PROFILES.some((p) => !p.hasPhysicalStorefrontInScenario),
+      "expected simulated 100% remote company profile",
+    );
+    for (const profile of FICTIONAL_DEMO_PROFILES) {
+      assert.match(profile.disclosureBadge, /Fictional Demo Customer/i);
+      assert.match(profile.disclosureBadge, /Not a Real Client/i);
+      assert.match(profile.mapPin.approximateCoordsLabel, /Synthetic/i);
+      assert.match(profile.mapPin.caption, /not a real (business address|client or address|company or office location)/i);
+      assert.deepEqual(
+        brokenLinks(profile.pairedExamples.map((ex) => ex.href)),
+        [],
+        `${profile.id} has broken paired example link`,
+      );
+    }
+    const retailMatches = selectFictionalProfilesForServices(["ecommerce-development"], 2);
+    assert.ok(retailMatches.some((p) => p.id === "alder-loom"));
   });
 });

@@ -3,7 +3,13 @@ import { SERVICES } from "@/lib/services";
 
 export type CategoryFilter = "All" | ProjectCategory;
 
-export type AvailabilityFilter = "all" | "live-demo" | "locally-tested" | "in-development";
+export type AvailabilityFilter =
+  | "all"
+  | "live-demo"
+  | "locally-tested"
+  | "prototype"
+  | "concept"
+  | "in-development";
 
 export type StackFilterId =
   | "all"
@@ -61,9 +67,11 @@ export const STACK_FILTERS: StackFilterDef[] = [
 ];
 
 export const AVAILABILITY_OPTIONS: { id: AvailabilityFilter; label: string }[] = [
-  { id: "all", label: "All statuses" },
-  { id: "live-demo", label: "Live public sandbox" },
-  { id: "locally-tested", label: "Locally tested demo" },
+  { id: "all", label: "All 80 showcases" },
+  { id: "live-demo", label: "Live public sandboxes" },
+  { id: "locally-tested", label: "Locally tested demos" },
+  { id: "prototype", label: "Built repo prototypes" },
+  { id: "concept", label: "Concepts & sample scenarios" },
   { id: "in-development", label: "In development" },
 ];
 
@@ -79,6 +87,8 @@ export function matchesAvailability(project: Project, availability: Availability
   if (availability === "all") return true;
   if (availability === "live-demo") return Boolean(project.liveUrl && project.liveUrl.trim() !== "");
   if (availability === "locally-tested") return project.status === "Demo Ready" && !project.liveUrl;
+  if (availability === "prototype") return project.status === "Prototype";
+  if (availability === "concept") return project.status === "Concept" || project.status === "Sample Scenario";
   if (availability === "in-development") return project.status === "In Development";
   return true;
 }
