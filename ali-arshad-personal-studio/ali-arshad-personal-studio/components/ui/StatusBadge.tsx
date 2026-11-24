@@ -6,7 +6,7 @@ export function StatusBadge({ status }: { status: ProjectStatus }) {
   const tone =
     status === "Verified"
       ? "verified"
-      : status === "Demo Ready"
+      : status === "Demo Ready" || status === "Playable Experiment"
         ? "demo"
         : status === "Prototype"
           ? "adapted"
@@ -14,8 +14,13 @@ export function StatusBadge({ status }: { status: ProjectStatus }) {
   return <span className={`badge badge--${tone}`}>{status}</span>;
 }
 
-/** Says how the work came about, so adaptations are never mistaken for original builds. */
+/** Says how the work came about, so adaptations and personal experiments are never mistaken for client work. */
 export function TypeBadge({ type }: { type: ProjectType }) {
-  const tone = type === "Professional Work" ? "pro" : type === "Open-Source Adaptation" ? "adapted" : "concept";
+  const tone =
+    type === "Professional Work"
+      ? "pro"
+      : type === "Open-Source Adaptation"
+        ? "adapted"
+        : "concept";
   return <span className={`badge badge--${tone}`}>{type}</span>;
 }

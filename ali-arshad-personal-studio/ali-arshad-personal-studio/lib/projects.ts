@@ -1,5 +1,28 @@
+import type { GameSlug } from "@/lib/games/catalog";
 import { EXPANSION_PROJECTS_A, type ConceptVisualSpec } from "@/lib/projects-expansion-a";
 import { EXPANSION_PROJECTS_B } from "@/lib/projects-expansion-b";
+import { EXPANSION_PROJECTS_C } from "@/lib/projects-expansion-c";
+import { GAME_WORK_ENTRIES } from "@/lib/projects-games";
+
+const REPO_TREE_BASE =
+  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/next-build-100-planner-globe";
+
+const CORE_SOURCE_DIR: Record<string, string> = {
+  "pipelineos-crm": "apps/pipelineos",
+  "stockflow-inventory": "apps/stockflow",
+  "tessera-clayworks-storefront": "demos/commerce-storefront",
+  "northwind-analytics-dashboard": "demos/analytics-dashboard",
+  "tideline-support-agent": "demos/support-agent",
+  "kestrel-voice-sales-agent": "demos/voice-sales-agent",
+  "inbound-lead-qualification-workflow": "demos/n8n-lead-automation",
+  "meridian-inventory-operations": "demos/supply-chain",
+  "lantern-sourcing-platform": "demos/sourcing-platform",
+  "blender-product-visualisation": "demos/blender-product-viz",
+  "motion-production-pipeline": "demos/motion-production",
+  "halcyon-brand-system": "demos/brand-system",
+  "ledgerlight-block-explorer": "demos/chain-explorer",
+  "sentryline-security-posture": "demos/security-dashboard",
+};
 
 /**
  * Central project records.
@@ -24,6 +47,7 @@ export const PROJECT_CATEGORIES = [
   "Web & Software",
   "AI Automation",
   "Business Solutions",
+  "Games & Experiments",
 ] as const;
 
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
@@ -32,21 +56,31 @@ export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
  * Professional Work      — paid or employed work Ali genuinely contributed to.
  * Original Concept       — built from scratch by Ali; the scenario may be fictional, the software is real.
  * Open-Source Adaptation — built on someone else's licensed project; see `attribution`.
+ * Personal Experiment    — self-initiated browser game or interactive lab built out of personal interest.
  */
-export type ProjectType = "Professional Work" | "Original Concept" | "Open-Source Adaptation";
+export type ProjectType =
+  | "Professional Work"
+  | "Original Concept"
+  | "Open-Source Adaptation"
+  | "Personal Experiment";
 
 /**
- * Planned        — scoped but not started. Not indexed, not shown in the gallery.
- * In Development — being built. Not indexed.
- * Demo Ready     — built and locally tested in this repository; NOT publicly deployed unless `liveUrl` is set.
- * Verified       — a real professional engagement confirmed with the client, including naming permission.
- * Published      — live, written up, and approved for public listing. Indexed.
+ * Planned             — scoped but not started. Not indexed, not shown in the gallery.
+ * In Development      — being built. Not indexed.
+ * Demo Ready          — built and locally tested in this repository; NOT publicly deployed unless `liveUrl` is set.
+ * Prototype           — built runnable prototype verified locally in apps/ or project-lab/. Not indexed.
+ * Playable Experiment — playable browser game experiment in /games/[slug]. Not indexed under /work/*.
+ * Concept             — illustrative architecture concept + small local workflow slice. Not indexed.
+ * Sample Scenario     — illustrative fictional business brief + architecture scope. Not indexed.
+ * Verified            — a real professional engagement confirmed with the client, including naming permission.
+ * Published           — live, written up, and approved for public listing. Indexed.
  */
 export type ProjectStatus =
   | "Planned"
   | "In Development"
   | "Demo Ready"
   | "Prototype"
+  | "Playable Experiment"
   | "Concept"
   | "Sample Scenario"
   | "Verified"
@@ -142,8 +176,18 @@ export type Project = {
   gallery: ProjectMedia[];
   /** Live deployment, once one exists. */
   liveUrl?: string;
-  /** Public source code, when sharing is appropriate. */
+  /** Playable internal route for Games & Experiments entries (e.g. /games/signal-link). */
+  playUrl?: string;
+  /** Linked game slug for rendering original GameCoverArt on /work. */
+  gameSlug?: GameSlug;
+  /** Public source code URL pointing to an actual folder/file in this repository. */
   sourceUrl?: string;
+  /** Verified relative repository path (e.g. apps/pipelineos, demos/support-agent, project-lab/...). */
+  sourceRepoPath?: string;
+  /** Explicit engineering or scope limitations shown transparently on the detail page. */
+  limitations?: string;
+  /** Optional AI-generated architectural concept visual explicitly labeled as non-screenshot art. */
+  generatedVisual?: { src: string; alt: string; label: string };
   attribution?: Attribution;
   /** Optional technical architecture diagram shown inside the project / case study write-up. */
   architectureDiagram?: {
@@ -1584,12 +1628,29 @@ export const CORE_PROJECTS: Project[] = [
   PIPELINEOS, STOCKFLOW,
   COMMERCE, ANALYTICS, SUPPORT_AGENT, VOICE_AGENT, N8N, SUPPLY_CHAIN,
   SOURCING, BLENDER, MOTION, BRAND_SYSTEM, CHAIN_EXPLORER, SECURITY,
-];
+].map((proj) => {
+  const dir = CORE_SOURCE_DIR[proj.slug];
+  return dir
+    ? {
+        ...proj,
+        sourceRepoPath: dir,
+        sourceUrl: `${REPO_TREE_BASE}/${dir}`,
+      }
+    : proj;
+});
 
-export const PROJECTS: Project[] = [
+/** 100 distinct software, AI, analytics, sourcing, brand, and creative project showcases. */
+export const COMMERCIAL_PROJECTS: Project[] = [
   ...CORE_PROJECTS,
   ...EXPANSION_PROJECTS_A,
   ...EXPANSION_PROJECTS_B,
+  ...EXPANSION_PROJECTS_C,
+];
+
+/** Full Work portfolio: 100 technical/creative project showcases + 20 playable browser game experiments. */
+export const PROJECTS: Project[] = [
+  ...COMMERCIAL_PROJECTS,
+  ...GAME_WORK_ENTRIES,
 ];
 
 /**
@@ -1629,6 +1690,7 @@ export const isIndexable = (p: Project) => p.status === "Published" || p.status 
 export const isLive = (p: Project) =>
   p.status === "Demo Ready" ||
   p.status === "Prototype" ||
+  p.status === "Playable Experiment" ||
   p.status === "Concept" ||
   p.status === "Sample Scenario" ||
   p.status === "Verified" ||
@@ -1639,11 +1701,13 @@ export const STATUS_NOTE: Record<ProjectStatus, string> = {
   "In Development": "This project is being built. Details may change.",
   "Demo Ready": "This is a working demonstration, not a client engagement. The brand and data are fictional.",
   Prototype:
-    "This is a functioning studio prototype built and locally verified inside this repository using fictional seeded data — not a paid client deployment.",
+    "This is a runnable studio prototype built and locally tested inside this repository using synthetic data — not a paid client deployment.",
+  "Playable Experiment":
+    "Personal browser game experiment built out of personal interest in interactive UI and state machines — not client work or a claimed game-development service line.",
   Concept:
-    "Architecture Concept — illustrative studio design & technical scope showing how we would build this system. Not a completed implementation, live demo, or client engagement.",
+    "Architecture Concept — illustrative studio design & technical scope paired with a small representative workflow prototype in project-lab/concepts/. Not a finished production build or client engagement.",
   "Sample Scenario":
-    "Sample Scenario — illustrative fictional business brief & proposed studio architecture. Not a real client, completed engagement, or verified outcome.",
+    "Sample Scenario — illustrative fictional business brief & proposed architecture paired with a small representative workflow prototype. Not a real client, completed engagement, or verified outcome.",
   Verified: "This was a real engagement, confirmed with the client.",
   Published: "",
 };

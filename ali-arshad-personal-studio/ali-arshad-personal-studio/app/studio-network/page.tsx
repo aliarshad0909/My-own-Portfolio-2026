@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { StudioNetworkForm } from "@/components/network/StudioNetworkForm";
+import { StudioNetworkGlobe } from "@/components/network/StudioNetworkGlobe";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -12,10 +13,10 @@ import { pageMetadata } from "@/lib/seo";
 import { getKeyword } from "@/lib/seo/keyword-registry";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { SITE, activeSocials } from "@/lib/site";
-import { VERIFIED_COLLABORATORS } from "@/lib/studio-network";
+import { loadApprovedPublicCollaborators } from "@/lib/studio-network-directory";
 import { isNetworkDeliveryConfigured } from "@/lib/studio-network-server";
 
-// Evaluate delivery env vars per request so Vercel env updates take effect immediately.
+// Evaluate delivery & directory env vars per request so Vercel env updates take effect immediately.
 export const dynamic = "force-dynamic";
 
 const state = getKeyword("net-studio-network")?.state ?? "Researched";
@@ -23,7 +24,7 @@ const state = getKeyword("net-studio-network")?.state ?? "Researched";
 export const metadata: Metadata = pageMetadata({
   title: "Studio Network — Independent Collaborators & US Project Delivery",
   description:
-    "How Ali Arshad Personal Studio pairs direct solo delivery with vetted independent specialists on US-focused projects — plus how qualified collaborators can register interest.",
+    "How Ali Arshad Personal Studio pairs direct solo delivery with vetted independent specialists on US-focused projects — with a privacy-first interactive globe and opt-in registration.",
   path: "/studio-network",
   index: isIndexable(state),
 });
@@ -41,8 +42,8 @@ const PRINCIPLES = [
   },
   {
     icon: "alert" as const,
-    title: "Zero fake logos or implied employees",
-    text: "Independent collaborators are contractors, not W-2 staff. Collaborators are named publicly only with verified details and written permission.",
+    title: "Private by default, zero invented profiles",
+    text: "Independent collaborators are contractors, not W-2 staff. Profiles stay private unless the specialist explicitly opts in, passes verification, and receives moderation approval.",
   },
   {
     icon: "code" as const,
@@ -76,6 +77,7 @@ export default function StudioNetworkPage() {
   if (!shouldRender(state)) notFound();
 
   const configured = isNetworkDeliveryConfigured();
+  const approvedCollaborators = loadApprovedPublicCollaborators();
   const linkedinUrl = activeSocials().find((s) => s.icon === "linkedin")?.url ?? "";
 
   return (
@@ -109,7 +111,24 @@ export default function StudioNetworkPage() {
         }
       />
 
-      <section className="section section--tight" aria-labelledby="direct-vs-partner-title">
+      {/* Privacy-First Interactive Collaborator Globe */}
+      <section className="section section--tight" aria-labelledby="network-globe-title">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow eyebrow--plain">Global remote coverage · Privacy-first</p>
+            <h2 className="section-title section-title--sm" id="network-globe-title">
+              Interactive Studio Network Globe
+            </h2>
+            <p className="section-sub">
+              Only verified, manually approved independent collaborators who explicitly opt into public listing appear on this globe — showing approximate metro regions only, never exact addresses or fictional demo profiles.
+            </p>
+          </div>
+
+          <StudioNetworkGlobe collaborators={approvedCollaborators} deliveryConfigured={configured} />
+        </div>
+      </section>
+
+      <section className="section section--surface section--tight" aria-labelledby="direct-vs-partner-title">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Clear boundaries</p>
@@ -138,7 +157,7 @@ export default function StudioNetworkPage() {
         </div>
       </section>
 
-      <section className="section section--surface section--tight" aria-labelledby="network-principles">
+      <section className="section section--tight" aria-labelledby="network-principles">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Operating principles</p>
@@ -166,23 +185,23 @@ export default function StudioNetworkPage() {
         </div>
       </section>
 
-      {/* Verified Collaborators Roster — never displays invented profiles */}
-      <section className="section section--tight" aria-labelledby="collaborators-roster-title">
+      {/* Verified Collaborators Roster — never displays invented or unconsented profiles */}
+      <section className="section section--surface section--tight" aria-labelledby="collaborators-roster-title">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Public collaborator directory</p>
             <h2 className="section-title section-title--sm" id="collaborators-roster-title">
-              Named only with verified details and written permission
+              Named only with explicit opt-in, verification, and moderation approval
             </h2>
           </div>
 
-          {VERIFIED_COLLABORATORS.length > 0 ? (
+          {approvedCollaborators.length > 0 ? (
             <div className="roster-grid">
-              {VERIFIED_COLLABORATORS.map((person) => (
-                <article key={person.name} className="panel roster-card">
+              {approvedCollaborators.map((person) => (
+                <article key={person.id} className="panel roster-card">
                   <h3 className="card-title">{person.name}</h3>
                   <p className="roster-card__meta">
-                    {person.role} · {person.location}
+                    {person.role} · {person.approximateLocation}
                   </p>
                   <p>{person.specialty}</p>
                   {person.portfolioUrl ? (
@@ -196,10 +215,11 @@ export default function StudioNetworkPage() {
             </div>
           ) : (
             <div className="panel roster-placeholder" role="note">
-              <p className="roster-placeholder__title">Collaborator profiles are currently unpublished</p>
+              <p className="roster-placeholder__title">Collaborator profiles are currently unpublished (0 public listings)</p>
               <p className="section-sub">
-                To stay strictly honest, this directory stays empty until each independent collaborator confirms their bio, location, work samples,
-                and written permission to be listed publicly. When a client project involves a specialist, I introduce them directly during scoping.
+                To protect privacy and stay strictly honest, this directory and the globe above remain free of invented profiles until each real
+                independent collaborator confirms their bio, approximate metro region, work samples, explicit public opt-in, and moderation approval.
+                Illustrative demo teams remain strictly separated under <Link href="/demo-scenarios">/demo-scenarios</Link>.
               </p>
             </div>
           )}
@@ -207,7 +227,7 @@ export default function StudioNetworkPage() {
       </section>
 
       {/* Join the Studio Network Form */}
-      <section className="section section--surface" id="join-network" aria-labelledby="join-network-title">
+      <section className="section" id="join-network" aria-labelledby="join-network-title">
         <div className="container network-apply">
           <div className="network-apply__intro">
             <p className="eyebrow eyebrow--plain">Join the Studio Network</p>
@@ -225,21 +245,22 @@ export default function StudioNetworkPage() {
               </li>
               <li>
                 <Icon name="check" size={16} />
-                <span>Only details needed to assess collaboration fit are collected</span>
+                <span>Private by default — never published publicly without explicit opt-in and verification</span>
               </li>
               <li>
                 <Icon name="check" size={16} />
-                <span>Nothing you submit is published without your explicit written consent</span>
+                <span>Optional globe listings expose coarse metro regions only — never home addresses</span>
               </li>
             </ul>
             <p className="fine-print" style={{ marginTop: "16px" }}>
-              Looking to hire the studio for a client project instead? Use the <Link href="/contact">project inquiry form</Link>.
+              Looking to hire the studio for a client project instead? Use the <Link href="/contact">project inquiry form</Link> or try the{" "}
+              <Link href="/project-planner">visual Project Planner</Link>.
             </p>
           </div>
 
           <div className="panel panel--lg">
             <h3 className="section-title section-title--sm">Collaborator registration</h3>
-            <p className="section-sub">Fields marked with * are required.</p>
+            <p className="section-sub">Fields marked with * are required. Public globe visibility is off by default.</p>
             <StudioNetworkForm configured={configured} fallbackEmail={SITE.email} linkedinUrl={linkedinUrl} />
           </div>
         </div>

@@ -1,9 +1,39 @@
 import type { Project, ProjectCategory, ProjectStatus } from "@/lib/projects";
 
+const REPO_TREE_BASE =
+  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/next-build-100-planner-globe";
+
+const MONOREPO_APP_DIR: Record<string, string> = {
+  "stockflow-mobile-companion": "apps/stockflow-mobile",
+  "financeos-accounting-suite": "apps/financeos",
+  "flowos-automation-studio": "apps/flowos",
+  "sourceos-procurement-hub": "apps/sourceos",
+  "orexa-interactive-learning-os": "apps/orexa",
+  "supportos-helpdesk-console": "apps/supportos",
+  "projectos-delivery-workspace": "apps/projectos",
+  "insightos-bi-workspace": "apps/insightos",
+  "peopleos-team-directory": "apps/peopleos",
+  "bookos-appointment-scheduler": "apps/bookos",
+};
+
 export type ConceptVisualSpec = {
   accent: string;
   code: string;
-  pattern: "grid" | "flow" | "chart" | "commerce" | "agent" | "media" | "ledger" | "brand";
+  pattern:
+    | "grid"
+    | "flow"
+    | "chart"
+    | "commerce"
+    | "agent"
+    | "media"
+    | "ledger"
+    | "brand"
+    | "eval"
+    | "gateway"
+    | "finops"
+    | "webhook"
+    | "scanner"
+    | "schema";
 };
 
 export type ExpansionInput = {
@@ -18,16 +48,26 @@ export type ExpansionInput = {
   approach: string;
   features: string[];
   deliverables: string[];
+  limitations?: string;
   technologies: string[];
   tags: string[];
   relatedServicePaths: string[];
   relatedToolPaths?: string[];
+  sourceRepoPath?: string;
+  sourceUrl?: string;
+  generatedVisual?: { src: string; alt: string; label: string };
   visual: ConceptVisualSpec;
   liveUrl?: string;
 };
 
 export function buildExpansionProject(input: ExpansionInput): Project {
   const isPrototype = input.status === "Prototype";
+  const resolvedRepoPath =
+    input.sourceRepoPath ??
+    MONOREPO_APP_DIR[input.slug] ??
+    `project-lab/concepts/${input.slug}`;
+  const resolvedSourceUrl = input.sourceUrl ?? `${REPO_TREE_BASE}/${resolvedRepoPath}`;
+
   return {
     id: input.id,
     slug: input.slug,
@@ -38,33 +78,48 @@ export function buildExpansionProject(input: ExpansionInput): Project {
     summary: input.summary,
     projectType: "Original Concept",
     status: input.status,
-    role: isPrototype ? "Sole builder (studio repository application)" : "Architecture concept & scope author",
+    role: isPrototype ? "Sole builder (studio repository prototype)" : "Architecture concept & workflow prototype author",
     contribution: input.deliverables,
     technologies: input.technologies,
     featured: false,
     usesSampleMedia: !isPrototype,
-    cover: {
-      src: "/images/projects/placeholder-interior.webp",
-      alt: `${input.title} — ${input.status} architectural blueprint illustration`,
-      width: 1200,
-      height: 675,
-    },
+    cover: input.generatedVisual
+      ? {
+          src: input.generatedVisual.src,
+          alt: input.generatedVisual.alt,
+          width: 1200,
+          height: 675,
+        }
+      : {
+          src: "/images/projects/placeholder-interior.webp",
+          alt: `${input.title} — ${input.status} architectural blueprint illustration`,
+          width: 1200,
+          height: 675,
+        },
     gallery: [],
     liveUrl: input.liveUrl,
+    sourceUrl: resolvedSourceUrl,
+    sourceRepoPath: resolvedRepoPath,
+    limitations:
+      input.limitations ??
+      (isPrototype
+        ? "Verified locally inside this repository using synthetic seeded data — not a public multi-tenant production deployment."
+        : "Architecture concept paired with a lightweight representative workflow prototype in project-lab/concepts/ — not a completed full-stack deployment or client engagement."),
     isCatalogExpansion: true,
     nicheLabel: input.niche,
     relatedServicePaths: input.relatedServicePaths,
     relatedToolPaths: input.relatedToolPaths,
+    generatedVisual: input.generatedVisual,
     conceptVisual: input.visual,
     caseStudy: {
-      background: `${input.niche} showcase (${input.status}). ${isPrototype ? "Built and verified locally in the studio monorepo as an inspectable software prototype — not a client deployment." : "Illustrative architecture concept designed to demonstrate how the studio approaches this domain — not a completed implementation or client engagement."}`,
+      background: `${input.niche} showcase (${input.status}). ${isPrototype ? "Built and verified locally in this repository as an inspectable runnable prototype — not a client deployment." : "Illustrative architecture concept paired with a small representative runnable workflow in project-lab/concepts/ — not a finished production build or client engagement."}`,
       challenge: input.problem,
       approach: input.approach,
       features: input.features,
       process: input.deliverables,
       solution: isPrototype
-        ? "Implemented and locally verified inside the Ali Arshad Personal Studio monorepo using fictional seeded datasets."
-        : "Prepared as a structured technical blueprint ready to customize into a scoped client build.",
+        ? `Runnable locally from ${resolvedRepoPath} with automated tests and synthetic fixtures.`
+        : `Documented technical blueprint with a representative local workflow slice in ${resolvedRepoPath}, ready to adapt into a scoped client build.`,
     },
   };
 }

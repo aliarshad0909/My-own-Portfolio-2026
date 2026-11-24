@@ -64,6 +64,14 @@ export default async function GameDetailPage({
           <span className="badge">{game.category}</span>
           <span className="badge">Browser playable · {game.estimatedTime}</span>
         </div>
+        <div className="hero__actions" style={{ marginTop: "16px" }}>
+          <ButtonLink href={`/work/game-${game.slug}`} variant="secondary" icon={null}>
+            Read build story &amp; engineering notes
+          </ButtonLink>
+          <ButtonLink href="/work" variant="secondary" icon={null}>
+            Browse all Work &amp; Experiments
+          </ButtonLink>
+        </div>
       </PageHero>
 
       <section className="section section--tight" aria-labelledby="play-area-title">

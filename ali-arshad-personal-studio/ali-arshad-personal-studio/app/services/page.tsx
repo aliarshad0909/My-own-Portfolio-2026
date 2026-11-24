@@ -248,6 +248,9 @@ export default function ServicesPage() {
       >
         <div className="hero__actions">
           <ButtonLink href="/contact">Discuss your project</ButtonLink>
+          <ButtonLink href="/project-planner" variant="secondary" icon={null}>
+            Visual Project Planner
+          </ButtonLink>
           <ButtonLink href="#compare-services" variant="secondary" icon={null}>
             Compare services
           </ButtonLink>

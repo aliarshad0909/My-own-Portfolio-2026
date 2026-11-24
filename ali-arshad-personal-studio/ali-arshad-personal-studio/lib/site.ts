@@ -77,11 +77,13 @@ export const NAV_ITEMS: NavItem[] = [
 
 /** Secondary quick links shown in the mobile drawer below the primary links. */
 export const MOBILE_SECONDARY_ITEMS: NavItem[] = [
+  { label: "Visual Project Planner", href: "/project-planner" },
   { label: "Live Product Directory", href: "/products" },
   { label: "Calculator Centre", href: "/tools" },
   { label: "Guides & Resources", href: "/resources" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "US Remote Coverage", href: "/locations" },
+  { label: "Studio Network", href: "/studio-network" },
   { label: "Experience", href: "/experience" },
   { label: "Privacy", href: "/privacy" },
 ];
@@ -92,6 +94,7 @@ export const CORE_SITEMAP_PAGES: string[] = [
   "/work",
   "/products",
   "/games",
+  "/project-planner",
   "/blog",
   "/case-studies",
   "/services",

@@ -2,15 +2,18 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { GameCoverArt } from "@/components/games/GameCoverArt";
 import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import type { Project } from "@/lib/projects";
 
 type Props = { project: Project; sizes: string; priority?: boolean };
 
 /**
- * Card media. Shows the cover image; if the project has a preview clip it is
- * only fetched and played on hover/focus, and never when the visitor prefers
- * reduced motion. No video is loaded up front.
+ * Card media. Renders:
+ *  - original GameCoverArt for playable browser game experiments,
+ *  - explicitly badged AI-generated architectural illustrations for featured concepts,
+ *  - bespoke ConceptCoverArt schematics for concepts/prototypes without screenshots,
+ *  - or real application screenshots (with optional hover preview clip respecting reduced motion).
  */
 export function ProjectMedia({ project, sizes, priority = false }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -26,7 +29,6 @@ export function ProjectMedia({ project, sizes, priority = false }: Props) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Play on hover or keyboard focus of the surrounding card link.
   useEffect(() => {
     const card = wrapRef.current?.closest(".project-card");
     if (!card || !project.previewVideo || !allowMotion) return;
@@ -53,7 +55,21 @@ export function ProjectMedia({ project, sizes, priority = false }: Props) {
 
   return (
     <div className="project-card__media" ref={wrapRef}>
-      {project.conceptVisual ? (
+      {project.gameSlug ? (
+        <GameCoverArt slug={project.gameSlug} />
+      ) : project.generatedVisual ? (
+        <>
+          <Image
+            src={project.generatedVisual.src}
+            alt={project.generatedVisual.alt}
+            fill
+            sizes={sizes}
+            priority={priority}
+            className="project-card__image"
+          />
+          <span className="project-card__art-tag">{project.generatedVisual.label}</span>
+        </>
+      ) : project.conceptVisual ? (
         <ConceptCoverArt spec={project.conceptVisual} title={project.title} status={project.status} />
       ) : (
         <Image src={project.cover.src} alt={project.cover.alt} fill sizes={sizes} priority={priority} className="project-card__image" />

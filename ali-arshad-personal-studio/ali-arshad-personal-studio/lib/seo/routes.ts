@@ -17,6 +17,7 @@
  */
 
 import { BLOG_POSTS } from "@/lib/content/blog";
+import { FICTIONAL_DEMO_PROFILES } from "@/lib/geo/fictional-profiles";
 import { STUDIO_GAMES } from "@/lib/games/catalog";
 import { PROJECTS, caseStudies } from "@/lib/projects";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
@@ -32,6 +33,8 @@ export const STATIC_ROUTES = [
   "/work",
   "/products",
   "/games",
+  "/project-planner",
+  "/demo-scenarios",
   "/blog",
   "/blog/rss.xml",
   "/llms.txt",
@@ -58,6 +61,7 @@ export function knownRoutes(): Set<string> {
   for (const prod of STUDIO_PRODUCTS) routes.add(`/products/${prod.slug}`);
   for (const game of STUDIO_GAMES) routes.add(`/games/${game.slug}`);
   for (const post of BLOG_POSTS) routes.add(`/blog/${post.slug}`);
+  for (const scenario of FICTIONAL_DEMO_PROFILES) routes.add(`/demo-scenarios/${scenario.slug}`);
 
   // Registry primaryUrls define the tool/resource/industry pages and hub spokes.
   for (const k of KEYWORD_REGISTRY) routes.add(k.primaryUrl);

@@ -103,7 +103,7 @@ export async function POST(request: Request) {
         ok: false,
         code: "not_configured",
         message:
-          "The collaborator registration form is not connected to an inbox yet, so your submission was not delivered. Please reach out via LinkedIn or email once listed.",
+          "The collaborator registration form is not connected to an inbox yet, so your submission was not delivered or stored. Please connect via LinkedIn until server delivery is enabled.",
       },
       503,
     );
@@ -124,5 +124,6 @@ export async function POST(request: Request) {
     );
   }
 
-  return json({ ok: true }, 200);
+  // Submissions remain private by default; moderation & written verification are always required before public globe listing.
+  return json({ ok: true, privacyState: "private_pending_review" }, 200);
 }

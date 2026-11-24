@@ -29,9 +29,11 @@ type Props = {
   /** Whether a delivery channel is configured on the server. */
   configured: boolean;
   fallbackEmail?: string;
+  upworkUrl?: string;
+  linkedinUrl?: string;
 };
 
-export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
+export function InquiryForm({ configured, fallbackEmail = "", upworkUrl = "", linkedinUrl = "" }: Props) {
   const [values, setValues] = useState<InquiryInput>(EMPTY);
   const [errors, setErrors] = useState<InquiryErrors>({});
   const [status, setStatus] = useState<Status>({ kind: "idle" });
@@ -149,15 +151,30 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
           <div>
             <h3 className="card-title">The inquiry form isn&rsquo;t connected yet</h3>
             <p>
-              Messages can&rsquo;t be delivered from this form until it is connected to an inbox.
+              Messages cannot be delivered from this form until an email provider or webhook is configured on the server.
               {fallbackEmail ? (
                 <>
                   {" "}
-                  Please email <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a> instead.
+                  Email <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a> instead
                 </>
-              ) : (
-                " Please check back soon."
-              )}
+              ) : null}
+              {upworkUrl ? (
+                <>
+                  {fallbackEmail ? ", or message me directly on " : " Reach me directly right now on "}
+                  <a href={upworkUrl} target="_blank" rel="noopener noreferrer">
+                    Upwork
+                  </a>
+                </>
+              ) : null}
+              {linkedinUrl ? (
+                <>
+                  {upworkUrl || fallbackEmail ? " or " : " Reach me directly on "}
+                  <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+                    LinkedIn
+                  </a>
+                </>
+              ) : null}
+              . You can also build a copyable brief in the <a href="/project-planner">Visual Project Planner</a>.
             </p>
           </div>
         </div>

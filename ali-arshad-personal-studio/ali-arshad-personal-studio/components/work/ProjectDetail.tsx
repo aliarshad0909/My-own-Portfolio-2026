@@ -6,6 +6,7 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { TrackedLink } from "@/components/ui/TrackedLink";
+import { GameCoverArt } from "@/components/games/GameCoverArt";
 import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
@@ -96,8 +97,14 @@ export function ProjectDetail({ project, variant }: Props) {
                 <span>{statusNote}</span>
               </p>
             ) : null}
-            {project.liveUrl || project.sourceUrl ? (
+            {project.playUrl || project.liveUrl || project.sourceUrl ? (
               <div className="detail__links">
+                {project.playUrl ? (
+                  <Link className="btn btn--primary btn--md" href={project.playUrl}>
+                    <Icon name="play" size={17} />
+                    <span>Play Live in Browser</span>
+                  </Link>
+                ) : null}
                 {project.liveUrl ? (
                   <TrackedLink
                     className="btn btn--primary btn--md"
@@ -112,7 +119,7 @@ export function ProjectDetail({ project, variant }: Props) {
                 ) : null}
                 {project.sourceUrl ? (
                   <a className="btn btn--secondary btn--md" href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
-                    <span>View source code</span>
+                    <span>View source in repository</span>
                     <Icon name="arrow-up-right" size={18} className="btn__icon" />
                   </a>
                 ) : null}
@@ -123,7 +130,23 @@ export function ProjectDetail({ project, variant }: Props) {
 
         <div className="container">
           <div className="detail__cover">
-            {project.conceptVisual ? (
+            {project.gameSlug ? (
+              <GameCoverArt slug={project.gameSlug} />
+            ) : project.generatedVisual ? (
+              <div className="detail__generated-cover">
+                <Image
+                  src={project.generatedVisual.src}
+                  alt={project.generatedVisual.alt}
+                  width={1200}
+                  height={675}
+                  priority
+                  sizes="(min-width: 1240px) 1240px, 100vw"
+                />
+                <span className="detail__generated-badge">
+                  {project.generatedVisual.label} — Illustrative artwork, not a production screenshot
+                </span>
+              </div>
+            ) : project.conceptVisual ? (
               <ConceptCoverArt spec={project.conceptVisual} title={project.title} status={project.status} />
             ) : (
               <Image src={project.cover.src} alt={project.cover.alt} width={project.cover.width} height={project.cover.height} priority sizes="(min-width: 1240px) 1240px, 100vw" />
@@ -397,6 +420,61 @@ export function ProjectDetail({ project, variant }: Props) {
                   ))}
                 </ul>
               </section>
+
+              {project.limitations ? (
+                <section aria-labelledby="limitations-title">
+                  <h2 className="section-title section-title--sm" id="limitations-title">
+                    Scope &amp; honest limitations
+                  </h2>
+                  <p>{project.limitations}</p>
+                </section>
+              ) : null}
+
+              {project.sourceRepoPath ? (
+                <section aria-labelledby="run-source-title">
+                  <h2 className="section-title section-title--sm" id="run-source-title">
+                    Runnable repository source
+                  </h2>
+                  <div className="demo-access-panel">
+                    <p className="demo-access-panel__note">
+                      Inspect or run this build locally directly from the repository using synthetic demo data (no production secrets required).
+                    </p>
+                    <dl className="demo-access-panel__grid">
+                      <div>
+                        <dt>Repository path</dt>
+                        <dd>
+                          <code>{project.sourceRepoPath}</code>
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>Local run &amp; test</dt>
+                        <dd>
+                          <code>
+                            {project.sourceRepoPath.startsWith("project-lab/")
+                              ? `cd ${project.sourceRepoPath} && node index.mjs && node --test test.mjs`
+                              : project.gameSlug
+                                ? "cd ali-arshad-personal-studio/ali-arshad-personal-studio && npm test"
+                                : `See ${project.sourceRepoPath}/README.md`}
+                          </code>
+                        </dd>
+                      </div>
+                    </dl>
+                    {project.sourceUrl ? (
+                      <div className="demo-access-panel__cta">
+                        <a
+                          className="btn btn--secondary btn--sm"
+                          href={project.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span>Open source folder on GitHub</span>
+                          <Icon name="arrow-up-right" size={16} className="btn__icon" />
+                        </a>
+                      </div>
+                    ) : null}
+                  </div>
+                </section>
+              ) : null}
 
               {project.architectureDiagram ? (
                 <section id="architecture" aria-labelledby="architecture-diagram-title">

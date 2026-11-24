@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { OriginalUsRegionMap } from "@/components/locations/OriginalUsRegionMap";
 import { Icon } from "@/components/ui/Icon";
 import type { FictionalCustomerProfile } from "@/lib/geo/fictional-profiles";
 
 /**
- * Renders explicitly disclosed fictional demo customer profiles with synthetic,
- * illustrative map pin graphics (zero real street addresses, zero real client claims).
+ * Renders explicitly disclosed fictional demo customer profiles reusing the
+ * studio's original 4-region US schematic map with synthetic illustrative
+ * markers and direct links to each fictional organization's detail & team page.
  */
 export function FictionalCustomerShowcase({
   locationLabel,
@@ -22,9 +24,9 @@ export function FictionalCustomerShowcase({
         Fictional demo customer examples relevant to {locationLabel}
       </h2>
       <p className="section-sub measure">
-        The example businesses below are <strong>100% fictional demo customer profiles</strong> created solely to show how our remote services and
-        working software demonstrations could fit real operating models. None are real clients, none hired this studio, and every map pin is a
-        synthetic illustrative marker rather than a real address.
+        The example organizations below are <strong>100% fictional demo scenarios</strong> created solely to show how our remote services and
+        working software demonstrations could apply to real operating models. None are real clients, none hired this studio, and every marker plotted
+        on the regional map is synthetic and illustrative rather than a real address.
       </p>
 
       <div className="fictional-profile-grid">
@@ -52,69 +54,11 @@ export function FictionalCustomerShowcase({
               <strong style={{ color: "var(--text)" }}>Illustrative remote approach:</strong> {p.illustrativeApproach}
             </p>
 
-            <div className="fictional-map">
-              <svg
-                viewBox="0 0 420 170"
-                width={420}
-                height={170}
-                role="img"
-                aria-label={`Illustrative schematic map showing synthetic marker for fictional scenario ${p.fictionalName} — not a real business address`}
-              >
-                <rect width="420" height="170" fill="#0d131d" />
-                <g stroke="#1e2a3a" strokeWidth="1">
-                  {[60, 120, 180, 240, 300, 360].map((x) => (
-                    <line key={x} x1={x} y1={0} x2={x} y2={170} />
-                  ))}
-                  {[34, 68, 102, 136].map((y) => (
-                    <line key={y} x1={0} y1={y} x2={420} y2={y} />
-                  ))}
-                </g>
-                {/* Stylized regional outline band */}
-                <path
-                  d="M42 42 Q120 26 210 38 T378 46 L366 132 Q270 144 195 130 T54 126 Z"
-                  fill="rgba(56, 189, 248, 0.06)"
-                  stroke="#2b3a4f"
-                  strokeDasharray="4 4"
-                />
-                {/* Synthetic pin */}
-                <circle
-                  cx={Math.round((p.mapPin.xPct / 100) * 420)}
-                  cy={Math.round((p.mapPin.yPct / 100) * 170)}
-                  r={22}
-                  fill="rgba(245, 196, 81, 0.14)"
-                  stroke="#f5c451"
-                  strokeDasharray="3 3"
-                />
-                <circle
-                  cx={Math.round((p.mapPin.xPct / 100) * 420)}
-                  cy={Math.round((p.mapPin.yPct / 100) * 170)}
-                  r={7}
-                  fill="#ff7a5c"
-                  stroke="#f8f5ef"
-                  strokeWidth="2"
-                />
-                <text
-                  x={14}
-                  y={22}
-                  fill="#f5c451"
-                  fontSize="10"
-                  fontWeight="700"
-                  fontFamily="ui-monospace, monospace"
-                >
-                  SYNTHETIC ILLUSTRATIVE MARKER · NOT A REAL ADDRESS
-                </text>
-                <text
-                  x={14}
-                  y={156}
-                  fill="#94a3b8"
-                  fontSize="10"
-                  fontFamily="ui-monospace, monospace"
-                >
-                  {p.mapPin.approximateCoordsLabel}
-                </text>
-              </svg>
-              <div className="fictional-map__caption">{p.mapPin.caption}</div>
-            </div>
+            <OriginalUsRegionMap
+              scenarioName={p.fictionalName}
+              markers={p.mapMarkers}
+              caption={p.mapPin.caption}
+            />
 
             <div>
               <p className="eyebrow eyebrow--plain" style={{ marginBottom: "8px" }}>
@@ -132,6 +76,13 @@ export function FictionalCustomerShowcase({
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div className="fictional-card__footer">
+              <Link href={`/demo-scenarios/${p.slug}`} className="btn btn--secondary btn--sm">
+                <span>Inspect fictional scenario &amp; team ({p.teamHierarchy.length} roles)</span>
+                <Icon name="arrow-right" size={15} />
+              </Link>
             </div>
           </article>
         ))}

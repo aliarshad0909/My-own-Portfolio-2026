@@ -1,11 +1,16 @@
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { BLOG_POSTS, estimateReadingMinutes } from "@/lib/content/blog";
 import { RESOURCES } from "@/lib/content/resources";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
-import { CORE_PROJECTS, PROJECTS, isIndexable as isProjectIndexable } from "@/lib/projects";
+import {
+  COMMERCIAL_PROJECTS,
+  CORE_PROJECTS,
+  PROJECTS,
+  isIndexable as isProjectIndexable,
+} from "@/lib/projects";
 import { getKeyword } from "@/lib/seo/keyword-registry";
 import { isIndexable } from "@/lib/seo/publication";
 import { brokenLinks, isKnownRoute } from "@/lib/seo/routes";
@@ -280,20 +285,54 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
     assert.deepEqual(inDev.map((p) => p.slug), ["blender-product-visualisation"]);
   });
 
-  it("ships 80 distinct project showcases with strict noindex gating on Concepts/Prototypes and zero broken links", () => {
+  it("ships 100 commercial project showcases + 20 playable game experiments with runnable repo paths, strict noindex gating, and zero broken links", () => {
     assert.equal(CORE_PROJECTS.length, 14);
-    assert.equal(PROJECTS.length, 80);
+    assert.equal(COMMERCIAL_PROJECTS.length, 100);
+    assert.equal(PROJECTS.length, 120);
     const slugs = PROJECTS.map((p) => p.slug);
-    assert.equal(new Set(slugs).size, 80, "all 80 project slugs must be unique");
+    assert.equal(new Set(slugs).size, 120, "all 120 project & game slugs must be unique");
+
+    const repoRoot = path.resolve(APP_ROOT, "..", "..");
 
     for (const p of PROJECTS) {
       assert.ok(isKnownRoute(`/work/${p.slug}`), `/work/${p.slug} must be a known route`);
-      if (p.status === "Concept" || p.status === "Sample Scenario" || p.status === "Prototype" || p.status === "In Development") {
+      assert.ok(p.sourceRepoPath, `${p.slug} must declare a runnable sourceRepoPath`);
+      const resolvedPath = p.sourceRepoPath!.startsWith("ali-arshad-personal-studio/")
+        ? path.join(repoRoot, p.sourceRepoPath!)
+        : path.join(repoRoot, p.sourceRepoPath!);
+      assert.ok(existsSync(resolvedPath), `${p.slug} sourceRepoPath does not exist on disk: ${p.sourceRepoPath}`);
+
+      if (
+        p.status === "Concept" ||
+        p.status === "Sample Scenario" ||
+        p.status === "Prototype" ||
+        p.status === "In Development" ||
+        p.status === "Playable Experiment"
+      ) {
         assert.equal(isProjectIndexable(p), false, `${p.slug} (${p.status}) must stay noindex`);
+      }
+      if (p.generatedVisual) {
+        assert.ok(
+          existsSync(path.join(APP_ROOT, "public", p.generatedVisual.src)),
+          `${p.slug} generatedVisual missing on disk: ${p.generatedVisual.src}`,
+        );
+        assert.match(p.generatedVisual.label, /Not a Screenshot|AI Illustration|Concept Illustration/i);
       }
       const links = [...(p.relatedServicePaths ?? []), ...(p.relatedToolPaths ?? [])];
       assert.deepEqual(brokenLinks(links), [], `${p.slug} has broken service/tool links`);
     }
+
+    const games = filterProjects(PROJECTS, {
+      category: "All",
+      serviceId: null,
+      availability: "game",
+      stackId: "all",
+      query: "",
+    });
+    assert.equal(games.length, 20, "Work finder must surface all 20 playable game experiments");
+    assert.ok(CORE_SITEMAP_PAGES.includes("/project-planner"));
+    assert.ok(isKnownRoute("/project-planner"));
+    assert.ok(isKnownRoute("/demo-scenarios"));
   });
 });
 
