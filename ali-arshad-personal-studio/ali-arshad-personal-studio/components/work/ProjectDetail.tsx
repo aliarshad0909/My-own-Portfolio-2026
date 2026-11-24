@@ -6,6 +6,7 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { TrackedLink } from "@/components/ui/TrackedLink";
+import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
@@ -13,6 +14,26 @@ import { SERVICE_HUBS, spokesForProject } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
 import { servicesForProject } from "@/lib/services";
 import { GPU_COMPUTE_PATH, GPU_RELATED_PROJECT_SLUGS } from "@/lib/gpu-compute";
+
+function labelFromPath(path: string): string {
+  const seg = path.split("/").filter(Boolean).pop() ?? path;
+  return seg
+    .split("-")
+    .map((w) => {
+      if (w === "ai") return "AI";
+      if (w === "crm") return "CRM";
+      if (w === "api") return "API";
+      if (w === "n8n") return "n8n";
+      if (w === "rag") return "RAG";
+      if (w === "mvp") return "MVP";
+      if (w === "gpu") return "GPU";
+      if (w === "roi") return "ROI";
+      if (w === "saas") return "SaaS";
+      if (w === "nextjs") return "Next.js";
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
+    .join(" ");
+}
 
 /** Dedicated published service hubs evidenced by a given project slug. */
 function hubsForProject(slug: string) {
@@ -102,7 +123,11 @@ export function ProjectDetail({ project, variant }: Props) {
 
         <div className="container">
           <div className="detail__cover">
-            <Image src={project.cover.src} alt={project.cover.alt} width={project.cover.width} height={project.cover.height} priority sizes="(min-width: 1240px) 1240px, 100vw" />
+            {project.conceptVisual ? (
+              <ConceptCoverArt spec={project.conceptVisual} title={project.title} status={project.status} />
+            ) : (
+              <Image src={project.cover.src} alt={project.cover.alt} width={project.cover.width} height={project.cover.height} priority sizes="(min-width: 1240px) 1240px, 100vw" />
+            )}
           </div>
 
           <div className="detail__layout">
@@ -186,6 +211,32 @@ export function ProjectDetail({ project, variant }: Props) {
                     </dd>
                   </div>
                 ) : null}
+                {project.relatedServicePaths && project.relatedServicePaths.length > 0 ? (
+                  <div>
+                    <dt>Related services</dt>
+                    <dd>
+                      {project.relatedServicePaths.map((href, i) => (
+                        <span key={href}>
+                          {i > 0 ? ", " : ""}
+                          <Link href={href}>{labelFromPath(href)}</Link>
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                ) : null}
+                {project.relatedToolPaths && project.relatedToolPaths.length > 0 ? (
+                  <div>
+                    <dt>Related calculators</dt>
+                    <dd>
+                      {project.relatedToolPaths.map((href, i) => (
+                        <span key={href}>
+                          {i > 0 ? ", " : ""}
+                          <Link href={href}>{labelFromPath(href)}</Link>
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                ) : null}
               </dl>
               {project.tags.length > 0 ? (
                 <ul className="tag-list" aria-label="Tags">
@@ -197,18 +248,18 @@ export function ProjectDetail({ project, variant }: Props) {
             </aside>
 
             <div className="detail__content prose">
-              {isCaseStudy && cs ? (
+              {(isCaseStudy || project.isCatalogExpansion) && cs ? (
                 <>
                   {cs.background ? (
                     <section aria-labelledby="background-title">
                       <h2 className="section-title section-title--sm" id="background-title">
-                        Background
+                        {project.isCatalogExpansion ? "Overview & status" : "Background"}
                       </h2>
                       <p>{cs.background}</p>
                     </section>
-                  ) : (
+                  ) : !project.isCatalogExpansion ? (
                     <EditorNote>Add `caseStudy.background`: who the client is and what the project was for.</EditorNote>
-                  )}
+                  ) : null}
                   {cs.challenge ? (
                     <section aria-labelledby="challenge-title">
                       <h2 className="section-title section-title--sm" id="challenge-title">
@@ -216,9 +267,9 @@ export function ProjectDetail({ project, variant }: Props) {
                       </h2>
                       <p>{cs.challenge}</p>
                     </section>
-                  ) : (
+                  ) : !project.isCatalogExpansion ? (
                     <EditorNote>Add `caseStudy.challenge`: the problem that needed solving.</EditorNote>
-                  )}
+                  ) : null}
                   {cs.objectives && cs.objectives.length > 0 ? (
                     <section aria-labelledby="objectives-title">
                       <h2 className="section-title section-title--sm" id="objectives-title">
@@ -236,7 +287,7 @@ export function ProjectDetail({ project, variant }: Props) {
 
               <section aria-labelledby="role-title">
                 <h2 className="section-title section-title--sm" id="role-title">
-                  My role
+                  {project.isCatalogExpansion ? "Scope & deliverables" : "My role"}
                 </h2>
                 <p>{project.role}</p>
                 <ul>
@@ -246,7 +297,7 @@ export function ProjectDetail({ project, variant }: Props) {
                 </ul>
               </section>
 
-              {isCaseStudy && cs ? (
+              {(isCaseStudy || project.isCatalogExpansion) && cs ? (
                 <>
                   {cs.approach ? (
                     <section aria-labelledby="approach-title">
@@ -255,13 +306,15 @@ export function ProjectDetail({ project, variant }: Props) {
                       </h2>
                       <p>{cs.approach}</p>
                     </section>
-                  ) : (
+                  ) : !project.isCatalogExpansion ? (
                     <EditorNote>Add `caseStudy.approach`: the strategy chosen and why.</EditorNote>
-                  )}
+                  ) : null}
                   {cs.features && cs.features.length > 0 ? (
                     <section aria-labelledby="features-title">
                       <h2 className="section-title section-title--sm" id="features-title">
-                        What is implemented
+                        {project.isCatalogExpansion && project.status !== "Prototype"
+                          ? "Planned architecture & capabilities"
+                          : "What is implemented"}
                       </h2>
                       <ul className="check-list check-list--spaced">
                         {cs.features.map((f) => (
@@ -273,7 +326,7 @@ export function ProjectDetail({ project, variant }: Props) {
                       </ul>
                     </section>
                   ) : null}
-                  {cs.process && cs.process.length > 0 ? (
+                  {!project.isCatalogExpansion && cs.process && cs.process.length > 0 ? (
                     <section aria-labelledby="process-title">
                       <h2 className="section-title section-title--sm" id="process-title">
                         Process
@@ -284,9 +337,9 @@ export function ProjectDetail({ project, variant }: Props) {
                         ))}
                       </ol>
                     </section>
-                  ) : (
+                  ) : !project.isCatalogExpansion ? (
                     <EditorNote>Add `caseStudy.process`: the production or development steps.</EditorNote>
-                  )}
+                  ) : null}
                   {cs.decisions && cs.decisions.length > 0 ? (
                     <section aria-labelledby="decisions-title">
                       <h2 className="section-title section-title--sm" id="decisions-title">
@@ -305,14 +358,16 @@ export function ProjectDetail({ project, variant }: Props) {
                   {cs.solution ? (
                     <section aria-labelledby="solution-title">
                       <h2 className="section-title section-title--sm" id="solution-title">
-                        What was delivered
+                        {project.isCatalogExpansion && project.status !== "Prototype"
+                          ? "Blueprint readiness"
+                          : "What was delivered"}
                       </h2>
                       <p>{cs.solution}</p>
                     </section>
-                  ) : (
+                  ) : !project.isCatalogExpansion ? (
                     <EditorNote>Add `caseStudy.solution`: what was delivered.</EditorNote>
-                  )}
-                  {cs.results && cs.results.length > 0 ? (
+                  ) : null}
+                  {!project.isCatalogExpansion && cs.results && cs.results.length > 0 ? (
                     <section aria-labelledby="results-title">
                       <h2 className="section-title section-title--sm" id="results-title">
                         Results
@@ -326,9 +381,9 @@ export function ProjectDetail({ project, variant }: Props) {
                         <p className="fine-print">These are tested capabilities of the demonstration, not commercial outcomes.</p>
                       ) : null}
                     </section>
-                  ) : (
+                  ) : !project.isCatalogExpansion ? (
                     <EditorNote>Add `caseStudy.results` only with verified outcomes. Leave empty otherwise.</EditorNote>
-                  )}
+                  ) : null}
                 </>
               ) : null}
 
@@ -501,7 +556,9 @@ export function ProjectDetail({ project, variant }: Props) {
                 <EditorNote>This project is an Open-Source Adaptation but has no `attribution` block. Add one before publishing.</EditorNote>
               ) : null}
 
-              {!isCaseStudy && cs ? <ArrowLink href={`/case-studies/${project.slug}`}>Read the case study</ArrowLink> : null}
+              {!isCaseStudy && cs && !project.isCatalogExpansion ? (
+                <ArrowLink href={`/case-studies/${project.slug}`}>Read the case study</ArrowLink>
+              ) : null}
             </div>
           </div>
 
@@ -561,7 +618,7 @@ export function ProjectDetail({ project, variant }: Props) {
             </h2>
             <div className="project-grid project-grid--2">
               {related.map((p) => (
-                <ProjectCard key={p.slug} project={p} linkTo={isCaseStudy && p.caseStudy ? "case-study" : "detail"} sizes="(min-width: 768px) 600px, 100vw" />
+                <ProjectCard key={p.slug} project={p} linkTo={isCaseStudy && p.caseStudy && !p.isCatalogExpansion ? "case-study" : "detail"} sizes="(min-width: 768px) 600px, 100vw" />
               ))}
             </div>
           </div>

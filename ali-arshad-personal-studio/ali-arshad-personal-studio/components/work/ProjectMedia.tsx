@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import type { Project } from "@/lib/projects";
 
 type Props = { project: Project; sizes: string; priority?: boolean };
@@ -52,7 +53,11 @@ export function ProjectMedia({ project, sizes, priority = false }: Props) {
 
   return (
     <div className="project-card__media" ref={wrapRef}>
-      <Image src={project.cover.src} alt={project.cover.alt} fill sizes={sizes} priority={priority} className="project-card__image" />
+      {project.conceptVisual ? (
+        <ConceptCoverArt spec={project.conceptVisual} title={project.title} status={project.status} />
+      ) : (
+        <Image src={project.cover.src} alt={project.cover.alt} fill sizes={sizes} priority={priority} className="project-card__image" />
+      )}
       {project.previewVideo && allowMotion && active ? (
         <video ref={ref} className="project-card__video" src={project.previewVideo} muted loop playsInline preload="none" aria-hidden="true" />
       ) : null}

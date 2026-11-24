@@ -3,7 +3,14 @@ import type { ProjectStatus, ProjectType } from "@/lib/projects";
 /** Says how finished a project is. Hidden once a project is fully published. */
 export function StatusBadge({ status }: { status: ProjectStatus }) {
   if (status === "Published") return null;
-  const tone = status === "Verified" ? "verified" : status === "Demo Ready" ? "demo" : "draft";
+  const tone =
+    status === "Verified"
+      ? "verified"
+      : status === "Demo Ready"
+        ? "demo"
+        : status === "Prototype"
+          ? "adapted"
+          : "draft";
   return <span className={`badge badge--${tone}`}>{status}</span>;
 }
 

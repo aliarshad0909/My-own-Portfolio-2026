@@ -65,10 +65,12 @@ export const activeSocials = (): SocialLink[] => SITE.socials.filter((s) => s.ur
 
 export type NavItem = { label: string; href: string };
 
-/** Minimal primary header navigation — keeps focus on work, services and inquiry conversion. */
+/** Primary header navigation — balanced access to portfolio, services, interactive lab, blog, and contact. */
 export const NAV_ITEMS: NavItem[] = [
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
+  { label: "Games", href: "/games" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -76,7 +78,6 @@ export const NAV_ITEMS: NavItem[] = [
 /** Secondary quick links shown in the mobile drawer below the primary links. */
 export const MOBILE_SECONDARY_ITEMS: NavItem[] = [
   { label: "Live Product Directory", href: "/products" },
-  { label: "Games & Experiments", href: "/games" },
   { label: "Calculator Centre", href: "/tools" },
   { label: "Guides & Resources", href: "/resources" },
   { label: "Case Studies", href: "/case-studies" },
@@ -91,6 +92,7 @@ export const CORE_SITEMAP_PAGES: string[] = [
   "/work",
   "/products",
   "/games",
+  "/blog",
   "/case-studies",
   "/services",
   "/experience",

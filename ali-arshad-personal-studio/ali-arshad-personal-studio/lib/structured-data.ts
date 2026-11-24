@@ -10,6 +10,7 @@
  *   - WebSite:             https://www.aliarshad.co/#website
  */
 import { CREDENTIALS } from "@/lib/credentials";
+import type { BlogPost } from "@/lib/content/blog";
 import type { GameDefinition } from "@/lib/games/catalog";
 import type { StudioProduct } from "@/lib/products/catalog";
 import type { Project } from "@/lib/projects";
@@ -329,6 +330,54 @@ export function gameListSchema(games: GameDefinition[]) {
         url: abs(`/games/${g.slug}`),
         author: personRef(),
       },
+    })),
+  };
+}
+
+/**
+ * BlogPosting schema for Studio Blog articles under /blog/[slug].
+ * Linked consistently to #person and #studio via @id; honest dates & sections.
+ */
+export function blogArticleSchema(post: BlogPost) {
+  const url = abs(`/blog/${post.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    url,
+    mainEntityOfPage: url,
+    image: abs("/opengraph-image.jpg"),
+    articleSection: post.category,
+    keywords: post.tags.join(", "),
+    author: personRef(),
+    publisher: studioRef(),
+    isAccessibleForFree: true,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
+    inLanguage: "en",
+  };
+}
+
+export function blogListSchema(posts: BlogPost[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: `${SITE.name} — Studio Blog`,
+    description:
+      "Engineering build logs, source-backed AI protocol notes, creative workflow breakdowns, and browser-game dispatches.",
+    url: abs("/blog"),
+    author: personRef(),
+    publisher: studioRef(),
+    inLanguage: "en",
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      url: abs(`/blog/${p.slug}`),
+      datePublished: p.publishedAt,
+      dateModified: p.updatedAt,
+      articleSection: p.category,
+      author: personRef(),
     })),
   };
 }

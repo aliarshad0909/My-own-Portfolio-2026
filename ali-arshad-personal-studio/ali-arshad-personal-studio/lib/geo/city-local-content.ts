@@ -16,6 +16,7 @@
 
 import type { LocalSource, ServiceFit, SourcedParagraph } from "@/lib/geo/local-content-types";
 import type { FaqItem } from "@/lib/structured-data";
+import { EXTRA_CITY_LOCAL_RECORDS } from "@/lib/geo/city-local-content-extra";
 
 export type CityLocalContent = {
   /** Keyed as "<stateSlug>/<citySlug>". */
@@ -873,11 +874,13 @@ const CITY_RECORDS: CityLocalContent[] = [
   },
 ];
 
+const ALL_CITY_RECORDS: CityLocalContent[] = [...CITY_RECORDS, ...EXTRA_CITY_LOCAL_RECORDS];
+
 export const CITY_LOCAL_CONTENT: Record<string, CityLocalContent> = Object.fromEntries(
-  CITY_RECORDS.map((c) => [c.key, c]),
+  ALL_CITY_RECORDS.map((c) => [c.key, c]),
 );
 
 export const getCityLocalContent = (stateSlug: string, citySlug: string): CityLocalContent | undefined =>
   CITY_LOCAL_CONTENT[`${stateSlug}/${citySlug}`];
 
-export const allCityLocalContent = (): CityLocalContent[] => CITY_RECORDS;
+export const allCityLocalContent = (): CityLocalContent[] => ALL_CITY_RECORDS;

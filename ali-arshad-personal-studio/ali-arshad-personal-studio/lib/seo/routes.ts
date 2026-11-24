@@ -16,6 +16,7 @@
  * are added or removed, without a hand-maintained list drifting out of sync.
  */
 
+import { BLOG_POSTS } from "@/lib/content/blog";
 import { STUDIO_GAMES } from "@/lib/games/catalog";
 import { PROJECTS, caseStudies } from "@/lib/projects";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
@@ -31,6 +32,9 @@ export const STATIC_ROUTES = [
   "/work",
   "/products",
   "/games",
+  "/blog",
+  "/blog/rss.xml",
+  "/llms.txt",
   "/services",
   "/services/gpu-compute",
   "/about",
@@ -53,6 +57,7 @@ export function knownRoutes(): Set<string> {
   for (const p of caseStudies()) routes.add(`/case-studies/${p.slug}`);
   for (const prod of STUDIO_PRODUCTS) routes.add(`/products/${prod.slug}`);
   for (const game of STUDIO_GAMES) routes.add(`/games/${game.slug}`);
+  for (const post of BLOG_POSTS) routes.add(`/blog/${post.slug}`);
 
   // Registry primaryUrls define the tool/resource/industry pages and hub spokes.
   for (const k of KEYWORD_REGISTRY) routes.add(k.primaryUrl);

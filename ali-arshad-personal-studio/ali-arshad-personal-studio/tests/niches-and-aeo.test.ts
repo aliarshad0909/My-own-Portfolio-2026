@@ -2,17 +2,21 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
+import { BLOG_POSTS, estimateReadingMinutes } from "@/lib/content/blog";
 import { RESOURCES } from "@/lib/content/resources";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
-import { PROJECTS } from "@/lib/projects";
+import { CORE_PROJECTS, PROJECTS, isIndexable as isProjectIndexable } from "@/lib/projects";
 import { getKeyword } from "@/lib/seo/keyword-registry";
 import { isIndexable } from "@/lib/seo/publication";
-import { brokenLinks } from "@/lib/seo/routes";
+import { brokenLinks, isKnownRoute } from "@/lib/seo/routes";
 import { SERVICE_HUBS, allSpokes, getSpoke, spokesForProject } from "@/lib/seo/service-hubs";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
+import { CORE_SITEMAP_PAGES } from "@/lib/site";
 import { AVAILABILITY_OPTIONS, STACK_FILTERS, filterProjects } from "@/lib/work-finder";
 import {
   articleSchema,
+  blogArticleSchema,
+  blogListSchema,
   breadcrumbSchema,
   creativeWorkSchema,
   faqSchema,
@@ -254,7 +258,7 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
     });
     assert.deepEqual(
       live.map((p) => p.slug).sort(),
-      ["pipelineos-crm", "stockflow-inventory"],
+      ["pipelineos-crm", "stockflow-inventory", "stockflow-mobile-companion"],
     );
 
     const n8n = filterProjects(PROJECTS, {
@@ -274,5 +278,55 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
       query: "",
     });
     assert.deepEqual(inDev.map((p) => p.slug), ["blender-product-visualisation"]);
+  });
+
+  it("ships 80 distinct project showcases with strict noindex gating on Concepts/Prototypes and zero broken links", () => {
+    assert.equal(CORE_PROJECTS.length, 14);
+    assert.equal(PROJECTS.length, 80);
+    const slugs = PROJECTS.map((p) => p.slug);
+    assert.equal(new Set(slugs).size, 80, "all 80 project slugs must be unique");
+
+    for (const p of PROJECTS) {
+      assert.ok(isKnownRoute(`/work/${p.slug}`), `/work/${p.slug} must be a known route`);
+      if (p.status === "Concept" || p.status === "Sample Scenario" || p.status === "Prototype" || p.status === "In Development") {
+        assert.equal(isProjectIndexable(p), false, `${p.slug} (${p.status}) must stay noindex`);
+      }
+      const links = [...(p.relatedServicePaths ?? []), ...(p.relatedToolPaths ?? [])];
+      assert.deepEqual(brokenLinks(links), [], `${p.slug} has broken service/tool links`);
+    }
+  });
+});
+
+describe("studio blog & RSS feed", () => {
+  it("ships 8 original dated blog articles with valid JSON-LD, reading times, and zero broken links", () => {
+    assert.equal(BLOG_POSTS.length, 8);
+    assert.ok(CORE_SITEMAP_PAGES.includes("/blog"));
+    assert.ok(isKnownRoute("/blog"));
+    assert.ok(isKnownRoute("/blog/rss.xml"));
+
+    const slugs = BLOG_POSTS.map((p) => p.slug);
+    assert.equal(new Set(slugs).size, 8);
+    const iso = /^\d{4}-\d{2}-\d{2}$/;
+
+    for (const post of BLOG_POSTS) {
+      assert.ok(isKnownRoute(`/blog/${post.slug}`));
+      assert.match(post.publishedAt, iso);
+      assert.match(post.updatedAt, iso);
+      assert.ok(post.updatedAt >= post.publishedAt);
+      assert.ok(estimateReadingMinutes(post) >= 2);
+      assert.deepEqual(
+        brokenLinks(post.relatedLinks.map((l) => l.href)),
+        [],
+        `blog:${post.slug} has broken related links`,
+      );
+      const schema = blogArticleSchema(post);
+      assert.equal(schema["@type"], "BlogPosting");
+      assert.ok(schema.author["@id"].endsWith("/#person"));
+      assert.ok(schema.publisher["@id"].endsWith("/#studio"));
+    }
+
+    const list = blogListSchema(BLOG_POSTS);
+    assert.equal(list["@type"], "Blog");
+    assert.equal(list.blogPost.length, 8);
   });
 });

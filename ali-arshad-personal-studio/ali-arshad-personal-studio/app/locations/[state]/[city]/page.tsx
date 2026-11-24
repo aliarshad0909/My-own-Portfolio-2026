@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FictionalCustomerShowcase } from "@/components/locations/FictionalCustomerShowcase";
 import { PreviewSampleScenarios } from "@/components/locations/PreviewSampleScenarios";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Sources } from "@/components/seo/Sources";
@@ -13,6 +14,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { PILOT_CITIES, getCity } from "@/lib/geo/cities";
 import { getCityLocalContent } from "@/lib/geo/city-local-content";
+import { selectFictionalProfilesForServices } from "@/lib/geo/fictional-profiles";
 import { cityIntro, cityMeta } from "@/lib/geo/location-content";
 import { previewSampleForCity } from "@/lib/geo/preview-samples";
 import { getState } from "@/lib/geo/states";
@@ -63,6 +65,10 @@ export default async function CityPage({ params }: Props) {
   ).slice(0, 4);
 
   const primaryFit = local?.serviceFit[0];
+  const fictionalProfiles = selectFictionalProfilesForServices(
+    (local?.serviceFit ?? []).map((f) => f.href),
+    1,
+  );
   const sampleScenarios = local
     ? previewSampleForCity(
         cityRecord,
@@ -205,6 +211,11 @@ export default async function CityPage({ params }: Props) {
                 </ul>
               </div>
             ) : null}
+
+            <FictionalCustomerShowcase
+              locationLabel={`${cityRecord.name}, ${stateRecord.code}`}
+              profiles={fictionalProfiles}
+            />
 
             <PreviewSampleScenarios locationName={`${cityRecord.name}, ${stateRecord.code}`} scenarios={sampleScenarios} />
 

@@ -70,7 +70,13 @@ export function ServiceShowcaseHome() {
               Compare services &amp; 26 niches →
             </Link>
             <Link href="/work" className="location-pill">
-              Project Finder (14 builds)
+              Project Finder (80 showcases)
+            </Link>
+            <Link href="/games" className="location-pill">
+              20 Playable Browser Games
+            </Link>
+            <Link href="/blog" className="location-pill">
+              Studio Blog (8 articles)
             </Link>
             <Link href="/products" className="location-pill">
               12 SaaS Product Demos
@@ -80,9 +86,6 @@ export function ServiceShowcaseHome() {
             </Link>
             <Link href="/resources" className="location-pill">
               15 Guides &amp; Resources
-            </Link>
-            <Link href="/games" className="location-pill">
-              Games &amp; Experiments (3 playable)
             </Link>
             <Link href="/locations" className="location-pill">
               Remote US Coverage

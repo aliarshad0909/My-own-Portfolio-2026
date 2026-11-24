@@ -1,3 +1,6 @@
+import { EXPANSION_PROJECTS_A, type ConceptVisualSpec } from "@/lib/projects-expansion-a";
+import { EXPANSION_PROJECTS_B } from "@/lib/projects-expansion-b";
+
 /**
  * Central project records.
  * Add, edit or remove entries here — the homepage, /work, /work/[slug],
@@ -6,8 +9,10 @@
  * Honesty rules baked into the model:
  *   - `projectType` always says how the work came about (own work, concept, or
  *     an adaptation of someone else's open-source project).
- *   - `status` says how finished it is. Only "Published" is indexed by search
- *     engines and listed in the sitemap.
+ *   - `status` says how finished it is. Only "Published" and verified
+ *     "Demo Ready" builds are indexed by search engines and listed in the sitemap.
+ *     "Concept", "Sample Scenario", "Prototype", "Planned", and "In Development"
+ *     stay noindex so search indices never receive unbuilt concept pages.
  *   - `attribution` is required for every Open-Source Adaptation.
  *   - `usesSampleMedia` marks any card whose imagery is not real project work.
  */
@@ -37,7 +42,15 @@ export type ProjectType = "Professional Work" | "Original Concept" | "Open-Sourc
  * Verified       — a real professional engagement confirmed with the client, including naming permission.
  * Published      — live, written up, and approved for public listing. Indexed.
  */
-export type ProjectStatus = "Planned" | "In Development" | "Demo Ready" | "Verified" | "Published";
+export type ProjectStatus =
+  | "Planned"
+  | "In Development"
+  | "Demo Ready"
+  | "Prototype"
+  | "Concept"
+  | "Sample Scenario"
+  | "Verified"
+  | "Published";
 
 export type ProjectImage = {
   src: string;
@@ -158,7 +171,17 @@ export type Project = {
     techBadges: string[];
     screens: (ProjectImage & { label: string })[];
   };
-  /** Presence of this object lists the project under /case-studies. */
+  /** True for the 66 portfolio expansion showcases (prototypes, concepts, scenarios). */
+  isCatalogExpansion?: boolean;
+  /** Substantiated studio niche label for the 80-project showcase directory. */
+  nicheLabel?: string;
+  /** Direct published service/niche paths linked from /work/[slug]. */
+  relatedServicePaths?: string[];
+  /** Direct free business calculator paths linked from /work/[slug]. */
+  relatedToolPaths?: string[];
+  /** Bespoke architectural SVG blueprint metadata for expansion showcases. */
+  conceptVisual?: ConceptVisualSpec;
+  /** Presence of this object lists core builds under /case-studies. */
   caseStudy?: CaseStudy;
 };
 
@@ -1557,10 +1580,16 @@ const STOCKFLOW: Project = {
 
 export const LIVE_PRODUCT_SLUGS = ["pipelineos-crm", "stockflow-inventory"] as const;
 
-export const PROJECTS: Project[] = [
+export const CORE_PROJECTS: Project[] = [
   PIPELINEOS, STOCKFLOW,
   COMMERCE, ANALYTICS, SUPPORT_AGENT, VOICE_AGENT, N8N, SUPPLY_CHAIN,
   SOURCING, BLENDER, MOTION, BRAND_SYSTEM, CHAIN_EXPLORER, SECURITY,
+];
+
+export const PROJECTS: Project[] = [
+  ...CORE_PROJECTS,
+  ...EXPANSION_PROJECTS_A,
+  ...EXPANSION_PROJECTS_B,
 ];
 
 /**
@@ -1586,25 +1615,35 @@ export const getProject = (slug: string) => PROJECTS.find((p) => p.slug === slug
 
 export const featuredProjects = (count = 3) => PROJECTS.filter((p) => p.featured).slice(0, count);
 
-export const caseStudies = () => PROJECTS.filter((p) => p.caseStudy !== undefined);
+export const caseStudies = () => CORE_PROJECTS.filter((p) => p.caseStudy !== undefined);
 
-/** Only fully published work is indexed by search engines and listed in the sitemap. */
 /**
- * Indexable work: published projects, and finished demonstration builds.
- * Demo pages are the site's most substantial original content and every one
- * carries its status note ("a working demonstration, not a client engagement;
- * the brand and data are fictional"), so indexing them makes no false claim.
- * Planned and in-development entries stay out of the index and the sitemap.
+ * Indexable work: published projects and finished core demonstration builds.
+ * Unbuilt Concepts, Sample Scenarios, local Prototypes, and In-Development
+ * entries stay noindex and out of sitemap.xml so search engines never see
+ * speculative concept pages as completed implementations.
  */
 export const isIndexable = (p: Project) => p.status === "Published" || p.status === "Demo Ready";
 
-/** Statuses that are safe to show in the public gallery. */
-export const isLive = (p: Project) => p.status === "Demo Ready" || p.status === "Verified" || p.status === "Published";
+/** Statuses safe to display in the public /work showcase gallery. */
+export const isLive = (p: Project) =>
+  p.status === "Demo Ready" ||
+  p.status === "Prototype" ||
+  p.status === "Concept" ||
+  p.status === "Sample Scenario" ||
+  p.status === "Verified" ||
+  p.status === "Published";
 
 export const STATUS_NOTE: Record<ProjectStatus, string> = {
   Planned: "This project is scoped but not built yet.",
   "In Development": "This project is being built. Details may change.",
   "Demo Ready": "This is a working demonstration, not a client engagement. The brand and data are fictional.",
+  Prototype:
+    "This is a functioning studio prototype built and locally verified inside this repository using fictional seeded data — not a paid client deployment.",
+  Concept:
+    "Architecture Concept — illustrative studio design & technical scope showing how we would build this system. Not a completed implementation, live demo, or client engagement.",
+  "Sample Scenario":
+    "Sample Scenario — illustrative fictional business brief & proposed studio architecture. Not a real client, completed engagement, or verified outcome.",
   Verified: "This was a real engagement, confirmed with the client.",
   Published: "",
 };

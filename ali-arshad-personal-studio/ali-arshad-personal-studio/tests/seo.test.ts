@@ -118,8 +118,8 @@ describe("location architecture", () => {
     assert.equal(new Set(slugs).size, slugs.length, "duplicate state slugs");
   });
 
-  it("has twelve pilot cities, each attached to a real state", () => {
-    assert.equal(PILOT_CITIES.length, 12);
+  it("has 32 registered preview cities, each attached to a real state", () => {
+    assert.equal(PILOT_CITIES.length, 32);
     assert.deepEqual(orphanCities(), [], "pilot cities pointing at unknown states");
   });
 

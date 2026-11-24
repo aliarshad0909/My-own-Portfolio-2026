@@ -7,13 +7,17 @@ import { PLANNED, PROJECTS } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Work: Web, AI Automation, 3D & Motion Portfolio",
-  description: "Explore 14 studio demonstration projects across Next.js web apps, live SaaS sandboxes, AI agents, n8n workflows, branding, sourcing, and media pipelines — filterable by service, stack, and live status.",
+  title: "Work: 80 Web, AI Automation, Analytics, 3D & Creative Showcases",
+  description:
+    "Explore 80 studio showcases across live public SaaS sandboxes, locally tested repository builds, monorepo prototypes, and architecture concepts — clearly labeled by status and filterable by service, stack, and live availability.",
   path: "/work",
 });
 
 export default function WorkPage() {
-  const hasSampleMedia = PROJECTS.some((p) => p.usesSampleMedia === true);
+  const liveCount = PROJECTS.filter((p) => Boolean(p.liveUrl)).length;
+  const demoCount = PROJECTS.filter((p) => p.status === "Demo Ready" && !p.liveUrl).length;
+  const protoCount = PROJECTS.filter((p) => p.status === "Prototype" && !p.liveUrl).length;
+  const conceptCount = PROJECTS.filter((p) => p.status === "Concept" || p.status === "Sample Scenario").length;
   return (
     <>
       <Breadcrumbs
@@ -23,19 +27,21 @@ export default function WorkPage() {
         ]}
       />
       <PageHero
-        eyebrow="Work"
+        eyebrow={`Work · ${PROJECTS.length} Project Showcases`}
         title={
           <>
-            Projects across <span className="accent">creative, technical and business</span> work
+            Projects &amp; blueprints across <span className="accent">software, AI, creative &amp; ops</span>
           </>
         }
-        lead="Browse by discipline. Each project states how it came about (client work, an original build, or an adaptation of someone else's open-source project) and what I personally did."
+        lead="Browse by service, discipline, stack, or build status. Every card distinguishes publicly deployed sandboxes, locally tested repository builds, monorepo prototypes, and architecture concepts — never mixing unbuilt concepts with real client work."
       />
       <section className="section section--flush-top" aria-label="Projects">
         <div className="container">
-          {hasSampleMedia ? (
-            <p className="notice notice--wide">Cards marked with sample artwork preview the layout and are not client work.</p>
-          ) : null}
+          <p className="notice notice--wide">
+            <strong>Honest status split ({PROJECTS.length} total):</strong> {liveCount} live public web/mobile sandboxes,{" "}
+            {demoCount} locally verified demos, {protoCount} locally built monorepo prototypes, 1 build in development, and{" "}
+            {conceptCount} architecture concepts &amp; sample scenarios (unbuilt concepts stay marked clearly and excluded from search indexing).
+          </p>
           <WorkGallery projects={PROJECTS} />
         </div>
       </section>
