@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ArrowLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon } from "@/components/ui/Icon";
@@ -10,7 +11,7 @@ import { GameCoverArt } from "@/components/games/GameCoverArt";
 import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
-import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
+import { PROJECTS, STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
 import { SERVICE_HUBS, spokesForProject } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
 import { servicesForProject } from "@/lib/services";
@@ -19,6 +20,7 @@ import {
   WORK_COLLECTIONS,
   audienceForProject,
   collectionForProject,
+  collectionNeighbours,
   deliveryAttribution,
 } from "@/lib/work-collections";
 
@@ -79,21 +81,55 @@ export function ProjectDetail({ project, variant }: Props) {
   const hubs = hubsForProject(project.slug);
   const spokes = spokesForProject(project.slug);
   const gpuRelated = isGpuRelatedProject(project.slug);
-  const { prev, next } = isCaseStudy ? neighbours(project.slug) : { prev: undefined, next: undefined };
   const colId = collectionForProject(project);
   const collection = WORK_COLLECTIONS.find((c) => c.id === colId) ?? WORK_COLLECTIONS[0];
   const audience = audienceForProject(project);
   const delivery = deliveryAttribution(project);
+  const { prev, next } = isCaseStudy
+    ? neighbours(project.slug)
+    : collectionNeighbours(PROJECTS, project);
+  const collectionHref = `/work?collection=${collection.id}`;
 
   return (
     <>
+      <Breadcrumbs
+        items={
+          isCaseStudy
+            ? [
+                { name: "Home", path: "/" },
+                { name: "Case Studies", path: "/case-studies" },
+                { name: project.title, path: `/case-studies/${project.slug}` },
+              ]
+            : [
+                { name: "Home", path: "/" },
+                { name: "Work", path: "/work" },
+                { name: collection.shortTitle, path: collectionHref },
+                { name: project.title, path: `/work/${project.slug}` },
+              ]
+        }
+      />
       <article className="detail">
         <header className="page-hero">
           <div className="container enter">
-            <Link href={backHref} className="back-link">
-              <Icon name="arrow-right" size={16} className="flip" />
-              <span>{isCaseStudy ? "All case studies" : "All work"}</span>
-            </Link>
+            <div className="detail__back-row">
+              {isCaseStudy ? (
+                <Link href={backHref} className="back-link">
+                  <Icon name="arrow-right" size={16} className="flip" />
+                  <span>All case studies</span>
+                </Link>
+              ) : (
+                <>
+                  <Link href={collectionHref} className="back-link">
+                    <Icon name="arrow-right" size={16} className="flip" />
+                    <span>Back to {collection.shortTitle}</span>
+                  </Link>
+                  <span className="detail__back-divider" aria-hidden="true">·</span>
+                  <Link href="/work" className="back-link">
+                    <span>All Work</span>
+                  </Link>
+                </>
+              )}
+            </div>
             <div className="detail__meta">
               <span className="eyebrow eyebrow--plain">{isCaseStudy ? "Case study" : "Project"}</span>
               <TypeBadge type={project.projectType} />
@@ -676,7 +712,7 @@ export function ProjectDetail({ project, variant }: Props) {
             </div>
           </div>
 
-              {project.gallery.length > 0 ? (
+          {project.gallery.length > 0 ? (
             <section className="detail__gallery" aria-labelledby="gallery-title">
               <h2 className="section-title section-title--sm" id="gallery-title">
                 {isCaseStudy ? "Visual demonstration — multiple screens & states" : "Captured interface screens & states"}
@@ -724,27 +760,33 @@ export function ProjectDetail({ project, variant }: Props) {
         </div>
       </article>
 
-      {isCaseStudy && (prev || next) ? (
-        <nav className="case-nav" aria-label="Case study navigation">
+      {prev || next ? (
+        <nav className="case-nav" aria-label={isCaseStudy ? "Case study navigation" : `${collection.shortTitle} project navigation`}>
           <div className="container case-nav__inner">
             {prev ? (
-              <Link href={`/case-studies/${prev.slug}`} className="case-nav__link case-nav__link--prev">
+              <Link
+                href={isCaseStudy ? `/case-studies/${prev.slug}` : `/work/${prev.slug}`}
+                className="case-nav__link case-nav__link--prev"
+              >
                 <span className="case-nav__label">
                   <Icon name="arrow-right" size={15} className="flip" />
-                  Previous
+                  Previous {isCaseStudy ? "case study" : "in collection"}
                 </span>
                 <span className="case-nav__title">{prev.title}</span>
               </Link>
             ) : (
               <span />
             )}
-            <Link href="/case-studies" className="case-nav__all">
-              All case studies
+            <Link href={isCaseStudy ? "/case-studies" : collectionHref} className="case-nav__all">
+              {isCaseStudy ? "All case studies" : `Back to ${collection.shortTitle}`}
             </Link>
             {next ? (
-              <Link href={`/case-studies/${next.slug}`} className="case-nav__link case-nav__link--next">
+              <Link
+                href={isCaseStudy ? `/case-studies/${next.slug}` : `/work/${next.slug}`}
+                className="case-nav__link case-nav__link--next"
+              >
                 <span className="case-nav__label">
-                  Next
+                  Next {isCaseStudy ? "case study" : "in collection"}
                   <Icon name="arrow-right" size={15} />
                 </span>
                 <span className="case-nav__title">{next.title}</span>

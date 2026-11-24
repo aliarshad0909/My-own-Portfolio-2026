@@ -59,6 +59,9 @@ export default async function FictionalScenarioDetailPage({
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   const otherProfiles = FICTIONAL_DEMO_PROFILES.filter((p) => p.slug !== profile.slug);
+  const idx = FICTIONAL_DEMO_PROFILES.findIndex((p) => p.slug === profile.slug);
+  const prevProfile = FICTIONAL_DEMO_PROFILES[(idx - 1 + FICTIONAL_DEMO_PROFILES.length) % FICTIONAL_DEMO_PROFILES.length];
+  const nextProfile = FICTIONAL_DEMO_PROFILES[(idx + 1) % FICTIONAL_DEMO_PROFILES.length];
   const memberMap = new Map(profile.teamHierarchy.map((m) => [m.id, m]));
   const roots = teamByParent(profile.teamHierarchy, null);
 
@@ -312,6 +315,28 @@ export default async function FictionalScenarioDetailPage({
           </div>
         </div>
       </section>
+
+      <nav className="case-nav" aria-label="Fictional demo scenario navigation">
+        <div className="container case-nav__inner">
+          <Link href={`/demo-scenarios/${prevProfile.slug}`} className="case-nav__link case-nav__link--prev">
+            <span className="case-nav__label">
+              <Icon name="arrow-right" size={15} className="flip" />
+              Previous fictional scenario
+            </span>
+            <span className="case-nav__title">{prevProfile.fictionalName}</span>
+          </Link>
+          <Link href="/demo-scenarios" className="case-nav__all">
+            All {FICTIONAL_DEMO_PROFILES.length} fictional scenarios
+          </Link>
+          <Link href={`/demo-scenarios/${nextProfile.slug}`} className="case-nav__link case-nav__link--next">
+            <span className="case-nav__label">
+              Next fictional scenario
+              <Icon name="arrow-right" size={15} />
+            </span>
+            <span className="case-nav__title">{nextProfile.fictionalName}</span>
+          </Link>
+        </div>
+      </nav>
 
       <ContactCTA
         standalone

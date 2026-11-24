@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
@@ -78,6 +79,17 @@ export function BlogBrowser({ posts }: { posts: BlogPost[] }) {
         <ul className="blog-grid">
           {visible.map((post) => (
             <li key={post.slug} className="blog-card">
+              {post.visual ? (
+                <Link href={`/blog/${post.slug}`} className="blog-card__thumb" tabIndex={-1} aria-hidden="true">
+                  <Image
+                    src={post.visual.src}
+                    alt=""
+                    width={post.visual.width}
+                    height={post.visual.height}
+                    sizes="(min-width: 1024px) 540px, 94vw"
+                  />
+                </Link>
+              ) : null}
               <div className="blog-card__meta">
                 <span className="badge badge--concept">{post.category}</span>
                 <span>{post.publishedAt}</span>

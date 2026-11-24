@@ -122,6 +122,13 @@ const REAL_MONOREPO_MEDIA: Record<
       { type: "image", src: "/images/projects/orexa/tutor.png", alt: "Orexa guided interactive tutor and concept explanation pane", width: 1440, height: 900 },
       { type: "image", src: "/images/projects/orexa/assessments.png", alt: "Orexa timed mastery quiz interface with instant score review", width: 1440, height: 900 },
     ],
+    architectureDiagram: {
+      src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+      alt: "Next.js App Router and structured curriculum persistence schematic for Orexa interactive learning workspace",
+      width: 1200,
+      height: 720,
+      caption: "Modular Next.js App Router + PostgreSQL architecture separating lesson state, interactive tutor cues, and quiz grading.",
+    },
   },
   "supportos-helpdesk-console": {
     cover: {
@@ -155,6 +162,13 @@ const REAL_MONOREPO_MEDIA: Record<
       { type: "image", src: "/images/projects/projectos/projects.png", alt: "ProjectOS portfolio list tracking milestone hours versus budget", width: 1440, height: 900 },
       { type: "image", src: "/images/projects/projectos/client-view.png", alt: "ProjectOS clean shareable client milestone progress digest", width: 1440, height: 900 },
     ],
+    architectureDiagram: {
+      src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+      alt: "Full-stack Next.js App Router and PostgreSQL delivery architecture for ProjectOS sprint and client portals",
+      width: 1200,
+      height: 720,
+      caption: "Server-rendered App Router workspace isolating internal sprint boards from shareable read-only client views.",
+    },
   },
   "insightos-bi-workspace": {
     cover: {
@@ -168,6 +182,13 @@ const REAL_MONOREPO_MEDIA: Record<
       { type: "image", src: "/images/projects/insightos/explorer.png", alt: "InsightOS interactive query and metric slice explorer", width: 1440, height: 900 },
       { type: "image", src: "/images/projects/insightos/datasets.png", alt: "InsightOS structured dataset registry with freshness status", width: 1440, height: 900 },
     ],
+    architectureDiagram: {
+      src: "/images/site-visuals/industries/sector-systems-overview.svg",
+      alt: "Unified analytics data flow connecting operational datasets to executive KPI boards in InsightOS",
+      width: 1200,
+      height: 720,
+      caption: "Single-source metric aggregation feeding saved executive boards and ad-hoc slice explorers.",
+    },
   },
   "peopleos-team-directory": {
     cover: {
@@ -181,6 +202,13 @@ const REAL_MONOREPO_MEDIA: Record<
       { type: "image", src: "/images/projects/peopleos/leave.png", alt: "PeopleOS PTO request queue and manager approval workflow", width: 1440, height: 900 },
       { type: "image", src: "/images/projects/peopleos/recruitment.png", alt: "PeopleOS structured hiring pipeline and onboarding checklist tracker", width: 1440, height: 900 },
     ],
+    architectureDiagram: {
+      src: "/images/site-visuals/industries/saas-stack-architecture.svg",
+      alt: "Multi-module SaaS architecture uniting employee directory, leave approvals, and hiring flows",
+      width: 1200,
+      height: 720,
+      caption: "Typed relational schema connecting team directory, PTO approval workflows, and onboarding stages.",
+    },
   },
   "bookos-appointment-scheduler": {
     cover: {
@@ -194,6 +222,13 @@ const REAL_MONOREPO_MEDIA: Record<
       { type: "image", src: "/images/projects/bookos/catalog.png", alt: "BookOS service duration, buffer-time, and pricing catalog configuration", width: 1440, height: 900 },
       { type: "image", src: "/images/projects/bookos/book.png", alt: "BookOS customer-facing time-zone-safe slot picker and confirmation screen", width: 1440, height: 900 },
     ],
+    architectureDiagram: {
+      src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+      alt: "Transactional booking architecture enforcing time-zone normalization and double-booking guards",
+      width: 1200,
+      height: 720,
+      caption: "Conflict-safe availability slot engine backed by PostgreSQL transactions and UTC-normalized provider schedules.",
+    },
   },
 };
 

@@ -145,9 +145,9 @@ export const WORK_COLLECTIONS: readonly WorkCollectionDef[] = [
     previewLimit: 4,
     spotlightSlugs: [
       "halcyon-brand-system",
-      "motion-production-pipeline",
       "design-token-wcag-auditor",
       "video-rendition-planner",
+      "motion-production-pipeline",
       "blender-product-visualisation",
     ],
   },
@@ -199,7 +199,7 @@ export function collectionForProject(p: Project): WorkCollectionId {
     slug === "halcyon-brand-system" ||
     slug === "motion-production-pipeline" ||
     slug === "blender-product-visualisation" ||
-    slug === "design-system-token-auditor" ||
+    slug === "design-token-wcag-auditor" ||
     slug === "video-rendition-planner" ||
     niche.includes("creative") ||
     niche.includes("brand") ||
@@ -248,13 +248,14 @@ export function collectionForProject(p: Project): WorkCollectionId {
     slug === "kestrel-voice-sales-agent" ||
     slug === "supportos-helpdesk-console" ||
     slug === "agent-eval-harness" ||
-    slug === "mcp-tool-policy-gateway" ||
+    slug === "mcp-policy-gateway" ||
     slug === "rag-citation-verifier" ||
     slug === "pii-redaction-pipeline" ||
     niche.includes("ai agent") ||
     niche.includes("retrieval") ||
     niche.includes("ai eval") ||
-    niche.includes("ai safety")
+    niche.includes("ai safety") ||
+    niche.includes("agentic ai")
   ) {
     return "ai-products-agents";
   }
@@ -304,6 +305,28 @@ export function groupProjectsByCollection(projects: Project[]) {
       .sort((a, b) => visualRichnessRank(a, col.spotlightSlugs) - visualRichnessRank(b, col.spotlightSlugs));
     return { collection: col, items };
   }).filter((g) => g.items.length > 0);
+}
+
+/** Previous & next projects inside the same curated collection for smooth /work/[slug] browsing. */
+export function collectionNeighbours(
+  allProjects: Project[],
+  project: Project,
+): { prev: Project | undefined; next: Project | undefined; position: number; total: number } {
+  const colId = collectionForProject(project);
+  const col = WORK_COLLECTIONS.find((c) => c.id === colId) ?? WORK_COLLECTIONS[0];
+  const siblings = allProjects
+    .filter((p) => collectionForProject(p) === colId)
+    .sort((a, b) => visualRichnessRank(a, col.spotlightSlugs) - visualRichnessRank(b, col.spotlightSlugs));
+  const i = siblings.findIndex((p) => p.slug === project.slug);
+  if (i === -1 || siblings.length < 2) {
+    return { prev: undefined, next: undefined, position: 1, total: Math.max(1, siblings.length) };
+  }
+  return {
+    prev: siblings[(i - 1 + siblings.length) % siblings.length],
+    next: siblings[(i + 1) % siblings.length],
+    position: i + 1,
+    total: siblings.length,
+  };
 }
 
 /** Clear plain-language audience description for the Project Detail "At a Glance" brief. */

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { InquiryForm } from "@/components/contact/InquiryForm";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Faq } from "@/components/ui/Faq";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
@@ -47,6 +48,12 @@ export default function ContactPage() {
 
   return (
     <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ]}
+      />
       <section className="page-hero contact" aria-labelledby="contact-title">
         <div className="container contact__inner">
           <div className="contact__intro">

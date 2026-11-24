@@ -267,6 +267,13 @@ const COMMERCE: Project = {
     { type: "image", src: "/images/projects/commerce/order.webp", alt: "Order confirmation screen showing the demo order number and totals", width: 1600, height: 900 },
     { type: "image", src: "/images/projects/commerce/mobile.webp", alt: "The shop and product pages on a phone-sized screen", width: 1382, height: 1420 },
   ],
+  architectureDiagram: {
+    src: "/images/site-visuals/industries/ecommerce-ops-architecture.svg",
+    alt: "E-commerce storefront and operations schematic connecting storefront catalog, integer-cent cart logic, and order tracking",
+    width: 1200,
+    height: 720,
+    caption: "Storefront architecture schematic connecting filterable catalog variants, integer-cent pricing, and stock-checked checkout.",
+  },
   caseStudy: {
     background:
       "Tessera Clayworks is a fictional small-batch ceramics studio invented for this project. The brief was to build the storefront such a business would actually need, so the work shows commerce mechanics rather than a styled template.",
@@ -448,6 +455,13 @@ const SUPPORT_AGENT: Project = {
     { type: "image", src: "/images/projects/support-agent/conversation.webp", alt: "A conversation where the agent answers a refund question and cites the source article", width: 1500, height: 1055 },
     { type: "image", src: "/images/projects/support-agent/mobile.webp", alt: "The agent on a phone-sized screen", width: 780, height: 1640 },
   ],
+  architectureDiagram: {
+    src: "/images/site-visuals/specializations/ai-agent-guardrail-loop.svg",
+    alt: "Grounded retrieval and confidence-threshold escalation loop showing BM25 search, citation checking, and human hand-off",
+    width: 1200,
+    height: 720,
+    caption: "Retrieval guardrail architecture enforcing confidence thresholds, cited answers, and explicit human escalation.",
+  },
   caseStudy: {
     background:
       "Tideline is an invented outdoor-equipment retailer. The agent exists to show retrieval and escalation behaviour, which is where most support automation actually succeeds or fails.",
@@ -614,6 +628,13 @@ const N8N: Project = {
     height: 700,
   },
   gallery: [],
+  architectureDiagram: {
+    src: "/images/diagrams/crm-dedupe-sync-flow.svg",
+    alt: "CRM deduplication and inbound routing schematic illustrating validation, scoring, static-data dedupe window, and owner assignment",
+    width: 1200,
+    height: 720,
+    caption: "Inbound qualification and deduplication schematic showing how validated leads route into CRM without duplicate records.",
+  },
   caseStudy: {
     background:
       "Automation work is usually shown as a screenshot of a canvas, which proves only that nodes were placed. This project exists to show the logic inside the nodes, tested.",
@@ -693,6 +714,13 @@ const SUPPLY_CHAIN: Project = {
   gallery: [
     { type: "image", src: "/images/projects/supply-chain/mobile.webp", alt: "The stock table on a phone-sized screen", width: 780, height: 1640 },
   ],
+  architectureDiagram: {
+    src: "/images/site-visuals/industries/logistics-supply-flow.svg",
+    alt: "Append-only inventory and purchasing flow schematic from supplier receipts through ledger movements to reorder advice",
+    width: 1200,
+    height: 720,
+    caption: "Append-only movement ledger schematic unifying stock balances, purchase receipts, transfers, and reorder alerts.",
+  },
   caseStudy: {
     background:
       "Meridian is an invented distributor. The system covers the part of operations where mistakes are expensive: knowing what you have, what is coming, and what to order.",
@@ -773,6 +801,13 @@ const SOURCING: Project = {
   gallery: [
     { type: "image", src: "/images/projects/sourcing-platform/mobile.webp", alt: "The supplier comparison on a phone-sized screen", width: 780, height: 1640 },
   ],
+  architectureDiagram: {
+    src: "/images/diagrams/landed-cost-waterfall.svg",
+    alt: "Landed-cost waterfall diagram breaking factory unit price, freight, HS-code duty, and incoterm allocation into final warehouse cost",
+    width: 1200,
+    height: 720,
+    caption: "Landed-cost waterfall showing how incoterms, freight weight rules, and HS duties re-rank competing supplier quotes.",
+  },
   caseStudy: {
     background:
       "Lantern is an invented sourcing desk. The tool addresses the mistake that costs importers the most money: choosing a supplier on unit price.",

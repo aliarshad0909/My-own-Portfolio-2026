@@ -18,7 +18,12 @@ import { SERVICE_HUBS, allSpokes, getSpoke, spokesForProject } from "@/lib/seo/s
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { CORE_SITEMAP_PAGES } from "@/lib/site";
 import { AVAILABILITY_OPTIONS, STACK_FILTERS, filterProjects } from "@/lib/work-finder";
-import { WORK_COLLECTIONS, groupProjectsByCollection } from "@/lib/work-collections";
+import {
+  WORK_COLLECTIONS,
+  collectionForProject,
+  collectionNeighbours,
+  groupProjectsByCollection,
+} from "@/lib/work-collections";
 import {
   articleSchema,
   blogArticleSchema,
@@ -319,6 +324,12 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
         );
         assert.match(p.generatedVisual.label, /Not a (Real )?Screenshot|AI-Generated|AI Illustration|Concept Illustration/i);
       }
+      if (p.architectureDiagram) {
+        assert.ok(
+          existsSync(path.join(APP_ROOT, "public", p.architectureDiagram.src)),
+          `${p.slug} architectureDiagram missing on disk: ${p.architectureDiagram.src}`,
+        );
+      }
       const links = [...(p.relatedServicePaths ?? []), ...(p.relatedToolPaths ?? [])];
       assert.deepEqual(brokenLinks(links), [], `${p.slug} has broken service/tool links`);
     }
@@ -336,6 +347,18 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
     assert.equal(grouped.length, WORK_COLLECTIONS.length, "every Work collection must contain projects");
     const groupedTotal = grouped.reduce((sum, g) => sum + g.items.length, 0);
     assert.equal(groupedTotal, PROJECTS.length, "7 Work collections must partition all 120 entries cleanly");
+
+    // Verify key AI-concept builds route into their intended problem collections & collectionNeighbours works
+    const mcpProj = PROJECTS.find((p) => p.slug === "mcp-policy-gateway");
+    const tokenProj = PROJECTS.find((p) => p.slug === "design-token-wcag-auditor");
+    assert.ok(mcpProj && collectionForProject(mcpProj) === "ai-products-agents");
+    assert.ok(tokenProj && collectionForProject(tokenProj) === "creative-motion-production");
+    for (const g of grouped) {
+      const sample = g.items[0];
+      const nav = collectionNeighbours(PROJECTS, sample);
+      assert.ok(nav.prev && nav.next, `collection ${g.collection.id} must yield prev & next navigation`);
+      assert.equal(nav.total, g.items.length);
+    }
 
     // Verify all 10 monorepo standalone apps carry real multi-screen captures on disk
     const monorepoSlugs = [
@@ -379,12 +402,22 @@ describe("studio blog & RSS feed", () => {
     assert.equal(new Set(slugs).size, 8);
     const iso = /^\d{4}-\d{2}-\d{2}$/;
 
+    const seenVisuals = new Set<string>();
     for (const post of BLOG_POSTS) {
       assert.ok(isKnownRoute(`/blog/${post.slug}`));
       assert.match(post.publishedAt, iso);
       assert.match(post.updatedAt, iso);
       assert.ok(post.updatedAt >= post.publishedAt);
       assert.ok(estimateReadingMinutes(post) >= 2);
+      assert.ok(post.visual, `blog:${post.slug} must carry a purposeful visual`);
+      assert.ok(
+        existsSync(path.join(APP_ROOT, "public", post.visual!.src)),
+        `blog:${post.slug} visual missing on disk: ${post.visual!.src}`,
+      );
+      assert.ok(!seenVisuals.has(post.visual!.src), `blog:${post.slug} must use a distinct visual asset`);
+      seenVisuals.add(post.visual!.src);
+      assert.ok(post.visual!.alt.length >= 20, `blog:${post.slug} visual needs descriptive alt text`);
+      assert.ok(post.visual!.caption.length >= 20, `blog:${post.slug} visual needs descriptive caption`);
       assert.deepEqual(
         brokenLinks(post.relatedLinks.map((l) => l.href)),
         [],
