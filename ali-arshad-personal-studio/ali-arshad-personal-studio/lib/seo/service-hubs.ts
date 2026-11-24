@@ -266,8 +266,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Build", detail: "Catalogue, cart, checkout, admin" },
       { label: "Launch", detail: "Deploy, test, hand-off" },
     ],
-    projectSlugs: ["tessera-clayworks-storefront"],
-    relatedTools: ["/tools/web-project-estimator"],
+    projectSlugs: ["tessera-clayworks-storefront", "stockflow-inventory"],
+    relatedTools: ["/tools/web-project-estimator", "/tools/profit-margin-calculator"],
     relatedHubs: ["/services/web-development", "/services/business-dashboards"],
     faqs: [
       {
@@ -292,7 +292,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
     ],
     publicationState: "Published",
-    spokes: [],
+    spokes: ALL_SPOKES["ecommerce-development"] ?? [],
   },
   {
     slug: "business-dashboards",
@@ -389,7 +389,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
       {
         q: "Can you handle ongoing social media, email and content coordination?",
-        a: "Yes. Alongside visual systems, I bring over two years of hands-on brand management for US-based brands, plus active HubSpot Social Media and Google Ads AI-Powered Performance Ads certifications.",
+        a: "Yes. Alongside visual systems, I bring hands-on brand management experience for US-based brands, plus active HubSpot Social Media and Google Ads AI-Powered Performance Ads certifications.",
       },
       {
         q: "Why do you measure WCAG colour contrast during branding?",
@@ -531,3 +531,12 @@ export const getSpoke = (hubSlug: string, spokeSlug: string) =>
 
 export const allSpokes = () =>
   SERVICE_HUBS.flatMap((h) => h.spokes.map((s) => ({ hub: h, spoke: s })));
+
+/** Published specialization spokes evidenced by a given project slug (for reciprocal links). */
+export const spokesForProject = (projectSlug: string) =>
+  allSpokes().filter(
+    ({ hub, spoke }) =>
+      hub.publicationState === "Published" &&
+      spoke.publicationState === "Published" &&
+      spoke.projectSlugs.includes(projectSlug),
+  );

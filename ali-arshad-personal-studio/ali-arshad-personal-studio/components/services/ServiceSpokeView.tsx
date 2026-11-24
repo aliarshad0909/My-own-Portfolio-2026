@@ -10,6 +10,7 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { locationsForServiceHub } from "@/lib/geo/location-connections";
 import { getProject, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHubEnrichment } from "@/lib/seo/service-enrichment";
@@ -26,6 +27,13 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
     .map((slug) => getProject(slug))
     .filter((p): p is Project => p !== undefined);
   const siblings = hub.spokes.filter((s) => s.slug !== spoke.slug && shouldRender(s.publicationState));
+  const locationMatches = locationsForServiceHub(hub.slug, 6);
+  const hasPublicLiveDemo = projects.some((p) => Boolean(p.liveUrl));
+  const proofSummary = hasPublicLiveDemo
+    ? "Includes publicly deployed live sandbox demonstration"
+    : projects.length > 0
+      ? "Backed by locally tested studio demonstration build(s)"
+      : "Scoped transparently during discovery";
 
   const heroVisual = spoke.heroVisual;
   const linkedProject = heroVisual?.projectSlug ? getProject(heroVisual.projectSlug) : undefined;
@@ -97,9 +105,9 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
 
       <PageHero eyebrow={hub.h1} title={spoke.h1} lead={spoke.lead} aside={heroAside}>
         <div className="hero__actions">
-          <ButtonLink href={contactHref}>Discuss {spoke.h1.toLowerCase()}</ButtonLink>
+          <ButtonLink href={contactHref}>Discuss {spoke.h1}</ButtonLink>
           <ButtonLink href={`/services/${hub.slug}`} variant="secondary" icon={null}>
-            Full {hub.h1.toLowerCase()} service
+            Full {hub.h1} service
           </ButtonLink>
         </div>
       </PageHero>
@@ -121,12 +129,41 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
         </div>
       ) : null}
 
+      <section className="container" style={{ marginTop: "1.5rem" }} aria-label="Service summary and delivery details">
+        <div className="panel spoke-aeo-panel">
+          {spoke.quickAnswer ? (
+            <div className="spoke-aeo-panel__answer">
+              <p className="label">Direct answer</p>
+              <p className="spoke-aeo-panel__lead">{spoke.quickAnswer}</p>
+            </div>
+          ) : null}
+          <dl className="spoke-aeo-grid">
+            {spoke.audience ? (
+              <div>
+                <dt>Best fit / Audience</dt>
+                <dd>{spoke.audience}</dd>
+              </div>
+            ) : null}
+            <div>
+              <dt>Remote delivery</dt>
+              <dd>
+                Delivered remotely for US &amp; international clients with scheduled time-zone overlap — independent studio of one, no physical regional offices claimed.
+              </dd>
+            </div>
+            <div>
+              <dt>Supporting proof</dt>
+              <dd>{proofSummary}</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
       <section className="section" aria-labelledby="spoke-overview">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Overview</p>
             <h2 className="section-title section-title--sm" id="spoke-overview">
-              Why teams focus specifically on {spoke.h1.toLowerCase()}
+              Why teams focus specifically on {spoke.h1}
             </h2>
           </div>
           <div className="prose">
@@ -148,7 +185,7 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Deliverables</p>
             <h2 className="section-title section-title--sm" id="spoke-deliverables">
-              What is included in a {spoke.h1.toLowerCase()} engagement
+              What is included: {spoke.h1}
             </h2>
           </div>
           <ul className="hub-deliverables">
@@ -221,19 +258,53 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
         </section>
       ) : null}
 
-      {spoke.relatedTool ? (
-        <section className="section section--tight" aria-label="Interactive planning tool">
+      {spoke.relatedTool || spoke.relatedProduct || spoke.relatedResource ? (
+        <section className="section section--tight" aria-label="Interactive tools and connected resources">
           <div className="container">
-            <div className="hub-tool-banner">
-              <div className="hub-tool-banner__copy">
-                <p className="eyebrow eyebrow--plain">Interactive planning tool</p>
-                <h2 className="hub-tool-banner__title">{spoke.relatedTool.label}</h2>
-                <p className="hub-tool-banner__text">
-                  Run your own numbers directly in the browser — no email gate and no obligation.
-                </p>
+            {spoke.relatedTool ? (
+              <div className="hub-tool-banner">
+                <div className="hub-tool-banner__copy">
+                  <p className="eyebrow eyebrow--plain">Interactive planning tool</p>
+                  <h2 className="hub-tool-banner__title">{spoke.relatedTool.label}</h2>
+                  <p className="hub-tool-banner__text">
+                    Run your own numbers directly in the browser — no email gate and no obligation.
+                  </p>
+                </div>
+                <ButtonLink href={spoke.relatedTool.href}>Open calculator</ButtonLink>
               </div>
-              <ButtonLink href={spoke.relatedTool.href}>Open calculator</ButtonLink>
-            </div>
+            ) : null}
+            {spoke.relatedProduct || spoke.relatedResource ? (
+              <ul className="hub-card-grid" style={{ marginTop: spoke.relatedTool ? "1.25rem" : "0" }}>
+                {spoke.relatedProduct ? (
+                  <li>
+                    <Link href={spoke.relatedProduct.href} className="hub-link-card">
+                      <span className="hub-link-card__kind">Studio demonstration product</span>
+                      <span className="hub-link-card__title">
+                        <span>{spoke.relatedProduct.label}</span>
+                        <Icon name="arrow-up-right" size={16} />
+                      </span>
+                      <span className="hub-link-card__desc">
+                        Inspect architecture details, sandbox credentials, and real application screenshots in the Product Directory.
+                      </span>
+                    </Link>
+                  </li>
+                ) : null}
+                {spoke.relatedResource ? (
+                  <li>
+                    <Link href={spoke.relatedResource.href} className="hub-link-card">
+                      <span className="hub-link-card__kind">Background guide</span>
+                      <span className="hub-link-card__title">
+                        <span>{spoke.relatedResource.label}</span>
+                        <Icon name="arrow-up-right" size={16} />
+                      </span>
+                      <span className="hub-link-card__desc">
+                        Plain-English decision guide written directly from the studio&rsquo;s engineering and operational practices.
+                      </span>
+                    </Link>
+                  </li>
+                ) : null}
+              </ul>
+            ) : null}
           </div>
         </section>
       ) : null}
@@ -267,7 +338,7 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
                 <span className="hub-link-card__desc">{hub.lead}</span>
               </Link>
             </li>
-            {siblings.slice(0, 3).map((sib) => (
+            {siblings.slice(0, 5).map((sib) => (
               <li key={sib.slug}>
                 <Link href={`/services/${hub.slug}/${sib.slug}`} className="hub-link-card">
                   <span className="hub-link-card__kind">
@@ -285,15 +356,46 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
         </div>
       </section>
 
+      {locationMatches.states.length > 0 ? (
+        <section className="section section--tight" aria-labelledby="spoke-locations">
+          <div className="container">
+            <div className="panel location-fit-strip">
+              <p className="eyebrow eyebrow--plain">Remote US coverage</p>
+              <h2 className="section-title section-title--sm" id="spoke-locations">
+                Markets where {spoke.h1} fits local operations
+              </h2>
+              <p className="section-sub" style={{ marginTop: "6px" }}>
+                Delivered remotely nationwide with scheduled US time-zone overlap — no physical regional branch offices claimed.
+              </p>
+              <div className="location-pill-list" style={{ marginTop: "14px" }}>
+                {locationMatches.states.map((st) => (
+                  <Link key={st.slug} href={`/locations/${st.slug}`} className="location-pill">
+                    {st.name}
+                  </Link>
+                ))}
+                {locationMatches.cities.map((c) => (
+                  <Link key={`${c.stateSlug}-${c.slug}`} href={`/locations/${c.stateSlug}/${c.slug}`} className="location-pill location-pill--metro">
+                    {c.name}
+                  </Link>
+                ))}
+                <Link href="/locations" className="location-pill location-pill--all">
+                  All 50 states + D.C. →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <ContactCTA
         standalone
         eyebrow="Start a focused engagement"
-        title={`Need help with ${spoke.h1.toLowerCase()}?`}
+        title={`Need help with ${spoke.h1}?`}
         text="Share your current workflow, constraints and timeline. I will give you an honest read on scope, trade-offs and the cleanest next step."
         button="Discuss your project"
         href={contactHref}
         secondaryHref={`/services/${hub.slug}`}
-        secondaryLabel={`Back to ${hub.h1.toLowerCase()}`}
+        secondaryLabel={`Back to ${hub.h1}`}
       />
     </>
   );

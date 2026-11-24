@@ -27,7 +27,7 @@ import {
 } from "@/lib/gpu-compute";
 
 describe("GPU compute consultation service", () => {
-  it("stays PublicNoIndex (reviewable, excluded from sitemap) with placeholder specs and valid links", () => {
+  it("stays PublicNoIndex (reviewable, excluded from sitemap) with consultation-scoped specs, zero [TBD] text, and valid links", () => {
     assert.equal(GPU_COMPUTE_PUBLICATION_STATE, "PublicNoIndex");
     assert.equal(isIndexable(GPU_COMPUTE_PUBLICATION_STATE), false);
     assert.ok(isKnownRoute(GPU_COMPUTE_PATH));
@@ -36,7 +36,8 @@ describe("GPU compute consultation service", () => {
     assert.equal(SERVICE_OPTIONS.at(-1), "Not sure yet");
 
     for (const spec of GPU_COMPUTE_SPECS) {
-      assert.equal(spec.status, "Placeholder — pending confirmation");
+      assert.equal(spec.status, "Confirmed during consultation");
+      assert.ok(!/\[TBD/i.test(spec.value), `GPU spec must not show [TBD] placeholder: ${spec.value}`);
     }
     for (const slug of GPU_RELATED_PROJECT_SLUGS) {
       assert.ok(getProject(slug), `missing GPU related project ${slug}`);
@@ -63,6 +64,11 @@ describe("registered city local content (exact 12 cities)", () => {
 
       for (const s of local!.sources) {
         assert.ok(s.url.startsWith("https://"), `${city.slug} source must be https: ${s.url}`);
+        const parsed = new URL(s.url);
+        assert.ok(
+          parsed.pathname !== "/" && parsed.pathname.length > 1,
+          `${city.slug} source must point to an exact page, not a generic domain homepage: ${s.url}`,
+        );
         assert.match(s.accessed, /^\d{4}-\d{2}-\d{2}$/);
       }
 

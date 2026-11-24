@@ -1216,7 +1216,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       caption: "Halcyon brand system demo · Live WCAG contrast checks, modular type, SVG & HTML email",
     },
     facts: [
-      { label: "Experience", value: "2+ years managing US-based brands" },
+      { label: "Experience", value: "Hands-on US brand management" },
       { label: "Credentials", value: "HubSpot Social + Google Ads Certified" },
       { label: "Accessibility", value: "WCAG contrast measured, not guessed" },
       { label: "Execution", value: "Identity, web, social & email aligned" },
@@ -1381,7 +1381,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       {
         sector: "US-Market Growth Brands",
         title: "Hands-on brand & channel coordination",
-        detail: "Grounded in over two years managing brand, social, email and campaign work for US-based brands.",
+        detail: "Grounded in hands-on brand, social, email and campaign coordination for US-based brands.",
       },
     ],
     demoHeading: "Complete demonstration: Halcyon brand system & campaign",

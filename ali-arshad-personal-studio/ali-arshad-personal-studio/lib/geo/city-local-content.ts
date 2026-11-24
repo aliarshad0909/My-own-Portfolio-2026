@@ -8,8 +8,9 @@
  *    production and `sitemap.xml`) until real local signals and editorial review exist.
  *  - Uses ONLY the 12 registered cities (no silently invented cities).
  *  - Business service framing only — zero tourism, lifestyle, or city-guide filler.
- *  - Every factual local claim cites real, checked institutional sources with
- *    inline indices (`sources: [0]`) and ISO `accessed` dates.
+ *  - Every factual local claim cites an exact institutional report or data page
+ *    (never a generic domain homepage) with inline indices (`sources: [0]`) and
+ *    ISO `accessed` dates. Unverified point-in-time numeric claims are excluded.
  *  - Zero fabricated offices, local staff, local clients, or results.
  */
 
@@ -35,22 +36,22 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "texas/austin",
     headline: "Remote Web Engineering, SaaS & Automation for Austin, TX Teams",
     angle:
-      "Austin's fast-growing software and semiconductor ecosystem rewards lean teams that ship real web products, CRM systems, and AI workflows without agency bloat.",
+      "Austin's dense technology, professional-services, and advanced-manufacturing labor market rewards lean teams that ship custom web software, CRMs, and AI workflows without agency bloat.",
     audience:
-      "B2B SaaS founders, semiconductor supply-chain operators, and product-led teams across the Austin metro.",
+      "B2B SaaS founders, hardware/supply-chain operators, and product-led teams across the Austin metro.",
     timeZoneOverlap:
       "Central Time (CT) — live discovery calls, sprint walkthroughs, and async written reviews align cleanly with Austin morning and midday hours.",
     context: [
       {
-        text: "Following Bureau of Labor Statistics benchmark revisions, Opportunity Austin reported the Austin metro leading top-50 U.S. metros in annual job growth, adding roughly 27,200 jobs at a 2.0% pace while the Federal Reserve Bank of Dallas tracked local unemployment hovering near 3.6% to 3.8% — consistently tighter than both Texas and national averages.",
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables and Federal Reserve Bank of Dallas Austin Economic Indicators track sustained metropolitan payroll activity across professional and business services, information technology, trade and transportation, and manufacturing.",
         sources: [0, 1],
       },
       {
-        text: "Alongside software and business services, Austin anchors a major domestic semiconductor and hardware engineering corridor, with high local engineering wages pushing smaller product teams to look for accountable senior execution without expanding full-time payroll prematurely.",
+        text: "Because local engineering talent in the Austin metro remains competitive across software and hardware employers, smaller product teams regularly seek accountable senior execution without expanding full-time payroll prematurely.",
         sources: [0, 1],
       },
       {
-        text: "Working remotely as an independent studio lets Austin founders consolidate Next.js application builds, CRM tooling, n8n workflow automation, and scoped RTX GPU evaluation runs under one technical point of contact, with no physical Austin office claimed or needed.",
+        text: "Working remotely as an independent studio lets Austin founders consolidate Next.js application builds, CRM tooling, n8n workflow automation, and consultation-scoped RTX GPU evaluation runs under one technical point of contact, with no physical Austin office claimed or needed.",
       },
     ],
     serviceFit: [
@@ -83,14 +84,14 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Austin Metro Economic & Job Growth Tracking",
-        url: "https://www.opportunityaustin.com/",
-        publisher: "Opportunity Austin",
+        title: "Austin-Round Rock-San Marcos, TX Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.tx_austin_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {
         title: "Austin Economic Indicators",
-        url: "https://www.dallasfed.org/",
+        url: "https://www.dallasfed.org/research/indicators/aus",
         publisher: "Federal Reserve Bank of Dallas",
         accessed: "2026-11-24",
       },
@@ -100,19 +101,19 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "texas/dallas",
     headline: "Business Dashboards, Internal Software & Automation for Dallas–Fort Worth",
     angle:
-      "Corporate relocations, financial services, and multi-modal logistics across DFW create heavy demand for clean executive dashboards and dependable operational software.",
+      "Corporate operations, financial services, and regional distribution across Dallas–Fort Worth create steady demand for single-source executive dashboards and dependable operational software.",
     audience:
       "Mid-market distribution, finance, corporate operations, and B2B service operators across Dallas–Fort Worth.",
     timeZoneOverlap:
       "Central Time (CT) — kickoff sessions and staged milestone demos fit standard Dallas business hours.",
     context: [
       {
-        text: "Tracking from the Dallas Regional Chamber and the Federal Reserve Bank of Dallas underscores Dallas–Fort Worth's standing as a major corporate headquarters, financial-services, and advanced-manufacturing hub, with sustained expansion across banking, insurance, and regional headquarters campuses.",
+        text: "U.S. Bureau of Labor Statistics metropolitan payroll data and Federal Reserve Bank of Dallas DFW Economic Indicators highlight Dallas–Fort Worth's broad employment base across trade, transportation, utilities, professional and business services, financial activities, and manufacturing.",
         sources: [0, 1],
       },
       {
-        text: "Supported by DFW International Airport and multi-modal corridors like AllianceTexas, trade, transportation, and utilities remain leading regional employment pillars alongside finance and professional services.",
-        sources: [0, 1],
+        text: "Dallas Regional Chamber economic development tracking likewise emphasizes corporate operations, finance, and regional logistics corridors where multi-site teams depend on timely operational reporting.",
+        sources: [1, 2],
       },
       {
         text: "For DFW operators managing inventory, revenue reporting, or multi-branch workflows across spreadsheets, a remote studio can deliver unified React/PostgreSQL dashboards and n8n data pipelines without agency overhead.",
@@ -148,15 +149,21 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Dallas Region Economy, Finance & Corporate Expansions",
-        url: "https://www.dallaschamber.org/",
-        publisher: "Dallas Regional Chamber",
+        title: "Dallas-Fort Worth-Arlington, TX Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.tx_dallas_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {
         title: "Dallas–Fort Worth Economic Indicators",
-        url: "https://www.dallasfed.org/",
+        url: "https://www.dallasfed.org/research/indicators/dfw",
         publisher: "Federal Reserve Bank of Dallas",
+        accessed: "2026-11-24",
+      },
+      {
+        title: "Prosperity & Economic Development Priorities",
+        url: "https://www.dallaschamber.org/priorities/prosperity-economic-development/",
+        publisher: "Dallas Regional Chamber",
         accessed: "2026-11-24",
       },
     ],
@@ -165,19 +172,19 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "florida/miami",
     headline: "Ecommerce Engineering, Sourcing Tooling & Brand Systems for Miami, FL",
     angle:
-      "Miami-Dade's international freight gateway, high business-formation rate, and cross-border commerce favor fast custom storefronts and clean landed-cost tooling.",
+      "South Florida's international trade corridors, freight infrastructure, and commerce-heavy metro economy favor fast custom storefronts and clean landed-cost tooling.",
     audience:
       "DTC brands, import/export merchants, hospitality operators, and cross-border commerce teams in Miami-Dade.",
     timeZoneOverlap:
       "Eastern Time (ET) — discovery calls, live reviews, and written check-ins run cleanly during Miami morning and early afternoon hours.",
     context: [
       {
-        text: "The Miami-Dade Beacon Council and SelectFlorida highlight Miami-Dade's role as the primary U.S. trade gateway to Latin America and the Caribbean, with Miami International Airport ranking first nationwide for international freight and the Miami Customs District handling well over $130 billion in annual two-way trade.",
-        sources: [0, 1],
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables for the Miami metropolitan area document major employment concentrations in trade, transportation and utilities, professional and business services, financial activities, and leisure and hospitality.",
+        sources: [0],
       },
       {
-        text: "Alongside international trade and hospitality, Miami-Dade has seen rapid corporate expansion in finance and entrepreneurship, driving competitive pressure among consumer and B2B brands selling across domestic and cross-border markets.",
-        sources: [0, 1],
+        text: "SelectFlorida's International Business Fast Facts further underscores Florida's international trade gateways and cross-border commercial ties linking South Florida businesses with Latin America, the Caribbean, and global suppliers.",
+        sources: [1],
       },
       {
         text: "Delivered remotely, custom storefront engineering, landed-cost and supplier-comparison tooling, and WCAG-verified brand systems help Miami merchants move faster without sacrificing margin clarity.",
@@ -213,14 +220,14 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Miami-Dade Economic Overview, Trade & Target Industries",
-        url: "https://www.beaconcouncil.com/",
-        publisher: "Miami-Dade Beacon Council",
+        title: "Miami-Fort Lauderdale-Pompano Beach, FL Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.fl_miami_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {
-        title: "Florida International Business Fast Facts",
-        url: "https://selectflorida.org/international-business-fast-facts",
+        title: "Florida International Business Fast Facts (PDF)",
+        url: "https://selectflorida.org/wp-content/uploads/Florida-International-Business-Fast-Facts.pdf",
         publisher: "SelectFlorida",
         accessed: "2026-11-24",
       },
@@ -230,22 +237,22 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "new-york/new-york-city",
     headline: "Web Engineering, Automation & Brand Systems for New York City Teams",
     angle:
-      "High private-sector wages and intense creative benchmarks across the five boroughs make custom web engineering, n8n workflow automation, and sharp brand execution pay back quickly.",
+      "High operating costs and demanding creative benchmarks across the five boroughs make custom web engineering, n8n workflow automation, and sharp brand execution pay back quickly.",
     audience:
       "Professional services, fintech/finance teams, media companies, and consumer brands across New York City.",
     timeZoneOverlap:
       "Eastern Time (ET) — straightforward morning and midday overlap for kickoff calls, demos, and async Slack/email reviews.",
     context: [
       {
-        text: "New York City Economic Development Corporation (NYCEDC) data places private-sector wages far above national averages across a record base of more than 286,000 business establishments, with financial services and technology continuing to drive major leasing and venture activity.",
-        sources: [0],
+        text: "New York City Economic Development Corporation (NYCEDC) reporting and U.S. Bureau of Labor Statistics metro employment tables highlight New York's deep concentration across financial activities, professional and business services, information, and technology.",
+        sources: [0, 2],
       },
       {
-        text: "At the same time, the Office of the New York City Comptroller and NYCEDC emphasize the scale of the city's creative economy — spanning advertising, design, media, fashion, and publishing — setting an unusually high bar for digital brand presentation.",
-        sources: [0, 1],
+        text: "At the same time, the Office of the New York City Comptroller's Creative Economy report documents the breadth of the city's advertising, design, media, fashion, and publishing sectors — setting an unusually high bar for digital brand presentation.",
+        sources: [1],
       },
       {
-        text: "An independent remote studio gives NYC founders and operators senior Next.js engineering, self-hostable n8n automation, brand design systems, and scoped RTX GPU compute consultations without big-agency retainers.",
+        text: "An independent remote studio gives NYC founders and operators senior Next.js engineering, self-hostable n8n automation, brand design systems, and consultation-scoped RTX GPU compute reviews without big-agency retainers.",
       },
     ],
     serviceFit: [
@@ -294,28 +301,34 @@ const CITY_RECORDS: CityLocalContent[] = [
         publisher: "Office of the New York City Comptroller",
         accessed: "2026-11-24",
       },
+      {
+        title: "New York-Northern New Jersey-Long Island, NY-NJ-PA Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.ny_newyork_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
+        accessed: "2026-11-24",
+      },
     ],
   },
   {
     key: "california/san-francisco",
     headline: "AI Agents, Product Engineering & RTX Compute for San Francisco Teams",
     angle:
-      "San Francisco's dense AI startup ecosystem demands auditable agents, fast Next.js product layers, and honest engineering rigor — never superficial chatbot demos.",
+      "San Francisco's technical software and AI startup ecosystem demands auditable agents, fast Next.js product layers, and honest engineering rigor — never superficial chatbot demos.",
     audience:
       "AI startups, developer-tool founders, and technical product teams across San Francisco and the Bay Area.",
     timeZoneOverlap:
       "Pacific Time (PT) — structured async written specs and preview links paired with scheduled morning Pacific Time check-ins.",
     context: [
       {
-        text: "Economic tracking from the City and County of San Francisco and the Bay Area Council highlights a strong AI-led resurgence across San Francisco, with Bay Area venture funding heavily concentrated in artificial intelligence, infrastructure, and frontier software.",
-        sources: [0, 1],
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance data for San Francisco–Oakland–Fremont reflects a dense concentration in information, professional and business services, and technology-adjacent industries.",
+        sources: [0],
       },
       {
-        text: "Bay Area Council policy work likewise emphasizes rapid expansion in AI infrastructure, compute demand, and technical software hiring — an environment where small founding teams routinely outsource surrounding web products, retrieval agents, and evaluation workflows to move faster.",
+        text: "Research reports published by the Bay Area Council Economic Institute examine ongoing AI, software, and infrastructure shifts across the region — an environment where lean founding teams routinely bring in specialist help for web products, retrieval agents, and evaluation workflows.",
         sources: [1],
       },
       {
-        text: "Delivered remotely, this studio builds inspectable AI agents with explicit confidence floors, full-stack Next.js/PostgreSQL web interfaces, and consultation-led RTX GPU compute runs sized honestly to verified server capacity.",
+        text: "Delivered remotely, this studio builds inspectable AI agents with explicit confidence floors, full-stack Next.js/PostgreSQL web interfaces, and consultation-led RTX GPU compute runs sized honestly to confirmed server capacity.",
       },
     ],
     serviceFit: [
@@ -348,15 +361,15 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "San Francisco Economic Recovery & Controller Economic Indicators",
-        url: "https://www.sf.gov/",
-        publisher: "City and County of San Francisco",
+        title: "San Francisco-Oakland-Fremont, CA Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.ca_sanfrancisco_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {
-        title: "Bay Area Regional Economy, AI & Infrastructure",
-        url: "https://www.bayareacouncil.org/",
-        publisher: "Bay Area Council",
+        title: "Bay Area Regional Economy & AI Research Reports",
+        url: "https://www.bayareaeconomy.org/report/",
+        publisher: "Bay Area Council Economic Institute",
         accessed: "2026-11-24",
       },
     ],
@@ -365,19 +378,19 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "california/los-angeles",
     headline: "Ecommerce, Creative Production & 3D Pipelines for Los Angeles Brands",
     angle:
-      "Los Angeles combines the nation's largest creative-economy workforce with North America's busiest container port complex — a direct match for DTC storefronts, 3D/motion workflows, and sourcing tools.",
+      "Greater Los Angeles pairs a major creative and entertainment workforce with Pacific trade and logistics infrastructure — a natural match for DTC storefronts, 3D/motion pipelines, and sourcing tools.",
     audience:
       "Direct-to-consumer brands, product companies, media/content teams, and import-driven merchants in Greater Los Angeles.",
     timeZoneOverlap:
       "Pacific Time (PT) — async visual previews, staging URLs, and scheduled morning Pacific Time review sessions.",
     context: [
       {
-        text: "The Los Angeles County Economic Development Corporation (LAEDC) tracks a regional economy exceeding $1 trillion in GDP anchored simultaneously by international trade through the twin Ports of Los Angeles and Long Beach and by one of the world's largest creative and entertainment clusters.",
-        sources: [0],
+        text: "U.S. Bureau of Labor Statistics metro employment tables and LAEDC Institute for Applied Economics research track Greater Los Angeles across trade, transportation and utilities, information and entertainment media, manufacturing, and professional services.",
+        sources: [0, 1],
       },
       {
-        text: "Statewide creative-economy data from California GO-Biz reinforces that roughly one in four U.S. creative-economy jobs sits in California, fueling high visual expectations for consumer brands competing online while tighter budgets push teams toward leaner digital production pipelines.",
-        sources: [0, 1],
+        text: "California GO-Biz creative-economy documentation reinforces the scale of the state's media, design, and digital-content industries, where consumer brands balance high visual standards with lean production budgets.",
+        sources: [1, 2],
       },
       {
         text: "Working remotely, one studio can pair custom Next.js storefronts and supplier landed-cost tooling with reproducible Blender 3D visualization, ffmpeg web-video preparation, and consultation-led RTX GPU rendering.",
@@ -418,8 +431,14 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "LAEDC Annual Economic Forecast & Ports/Creative Industry Analysis",
-        url: "https://laedc.org/",
+        title: "Los Angeles-Long Beach-Santa Ana, CA Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.ca_losangeles_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
+        accessed: "2026-11-24",
+      },
+      {
+        title: "Institute for Applied Economics Research & Economic Forecasts",
+        url: "https://laedc.org/research/",
         publisher: "Los Angeles County Economic Development Corporation (LAEDC)",
         accessed: "2026-11-24",
       },
@@ -442,12 +461,12 @@ const CITY_RECORDS: CityLocalContent[] = [
       "Central Time (CT) — convenient live alignment for morning and midday discovery and sprint reviews.",
     context: [
       {
-        text: "World Business Chicago highlights Chicagoland as the third-largest U.S. metro economy, distinguished by deep diversification — with no single industry exceeding 13% of regional output — across transportation and logistics, advanced manufacturing, financial services, and roughly 30 Fortune 500 headquarters.",
-        sources: [0],
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables and World Business Chicago key-industry profiles document Chicagoland's balanced economic mix across transportation and logistics, manufacturing, financial services, technology, and corporate headquarters.",
+        sources: [0, 1],
       },
       {
-        text: "Connecting six of North America's seven Class I railroads, ten interstate corridors, O'Hare cargo operations, and over 1.3 billion square feet of industrial real estate, the Chicago metro generates continuous inventory, order, and margin data across multi-site teams.",
-        sources: [0, 1],
+        text: "Statewide industry tracking from the Illinois Economic Development Corporation reinforces the scale of regional freight, industrial distribution, and manufacturing operations that generate continuous multi-site inventory and order data.",
+        sources: [1, 2],
       },
       {
         text: "Pairing a BBA in Supply Chain Management with full-stack PostgreSQL engineering allows this remote studio to build auditable inventory ledgers, executive KPI dashboards, and automated reporting workflows that replace brittle spreadsheets.",
@@ -488,14 +507,20 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Chicagoland Economy, Logistics, Manufacturing & Finance Reports",
-        url: "https://worldbusinesschicago.com/",
+        title: "Chicago-Joliet-Naperville, IL-IN-WI Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.il_chicago_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
+        accessed: "2026-11-24",
+      },
+      {
+        title: "Key Industries — Explore Chicago Industries",
+        url: "https://www.worldbusinesschicago.com/key-industries/",
         publisher: "World Business Chicago",
         accessed: "2026-11-24",
       },
       {
-        title: "Illinois Corporate, Manufacturing & Logistics Profile",
-        url: "https://www.illinoisedc.org/",
+        title: "Illinois Key Industries",
+        url: "https://www.illinoisedc.org/key-industries/",
         publisher: "Illinois Economic Development Corporation",
         accessed: "2026-11-24",
       },
@@ -505,18 +530,18 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "washington/seattle",
     headline: "n8n Automation, AI Agents & Commerce Engineering for Seattle, WA",
     angle:
-      "Greater Seattle's mix of cloud software, aerospace/space engineering, and Pacific maritime trade calls for clean, testable automation and web architecture.",
+      "Greater Seattle's mix of cloud software, aerospace engineering, and Pacific Northwest trade calls for clean, testable automation and web architecture.",
     audience:
       "Cloud/AI product teams, ecommerce brands, and Pacific Northwest trade/operations businesses in Greater Seattle.",
     timeZoneOverlap:
       "Pacific Time (PT) — async written specs, automated test suites, and scheduled morning Pacific Time check-ins.",
     context: [
       {
-        text: "Greater Seattle Partners reports a regional economy exceeding $600 billion in gross regional product, anchored by cloud computing and AI engineering alongside the nation's second-largest aerospace workforce and a rapidly expanding commercial satellite sector.",
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables for Seattle–Tacoma–Bellevue show major regional employment across information technology, professional and business services, trade and transportation, and aerospace-linked manufacturing.",
         sources: [0],
       },
       {
-        text: "Simultaneously, Greater Seattle and the Port of Seattle anchor a major Pacific Rim trade and maritime corridor handling more than $117 billion in regional international trade — pairing high-expectation software buyers with real physical supply chains.",
+        text: "Metropolitan GDP reporting from the U.S. Bureau of Economic Analysis places the Seattle metro among the nation's largest regional economies, pairing high-expectation software buyers with active physical commerce and logistics chains.",
         sources: [0, 1],
       },
       {
@@ -558,15 +583,15 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Greater Seattle Regional Economy, Aerospace & Trade Data",
-        url: "https://greater-seattle.com/",
-        publisher: "Greater Seattle Partners",
+        title: "Seattle-Tacoma-Bellevue, WA Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.wa_seattle_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {
-        title: "Maritime Commerce & Pacific Gateway Overview",
-        url: "https://www.portseattle.org/",
-        publisher: "Port of Seattle",
+        title: "Gross Domestic Product by County and Metropolitan Area",
+        url: "https://www.bea.gov/data/gdp/gdp-by-county",
+        publisher: "U.S. Bureau of Economic Analysis",
         accessed: "2026-11-24",
       },
     ],
@@ -575,18 +600,18 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "massachusetts/boston",
     headline: "Data Dashboards, Web Apps & Compute Scoping for Boston, MA Teams",
     angle:
-      "Greater Boston's concentration of life sciences, healthcare systems, and research universities values disciplined data interfaces and honest engineering over flashy marketing.",
+      "Greater Boston's concentration of life sciences, education/health systems, and technical research firms values disciplined data interfaces and honest engineering over flashy marketing.",
     audience:
       "Biotech/life-sciences operations teams, university spin-offs, research startups, and B2B technology firms in Greater Boston.",
     timeZoneOverlap:
       "Eastern Time (ET) — smooth morning and midday overlap for technical scoping, reviews, and hand-off calls.",
     context: [
       {
-        text: "MassBio's industry tracking highlights Massachusetts as a premier global biopharma cluster employing roughly 113,500 life-sciences professionals centered around Boston and Cambridge, backed by continued venture funding and clinical innovation.",
+        text: "MassBio's annual Industry Snapshot highlights Massachusetts' position as a leading biopharma and life-sciences cluster centered around Boston and Cambridge, supported by active clinical pipelines and venture investment.",
         sources: [0],
       },
       {
-        text: "Alongside biotech, the Greater Boston Chamber of Commerce underscores the region's interlocking foundation of major research universities, hospital networks, financial firms, and AI-enabled research startups.",
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables for Boston–Cambridge–Newton similarly document deep employment in education and health services, professional and business services, financial activities, and information.",
         sources: [1],
       },
       {
@@ -624,14 +649,14 @@ const CITY_RECORDS: CityLocalContent[] = [
     sources: [
       {
         title: "Massachusetts Biopharma Industry Snapshot",
-        url: "https://www.massbio.org/industry-snapshot/",
+        url: "https://www.massbio.org/industry-reports/industry-snapshot/",
         publisher: "MassBio (Massachusetts Biotechnology Council)",
         accessed: "2026-11-24",
       },
       {
-        title: "Greater Boston Economic Competitiveness & Business Community",
-        url: "https://www.bostonchamber.com/",
-        publisher: "Greater Boston Chamber of Commerce",
+        title: "Boston-Cambridge-Newton, MA-NH Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.ma_boston_mn.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
     ],
@@ -640,19 +665,19 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "colorado/denver",
     headline: "Web Applications, Dashboards & Automation for Denver, CO Businesses",
     angle:
-      "Metro Denver's Front Range corridor pairs the nation's second-largest aerospace economy with software, clean energy, and Western logistics — a strong fit for custom web and data systems.",
+      "Metro Denver's Front Range corridor combines Colorado's aerospace sector with software, engineering services, and regional distribution — a strong fit for custom web and data systems.",
     audience:
-      "Aerospace/technical suppliers, software startups, clean-tech operators, and regional distributors along Colorado's Front Range.",
+      "Aerospace/technical suppliers, software startups, engineering operators, and regional distributors along Colorado's Front Range.",
     timeZoneOverlap:
       "Mountain Time (MT) — reliable morning and midday overlap for scoping calls and live milestone walkthroughs.",
     context: [
       {
-        text: "Data from the Metro Denver Economic Development Corporation and Choose Colorado highlights a diversified Front Range economy with a labor force near two million, anchored by the nation's second-largest aerospace sector (roughly 60% of Colorado's aerospace workforce sits in Metro Denver).",
-        sources: [0, 1],
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables for the Denver metropolitan area document broad employment across professional and business services, trade and transportation, information, financial activities, and manufacturing.",
+        sources: [0],
       },
       {
-        text: "Complemented by IT and telecom firms, clean-energy engineering, and aviation/logistics growth around Denver International Airport (serving over 82 million annual travelers), local operators increasingly rely on bespoke internal tools and reporting.",
-        sources: [0],
+        text: "Colorado Office of Economic Development and International Trade (OEDIT) aerospace profiles highlight the Front Range's major aerospace and technical engineering base, where lean suppliers and operators increasingly rely on bespoke web portals and operational dashboards.",
+        sources: [1],
       },
       {
         text: "Delivered remotely with Mountain Time alignment, custom Next.js software, operational dashboards, n8n workflows, and consultation-led RTX compute windows help lean Front Range firms execute without hiring multi-discipline teams.",
@@ -693,14 +718,14 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Metro Denver Economy, Aerospace, IT, Energy & Aviation",
-        url: "https://www.metrodenver.org/",
-        publisher: "Metro Denver Economic Development Corporation",
+        title: "Denver-Aurora-Broomfield, CO Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.co_denver_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {
         title: "Aerospace — Key Industries",
-        url: "https://choosecolorado.com/key-industries/aerospace",
+        url: "https://choosecolorado.com/key-industries/aerospace/",
         publisher: "Colorado Office of Economic Development & International Trade",
         accessed: "2026-11-24",
       },
@@ -710,18 +735,18 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "georgia/atlanta",
     headline: "n8n Automation, Logistics Tooling & Creative Production for Atlanta, GA",
     angle:
-      "Metro Atlanta's blend of payments/fintech ('Transaction Alley'), global air/freight logistics, and major film/media studios maps directly onto workflow automation and visual pipelines.",
+      "Metro Atlanta's blend of fintech/technology, Southeast freight logistics, and digital media production maps directly onto workflow automation and visual pipelines.",
     audience:
       "Fintech/B2B service firms, logistics and procurement teams, and media/consumer brands across Metro Atlanta.",
     timeZoneOverlap:
       "Eastern Time (ET) — straightforward morning and midday overlap for Atlanta teams.",
     context: [
       {
-        text: "The Metro Atlanta Chamber and Georgia Department of Economic Development highlight a regional economy anchored by three distinct pillars: a major fintech and payments cluster, unmatched Southeast logistics around Hartsfield-Jackson Atlanta International Airport and Port of Savannah corridors, and one of the largest film and digital-media production bases in North America.",
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables and Metro Atlanta Chamber key-industry profiles highlight a regional economy anchored by supply chain and logistics, technology and fintech, financial services, and media production.",
         sources: [0, 1],
       },
       {
-        text: "Growing corporate and technology footprints across Midtown and the broader metro add steady demand for back-office workflow integration, customer intake automation, and brand-consistent creative production.",
+        text: "Expanding corporate and technology operations across Metro Atlanta add steady demand for back-office workflow integration, customer intake automation, operational dashboards, and brand-consistent creative production.",
         sources: [0, 1],
       },
       {
@@ -763,15 +788,15 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Metro Atlanta Fintech, Logistics & Regional Business Overview",
-        url: "https://www.metroatlantachamber.com/",
-        publisher: "Metro Atlanta Chamber",
+        title: "Atlanta-Sandy Springs-Marietta, GA Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.ga_atlanta_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {
-        title: "Key Industries — Film, Logistics & Technology",
-        url: "https://georgia.org/industries",
-        publisher: "Georgia Department of Economic Development",
+        title: "Metro Atlanta Key Industries",
+        url: "https://metroatlantachamber.com/built-for-business/key-industries/",
+        publisher: "Metro Atlanta Chamber",
         accessed: "2026-11-24",
       },
     ],
@@ -780,19 +805,19 @@ const CITY_RECORDS: CityLocalContent[] = [
     key: "arizona/phoenix",
     headline: "Web Software, Operations Tooling & Automation for Phoenix, AZ Teams",
     angle:
-      "Greater Phoenix's historic semiconductor build-out, expanding industrial logistics, and growing bioscience corridor pull in hundreds of supplier and service firms needing modern web software.",
+      "Greater Phoenix's semiconductor manufacturing build-out, regional logistics corridors, and expanding technical-services base pull in supplier and B2B firms needing modern web software.",
     audience:
       "Advanced-manufacturing suppliers, industrial logistics operators, B2B service firms, and growing tech companies in Greater Phoenix.",
     timeZoneOverlap:
       "Mountain Standard Time (MST, no DST) — clean alignment across Mountain/Pacific working windows with async previews.",
     context: [
       {
-        text: "The Greater Phoenix Economic Council (GPEC) and Arizona Commerce Authority document massive multi-billion-dollar semiconductor manufacturing investments across North Phoenix, Chandler, and Peoria — anchored by TSMC, Intel, and Amkor alongside a rapidly expanding local ecosystem of specialized equipment and material suppliers.",
-        sources: [0, 1],
+        text: "U.S. Bureau of Labor Statistics Economy at a Glance tables for Phoenix–Mesa–Glendale track large regional employment pillars in trade and transportation, professional and business services, financial activities, and manufacturing.",
+        sources: [0],
       },
       {
-        text: "Complemented by major industrial logistics corridors and a fast-growing bioscience and healthcare research base in downtown Phoenix, regional growth has shifted strongly toward high-value manufacturing and B2B operations.",
-        sources: [0],
+        text: "Arizona Commerce Authority semiconductor industry documentation highlights major fabrication and supplier investments across Greater Phoenix, expanding demand for clean internal portals, inventory tools, and B2B operational visibility.",
+        sources: [1],
       },
       {
         text: "Working remotely, this studio helps Phoenix suppliers, distributors, and B2B teams replace manual spreadsheets with custom Next.js portals, operational dashboards, n8n workflows, and consultation-scoped RTX GPU tests.",
@@ -833,9 +858,9 @@ const CITY_RECORDS: CityLocalContent[] = [
     ],
     sources: [
       {
-        title: "Greater Phoenix Semiconductor, Industrial Logistics & Bioscience Sectors",
-        url: "https://www.gpec.org/",
-        publisher: "Greater Phoenix Economic Council (GPEC)",
+        title: "Phoenix-Mesa-Glendale, AZ Economy at a Glance",
+        url: "https://www.bls.gov/eag/eag.az_phoenix_msa.htm",
+        publisher: "U.S. Bureau of Labor Statistics",
         accessed: "2026-11-24",
       },
       {

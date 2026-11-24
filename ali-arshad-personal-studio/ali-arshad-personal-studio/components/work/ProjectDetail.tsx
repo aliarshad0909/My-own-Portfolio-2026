@@ -9,7 +9,7 @@ import { TrackedLink } from "@/components/ui/TrackedLink";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
-import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
+import { SERVICE_HUBS, spokesForProject } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
 import { servicesForProject } from "@/lib/services";
 import { GPU_COMPUTE_PATH, GPU_RELATED_PROJECT_SLUGS } from "@/lib/gpu-compute";
@@ -49,6 +49,7 @@ export function ProjectDetail({ project, variant }: Props) {
   const statusNote = STATUS_NOTE[project.status];
   const services = servicesForProject(project.slug);
   const hubs = hubsForProject(project.slug);
+  const spokes = spokesForProject(project.slug);
   const gpuRelated = isGpuRelatedProject(project.slug);
   const { prev, next } = isCaseStudy ? neighbours(project.slug) : { prev: undefined, next: undefined };
 
@@ -169,6 +170,19 @@ export function ProjectDetail({ project, variant }: Props) {
                           <Link href={GPU_COMPUTE_PATH}>RTX GPU compute rental</Link>
                         </>
                       ) : null}
+                    </dd>
+                  </div>
+                ) : null}
+                {spokes.length > 0 ? (
+                  <div>
+                    <dt>Service specializations</dt>
+                    <dd>
+                      {spokes.map(({ hub, spoke }, i) => (
+                        <span key={`${hub.slug}/${spoke.slug}`}>
+                          {i > 0 ? ", " : ""}
+                          <Link href={`/services/${hub.slug}/${spoke.slug}`}>{spoke.h1}</Link>
+                        </span>
+                      ))}
                     </dd>
                   </div>
                 ) : null}

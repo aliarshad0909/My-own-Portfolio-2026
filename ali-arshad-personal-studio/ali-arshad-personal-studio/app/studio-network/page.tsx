@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { StudioNetworkForm } from "@/components/network/StudioNetworkForm";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
@@ -13,7 +12,6 @@ import { pageMetadata } from "@/lib/seo";
 import { getKeyword } from "@/lib/seo/keyword-registry";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { SITE, activeSocials } from "@/lib/site";
-import { breadcrumbSchema } from "@/lib/structured-data";
 import { VERIFIED_COLLABORATORS } from "@/lib/studio-network";
 import { isNetworkDeliveryConfigured } from "@/lib/studio-network-server";
 
@@ -82,12 +80,6 @@ export default function StudioNetworkPage() {
 
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Studio Network", path: "/studio-network" },
-        ])}
-      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },

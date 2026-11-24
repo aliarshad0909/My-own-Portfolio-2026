@@ -7,28 +7,21 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ArrowLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { siteBaseUrl } from "@/lib/site";
+import { webApplicationSchema } from "@/lib/structured-data";
 import { TOOLS, type ToolDef } from "@/lib/tools/catalog";
-
-function webAppSchema(tool: ToolDef) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: tool.h1,
-    description: tool.lead,
-    url: new URL(`/tools/${tool.slug}`, siteBaseUrl()).toString(),
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Any (web browser)",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  };
-}
 
 export function ToolPageShell({ tool, children }: { tool: ToolDef; children: ReactNode }) {
   const otherTools = TOOLS.filter((t) => t.slug !== tool.slug);
 
   return (
     <>
-      <JsonLd data={webAppSchema(tool)} />
+      <JsonLd
+        data={webApplicationSchema({
+          slug: tool.slug,
+          name: tool.h1,
+          description: tool.lead,
+        })}
+      />
       <Breadcrumbs
         items={[
           { name: "Home", path: "/" },

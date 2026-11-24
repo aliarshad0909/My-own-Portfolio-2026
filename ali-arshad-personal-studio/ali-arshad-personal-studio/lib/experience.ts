@@ -48,7 +48,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
     id: "brand-management",
     area: "Brand Management",
     summary:
-      "More than two years managing brand work for US-based brands, keeping content, campaigns and communication consistent and moving.",
+      "Hands-on experience managing brand work for US-based brands, keeping content, campaigns and communication consistent and moving.",
     highlights: ["Brand and content management", "Social media and email marketing", "Campaign and advertising coordination"],
     kind: "work",
     thread: "creative",

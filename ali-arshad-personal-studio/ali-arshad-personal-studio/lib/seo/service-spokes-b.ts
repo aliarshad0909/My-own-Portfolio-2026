@@ -53,6 +53,10 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Video Editing", "ffmpeg / ffprobe", "H.264 +faststart", "VP9", "9:16 / 4:5 / 16:9"],
+      audience: "Product brands, founders, and marketing leads turning raw launch or product footage into sharp, channel-ready edits.",
+      quickAnswer:
+        "Brand video editing pairs hook-first storytelling and on-brand captions with probed H.264 (+faststart), VP9, and social-ratio exports ready for fast web embeds and paid feeds.",
+      relatedResource: { href: "/resources/motion-graphics-pricing", label: "Read: What drives video & motion production cost?" },
       scopeNotice:
         "Cleared client showreel edits are currently being prepared for public display. The technical web-encoding pipeline behind delivery is verified and documented in the Motion Production case study.",
       faqs: [
@@ -104,6 +108,10 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Motion Graphics", "SVG Brand Assets", "ffmpeg", "H.264 / VP9", "WebP Posters"],
+      audience: "Software, SaaS, and consumer product brands needing clear UI explainers and restrained brand motion that load fast on the web.",
+      quickAnswer:
+        "Motion graphics and product explainers clarify complex workflows in 15–45 seconds, delivered with storyboard contact sheets, reduced-motion poster stills, and web-optimized encodes.",
+      relatedResource: { href: "/resources/motion-graphics-pricing", label: "Read: Motion graphics pricing & scope guide" },
       scopeNotice:
         "Finished cleared motion samples are in preparation for public listing. Delivery encoding and storyboard contact-sheet automation are live and verified in the Motion Production demo.",
       faqs: [
@@ -205,6 +213,9 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Short-Form Editing", "Motion Graphics", "SVG Social Templates", "ffmpeg", "Paid Social Specs"],
+      audience: "DTC ecommerce and consumer brands running Reels, TikTok, Shorts, and paid social tests that need cohesive creative variations.",
+      quickAnswer:
+        "Social advertising creatives deliver brand-locked 9:16 and 4:5 short-form edits with modular opening hooks and safe-zone captions — built for clean creative testing without agency retainers.",
       scopeNotice:
         "Cleared client ad reels are pending publication permission. Brand-system social templates and encoding tooling are documented in the Halcyon and Motion Production case studies.",
       faqs: [
@@ -259,6 +270,10 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Vector SVG", "WCAG 2.2 Contrast", "Modular Type Scale", "CSS Design Tokens", "Brand Guidelines"],
+      audience: "Founders, launching brands, and growing companies replacing a standalone logo with a developer-ready visual system.",
+      quickAnswer:
+        "Brand identity design produces vector SVG lockups, WCAG-checked colour tokens, modular type scales, and applied web/social/email templates you own outright.",
+      relatedResource: { href: "/resources/brand-style-guide", label: "Read: What a practical brand style guide includes" },
       faqs: [
         { q: "Why test WCAG colour contrast during identity design?", a: "In the Halcyon build, our initial accent colour measured 3.36:1 on paper — below the 4.5:1 requirement for readable body text. Catching that upfront saves painful redesigns once your website launches." },
         { q: "What files do we receive at the end?", a: "Clean vector SVG lockups, CSS custom-property tokens, a documented style guide and applied starter templates — all fully owned by your company." },
@@ -272,7 +287,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       keywordId: "spec-social-media-management",
       title: "Social Media Management & Channel Operations",
       h1: "Social media management",
-      lead: "Consistent, brand-aligned social media strategy, template systems and publishing coordination — backed by 2+ years managing US-based brands and HubSpot Social Media Certification.",
+      lead: "Consistent, brand-aligned social media strategy, template systems and publishing coordination — backed by hands-on US brand-management experience and HubSpot Social Media Certification.",
       heroVisual: {
         src: "/images/credentials/hubspot-social-media-certified.webp",
         alt: "HubSpot Academy Social Media Certification awarded to Ali Arshad, valid through December 2028",
@@ -283,7 +298,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       },
       body: [
         "Most small brands oscillate between bursts of daily posting and six weeks of silence. Consistency breaks down when strategy, visual templates and publishing coordination sit in different hands.",
-        "Grounded in over two years of hands-on brand management for US-based brands and active HubSpot Academy Social Media Certification, I bring structured content pillars, reusable brand templates and steady publishing operations.",
+        "Grounded in hands-on brand management experience for US-based brands and active HubSpot Academy Social Media Certification, I bring structured content pillars, reusable brand templates and steady publishing operations.",
       ],
       problems: [
         "Social channels go quiet whenever founders get busy with operations",
@@ -308,8 +323,11 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["HubSpot Inbound Methodology", "SVG Social Templates", "Editorial Calendars", "Short-Form Video", "Analytics"],
+      audience: "US and international product brands needing consistent social media operations without hiring an in-house team.",
+      quickAnswer:
+        "Social media management combines content pillars, brand-locked visual templates, and predictable approval-gated publishing — backed by hands-on US brand-management experience and active HubSpot Social Media Certification.",
       faqs: [
-        { q: "What verified training backs this service?", a: "Over two years managing brand, social and campaign operations for US-based brands, alongside an active HubSpot Academy Social Media Certification (valid through December 2028)." },
+        { q: "What verified training backs this service?", a: "Hands-on brand, social and campaign coordination experience for US-based brands, alongside an active HubSpot Academy Social Media Certification (valid through December 2028)." },
         { q: "Do we approve posts before they go live?", a: "Always. Monthly or bi-weekly batches go through a clean sign-off step so your voice and product claims stay accurate." },
         { q: "Can you pair social management with short-form video edits?", a: "Yes — creative production and social management sit under the same roof so static and video assets stay cohesive." },
       ],
@@ -357,6 +375,9 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Table-Based HTML Email", "Inline CSS", "Outlook Conditionals", "Resend / ESPs", "n8n Triggers"],
+      audience: "Ecommerce and B2B brands activating dormant subscriber lists with reliable lifecycle flows and client-safe HTML email templates.",
+      quickAnswer:
+        "Email marketing support delivers mapped welcome and nurture sequences alongside 600px table-based HTML templates tested for Gmail, Apple Mail, and Outlook with plain-text fallbacks.",
       faqs: [
         { q: "Why build table-based HTML emails instead of modern CSS Flexbox?", a: "Desktop Outlook still renders emails with the Word engine, which breaks Flexbox and strips external stylesheets. Clean 600px tables with inline styles ensure every recipient sees a sharp layout." },
         { q: "Do templates include plain-text versions?", a: "Yes — every HTML template ships with a clean plain-text alternative and structured hidden preheader for inbox previews." },
@@ -406,6 +427,9 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Search Intent Mapping", "Editorial Calendars", "HubSpot Inbound", "Technical SEO", "Brand Voice"],
+      audience: "Service businesses, SaaS teams, and product brands aligning search intent, editorial voice, and conversion pages into one system.",
+      quickAnswer:
+        "Content strategy maps real buyer questions to single canonical destinations — eliminating duplicate-intent drift while connecting guides, social channels, and landing pages cleanly.",
       faqs: [
         { q: "Do you guarantee first-page Google rankings?", a: "Never. Nobody controls Google's algorithm honestly. What structured content strategy delivers is clear intent alignment, clean technical architecture and genuinely useful pages worth linking to." },
         { q: "How does content strategy connect to web development?", a: "Because I also engineer Next.js sites, heading hierarchy, internal links, structured data and page templates are built cleanly around the content plan." },
@@ -455,6 +479,9 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Google Ads Certified", "Next.js Landing Pages", "Ad Creative Kits", "Conversion Tracking", "CRM Sync"],
+      audience: "Founders and small brands running paid campaigns who need tight alignment between ad setup, creatives, fast landing pages, and lead tracking.",
+      quickAnswer:
+        "Paid advertising support pairs active Google Ads AI-Powered Performance Ads Certification with message-matched Next.js landing pages, creative variations, and clean conversion tracking inside your own ad accounts.",
       faqs: [
         { q: "Do we keep ownership of our Google Ads and Meta ad accounts?", a: "Yes. Campaigns run inside your own ad accounts with transparent access and billing directly under your control." },
         { q: "Are you a large media-buying agency?", a: "No — I operate as an independent studio coordinating campaign structure, ad creative and conversion landing pages for founders and small brands who want tight alignment without agency retainers." },
@@ -507,9 +534,13 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["RFQ Specifications", "Supplier Shortlisting", "Incoterm Normalisation", "Lantern Costing", "Supply Chain BBA"],
+      audience: "Ecommerce sellers and physical product brands vetting new manufacturers or benchmarking backup suppliers.",
+      quickAnswer:
+        "Supplier research delivers standardised RFQs and direct-contact factory shortlists with transparent MOQ, lead-time, and sample criteria — you contract directly with suppliers with zero hidden brokerage markups.",
       scopeNotice:
         "Research and coordination only: feasibility is confirmed against product and import restrictions before work begins, and third-party factory quality or customs compliance is never guaranteed on a supplier's behalf.",
       relatedTool: { href: "/tools/landed-cost-calculator", label: "Check margin with the Landed Cost Calculator" },
+      relatedProduct: { href: "/products/sourceos", label: "Inspect SourceOS supplier & RFQ control tower" },
       faqs: [
         { q: "Do I get direct contact details for every shortlisted supplier?", a: "Yes. You keep full transparency and contract directly with whichever supplier you choose — zero hidden commission markups." },
         { q: "Can you research backup suppliers for a product we already sell?", a: "Yes — benchmarking an incumbent supplier against vetted alternatives on true landed cost and lead time is a common engagement." },
@@ -602,7 +633,11 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["Relative Weighted Scoring", "EXW / FOB / CIF / DDP", "Integer-Cent Maths", "Lantern Architecture"],
-      relatedTool: { href: "/tools/landed-cost-calculator", label: "Run a quick landed-cost check" },
+      audience: "Procurement leads and product founders comparing multiple supplier quotes across mismatched incoterms and lead times.",
+      quickAnswer:
+        "Supplier comparison normalises mixed EXW/FOB/CIF/DDP quotes onto one baseline and ranks factories transparently across landed cost, lead time, quality, reliability, and responsiveness.",
+      relatedTool: { href: "/tools/supplier-comparison-calculator", label: "Compare quotes in the Supplier Comparison Calculator" },
+      relatedProduct: { href: "/products/sourceos", label: "Inspect SourceOS side-by-side RFQ quote comparison" },
       faqs: [
         { q: "Why use relative scoring instead of a fixed 1–10 rubric?", a: "Fixed rubrics let evaluators invent arbitrary grades. Relative scoring ranks your actual shortlisted suppliers against each other across measurable inputs so trade-offs stay honest." },
         { q: "Can we change the weights for our industry?", a: "Yes — a fast-fashion brand may weight speed higher than a seasonal homewares brand. Every weight is configurable and visible." },
@@ -652,9 +687,13 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         ],
       },
       stack: ["EXW / FOB / CIF / DDP", "Volumetric Weight", "Uplift Multiplier", "Integer-Cent Models", "Custom Web Tools"],
+      audience: "Importers, DTC product brands, and first-time sourcers protecting retail margin before wiring factory deposits.",
+      quickAnswer:
+        "Landed-cost analysis models goods value, actual vs. volumetric freight, estimated tariffs, insurance, and port fees across incoterms — giving you an exact per-unit uplift multiplier before ordering.",
       scopeNotice:
         "Planning and financial modelling only: estimated duty rates are for margin planning and must always be confirmed with a licensed customs broker before importing.",
       relatedTool: { href: "/tools/landed-cost-calculator", label: "Try the free Landed Cost Calculator now" },
+      relatedResource: { href: "/resources/what-is-landed-cost", label: "Read: What is landed cost & how to calculate it" },
       faqs: [
         { q: "What is the landed-cost uplift factor?", a: "It is your total landed cost divided by the raw goods value. An uplift factor of 1.35 means a $10 factory unit actually costs $13.50 landed at your door — and your pricing must clear $13.50, not $10." },
         { q: "Why does volumetric weight matter so much?", a: "Carriers charge on the greater of actual gross weight and dimensional (volumetric) weight. Bulky packaging can double freight cost even when the product is light." },

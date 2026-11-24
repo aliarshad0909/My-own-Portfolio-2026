@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Faq } from "@/components/ui/Faq";
-import type { FaqItem } from "@/lib/structured-data";
+import { personSchema, profilePageSchema, type FaqItem } from "@/lib/structured-data";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
@@ -81,6 +82,8 @@ const FAQ_ITEMS: FaqItem[] = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={profilePageSchema()} />
+      <JsonLd data={personSchema()} />
       <PageHero
         eyebrow="About"
         title={

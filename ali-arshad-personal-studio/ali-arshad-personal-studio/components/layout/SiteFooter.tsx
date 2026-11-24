@@ -73,6 +73,9 @@ export function SiteFooter() {
               <Link href="/products">Product Directory</Link>
             </li>
             <li>
+              <Link href="/games">Games &amp; Experiments</Link>
+            </li>
+            <li>
               <Link href="/tools">Calculator Centre</Link>
             </li>
             <li>
@@ -137,6 +140,7 @@ export function SiteFooter() {
         <Link href="/industries">Industries</Link>
         <Link href="/locations">US Coverage</Link>
         <Link href="/studio-network">Studio Network</Link>
+        <Link href="/privacy">Privacy</Link>
       </div>
 
       <div className="container site-footer__base">
