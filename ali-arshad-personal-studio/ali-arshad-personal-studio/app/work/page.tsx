@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { PageHero } from "@/components/ui/PageHero";
 import { WorkGallery } from "@/components/work/WorkGallery";
 import { PLANNED, PROJECTS } from "@/lib/projects";
@@ -7,7 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Work: Web, AI Automation, 3D & Motion Portfolio",
-  description: "Portfolio of creative production, 3D and motion, branding, web and software, AI automation and business projects by Ali Arshad.",
+  description: "Explore 14 studio demonstration projects across Next.js web apps, live SaaS sandboxes, AI agents, n8n workflows, branding, sourcing, and media pipelines — filterable by service, stack, and live status.",
   path: "/work",
 });
 
@@ -15,6 +16,12 @@ export default function WorkPage() {
   const hasSampleMedia = PROJECTS.some((p) => p.usesSampleMedia === true);
   return (
     <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Work", path: "/work" },
+        ]}
+      />
       <PageHero
         eyebrow="Work"
         title={

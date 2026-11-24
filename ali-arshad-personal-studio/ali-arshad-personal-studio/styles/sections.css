@@ -5188,3 +5188,102 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ── Work Project Finder & Homepage Studio Directory Strip ─────────────── */
+.work-finder {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.work-finder__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.work-finder__field {
+  display: grid;
+  gap: 6px;
+}
+
+.work-finder__label {
+  color: var(--muted);
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.work-finder__input,
+.work-finder__select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.work-finder__input::placeholder {
+  color: var(--muted);
+}
+
+.work-finder__input:focus-visible,
+.work-finder__select:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+  border-color: var(--coral-line);
+}
+
+.work-finder__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.work-finder__bottom .filter-bar {
+  margin-bottom: 0;
+}
+
+.work-finder__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.work-finder__count {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.work-finder__count strong {
+  color: var(--text);
+}
+
+.home-directory-strip {
+  margin-top: 28px;
+  display: grid;
+  gap: 14px;
+}
+
+@media (max-width: 960px) {
+  .work-finder__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .work-finder__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

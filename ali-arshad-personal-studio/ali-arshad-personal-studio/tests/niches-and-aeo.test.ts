@@ -10,6 +10,7 @@ import { isIndexable } from "@/lib/seo/publication";
 import { brokenLinks } from "@/lib/seo/routes";
 import { SERVICE_HUBS, allSpokes, getSpoke, spokesForProject } from "@/lib/seo/service-hubs";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
+import { AVAILABILITY_OPTIONS, STACK_FILTERS, filterProjects } from "@/lib/work-finder";
 import {
   articleSchema,
   breadcrumbSchema,
@@ -191,5 +192,63 @@ describe("AI discovery machine-readable llms.txt", () => {
     assert.ok(content.includes("https://stock.aliarshad.co"), "missing live StockFlow URL");
     assert.match(content, /studio demonstrations/i);
     assert.match(content, /no physical regional branch offices/i);
+  });
+});
+
+describe("work project finder (strictly backed by real PROJECTS data)", () => {
+  it("backs every stack filter and availability filter with at least one real project", () => {
+    for (const sf of STACK_FILTERS) {
+      const hits = filterProjects(PROJECTS, {
+        category: "All",
+        serviceId: null,
+        availability: "all",
+        stackId: sf.id,
+        query: "",
+      });
+      assert.ok(hits.length > 0, `stack filter "${sf.id}" matched 0 projects`);
+    }
+
+    for (const opt of AVAILABILITY_OPTIONS) {
+      const hits = filterProjects(PROJECTS, {
+        category: "All",
+        serviceId: null,
+        availability: opt.id,
+        stackId: "all",
+        query: "",
+      });
+      assert.ok(hits.length > 0, `availability filter "${opt.id}" matched 0 projects`);
+    }
+  });
+
+  it("filters accurately by live public sandbox, service area, technology stack, and keyword search", () => {
+    const live = filterProjects(PROJECTS, {
+      category: "All",
+      serviceId: null,
+      availability: "live-demo",
+      stackId: "all",
+      query: "",
+    });
+    assert.deepEqual(
+      live.map((p) => p.slug).sort(),
+      ["pipelineos-crm", "stockflow-inventory"],
+    );
+
+    const n8n = filterProjects(PROJECTS, {
+      category: "All",
+      serviceId: "ai-automation",
+      availability: "all",
+      stackId: "automation-ai",
+      query: "bm25",
+    });
+    assert.deepEqual(n8n.map((p) => p.slug), ["tideline-support-agent"]);
+
+    const inDev = filterProjects(PROJECTS, {
+      category: "All",
+      serviceId: null,
+      availability: "in-development",
+      stackId: "media-3d",
+      query: "",
+    });
+    assert.deepEqual(inDev.map((p) => p.slug), ["blender-product-visualisation"]);
   });
 });

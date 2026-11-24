@@ -10,6 +10,7 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { locationsForServiceHub } from "@/lib/geo/location-connections";
 import { getProject, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHubEnrichment } from "@/lib/seo/service-enrichment";
@@ -26,6 +27,7 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
     .map((slug) => getProject(slug))
     .filter((p): p is Project => p !== undefined);
   const siblings = hub.spokes.filter((s) => s.slug !== spoke.slug && shouldRender(s.publicationState));
+  const locationMatches = locationsForServiceHub(hub.slug, 6);
   const hasPublicLiveDemo = projects.some((p) => Boolean(p.liveUrl));
   const proofSummary = hasPublicLiveDemo
     ? "Includes publicly deployed live sandbox demonstration"
@@ -353,6 +355,37 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
           </ul>
         </div>
       </section>
+
+      {locationMatches.states.length > 0 ? (
+        <section className="section section--tight" aria-labelledby="spoke-locations">
+          <div className="container">
+            <div className="panel location-fit-strip">
+              <p className="eyebrow eyebrow--plain">Remote US coverage</p>
+              <h2 className="section-title section-title--sm" id="spoke-locations">
+                Markets where {spoke.h1} fits local operations
+              </h2>
+              <p className="section-sub" style={{ marginTop: "6px" }}>
+                Delivered remotely nationwide with scheduled US time-zone overlap — no physical regional branch offices claimed.
+              </p>
+              <div className="location-pill-list" style={{ marginTop: "14px" }}>
+                {locationMatches.states.map((st) => (
+                  <Link key={st.slug} href={`/locations/${st.slug}`} className="location-pill">
+                    {st.name}
+                  </Link>
+                ))}
+                {locationMatches.cities.map((c) => (
+                  <Link key={`${c.stateSlug}-${c.slug}`} href={`/locations/${c.stateSlug}/${c.slug}`} className="location-pill location-pill--metro">
+                    {c.name}
+                  </Link>
+                ))}
+                <Link href="/locations" className="location-pill location-pill--all">
+                  All 50 states + D.C. →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <ContactCTA
         standalone

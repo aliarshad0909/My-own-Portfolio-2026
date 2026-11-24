@@ -1,13 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ProjectCard } from "@/components/work/ProjectCard";
 import { ButtonLink } from "@/components/ui/Button";
-import { PROJECT_CATEGORIES, type Project, type ProjectCategory } from "@/lib/projects";
+import { ProjectCard } from "@/components/work/ProjectCard";
+import { PROJECT_CATEGORIES, type Project } from "@/lib/projects";
 import { SERVICES } from "@/lib/services";
+import {
+  AVAILABILITY_OPTIONS,
+  STACK_FILTERS,
+  filterProjects,
+  type AvailabilityFilter,
+  type CategoryFilter,
+  type StackFilterId,
+} from "@/lib/work-finder";
 
-type Filter = "All" | ProjectCategory;
-const FILTERS: Filter[] = ["All", ...PROJECT_CATEGORIES];
+const CATEGORY_FILTERS: CategoryFilter[] = ["All", ...PROJECT_CATEGORIES];
 
 /**
  * Reads ?service=<id> so "View related work" on /services lands on the right
@@ -24,8 +31,11 @@ function serviceFromLocation(): string | null {
 }
 
 export function WorkGallery({ projects }: { projects: Project[] }) {
-  const [filter, setFilter] = useState<Filter>("All");
+  const [category, setCategory] = useState<CategoryFilter>("All");
   const [serviceId, setServiceId] = useState<string | null>(null);
+  const [availability, setAvailability] = useState<AvailabilityFilter>("all");
+  const [stackId, setStackId] = useState<StackFilterId>("all");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     setServiceId(serviceFromLocation());
@@ -33,48 +43,137 @@ export function WorkGallery({ projects }: { projects: Project[] }) {
 
   const service = serviceId ? SERVICES.find((s) => s.id === serviceId) : undefined;
 
-  const visible = useMemo(() => {
-    let list = projects;
-    if (service) list = list.filter((p) => service.projectSlugs.includes(p.slug));
-    if (filter !== "All") list = list.filter((p) => p.categories.includes(filter));
-    return list;
-  }, [filter, projects, service]);
+  const visible = useMemo(
+    () =>
+      filterProjects(projects, {
+        category,
+        serviceId,
+        availability,
+        stackId,
+        query,
+      }),
+    [availability, category, projects, query, serviceId, stackId],
+  );
 
-  const clearService = () => {
-    setServiceId(null);
-    // Drop the parameter so a refresh or a shared link matches what is on screen.
+  const hasActiveFilters =
+    category !== "All" ||
+    serviceId !== null ||
+    availability !== "all" ||
+    stackId !== "all" ||
+    query.trim() !== "";
+
+  const syncServiceUrl = (nextId: string | null) => {
+    setServiceId(nextId);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
-      url.searchParams.delete("service");
+      if (nextId) url.searchParams.set("service", nextId);
+      else url.searchParams.delete("service");
       window.history.replaceState({}, "", url);
     }
   };
 
+  const resetAll = () => {
+    setCategory("All");
+    setAvailability("all");
+    setStackId("all");
+    setQuery("");
+    syncServiceUrl(null);
+  };
+
   return (
     <div className="work-gallery">
-      {service ? (
-        <div className="active-filter" role="status">
-          <span>
-            Showing work behind <strong>{service.title}</strong>
-          </span>
-          <button type="button" className="active-filter__clear" onClick={clearService}>
-            Show all projects
-          </button>
+      <div className="panel work-finder" aria-label="Project finder controls">
+        <div className="work-finder__row">
+          <label className="work-finder__field">
+            <span className="work-finder__label">Search builds &amp; tech</span>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="e.g. PostgreSQL, n8n, BM25, CRM, Blender..."
+              className="work-finder__input"
+              aria-label="Search portfolio projects by title, problem, or technology"
+            />
+          </label>
+
+          <label className="work-finder__field">
+            <span className="work-finder__label">Service area</span>
+            <select
+              value={serviceId ?? ""}
+              onChange={(e) => syncServiceUrl(e.target.value || null)}
+              className="work-finder__select"
+              aria-label="Filter projects by studio service"
+            >
+              <option value="">All 6 studio services</option>
+              {SERVICES.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.title}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="work-finder__field">
+            <span className="work-finder__label">Technology stack</span>
+            <select
+              value={stackId}
+              onChange={(e) => setStackId(e.target.value as StackFilterId)}
+              className="work-finder__select"
+              aria-label="Filter projects by technology stack"
+            >
+              {STACK_FILTERS.map((sf) => (
+                <option key={sf.id} value={sf.id}>
+                  {sf.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="work-finder__field">
+            <span className="work-finder__label">Demo availability</span>
+            <select
+              value={availability}
+              onChange={(e) => setAvailability(e.target.value as AvailabilityFilter)}
+              className="work-finder__select"
+              aria-label="Filter projects by demo status"
+            >
+              {AVAILABILITY_OPTIONS.map((opt) => (
+                <option key={opt.id} value={opt.id}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
-      ) : null}
 
-      <div className="filter-bar" role="group" aria-label="Filter projects by category">
-        {FILTERS.map((f) => (
-          <button key={f} type="button" className={`filter-chip ${filter === f ? "is-active" : ""}`.trim()} aria-pressed={filter === f} onClick={() => setFilter(f)}>
-            {f}
-          </button>
-        ))}
+        <div className="work-finder__bottom">
+          <div className="filter-bar" role="group" aria-label="Filter projects by category">
+            {CATEGORY_FILTERS.map((f) => (
+              <button
+                key={f}
+                type="button"
+                className={`filter-chip ${category === f ? "is-active" : ""}`.trim()}
+                aria-pressed={category === f}
+                onClick={() => setCategory(f)}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          <div className="work-finder__meta">
+            <span className="work-finder__count" role="status" aria-live="polite">
+              Showing <strong>{visible.length}</strong> of {projects.length} studio builds
+              {service ? ` · ${service.shortTitle}` : ""}
+            </span>
+            {hasActiveFilters ? (
+              <button type="button" className="active-filter__clear" onClick={resetAll}>
+                Reset filters
+              </button>
+            ) : null}
+          </div>
+        </div>
       </div>
-
-      <p className="visually-hidden" role="status" aria-live="polite">
-        {visible.length === 1 ? "1 project shown" : `${visible.length} projects shown`} for {filter}
-        {service ? ` within ${service.title}` : ""}.
-      </p>
 
       {visible.length > 0 ? (
         <div className="project-grid">
@@ -84,21 +183,13 @@ export function WorkGallery({ projects }: { projects: Project[] }) {
         </div>
       ) : (
         <div className="empty-state">
-          <h2 className="empty-state__title">
-            Nothing in {filter}
-            {service ? ` for ${service.title}` : ""} yet
-          </h2>
-          <p>Work in this category is being prepared for the portfolio. If you have a project like this in mind, I&rsquo;m happy to talk it through.</p>
+          <h2 className="empty-state__title">No matching builds for that filter combination</h2>
+          <p>
+            Try clearing one of the active filters to see related studio demonstrations, or reach out directly if you have a specific build in mind.
+          </p>
           <div className="empty-state__actions">
-            <button
-              type="button"
-              className="btn btn--secondary btn--md"
-              onClick={() => {
-                setFilter("All");
-                clearService();
-              }}
-            >
-              <span>Show all projects</span>
+            <button type="button" className="btn btn--secondary btn--md" onClick={resetAll}>
+              <span>Show all {projects.length} projects</span>
             </button>
             <ButtonLink href="/contact">Discuss a project</ButtonLink>
           </div>

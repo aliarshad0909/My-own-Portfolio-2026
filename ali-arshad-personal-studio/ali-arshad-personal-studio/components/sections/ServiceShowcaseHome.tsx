@@ -57,6 +57,35 @@ export function ServiceShowcaseHome() {
             </li>
           ))}
         </ul>
+
+        <div className="panel home-directory-strip reveal" aria-label="Explore studio sections">
+          <div>
+            <p className="eyebrow eyebrow--plain">Navigate the studio</p>
+            <p className="section-sub" style={{ marginTop: "4px" }}>
+              Jump straight to service comparisons, interactive product demos, free calculators, technical guides, or remote US coverage.
+            </p>
+          </div>
+          <div className="location-pill-list">
+            <Link href="/services#compare-services" className="location-pill location-pill--all">
+              Compare services &amp; 26 niches →
+            </Link>
+            <Link href="/work" className="location-pill">
+              Project Finder (14 builds)
+            </Link>
+            <Link href="/products" className="location-pill">
+              12 SaaS Product Demos
+            </Link>
+            <Link href="/tools" className="location-pill">
+              10 Free Calculators
+            </Link>
+            <Link href="/resources" className="location-pill">
+              15 Guides &amp; Resources
+            </Link>
+            <Link href="/locations" className="location-pill">
+              Remote US Coverage
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
