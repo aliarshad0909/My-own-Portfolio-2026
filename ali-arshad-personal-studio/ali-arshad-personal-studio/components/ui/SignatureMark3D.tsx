@@ -1,24 +1,28 @@
 import { MotionMedia } from "@/components/ui/MotionMedia";
 
 type Props = {
-  /** Layout presentation preset for the restored original 3D "A" mark. */
-  variant?: "cta" | "hero-badge" | "contact";
+  /** Layout scale preset for the existing sculpted 3D "A" mark. */
+  variant?: "cta" | "contact";
   className?: string;
 };
 
 /**
- * Restored original sculpted 3D "A" studio mark (`/images/signature/mark-3d.webp`
- * paired with its rendered `/videos/mark-3d.webm` & `.mp4` motion loop).
+ * Existing sculpted 3D "A" studio mark (`/images/signature/mark-3d.webp`
+ * paired with `/videos/mark-3d.webm` & `.mp4`) placed directly in open visual
+ * space — never inside a card, bordered box, tile, or cropped frame.
  *
- * - Pure black render is screen-blended onto obsidian + warm coral glow halos.
+ * - Screen-blended directly into warm coral/copper/dark surroundings so the
+ *   pure-black render backdrop disappears with zero harsh halo or box edge.
+ * - Subtle warm ambient light and soft contact shadow sit behind the mark.
  * - Automatic static WebP fallback under `prefers-reduced-motion: reduce`, on
- *   narrow mobile viewports (no heavy video download), or if autoplay is blocked.
+ *   narrow mobile viewports, or if autoplay is blocked.
  * - Decorative only (`aria-hidden="true"`), zero keyboard traps.
  */
 export function SignatureMark3D({ variant = "cta", className = "" }: Props) {
   return (
     <div className={`sig3d sig3d--${variant} ${className}`.trim()} aria-hidden="true">
-      <span className="sig3d__halo" />
+      <span className="sig3d__ambient" />
+      <span className="sig3d__shadow" />
       <div className="sig3d__media">
         <MotionMedia
           still={{

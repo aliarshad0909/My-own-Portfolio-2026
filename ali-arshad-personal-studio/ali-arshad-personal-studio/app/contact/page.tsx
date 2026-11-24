@@ -49,63 +49,65 @@ export default function ContactPage() {
     <>
       <section className="page-hero contact" aria-labelledby="contact-title">
         <div className="container contact__inner">
-          <div className="contact__intro enter">
-            <p className="eyebrow">Contact</p>
-            <h1 className="page-title" id="contact-title">
-              Let&rsquo;s talk about <span className="accent">your project</span>
-            </h1>
-            <p className="lead">
-              Tell me what you&rsquo;re building, what&rsquo;s in the way, and when you need it. I reply with honest thoughts on fit, scope and next steps,
-              including when the right answer is a smaller project than you had in mind.
-            </p>
+          <div className="contact__intro">
+            <div className="enter">
+              <p className="eyebrow">Contact</p>
+              <h1 className="page-title" id="contact-title">
+                Let&rsquo;s talk about <span className="accent">your project</span>
+              </h1>
+              <p className="lead">
+                Tell me what you&rsquo;re building, what&rsquo;s in the way, and when you need it. I reply with honest thoughts on fit, scope and next steps,
+                including when the right answer is a smaller project than you had in mind.
+              </p>
 
-            <ul className="contact__details">
-              {SITE.email ? (
-                <li>
-                  <Icon name="mail" size={20} />
-                  <span>
-                    <small>Email</small>
-                    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-                  </span>
-                </li>
-              ) : null}
-              {SITE.availability ? (
-                <li>
-                  <Icon name="clock" size={20} />
-                  <span>
-                    <small>Availability</small>
-                    {SITE.availability}
-                  </span>
-                </li>
-              ) : null}
-              <li>
-                <Icon name="globe" size={20} />
-                <span>
-                  <small>Working with</small>
-                  Clients internationally, remotely
-                </span>
-              </li>
-              <li>
-                <Icon name="layers" size={20} />
-                <span>
-                  <small>Services</small>
-                  <Link href="/services">{SERVICES.length} studio areas</Link>{" "}
-                  + <Link href={GPU_COMPUTE_PATH}>RTX GPU compute consultation</Link>
-                </span>
-              </li>
-            </ul>
-
-            {socials.length > 0 ? (
-              <ul className="social-list" aria-label="Professional profiles">
-                {socials.map((s) => (
-                  <li key={s.label}>
-                    <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (opens in a new tab)`}>
-                      <Icon name={s.icon} size={20} />
-                    </a>
+              <ul className="contact__details">
+                {SITE.email ? (
+                  <li>
+                    <Icon name="mail" size={20} />
+                    <span>
+                      <small>Email</small>
+                      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+                    </span>
                   </li>
-                ))}
+                ) : null}
+                {SITE.availability ? (
+                  <li>
+                    <Icon name="clock" size={20} />
+                    <span>
+                      <small>Availability</small>
+                      {SITE.availability}
+                    </span>
+                  </li>
+                ) : null}
+                <li>
+                  <Icon name="globe" size={20} />
+                  <span>
+                    <small>Working with</small>
+                    Clients internationally, remotely
+                  </span>
+                </li>
+                <li>
+                  <Icon name="layers" size={20} />
+                  <span>
+                    <small>Services</small>
+                    <Link href="/services">{SERVICES.length} studio areas</Link>{" "}
+                    + <Link href={GPU_COMPUTE_PATH}>RTX GPU compute consultation</Link>
+                  </span>
+                </li>
               </ul>
-            ) : null}
+
+              {socials.length > 0 ? (
+                <ul className="social-list" aria-label="Professional profiles">
+                  {socials.map((s) => (
+                    <li key={s.label}>
+                      <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (opens in a new tab)`}>
+                        <Icon name={s.icon} size={20} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
 
             <div className="contact__brand-pair">
               <div className="portrait-frame portrait-frame--contact">
@@ -117,7 +119,7 @@ export default function ContactPage() {
                   sizes="(min-width: 1024px) 320px, 60vw"
                 />
               </div>
-              <div className="contact__mark-card panel">
+              <div className="contact__mark-space">
                 <SignatureMark3D variant="contact" />
                 <p className="fine-print">Ali Arshad Personal Studio · Remote nationwide &amp; international</p>
               </div>
