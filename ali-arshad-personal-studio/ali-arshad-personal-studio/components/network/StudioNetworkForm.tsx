@@ -365,8 +365,8 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
           aria-describedby={describedBy("consent")}
         />
         <label htmlFor="net-consent">
-          I agree that Ali Arshad may review and store these details solely to evaluate independent project collaboration. Nothing I submit will be
-          published publicly without my explicit written permission. *
+          I agree that Ali Arshad may review and store these details solely to evaluate independent project collaboration, as described in the{" "}
+          <a href="/privacy">Privacy Notice</a>. Nothing I submit will be published publicly without my explicit written permission. *
         </label>
         {err("consent")}
       </div>

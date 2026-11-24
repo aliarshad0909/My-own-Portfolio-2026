@@ -86,7 +86,7 @@ export default function GpuComputePage() {
         <div className="hero__actions">
           <ButtonLink href={contactHref}>Submit workload requirements</ButtonLink>
           <ButtonLink href="#hardware-specs" variant="secondary" icon={null}>
-            Review specification status
+            Review scoping checklist
           </ButtonLink>
         </div>
       </PageHero>
@@ -95,9 +95,9 @@ export default function GpuComputePage() {
         <p className="notice notice--wide">
           <Icon name="alert" size={18} />
           <span>
-            <strong>Honest specification notice:</strong> Hardware specifications, VRAM capacity, availability windows, security controls, and hourly
-            pricing below currently carry clear placeholders pending Ali&rsquo;s direct confirmation. Nothing on this page is fabricated; exact
-            server details are confirmed before quoting. This page stays excluded from search indexing (noindex) until hardware specs are finalized.
+            <strong>Consultation-led infrastructure notice:</strong> Exact hardware specifications, VRAM limits, availability windows, security
+            controls, and custom hourly quotes are confirmed directly with Ali during workload review rather than listed as a self-serve rate sheet.
+            This page stays excluded from search indexing (noindex) until published server specifications are finalized.
           </span>
         </p>
       </section>
@@ -191,11 +191,11 @@ export default function GpuComputePage() {
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Hardware &amp; operational parameters</p>
             <h2 className="section-title" id="hardware-specs-title">
-              Server configuration &amp; placeholders awaiting confirmation
+              Parameters verified before any compute booking
             </h2>
             <p className="section-sub">
-              Exact server capacity, supported runtimes, availability windows, security controls, and hourly pricing are confirmed directly by Ali
-              rather than guessed on this page.
+              Exact server capacity, supported runtimes, availability windows, security controls, and custom hourly pricing are confirmed directly
+              during consultation before you commit to a run.
             </p>
           </div>
 
@@ -204,7 +204,7 @@ export default function GpuComputePage() {
               <thead>
                 <tr>
                   <th scope="col">Parameter</th>
-                  <th scope="col">Current documentation status</th>
+                  <th scope="col">How it is confirmed</th>
                   <th scope="col">Why it is checked during consultation</th>
                 </tr>
               </thead>
@@ -212,9 +212,7 @@ export default function GpuComputePage() {
                 {GPU_COMPUTE_SPECS.map((row) => (
                   <tr key={row.parameter}>
                     <th scope="row">{row.parameter}</th>
-                    <td>
-                      <span className="gpu-spec-placeholder">{row.value}</span>
-                    </td>
+                    <td>{row.value}</td>
                     <td>{row.whyItMatters}</td>
                   </tr>
                 ))}

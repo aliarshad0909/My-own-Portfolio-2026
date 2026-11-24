@@ -287,7 +287,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       keywordId: "spec-social-media-management",
       title: "Social Media Management & Channel Operations",
       h1: "Social media management",
-      lead: "Consistent, brand-aligned social media strategy, template systems and publishing coordination — backed by 2+ years managing US-based brands and HubSpot Social Media Certification.",
+      lead: "Consistent, brand-aligned social media strategy, template systems and publishing coordination — backed by hands-on US brand-management experience and HubSpot Social Media Certification.",
       heroVisual: {
         src: "/images/credentials/hubspot-social-media-certified.webp",
         alt: "HubSpot Academy Social Media Certification awarded to Ali Arshad, valid through December 2028",
@@ -298,7 +298,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       },
       body: [
         "Most small brands oscillate between bursts of daily posting and six weeks of silence. Consistency breaks down when strategy, visual templates and publishing coordination sit in different hands.",
-        "Grounded in over two years of hands-on brand management for US-based brands and active HubSpot Academy Social Media Certification, I bring structured content pillars, reusable brand templates and steady publishing operations.",
+        "Grounded in hands-on brand management experience for US-based brands and active HubSpot Academy Social Media Certification, I bring structured content pillars, reusable brand templates and steady publishing operations.",
       ],
       problems: [
         "Social channels go quiet whenever founders get busy with operations",
@@ -325,9 +325,9 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       stack: ["HubSpot Inbound Methodology", "SVG Social Templates", "Editorial Calendars", "Short-Form Video", "Analytics"],
       audience: "US and international product brands needing consistent social media operations without hiring an in-house team.",
       quickAnswer:
-        "Social media management combines content pillars, brand-locked visual templates, and predictable approval-gated publishing — backed by 2+ years managing US brands and active HubSpot Social Media Certification.",
+        "Social media management combines content pillars, brand-locked visual templates, and predictable approval-gated publishing — backed by hands-on US brand-management experience and active HubSpot Social Media Certification.",
       faqs: [
-        { q: "What verified training backs this service?", a: "Over two years managing brand, social and campaign operations for US-based brands, alongside an active HubSpot Academy Social Media Certification (valid through December 2028)." },
+        { q: "What verified training backs this service?", a: "Hands-on brand, social and campaign coordination experience for US-based brands, alongside an active HubSpot Academy Social Media Certification (valid through December 2028)." },
         { q: "Do we approve posts before they go live?", a: "Always. Monthly or bi-weekly batches go through a clean sign-off step so your voice and product claims stay accurate." },
         { q: "Can you pair social management with short-form video edits?", a: "Yes — creative production and social management sit under the same roof so static and video assets stay cohesive." },
       ],

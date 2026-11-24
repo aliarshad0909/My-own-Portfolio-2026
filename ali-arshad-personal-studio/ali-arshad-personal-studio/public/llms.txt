@@ -59,7 +59,14 @@
   - [Motion Graphics](https://www.aliarshad.co/services/creative-production/motion)
   - [Social Advertising Creatives](https://www.aliarshad.co/services/creative-production/social-video)
 - [Studio Network (Partner Collaboration)](https://www.aliarshad.co/studio-network): How vetted independent specialists join complex builds transparently.
-- [RTX GPU Compute Rental (Consultation-Led, Noindex Preview)](https://www.aliarshad.co/services/gpu-compute): Consultation-first RTX compute access; hardware specifications currently carry placeholders pending confirmation.
+- [RTX GPU Compute Rental (Consultation-Led, Noindex Preview)](https://www.aliarshad.co/services/gpu-compute): Consultation-first RTX compute access; exact hardware allocation, VRAM limits, runtime stack, security boundaries, and custom hourly quotes are confirmed directly during workload review.
+
+## Original Browser Games & Interactive Experiments
+
+- [Games & Interactive Experiments](https://www.aliarshad.co/games): Three original, lightweight browser mini-games built from scratch in TypeScript and React — explicitly labeled as **original portfolio experiments**, kept separate from commercial services and client work:
+  - [Signal Link](https://www.aliarshad.co/games/signal-link): Connect matching lettered signal node pairs across 5×5, 6×6, and 7×7 grids without crossing wires.
+  - [Pulse Grid](https://www.aliarshad.co/games/pulse-grid): Orthogonal parity grid logic puzzle with guaranteed-solvable curated and shuffled boards plus deterministic hints.
+  - [Studio Pairs](https://www.aliarshad.co/games/studio-pairs): Geometric SVG memory-matching game across 6-, 8-, and 10-pair boards with keyboard controls and reduced-motion support.
 
 ## Live Public Software Demonstrations
 
@@ -91,6 +98,7 @@
 - [Resources & Guides](https://www.aliarshad.co/resources): 15 original guides covering n8n vs. Zapier, AI agents vs. chatbots, custom web app pricing, Shopify vs. custom ecommerce, Next.js SEO, landed cost, motion graphics pricing, brand style guides, and freelancer vs. agency decisions.
 - [Industries Served](https://www.aliarshad.co/industries): [Ecommerce](https://www.aliarshad.co/industries/ecommerce), [SaaS](https://www.aliarshad.co/industries/saas), and [Logistics](https://www.aliarshad.co/industries/logistics).
 
-## Contact
+## Contact & Privacy
 
 - [Start a Project](https://www.aliarshad.co/contact): Share project goals, constraints, and timeline directly with Ali Arshad. No fixed public rate sheet — every engagement receives an individual plain-language written scope after discovery.
+- [Privacy & Data Handling](https://www.aliarshad.co/privacy): Plain-English studio disclosure documenting what the contact and collaborator forms collect, how messages are delivered, and how local browser tools and games operate without ad trackers.

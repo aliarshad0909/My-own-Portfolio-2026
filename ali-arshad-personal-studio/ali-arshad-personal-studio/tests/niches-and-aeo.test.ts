@@ -190,8 +190,32 @@ describe("AI discovery machine-readable llms.txt", () => {
     assert.ok(content.includes("https://www.aliarshad.co/services/ecommerce-development/custom-storefronts"), "missing custom storefronts niche URL");
     assert.ok(content.includes("https://crm.aliarshad.co"), "missing live PipelineOS URL");
     assert.ok(content.includes("https://stock.aliarshad.co"), "missing live StockFlow URL");
+    assert.ok(content.includes("https://www.aliarshad.co/games"), "missing /games canonical URL");
+    assert.ok(content.includes("https://www.aliarshad.co/privacy"), "missing /privacy canonical URL");
     assert.match(content, /studio demonstrations/i);
+    assert.match(content, /original portfolio experiments/i);
     assert.match(content, /no physical regional branch offices/i);
+  });
+
+  it("removes unverified brand-management duration claims and registers /privacy cleanly", () => {
+    const filesToCheck = [
+      "lib/experience.ts",
+      "lib/seo/service-hubs.ts",
+      "lib/seo/service-spokes-b.ts",
+      "lib/seo/service-enrichment-more.ts",
+      "lib/seo/keyword-registry.ts",
+    ];
+    for (const rel of filesToCheck) {
+      const text = readFileSync(path.join(APP_ROOT, rel), "utf8");
+      assert.doesNotMatch(
+        text,
+        /more than two years|over two years|2\+ years/i,
+        `unverified brand-management duration still present in ${rel}`,
+      );
+    }
+    const privacySource = readFileSync(path.join(APP_ROOT, "app/privacy/page.tsx"), "utf8");
+    assert.match(privacySource, /POST \/api\/inquiry/);
+    assert.match(privacySource, /not been formally reviewed by legal/i);
   });
 });
 

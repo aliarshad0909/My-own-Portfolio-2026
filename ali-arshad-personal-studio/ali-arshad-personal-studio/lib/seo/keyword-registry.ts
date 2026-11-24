@@ -1386,7 +1386,7 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     evidenceHave: [E.UNIQUE_COPY, E.REAL_DEMO],
     linksTo: ["/services/branding", "/work/halcyon-brand-system"],
     linksFrom: ["/services/branding"],
-    notes: "Backed by 2+ years US brand-management experience, HubSpot Social Media Certification and Halcyon demo.",
+    notes: "Backed by hands-on US brand-management experience, HubSpot Social Media Certification and Halcyon demo.",
   },
   {
     id: "spec-email-marketing",

@@ -81,6 +81,9 @@ export function ServiceShowcaseHome() {
             <Link href="/resources" className="location-pill">
               15 Guides &amp; Resources
             </Link>
+            <Link href="/games" className="location-pill">
+              Games &amp; Experiments (3 playable)
+            </Link>
             <Link href="/locations" className="location-pill">
               Remote US Coverage
             </Link>

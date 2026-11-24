@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { STUDIO_GAMES } from "@/lib/games/catalog";
 import { PROJECTS, caseStudies, isIndexable } from "@/lib/projects";
 import { CORE_SITEMAP_PAGES, siteBaseUrl } from "@/lib/site";
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
@@ -9,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const abs = (path: string) => `${base}${path === "/" ? "" : path}`;
 
   const pages = CORE_SITEMAP_PAGES.map((href) => ({ url: abs(href), lastModified: now, priority: href === "/" ? 1 : 0.8 }));
+  const games = STUDIO_GAMES.map((g) => ({ url: abs(`/games/${g.slug}`), lastModified: now, priority: 0.5 }));
   // Only fully published work is listed; demos and drafts stay out.
   const projects = PROJECTS.filter(isIndexable).map((p) => ({ url: abs(`/work/${p.slug}`), lastModified: now, priority: 0.6 }));
   const studies = caseStudies().filter(isIndexable).map((p) => ({ url: abs(`/case-studies/${p.slug}`), lastModified: now, priority: 0.6 }));
@@ -21,5 +23,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .filter((path) => !coreHrefs.has(path))
     .map((path) => ({ url: abs(path), lastModified: now, priority: 0.7 }));
 
-  return [...pages, ...projects, ...studies, ...seo];
+  return [...pages, ...games, ...projects, ...studies, ...seo];
 }

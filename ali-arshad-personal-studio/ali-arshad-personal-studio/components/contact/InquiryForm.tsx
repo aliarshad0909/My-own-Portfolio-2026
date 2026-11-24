@@ -262,7 +262,10 @@ export function InquiryForm({ configured, fallbackEmail = "" }: Props) {
 
       <div className="field field--check">
         <input id="consent" name="consent" type="checkbox" required checked={values.consent} onChange={(e) => set("consent", e.target.checked)} aria-invalid={errors.consent ? true : undefined} aria-describedby={describedBy("consent")} />
-        <label htmlFor="consent">I agree that Ali Arshad may store and use these details to respond to my inquiry. *</label>
+        <label htmlFor="consent">
+          I agree that Ali Arshad may store and use these details to respond to my inquiry, as described in the{" "}
+          <a href="/privacy">Privacy Notice</a>. *
+        </label>
         {err("consent")}
       </div>
 

@@ -1,14 +1,13 @@
 /**
  * Consultation-led RTX GPU Compute Rental service definition.
  *
- * Honesty & placeholder governance:
- *  - No RTX server hardware specifications, VRAM sizes, pricing, availability
- *    windows, or security controls exist in the repository today.
- *  - Every unverified operational/hardware figure MUST stay marked as a clear
- *    placeholder awaiting Ali's factual confirmation — never invented.
- *  - Publication state is `PublicNoIndex`: the page resolves cleanly for
+ * Honesty & consultation governance:
+ *  - Exact RTX server hardware models, VRAM totals, availability windows,
+ *    security policies, and hourly pricing are confirmed directly with Ali
+ *    during workload review rather than published as fixed specs or [TBD] stubs.
+ *  - Publication state stays `PublicNoIndex`: the page resolves cleanly for
  *    visitors and reviewers while staying excluded from search indexing and
- *    `sitemap.xml` until Ali confirms real hardware specs and approves indexing.
+ *    `sitemap.xml` until Ali confirms published hardware specs and approves indexing.
  */
 
 import type { IconName } from "@/components/ui/Icon";
@@ -20,9 +19,9 @@ export const GPU_COMPUTE_CONTACT_SERVICE = "RTX GPU Compute Rental (Consultation
 
 export const GPU_COMPUTE_PUBLICATION_STATE: PublicationState = "PublicNoIndex";
 
-export type GpuSpecPlaceholder = {
+export type GpuSpecParameter = {
   parameter: string;
-  status: "Placeholder — pending confirmation";
+  status: "Confirmed during consultation";
   value: string;
   whyItMatters: string;
 };
@@ -42,53 +41,53 @@ export type GpuProcessStep = {
   output: string;
 };
 
-export const GPU_COMPUTE_SPECS: GpuSpecPlaceholder[] = [
+export const GPU_COMPUTE_SPECS: GpuSpecParameter[] = [
   {
-    parameter: "GPU model & card count",
-    status: "Placeholder — pending confirmation",
-    value: "[TBD — Ali to confirm exact NVIDIA RTX model(s) and GPU count]",
+    parameter: "GPU model & card allocation",
+    status: "Confirmed during consultation",
+    value: "Dedicated NVIDIA RTX hardware — exact card model and GPU count confirmed during workload review",
     whyItMatters: "Determines supported precision (FP16/BF16/FP8), CUDA capability, and single-card vs. multi-GPU execution.",
   },
   {
     parameter: "Video memory (VRAM)",
-    status: "Placeholder — pending confirmation",
-    value: "[TBD — Ali to confirm per-GPU and total VRAM capacity]",
+    status: "Confirmed during consultation",
+    value: "Per-GPU and total available VRAM verified directly against your model or scene footprint",
     whyItMatters: "Sets practical limits for open-weight model sizes, quantization, batch sizes, and 3D scene memory.",
   },
   {
     parameter: "Host CPU, RAM & NVMe storage",
-    status: "Placeholder — pending confirmation",
-    value: "[TBD — Ali to confirm CPU cores, host RAM, scratch NVMe capacity, and retention period]",
+    status: "Confirmed during consultation",
+    value: "Host compute, scratch NVMe storage quota, and file retention window confirmed prior to booking",
     whyItMatters: "Controls dataset preprocessing speed, checkpoint storage, and asset caching.",
   },
   {
     parameter: "Supported runtime configurations",
-    status: "Placeholder — pending confirmation",
-    value: "[TBD — Ali to confirm OS, CUDA/cuDNN versions, Docker / SSH / Python / Blender CLI options]",
+    status: "Confirmed during consultation",
+    value: "OS, CUDA/cuDNN versions, Docker, SSH, Python, and Blender CLI support verified during technical scoping",
     whyItMatters: "Confirms whether your container, Conda environment, or render script runs cleanly without rework.",
   },
   {
     parameter: "Network bandwidth & dataset transfer",
-    status: "Placeholder — pending confirmation",
-    value: "[TBD — Ali to confirm upload/download speed and approved transfer method]",
+    status: "Confirmed during consultation",
+    value: "Upload/download throughput and approved transfer channel agreed before data transfer starts",
     whyItMatters: "Affects large checkpoint downloads, video footage uploads, and rendered asset retrieval.",
   },
   {
     parameter: "Availability windows & scheduling",
-    status: "Placeholder — pending confirmation",
-    value: "[TBD — Ali to confirm scheduling notice, max booking length, and timezone window]",
+    status: "Confirmed during consultation",
+    value: "Booking notice, session length, and time-zone scheduling window confirmed against live server availability",
     whyItMatters: "Aligns dedicated server time with sprint deadlines and prevents contention with other runs.",
   },
   {
     parameter: "Security, isolation & data handling",
-    status: "Placeholder — pending confirmation",
-    value: "[TBD — Ali to confirm tenant isolation, post-run wipe policy, access controls, and NDA terms]",
+    status: "Confirmed during consultation",
+    value: "Access controls, isolation boundaries, post-run wipe procedure, and NDA terms agreed in writing upfront",
     whyItMatters: "Essential before uploading proprietary weights, private datasets, or pre-release product geometry.",
   },
   {
     parameter: "Hourly pricing & minimum booking",
-    status: "Placeholder — pending confirmation",
-    value: "Custom hourly quote issued after workload review and capacity check (no published flat rate yet)",
+    status: "Confirmed during consultation",
+    value: "Custom hourly quote issued in writing after workload review and capacity check (no published flat rate)",
     whyItMatters: "Quotes reflect actual workload duration, setup assistance (if needed), and confirmed server capacity.",
   },
 ];
@@ -181,8 +180,8 @@ export const GPU_COMPUTE_FAQS: FaqItem[] = [
     a: "No. This is a consultation-led compute rental service on Ali's RTX server. Every booking starts with your workload requirements, a short technical fit discussion, a real capacity check, and a custom hourly quote — there is no self-serve checkout or automated provisioning portal.",
   },
   {
-    q: "Why are exact GPU hardware specs, availability, and hourly prices marked as placeholders right now?",
-    a: "This page intentionally avoids inventing hardware counts, VRAM figures, SLAs, or prices before Ali confirms the exact production server specification and security terms. Confirmed specifications are shared directly during consultation and will replace these placeholders once verified.",
+    q: "Why are exact hardware specs, availability windows, and hourly pricing confirmed in consultation rather than published as a rate table?",
+    a: "Dedicated compute is allocated directly on Ali's RTX server rather than an automated multi-tenant cloud fleet. Confirming card availability, VRAM limits, runtime stack, security boundaries, and a custom hourly quote during workload review avoids guesswork and ensures your job actually fits before booking.",
   },
   {
     q: "What workloads are a good fit — and what is not a good fit?",

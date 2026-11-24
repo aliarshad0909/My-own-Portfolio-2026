@@ -389,7 +389,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
       {
         q: "Can you handle ongoing social media, email and content coordination?",
-        a: "Yes. Alongside visual systems, I bring over two years of hands-on brand management for US-based brands, plus active HubSpot Social Media and Google Ads AI-Powered Performance Ads certifications.",
+        a: "Yes. Alongside visual systems, I bring hands-on brand management experience for US-based brands, plus active HubSpot Social Media and Google Ads AI-Powered Performance Ads certifications.",
       },
       {
         q: "Why do you measure WCAG colour contrast during branding?",

@@ -10,6 +10,7 @@
  *   - WebSite:             https://www.aliarshad.co/#website
  */
 import { CREDENTIALS } from "@/lib/credentials";
+import type { GameDefinition } from "@/lib/games/catalog";
 import type { StudioProduct } from "@/lib/products/catalog";
 import type { Project } from "@/lib/projects";
 import { SERVICES } from "@/lib/services";
@@ -287,6 +288,47 @@ export function faqSchema(items: FaqItem[]) {
       "@type": "Question",
       name: item.q,
       acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+}
+
+/**
+ * Honest VideoGame schema for original playable browser experiments under
+ * /games/[slug]. Linked to #person via @id; zero fake ratings or prices.
+ */
+export function gameSchema(game: GameDefinition) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    name: game.title,
+    description: `${game.summary} Original self-initiated portfolio experiment by ${SITE.name}.`,
+    url: abs(`/games/${game.slug}`),
+    genre: game.category,
+    playMode: "SinglePlayer",
+    applicationCategory: "Game",
+    operatingSystem: "Any (web browser)",
+    isAccessibleForFree: true,
+    author: personRef(),
+    inLanguage: "en",
+  };
+}
+
+export function gameListSchema(games: GameDefinition[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${SITE.name} — Original Browser Games & Interactive Experiments`,
+    itemListElement: games.map((g, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "VideoGame",
+        name: g.title,
+        description: g.tagline,
+        genre: g.category,
+        url: abs(`/games/${g.slug}`),
+        author: personRef(),
+      },
     })),
   };
 }
