@@ -7905,7 +7905,7 @@ code,
    4-FAMILY SERVICES GRID, PROJECT BRIEF STRIP & RESPONSIVE RHYTHM POLISH
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* 1. Unboxed Hero & Contact 3D "A" Logo (no portrait, no card, no caption) */
+/* 1. Homepage Hero Portrait + Unboxed 3D "A" Composition & Contact Unboxed 3D "A" */
 .hero {
   isolation: isolate;
   background: var(--bg);
@@ -7913,23 +7913,67 @@ code,
 
 .hero__inner--mark {
   align-items: center;
-  gap: clamp(28px, 4vw, 52px);
-  padding-block: clamp(44px, 6vw, 88px);
+  gap: clamp(28px, 4vw, 44px);
+  padding-block: clamp(36px, 5vw, 56px) clamp(32px, 4.5vw, 48px);
+}
+
+/* Open hero stage composing existing portrait beside unboxed 3D "A" (no card, no caption) */
+.hero__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding-top: 8px;
+}
+
+.hero__portrait-stage {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 280px);
+  overflow: visible;
+}
+
+.hero__portrait-stage::before {
+  content: "";
+  position: absolute;
+  inset: 8% -12% 4% -12%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 62% 68% at 62% 46%,
+    rgba(255, 122, 92, 0.24) 0%,
+    rgba(196, 76, 48, 0.1) 46%,
+    transparent 74%
+  );
+  filter: blur(26px);
+  pointer-events: none;
+}
+
+.hero__portrait-img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
 }
 
 .hero__mark-stage {
   display: grid;
   place-items: center;
   width: 100%;
-  padding-block: clamp(12px, 2.5vw, 28px);
+  padding-block: 4px;
 }
 
 .sig3d--hero {
-  width: clamp(250px, 31vw, 430px);
+  width: clamp(168px, 44vw, 216px);
 }
 
 .sig3d--hero .sig3d__ambient {
-  inset: -22%;
+  inset: -24%;
   background: radial-gradient(
     ellipse 72% 68% at 50% 48%,
     rgba(255, 122, 92, 0.34) 0%,
@@ -7950,19 +7994,70 @@ code,
   width: clamp(190px, 20vw, 260px);
 }
 
-@media (min-width: 1024px) {
-  .hero__inner--mark {
-    grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+@media (min-width: 768px) {
+  .hero__stage {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.85fr);
     align-items: center;
-    padding-block: clamp(56px, 6.2vw, 96px);
+    justify-items: center;
+    gap: clamp(14px, 2vw, 24px);
+    max-width: 600px;
+    margin-inline: auto;
+    padding-top: 12px;
   }
 
-  .hero__inner--mark .hero__copy {
-    padding-block: 0;
+  .hero__portrait-stage {
+    width: min(100%, 320px);
   }
 
   .hero__mark-stage {
+    align-self: center;
+    padding-bottom: 12px;
+  }
+
+  .sig3d--hero {
+    width: clamp(180px, 22vw, 232px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero__inner--mark {
+    grid-template-columns: minmax(0, 52fr) minmax(0, 48fr);
+    align-items: center;
+    gap: clamp(20px, 2.8vw, 40px);
+    padding-block: clamp(32px, 3.6vw, 56px);
+  }
+
+  .hero__inner--mark .hero__copy {
+    padding-block: clamp(12px, 1.4vw, 24px);
+  }
+
+  .hero__inner--mark .hero__title {
+    font-size: clamp(2.15rem, 0.85rem + 2.8vw, 3.55rem);
+  }
+
+  .hero__stage {
+    grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.82fr);
+    align-items: center;
+    gap: clamp(12px, 1.6vw, 24px);
+    max-width: none;
+    margin-inline: 0;
+    padding-top: 0;
+  }
+
+  .hero__portrait-stage {
+    width: 100%;
+    max-width: 365px;
+    justify-self: end;
+  }
+
+  .hero__mark-stage {
+    align-self: center;
     justify-self: center;
+    padding-block: 0 12px;
+  }
+
+  .sig3d--hero {
+    width: clamp(170px, 16.5vw, 240px);
   }
 }
 
@@ -8360,10 +8455,6 @@ code,
   .work-compare-row__side {
     align-items: flex-start;
     text-align: left;
-  }
-
-  .sig3d--hero {
-    width: clamp(220px, 64vw, 310px);
   }
 }
 

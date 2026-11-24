@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ChangingFocus } from "@/components/ui/ChangingFocus";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
@@ -12,9 +13,8 @@ const DISCIPLINES: { icon: IconName; label: string }[] = [
 
 /**
  * Conversion-focused editorial hero for Ali Arshad Personal Studio.
- * Places the sculpted 3D "A" logo directly in open visual space on the right
- * (unboxed, no portrait, no caption beneath the mark) against the obsidian
- * and warm coral studio atmosphere.
+ * Composes Ali's existing studio portrait alongside the unboxed sculpted 3D "A"
+ * logo directly in open obsidian-and-coral visual space (no card, no caption).
  */
 export function Hero() {
   return (
@@ -77,9 +77,22 @@ export function Hero() {
           </ul>
         </div>
 
-        {/* Open visual space for the unboxed 3D "A" logo — no card, no portrait, no caption */}
-        <div className="hero__mark-stage">
-          <SignatureMark3D variant="hero" />
+        {/* Open visual stage: existing personal portrait beside the unboxed 3D "A" logo (no card, no caption) */}
+        <div className="hero__stage">
+          <div className="hero__portrait-stage enter enter--portrait">
+            <Image
+              src="/images/portraits/portrait-hero.webp"
+              alt="Ali Arshad, founder of Ali Arshad Personal Studio"
+              width={1024}
+              height={1536}
+              priority
+              sizes="(min-width: 1280px) 360px, (min-width: 1024px) 28vw, 280px"
+              className="hero__portrait-img"
+            />
+          </div>
+          <div className="hero__mark-stage">
+            <SignatureMark3D variant="hero" />
+          </div>
         </div>
       </div>
     </section>
