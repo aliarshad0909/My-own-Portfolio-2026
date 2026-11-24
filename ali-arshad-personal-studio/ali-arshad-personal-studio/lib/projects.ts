@@ -5,7 +5,7 @@ import { EXPANSION_PROJECTS_C } from "@/lib/projects-expansion-c";
 import { GAME_WORK_ENTRIES } from "@/lib/projects-games";
 
 const REPO_TREE_BASE =
-  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/next-build-100-planner-globe";
+  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/studio-polish-curated-work";
 
 const CORE_SOURCE_DIR: Record<string, string> = {
   "pipelineos-crm": "apps/pipelineos",

@@ -18,6 +18,7 @@ import { SERVICE_HUBS, allSpokes, getSpoke, spokesForProject } from "@/lib/seo/s
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { CORE_SITEMAP_PAGES } from "@/lib/site";
 import { AVAILABILITY_OPTIONS, STACK_FILTERS, filterProjects } from "@/lib/work-finder";
+import { WORK_COLLECTIONS, groupProjectsByCollection } from "@/lib/work-collections";
 import {
   articleSchema,
   blogArticleSchema,
@@ -316,7 +317,7 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
           existsSync(path.join(APP_ROOT, "public", p.generatedVisual.src)),
           `${p.slug} generatedVisual missing on disk: ${p.generatedVisual.src}`,
         );
-        assert.match(p.generatedVisual.label, /Not a Screenshot|AI Illustration|Concept Illustration/i);
+        assert.match(p.generatedVisual.label, /Not a (Real )?Screenshot|AI-Generated|AI Illustration|Concept Illustration/i);
       }
       const links = [...(p.relatedServicePaths ?? []), ...(p.relatedToolPaths ?? [])];
       assert.deepEqual(brokenLinks(links), [], `${p.slug} has broken service/tool links`);
@@ -330,6 +331,37 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
       query: "",
     });
     assert.equal(games.length, 20, "Work finder must surface all 20 playable game experiments");
+
+    const grouped = groupProjectsByCollection(PROJECTS);
+    assert.equal(grouped.length, WORK_COLLECTIONS.length, "every Work collection must contain projects");
+    const groupedTotal = grouped.reduce((sum, g) => sum + g.items.length, 0);
+    assert.equal(groupedTotal, PROJECTS.length, "7 Work collections must partition all 120 entries cleanly");
+
+    // Verify all 10 monorepo standalone apps carry real multi-screen captures on disk
+    const monorepoSlugs = [
+      "stockflow-mobile-companion",
+      "financeos-accounting-suite",
+      "flowos-automation-studio",
+      "sourceos-procurement-hub",
+      "orexa-interactive-learning-os",
+      "supportos-helpdesk-console",
+      "projectos-delivery-workspace",
+      "insightos-bi-workspace",
+      "peopleos-team-directory",
+      "bookos-appointment-scheduler",
+    ];
+    for (const slug of monorepoSlugs) {
+      const proj = PROJECTS.find((p) => p.slug === slug);
+      assert.ok(proj, `missing monorepo project ${slug}`);
+      assert.ok(proj!.gallery.length >= 3, `${slug} must wire multi-screen gallery captures`);
+      assert.ok(existsSync(path.join(APP_ROOT, "public", proj!.cover.src)), `missing real cover for ${slug}`);
+      for (const item of proj!.gallery) {
+        if (item.type === "image") {
+          assert.ok(existsSync(path.join(APP_ROOT, "public", item.src)), `missing gallery screen ${item.src}`);
+        }
+      }
+    }
+
     assert.ok(CORE_SITEMAP_PAGES.includes("/project-planner"));
     assert.ok(isKnownRoute("/project-planner"));
     assert.ok(isKnownRoute("/demo-scenarios"));

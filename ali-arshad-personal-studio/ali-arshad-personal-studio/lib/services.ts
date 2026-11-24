@@ -107,6 +107,10 @@ export const SERVICES: Service[] = [
       "tessera-clayworks-storefront",
       "northwind-analytics-dashboard",
       "meridian-inventory-operations",
+      "projectos-delivery-workspace",
+      "bookos-appointment-scheduler",
+      "insightos-bi-workspace",
+      "financeos-accounting-suite",
     ],
     examples: [
       "A marketing website with a CMS-ready content structure",
@@ -145,6 +149,11 @@ export const SERVICES: Service[] = [
       "tideline-support-agent",
       "kestrel-voice-sales-agent",
       "inbound-lead-qualification-workflow",
+      "supportos-helpdesk-console",
+      "flowos-automation-studio",
+      "agent-eval-harness",
+      "mcp-policy-gateway",
+      "webhook-deadletter-replay",
     ],
     examples: [
       "An inquiry workflow that qualifies leads and updates the CRM",
@@ -216,6 +225,7 @@ export const SERVICES: Service[] = [
     ],
     projectSlugs: [
       "lantern-sourcing-platform",
+      "sourceos-procurement-hub",
       "stockflow-inventory",
       "meridian-inventory-operations",
     ],

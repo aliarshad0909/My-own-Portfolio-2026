@@ -10,9 +10,9 @@ import { GAME_WORK_ENTRIES } from "@/lib/projects-games";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Work: 100 Software, AI, Analytics & Creative Showcases + 20 Playable Games",
+  title: "Work: Curated Studio Builds, Prototypes & Playable Experiments",
   description:
-    "Explore 100 technical and creative showcases across live SaaS sandboxes, locally tested demos, runnable project-lab prototypes, and concepts — plus 20 original playable browser game experiments with build stories and runnable source.",
+    "Browse curated software, AI agent, automation, analytics, e-commerce, creative production, and browser game collections — each labeled honestly by build status with direct links to live demos or runnable source.",
   path: "/work",
 });
 
@@ -33,32 +33,68 @@ export default function WorkPage() {
         ]}
       />
       <PageHero
-        eyebrow={`Work · ${COMMERCIAL_PROJECTS.length} Project Showcases + ${gamesCount} Playable Games`}
+        eyebrow="Work · Curated Across 7 Studio Collections"
         title={
           <>
-            Projects, prototypes &amp; <span className="accent">interactive experiments</span>
+            Representative builds, prototypes &amp; <span className="accent">interactive experiments</span>
           </>
         }
-        lead="Filter by discipline, service area, stack, or build status. Every entry links directly to runnable repository source and states honestly whether it is a live public sandbox, a locally verified demo, a runnable prototype, a concept blueprint, or a personal browser game experiment."
+        lead="Start with live multi-screen product demonstrations, then explore seven problem-based collections covering SaaS, AI agents, automation, dashboards, e-commerce, creative production, and personal browser games."
       >
         <div className="hero__actions">
           <ButtonLink href="/project-planner">Launch Visual Project Planner</ButtonLink>
+          <ButtonLink href="/services" variant="secondary" icon={null}>
+            Explore Studio Services
+          </ButtonLink>
           <ButtonLink href="/games" variant="secondary" icon={null}>
             Dedicated Games Lab ({gamesCount})
           </ButtonLink>
         </div>
       </PageHero>
 
-      <section className="section section--flush-top" aria-label="Projects">
+      <section className="section section--flush-top" aria-label="Curated Work Showcase">
         <div className="container">
-          <p className="notice notice--wide">
-            <strong>Honest portfolio split ({COMMERCIAL_PROJECTS.length} projects + {gamesCount} personal games = {PROJECTS.length} entries):</strong>{" "}
-            {liveCount} live public web/mobile sandboxes, {demoCount} locally verified studio demos, {protoCount} runnable repository prototypes (in{" "}
-            <code>apps/</code> &amp; <code>project-lab/</code>), {inDevCount} build in development, {conceptCount} architecture concepts &amp; sample
-            scenarios (each paired with a small representative workflow slice in <code>project-lab/concepts/</code>), and {gamesCount} personal browser
-            game experiments (never client work). Unbuilt concepts, local prototypes, and game build stories under <code>/work/*</code> stay{" "}
-            <code>noindex</code>.
-          </p>
+          {/* Concise visual status key instead of a dense wall of text */}
+          <dl className="work-status-strip panel" aria-label="Honest portfolio build-status breakdown">
+            <div>
+              <dt>Live Public Sandboxes</dt>
+              <dd>
+                <strong>{liveCount}</strong>
+                <span>Test directly online</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Locally Verified Demos</dt>
+              <dd>
+                <strong>{demoCount}</strong>
+                <span>Full-stack repo builds</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Runnable Prototypes</dt>
+              <dd>
+                <strong>{protoCount}</strong>
+                <span>
+                  <code>apps/</code> &amp; <code>project-lab/</code>
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt>Concepts &amp; In-Dev</dt>
+              <dd>
+                <strong>{conceptCount + inDevCount}</strong>
+                <span>Architecture + workflow slices</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Personal Games</dt>
+              <dd>
+                <strong>{gamesCount}</strong>
+                <span>Playable experiments</span>
+              </dd>
+            </div>
+          </dl>
+
           <WorkGallery projects={PROJECTS} />
         </div>
       </section>
@@ -115,7 +151,7 @@ export default function WorkPage() {
                 20 Playable Browser Games
               </Link>
               <Link href="/services" className="location-pill">
-                Compare Services &amp; 26 Niches
+                Explore Services &amp; Delivery Model
               </Link>
             </div>
           </div>

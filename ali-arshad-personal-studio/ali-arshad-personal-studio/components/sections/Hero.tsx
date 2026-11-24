@@ -1,24 +1,26 @@
-import Image from "next/image";
 import { ChangingFocus } from "@/components/ui/ChangingFocus";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { SITE } from "@/lib/site";
 
 const DISCIPLINES: { icon: IconName; label: string }[] = [
-  { icon: "code", label: "Custom Web Apps & SaaS" },
+  { icon: "code", label: "SaaS, Web & E-Commerce" },
   { icon: "bot", label: "AI Agents & Automation" },
   { icon: "clapperboard", label: "Creative & Brand Production" },
 ];
 
 /**
- * Conversion-focused editorial hero tailored to US & international business clients.
- * Preserves the approved portrait-hero.webp photograph and obsidian/coral studio identity.
+ * Conversion-focused editorial hero for Ali Arshad Personal Studio.
+ * Places the sculpted 3D "A" logo directly in open visual space on the right
+ * (unboxed, no portrait, no caption beneath the mark) against the obsidian
+ * and warm coral studio atmosphere.
  */
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero__accent" aria-hidden="true" />
-      <div className="container hero__inner">
+      <div className="container hero__inner hero__inner--mark">
         <div className="hero__copy enter">
           <p className="eyebrow">
             {SITE.name} — {SITE.descriptor}
@@ -48,12 +50,20 @@ export function Hero() {
               <Icon name="arrow-up-right" size={18} className="btn__icon" />
             </TrackedLink>
             <TrackedLink
+              href="/work"
+              event="cta_click"
+              props={{ placement: "hero", label: "Explore Curated Work" }}
+              className="btn btn--secondary btn--md"
+            >
+              <span>Explore Curated Work</span>
+            </TrackedLink>
+            <TrackedLink
               href="/#live-product-demonstrations"
               event="cta_click"
               props={{ placement: "hero", label: "Try Live Product Demos" }}
               className="btn btn--secondary btn--md"
             >
-              <span>Try Live Product Demos</span>
+              <span>Try Live Demos</span>
             </TrackedLink>
           </div>
 
@@ -67,16 +77,9 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="hero__visual enter enter--portrait">
-          <Image
-            src="/images/portraits/portrait-hero.webp"
-            alt="Ali Arshad, founder of Ali Arshad Personal Studio"
-            width={1024}
-            height={1536}
-            priority
-            sizes="(min-width: 1024px) 520px, 80vw"
-            className="hero__portrait"
-          />
+        {/* Open visual space for the unboxed 3D "A" logo — no card, no portrait, no caption */}
+        <div className="hero__mark-stage">
+          <SignatureMark3D variant="hero" />
         </div>
       </div>
     </section>

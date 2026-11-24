@@ -1,7 +1,7 @@
 import type { Project } from "@/lib/projects";
 import { buildExpansionProject, type ExpansionInput } from "@/lib/projects-expansion-a";
 
-const REPO_TREE_BASE = "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/next-build-100-planner-globe";
+const REPO_TREE_BASE = "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/studio-polish-curated-work";
 
 /**
  * 20 technically substantial vertical-slice prototypes (p81..p100) bringing the
@@ -34,7 +34,7 @@ const RAW_C: ExpansionInput[] = [
     generatedVisual: {
       src: "/images/concepts/concept-ai-eval-observability.jpg",
       alt: "AI-generated dark architectural concept visual illustrating an AI evaluation pipeline with glowing verification nodes and telemetry rings",
-      label: "Concept Visual · AI Illustration",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
     },
     visual: { accent: "#ff7a5c", code: "EVL-81", pattern: "eval" },
   },
@@ -60,7 +60,7 @@ const RAW_C: ExpansionInput[] = [
     generatedVisual: {
       src: "/images/concepts/concept-mcp-security-gateway.jpg",
       alt: "AI-generated dark architectural concept visual depicting layered translucent security shields and glowing permission pathways",
-      label: "Concept Visual · AI Illustration",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
     },
     visual: { accent: "#34d399", code: "MCP-82", pattern: "gateway" },
   },
@@ -86,7 +86,7 @@ const RAW_C: ExpansionInput[] = [
     generatedVisual: {
       src: "/images/concepts/concept-finops-cloud-telemetry.jpg",
       alt: "AI-generated dark architectural concept visual illustrating layered FinOps cost telemetry bars and glowing copper-cyan flows",
-      label: "Concept Visual · AI Illustration",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
     },
     visual: { accent: "#f5c451", code: "FIN-83", pattern: "finops" },
   },
@@ -109,6 +109,11 @@ const RAW_C: ExpansionInput[] = [
     relatedToolPaths: ["/tools/automation-roi-calculator"],
     sourceRepoPath: "project-lab/webhook-deadletter-replay",
     sourceUrl: `${REPO_TREE_BASE}/project-lab/webhook-deadletter-replay`,
+    generatedVisual: {
+      src: "/images/concepts/concept-n8n-webhook-replay.jpg",
+      alt: "AI-generated dark architectural concept visual illustrating webhook event streams flowing through dead-letter queue chambers and a cyan retry conduit",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
+    },
     visual: { accent: "#38bdf8", code: "WHK-84", pattern: "webhook" },
   },
   {
@@ -172,6 +177,11 @@ const RAW_C: ExpansionInput[] = [
     relatedToolPaths: ["/tools/automation-roi-calculator"],
     sourceRepoPath: "project-lab/rag-citation-verifier",
     sourceUrl: `${REPO_TREE_BASE}/project-lab/rag-citation-verifier`,
+    generatedVisual: {
+      src: "/images/concepts/concept-rag-citation-verifier.jpg",
+      alt: "AI-generated dark architectural concept visual showing retrieved knowledge cards passing through a luminous verification lens highlighting grounded citation paths",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
+    },
     visual: { accent: "#38bdf8", code: "RAG-87", pattern: "eval" },
   },
   {
@@ -193,6 +203,11 @@ const RAW_C: ExpansionInput[] = [
     relatedToolPaths: ["/tools/profit-margin-calculator", "/tools/shipping-cost-calculator"],
     sourceRepoPath: "project-lab/returns-margin-triage",
     sourceUrl: `${REPO_TREE_BASE}/project-lab/returns-margin-triage`,
+    generatedVisual: {
+      src: "/images/concepts/concept-ecommerce-returns-triage.jpg",
+      alt: "AI-generated dark architectural concept visual illustrating e-commerce parcels routed through margin prisms into return and exchange lanes",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
+    },
     visual: { accent: "#ff7a5c", code: "RMA-88", pattern: "commerce" },
   },
   {
@@ -217,7 +232,7 @@ const RAW_C: ExpansionInput[] = [
     generatedVisual: {
       src: "/images/concepts/concept-supply-chain-twin.jpg",
       alt: "AI-generated dark architectural concept visual illustrating isometric supply chain nodes and warm coral-emerald logistics pathways",
-      label: "Concept Visual · AI Illustration",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
     },
     visual: { accent: "#34d399", code: "SIM-89", pattern: "ledger" },
   },
@@ -261,6 +276,11 @@ const RAW_C: ExpansionInput[] = [
     relatedToolPaths: ["/tools/web-project-estimator"],
     sourceRepoPath: "project-lab/feature-flag-evaluator",
     sourceUrl: `${REPO_TREE_BASE}/project-lab/feature-flag-evaluator`,
+    generatedVisual: {
+      src: "/images/concepts/concept-multi-tenant-saas.jpg",
+      alt: "AI-generated dark architectural concept visual showing modular multi-tenant SaaS workspace cubes and deterministic rollout routing channels",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
+    },
     visual: { accent: "#38bdf8", code: "FLG-91", pattern: "grid" },
   },
   {
@@ -408,6 +428,11 @@ const RAW_C: ExpansionInput[] = [
     relatedToolPaths: ["/tools/web-project-estimator"],
     sourceRepoPath: "project-lab/design-token-wcag-auditor",
     sourceUrl: `${REPO_TREE_BASE}/project-lab/design-token-wcag-auditor`,
+    generatedVisual: {
+      src: "/images/concepts/concept-design-token-auditor.jpg",
+      alt: "AI-generated dark architectural concept visual illustrating floating design-system color tokens, typography bars, and WCAG contrast gauges",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
+    },
     visual: { accent: "#ff7a5c", code: "A11Y-98", pattern: "brand" },
   },
   {
@@ -429,6 +454,11 @@ const RAW_C: ExpansionInput[] = [
     relatedToolPaths: ["/tools/project-budget-calculator"],
     sourceRepoPath: "project-lab/video-rendition-planner",
     sourceUrl: `${REPO_TREE_BASE}/project-lab/video-rendition-planner`,
+    generatedVisual: {
+      src: "/images/concepts/concept-video-rendition-pipeline.jpg",
+      alt: "AI-generated dark architectural concept visual depicting a master video reel encoded through optical lenses into 16:9, 9:16, and 4:5 web frames",
+      label: "Illustrative Concept Visual · AI-Generated (Not a Real Screenshot)",
+    },
     visual: { accent: "#a78bfa", code: "VID-99", pattern: "media" },
   },
   {

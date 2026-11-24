@@ -26,7 +26,8 @@ export type FictionalMapMarker = {
     | "Simulated Warehouse"
     | "Simulated Satellite Store"
     | "Simulated Distribution Yard"
-    | "Simulated Remote Hub (No Office)";
+    | "Simulated Remote Hub (No Office)"
+    | "Simulated Clinic Location";
   syntheticLocation: string;
   description: string;
 };
@@ -41,19 +42,24 @@ export type FictionalTeamMember = {
   simulatedRegion: string;
   portraitSrc: string;
   portraitAlt: string;
-  portraitDisclosure: "AI-Generated Fictional Illustration · Not a Real Person";
+  portraitDisclosure: "AI-Generated Fictional Illustration — Not a Real Person";
   howTheyUseSystem: string;
 };
 
 export type FictionalCustomerProfile = {
-  id: "alder-loom" | "beaconfield-supply" | "northstar-cloud";
-  slug: "alder-loom-home-goods" | "beaconfield-mechanical-supply" | "northstar-cloud-ops";
+  id: "alder-loom" | "beaconfield-supply" | "northstar-cloud" | "cedarbrook-dental";
+  slug:
+    | "alder-loom-home-goods"
+    | "beaconfield-mechanical-supply"
+    | "northstar-cloud-ops"
+    | "cedarbrook-dental-wellness";
   fictionalName: string;
   disclosureBadge: "Fictional Demo Scenario — Not a Real Client";
   operatingModel:
     | "Simulated Multi-Store Retail + Warehouse"
     | "Simulated Regional B2B Distribution Yards"
-    | "Simulated 100% Remote Software Company";
+    | "Simulated 100% Remote Software Company"
+    | "Simulated Multi-Clinic Appointment Practice";
   hasPhysicalStorefrontInScenario: boolean;
   industry: string;
   sampleProblem: string;
@@ -68,7 +74,7 @@ export type FictionalCustomerProfile = {
   pairedExamples: {
     title: string;
     href: string;
-    buildLabel: "Live Demo" | "Locally Tested Demo" | "Consultation Service";
+    buildLabel: "Live Demo" | "Locally Tested Demo" | "Built Prototype" | "Consultation Service";
   }[];
   /** Service hub slugs where this fictional profile naturally fits. */
   fitServiceSlugs: string[];
@@ -86,7 +92,7 @@ export type FictionalCustomerProfile = {
   teamHierarchy: FictionalTeamMember[];
 };
 
-const PORTRAIT_DISCLOSURE = "AI-Generated Fictional Illustration · Not a Real Person" as const;
+const PORTRAIT_DISCLOSURE = "AI-Generated Fictional Illustration — Not a Real Person" as const;
 
 export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
   {
@@ -437,6 +443,117 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
           "Runs automated golden-set retrieval benchmarks, audits citation grounding before releases, and coordinates consultation-scoped GPU evaluation bursts.",
+      },
+    ],
+  },
+  {
+    id: "cedarbrook-dental",
+    slug: "cedarbrook-dental-wellness",
+    fictionalName: "Cedarbrook Dental & Wellness Group",
+    disclosureBadge: "Fictional Demo Scenario — Not a Real Client",
+    operatingModel: "Simulated Multi-Clinic Appointment Practice",
+    hasPhysicalStorefrontInScenario: true,
+    industry: "Multi-Clinic Healthcare & Appointment Services",
+    sampleProblem:
+      "In this fictional two-clinic practice scenario, front-desk staff field repetitive insurance and preparation phone calls all morning while manual appointment reschedules leave open chair gaps across providers.",
+    illustrativeApproach:
+      "Pair a conflict-free multi-provider scheduling workspace, automated n8n pre-visit reminders, and a grounded non-clinical FAQ assistant that escalates all clinical questions straight to staff.",
+    scenarioOverview: [
+      "Cedarbrook Dental & Wellness Group is a completely invented multi-clinic wellness practice created to demonstrate how appointment scheduling software, automated reminder workflows, and strictly bounded FAQ assistants support service businesses.",
+      "In this illustrative scenario, two neighborhood clinics share six providers with different chair durations, buffer times, and intake checklists.",
+      "Phone-only scheduling creates missed bookings after hours, while generic chatbots risk giving unsafe advice unless strictly restricted to verified logistics FAQs with human staff escalation.",
+    ],
+    workflowWalkthrough: [
+      "New patients pick time-zone-safe appointment slots in a custom booking workspace enforcing provider durations and buffer rules without double-booking.",
+      "An automated n8n intake workflow sends confirmation reminders, collects non-clinical paperwork checklists, and flags unfilled cancellation slots for waitlisted patients.",
+      "A grounded logistics FAQ assistant answers hours, parking, and prep questions verbatim from clinic policies and immediately hands clinical questions to front-desk staff.",
+    ],
+    relatedProjectSlugs: [
+      "bookos-appointment-scheduler",
+      "tideline-support-agent",
+      "inbound-lead-qualification-workflow",
+      "northwind-analytics-dashboard",
+    ],
+    relatedServices: [
+      { title: "Web & Application Development", href: "/services/web-development", note: "Conflict-free custom scheduling portals and staff operations consoles." },
+      { title: "AI Customer Support Agents", href: "/services/ai-agents/support", note: "Policy-grounded logistics FAQ handling with strict human escalation boundaries." },
+      { title: "n8n Workflow Automation", href: "/services/n8n-automation", note: "Self-hostable appointment reminders, intake checklists, and waitlist alerts." },
+    ],
+    pairedExamples: [
+      { title: "BookOS Appointment Scheduler", href: "/work/bookos-appointment-scheduler", buildLabel: "Built Prototype" },
+      { title: "Tideline Support Agent", href: "/case-studies/tideline-support-agent", buildLabel: "Locally Tested Demo" },
+      { title: "Northwind Analytics Dashboard", href: "/case-studies/northwind-analytics-dashboard", buildLabel: "Locally Tested Demo" },
+    ],
+    fitServiceSlugs: ["web-development", "ai-agents", "n8n-automation", "business-dashboards"],
+    mapMarkers: [
+      {
+        id: "cedarbrook-ne-clinic",
+        x: 562,
+        y: 174,
+        region: "Northeast",
+        shortLabel: "C1 · Simulated Clinic North",
+        markerKind: "Simulated Clinic Location",
+        syntheticLocation: "Northeast Region — Simulated Primary Practice Clinic (Fictional)",
+        description: "Synthetic illustrative marker representing a fictional primary appointment clinic running multi-provider scheduling and automated intake reminders. Not a real clinic or address.",
+      },
+      {
+        id: "cedarbrook-south-clinic",
+        x: 472,
+        y: 306,
+        region: "South",
+        shortLabel: "C2 · Simulated Clinic South",
+        markerKind: "Simulated Clinic Location",
+        syntheticLocation: "South Region — Simulated Second Practice Clinic (Fictional)",
+        description: "Synthetic illustrative marker representing a fictional sister clinic sharing one unified provider booking calendar and utilization board. Not a real clinic or address.",
+      },
+    ],
+    mapPin: {
+      xPct: 68,
+      yPct: 44,
+      syntheticLabel: "Synthetic Multi-Clinic Markers",
+      approximateCoordsLabel: "Synthetic markers (Northeast & South · illustrative only)",
+      caption:
+        "Illustrative synthetic markers on the studio's regional US map for a fictional two-clinic appointment practice — not a real healthcare provider or address.",
+    },
+    teamHierarchy: [
+      {
+        id: "cedarbrook-maya",
+        fictionalName: "Dr. Maya Chen (Fictional)",
+        role: "Clinical Director & Partner",
+        department: "Clinical Leadership",
+        reportsTo: null,
+        simulatedRegion: "Northeast Region (Simulated)",
+        portraitSrc: "/images/fictional-teams/cedarbrook-dr-maya-chen.jpg",
+        portraitAlt: "AI-generated stylized editorial illustration of a fictional clinical director named Dr. Maya Chen",
+        portraitDisclosure: PORTRAIT_DISCLOSURE,
+        howTheyUseSystem:
+          "Approves clinic policy FAQ boundaries so automated responses stay strictly non-clinical and reviews weekly provider chair utilization metrics.",
+      },
+      {
+        id: "cedarbrook-david",
+        fictionalName: "David Okafor (Fictional)",
+        role: "Practice Operations Manager",
+        department: "Practice Operations",
+        reportsTo: "cedarbrook-maya",
+        simulatedRegion: "Northeast Region (Simulated)",
+        portraitSrc: "/images/fictional-teams/cedarbrook-david-okafor.jpg",
+        portraitAlt: "AI-generated stylized editorial illustration of a fictional practice operations manager named David Okafor",
+        portraitDisclosure: PORTRAIT_DISCLOSURE,
+        howTheyUseSystem:
+          "Configures service durations, buffer rules, and automated n8n reminder cadences across both simulated clinic calendars.",
+      },
+      {
+        id: "cedarbrook-sofia",
+        fictionalName: "Sofia Alvarez (Fictional)",
+        role: "Patient Intake & Scheduling Coordinator",
+        department: "Front Desk & Intake",
+        reportsTo: "cedarbrook-david",
+        simulatedRegion: "South Region (Simulated)",
+        portraitSrc: "/images/fictional-teams/cedarbrook-sofia-alvarez.jpg",
+        portraitAlt: "AI-generated stylized editorial illustration of a fictional patient coordinator named Sofia Alvarez",
+        portraitDisclosure: PORTRAIT_DISCLOSURE,
+        howTheyUseSystem:
+          "Handles escalated patient inquiries directly with full policy context and fills same-day cancellations from the live booking dashboard.",
       },
     ],
   },

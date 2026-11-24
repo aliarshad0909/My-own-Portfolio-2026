@@ -169,11 +169,11 @@ export type CollaboratorErrors = Partial<Record<keyof CollaboratorInput, string>
 export type CollaboratorResponse =
   | { ok: true; privacyState: "private_pending_review" }
   | {
-      ok: false;
-      code: "invalid" | "rate_limited" | "not_configured" | "delivery_failed" | "bad_request";
-      message: string;
-      errors?: CollaboratorErrors;
-    };
+    ok: false;
+    code: "invalid" | "rate_limited" | "not_configured" | "delivery_failed" | "bad_request";
+    message: string;
+    errors?: CollaboratorErrors;
+  };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 

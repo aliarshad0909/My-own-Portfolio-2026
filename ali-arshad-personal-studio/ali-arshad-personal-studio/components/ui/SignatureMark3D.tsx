@@ -2,7 +2,7 @@ import { MotionMedia } from "@/components/ui/MotionMedia";
 
 type Props = {
   /** Layout scale preset for the existing sculpted 3D "A" mark. */
-  variant?: "cta" | "contact";
+  variant?: "hero" | "cta" | "contact";
   className?: string;
 };
 
@@ -11,8 +11,8 @@ type Props = {
  * paired with `/videos/mark-3d.webm` & `.mp4`) placed directly in open visual
  * space — never inside a card, bordered box, tile, or cropped frame.
  *
- * - Screen-blended directly into warm coral/copper/dark surroundings so the
- *   pure-black render backdrop disappears with zero harsh halo or box edge.
+ * - Screen-blended directly into dark obsidian & warm coral/copper surroundings
+ *   so the pure-black render backdrop disappears with zero harsh halo or box edge.
  * - Subtle warm ambient light and soft contact shadow sit behind the mark.
  * - Automatic static WebP fallback under `prefers-reduced-motion: reduce`, on
  *   narrow mobile viewports, or if autoplay is blocked.

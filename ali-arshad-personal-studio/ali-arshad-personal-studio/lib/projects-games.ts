@@ -2,7 +2,7 @@ import { STUDIO_GAMES, type GameDefinition } from "@/lib/games/catalog";
 import type { Project } from "@/lib/projects";
 
 const REPO_TREE_BASE =
-  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/next-build-100-planner-globe/ali-arshad-personal-studio/ali-arshad-personal-studio";
+  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/studio-polish-curated-work/ali-arshad-personal-studio/ali-arshad-personal-studio";
 
 type GameBuildMeta = {
   enginePath: string;

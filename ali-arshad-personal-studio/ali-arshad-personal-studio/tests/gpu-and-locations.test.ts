@@ -165,8 +165,8 @@ describe("51-jurisdiction city expansion backlog & fictional demo customer profi
     }
   });
 
-  it("defines 3 transparently fictional customer profiles with synthetic markers, AI-labeled fictional portraits, and valid studio links", () => {
-    assert.equal(FICTIONAL_DEMO_PROFILES.length, 3);
+  it("defines 4 transparently fictional customer profiles with synthetic markers, AI-labeled fictional portraits, and valid studio links", () => {
+    assert.equal(FICTIONAL_DEMO_PROFILES.length, 4);
     const sitemap = new Set(indexableSeoRoutes());
     assert.ok(
       FICTIONAL_DEMO_PROFILES.some((p) => p.hasPhysicalStorefrontInScenario),
@@ -183,7 +183,7 @@ describe("51-jurisdiction city expansion backlog & fictional demo customer profi
       assert.match(profile.disclosureBadge, /Fictional Demo (Customer|Scenario)/i);
       assert.match(profile.disclosureBadge, /Not a Real Client/i);
       assert.match(profile.mapPin.approximateCoordsLabel, /Synthetic/i);
-      assert.match(profile.mapPin.caption, /not a real (business address|client or address|company or office location)/i);
+      assert.match(profile.mapPin.caption, /not a real (business address|client or address|company or office location|healthcare provider or address)/i);
       assert.ok(profile.mapMarkers.length >= 2, `${profile.slug} should include synthetic map markers`);
       assert.ok(profile.teamHierarchy.length >= 3, `${profile.slug} should define a fictional team hierarchy`);
 
@@ -209,7 +209,7 @@ describe("51-jurisdiction city expansion backlog & fictional demo customer profi
         assert.ok(getProject(slug), `${profile.slug} references missing project ${slug}`);
       }
     }
-    assert.equal(totalPortraits, 10, "expected 10 AI-illustrated fictional team members across the 3 scenarios");
+    assert.equal(totalPortraits, 13, "expected 13 AI-illustrated fictional team members across the 4 scenarios");
     const retailMatches = selectFictionalProfilesForServices(["ecommerce-development"], 2);
     assert.ok(retailMatches.some((p) => p.id === "alder-loom"));
   });

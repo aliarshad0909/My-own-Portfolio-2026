@@ -15,6 +15,12 @@ import { SERVICE_HUBS, spokesForProject } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
 import { servicesForProject } from "@/lib/services";
 import { GPU_COMPUTE_PATH, GPU_RELATED_PROJECT_SLUGS } from "@/lib/gpu-compute";
+import {
+  WORK_COLLECTIONS,
+  audienceForProject,
+  collectionForProject,
+  deliveryAttribution,
+} from "@/lib/work-collections";
 
 function labelFromPath(path: string): string {
   const seg = path.split("/").filter(Boolean).pop() ?? path;
@@ -74,6 +80,10 @@ export function ProjectDetail({ project, variant }: Props) {
   const spokes = spokesForProject(project.slug);
   const gpuRelated = isGpuRelatedProject(project.slug);
   const { prev, next } = isCaseStudy ? neighbours(project.slug) : { prev: undefined, next: undefined };
+  const colId = collectionForProject(project);
+  const collection = WORK_COLLECTIONS.find((c) => c.id === colId) ?? WORK_COLLECTIONS[0];
+  const audience = audienceForProject(project);
+  const delivery = deliveryAttribution(project);
 
   return (
     <>
@@ -129,6 +139,32 @@ export function ProjectDetail({ project, variant }: Props) {
         </header>
 
         <div className="container">
+          {/* Structured At-a-Glance Project Brief */}
+          <dl className="panel detail__brief-strip" aria-label="Project brief at a glance">
+            <div>
+              <dt>Collection</dt>
+              <dd>
+                <Link href={`/work?collection=${collection.id}`}>{collection.title}</Link>
+              </dd>
+            </div>
+            <div>
+              <dt>Who it is for</dt>
+              <dd>{audience}</dd>
+            </div>
+            <div>
+              <dt>Delivery model</dt>
+              <dd>
+                <strong>{delivery.label}</strong>
+              </dd>
+            </div>
+            <div>
+              <dt>Matching service</dt>
+              <dd>
+                <Link href={collection.serviceHref}>{collection.serviceLabel} →</Link>
+              </dd>
+            </div>
+          </dl>
+
           <div className="detail__cover">
             {project.gameSlug ? (
               <GameCoverArt slug={project.gameSlug} />
@@ -488,7 +524,7 @@ export function ProjectDetail({ project, variant }: Props) {
                         alt={project.architectureDiagram.alt}
                         width={project.architectureDiagram.width}
                         height={project.architectureDiagram.height}
-                        loading="lazy"
+                        loading="eager"
                         sizes="(min-width: 1024px) 780px, 94vw"
                       />
                     </div>
@@ -640,19 +676,51 @@ export function ProjectDetail({ project, variant }: Props) {
             </div>
           </div>
 
-          {project.gallery.length > 0 ? (
+              {project.gallery.length > 0 ? (
             <section className="detail__gallery" aria-labelledby="gallery-title">
               <h2 className="section-title section-title--sm" id="gallery-title">
-                {isCaseStudy ? "Visual demonstration" : "Screenshots"}
+                {isCaseStudy ? "Visual demonstration — multiple screens & states" : "Captured interface screens & states"}
               </h2>
-              {isCaseStudy ? (
-                <p className="fine-print detail__gallery-note">
-                  Captured from the running application{project.usesSampleMedia ? ", except where a card is marked as sample artwork" : ""}.
-                </p>
-              ) : null}
+              <p className="fine-print detail__gallery-note">
+                Real screens captured from the running repository application{project.usesSampleMedia ? ", except where explicitly marked as sample artwork" : ""}.
+              </p>
               <MediaGallery items={project.gallery} />
             </section>
           ) : null}
+
+          {/* Bidirectional Service Alignment Card */}
+          <section className="detail__service-align panel" aria-label="Related studio service and next steps">
+            <div>
+              <p className="eyebrow eyebrow--plain">{delivery.label}</p>
+              <h2 className="card-title" style={{ marginTop: "4px" }}>
+                {project.gameSlug
+                  ? "Interactive personal experiment — explore the Games Lab or studio services"
+                  : `Need a tailored build in ${collection.title}?`}
+              </h2>
+              <p className="section-sub" style={{ marginTop: "6px" }}>
+                {delivery.detail}
+              </p>
+            </div>
+            <div className="detail__service-align-actions">
+              <Link href={collection.serviceHref} className="btn btn--secondary btn--sm">
+                <span>{collection.serviceLabel}</span>
+                <Icon name="arrow-up-right" size={15} />
+              </Link>
+              <Link href={`/work?collection=${collection.id}`} className="btn btn--secondary btn--sm">
+                <span>More in {collection.shortTitle}</span>
+              </Link>
+              {project.playUrl ? (
+                <Link href={project.playUrl} className="btn btn--primary btn--sm">
+                  <Icon name="play" size={15} />
+                  <span>Play Live Game</span>
+                </Link>
+              ) : (
+                <Link href="/project-planner" className="btn btn--primary btn--sm">
+                  <span>Plan a Similar Build</span>
+                </Link>
+              )}
+            </div>
+          </section>
         </div>
       </article>
 

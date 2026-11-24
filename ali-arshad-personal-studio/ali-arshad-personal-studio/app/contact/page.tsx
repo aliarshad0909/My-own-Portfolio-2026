@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Faq } from "@/components/ui/Faq";
-import type { FaqItem } from "@/lib/structured-data";
-import Image from "next/image";
 import Link from "next/link";
 import { InquiryForm } from "@/components/contact/InquiryForm";
+import { Faq } from "@/components/ui/Faq";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
+import { GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
 import { isDeliveryConfigured } from "@/lib/inquiry-server";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES } from "@/lib/services";
-import { GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
 import { FREELANCE, SITE, activeSocials } from "@/lib/site";
+import type { FaqItem } from "@/lib/structured-data";
 
 // Evaluate delivery env vars per request so Vercel env updates take effect immediately.
 export const dynamic = "force-dynamic";
@@ -150,21 +149,9 @@ export default function ContactPage() {
               </ul>
             </div>
 
-            {/* Portrait + unboxed 3D "A" sitting cleanly in open visual space */}
-            <div className="contact__brand-pair">
-              <div className="portrait-frame portrait-frame--contact">
-                <Image
-                  src="/images/portraits/portrait-contact.webp"
-                  alt="Portrait of Ali Arshad wearing a dark blazer"
-                  width={1173}
-                  height={1341}
-                  sizes="(min-width: 1024px) 240px, 56vw"
-                />
-              </div>
-              <div className="contact__mark-space">
-                <SignatureMark3D variant="contact" />
-                <p className="fine-print">Ali Arshad Personal Studio · Independent remote delivery</p>
-              </div>
+            {/* Unboxed sculpted 3D "A" mark integrated directly into open space (no portrait, no card, no caption) */}
+            <div className="contact__mark-stage">
+              <SignatureMark3D variant="contact" />
             </div>
           </div>
 
