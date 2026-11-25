@@ -1,19 +1,19 @@
 /**
- * Server-only delivery for Studio Network collaborator registrations.
- * Reuses the studio's Resend / Webhook delivery configuration so no extra paid
- * service is required. Never import from client components.
+ * Server-only delivery for Studio Network collaborator registrations (`/api/studio-network`).
+ * Shares the Resend / Webhook environment configuration (with optional STUDIO_NETWORK_* overrides)
+ * and labels every email distinctly from client Contact inquiries.
+ * Never import this file from client components.
  */
+import { buildLabeledEmailHtml, envVar, sendResendEmail } from "@/lib/form-security";
 import { findCoarseRegion, type CollaboratorInput } from "@/lib/studio-network";
 
-const env = (k: string) => (process.env[k] ?? "").trim();
-
 export function networkDeliveryChannels() {
-  const webhookUrl = env("STUDIO_NETWORK_WEBHOOK_URL") || env("INQUIRY_WEBHOOK_URL");
-  const toEmail = env("STUDIO_NETWORK_TO_EMAIL") || env("INQUIRY_TO_EMAIL");
-  const fromEmail = env("INQUIRY_FROM_EMAIL");
+  const webhookUrl = envVar("STUDIO_NETWORK_WEBHOOK_URL") || envVar("INQUIRY_WEBHOOK_URL");
+  const toEmail = envVar("STUDIO_NETWORK_TO_EMAIL") || envVar("INQUIRY_TO_EMAIL");
+  const fromEmail = envVar("STUDIO_NETWORK_FROM_EMAIL") || envVar("INQUIRY_FROM_EMAIL");
   return {
     webhook: webhookUrl !== "",
-    email: env("RESEND_API_KEY") !== "" && toEmail !== "" && fromEmail !== "",
+    email: envVar("RESEND_API_KEY") !== "" && toEmail !== "" && fromEmail !== "",
   };
 }
 
@@ -22,13 +22,10 @@ export function isNetworkDeliveryConfigured(): boolean {
   return c.webhook || c.email;
 }
 
-const escapeHtml = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-
 async function sendWebhook(application: CollaboratorInput, meta: { receivedAt: string; visibility: string }) {
-  const url = env("STUDIO_NETWORK_WEBHOOK_URL") || env("INQUIRY_WEBHOOK_URL");
+  const url = envVar("STUDIO_NETWORK_WEBHOOK_URL") || envVar("INQUIRY_WEBHOOK_URL");
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  const secret = env("STUDIO_NETWORK_WEBHOOK_SECRET") || env("INQUIRY_WEBHOOK_SECRET");
+  const secret = envVar("STUDIO_NETWORK_WEBHOOK_SECRET") || envVar("INQUIRY_WEBHOOK_SECRET");
   if (secret) headers["x-inquiry-secret"] = secret;
 
   const res = await fetch(url, {
@@ -36,6 +33,7 @@ async function sendWebhook(application: CollaboratorInput, meta: { receivedAt: s
     headers,
     body: JSON.stringify({
       source: "ali-arshad-studio-network",
+      formType: "studio_network_application",
       moderationStatus: "pending",
       publishedToGlobe: false,
       ...meta,
@@ -48,42 +46,55 @@ async function sendWebhook(application: CollaboratorInput, meta: { receivedAt: s
 }
 
 async function sendEmail(application: CollaboratorInput, meta: { receivedAt: string; visibility: string }) {
-  const toEmail = env("STUDIO_NETWORK_TO_EMAIL") || env("INQUIRY_TO_EMAIL");
+  const toEmail = envVar("STUDIO_NETWORK_TO_EMAIL") || envVar("INQUIRY_TO_EMAIL");
+  const fromEmail = envVar("STUDIO_NETWORK_FROM_EMAIL") || envVar("INQUIRY_FROM_EMAIL");
   const regionLabel = findCoarseRegion(application.approximateRegion)?.label ?? "Private (not opted into public globe)";
-  const rows: [string, string][] = [
-    ["Name", application.name],
-    ["Email", application.email],
-    ["Location / Time Zone", application.locationTimezone],
-    ["Primary Skills", application.skills.join(", ")],
-    ["Portfolio / Samples", application.portfolioUrl],
-    ["Availability", application.availability],
-    ["Public Globe Opt-In", application.publicListingOptIn ? "Requested (requires verification & approval)" : "No — Private only"],
-    ["Coarse Globe Region", regionLabel],
-    ["Default Publication State", meta.visibility],
-    ["Received", meta.receivedAt],
+
+  const rows = [
+    { label: "Form Source", value: "Studio Network Registration (/studio-network)" },
+    { label: "Full Name", value: application.name },
+    { label: "Email", value: application.email, href: `mailto:${application.email}` },
+    { label: "Location / Time Zone", value: application.locationTimezone },
+    { label: "Primary Skills", value: application.skills.join(", ") },
+    { label: "Portfolio / Work Samples", value: application.portfolioUrl, href: application.portfolioUrl },
+    { label: "Availability", value: application.availability },
+    {
+      label: "Public Globe Opt-In",
+      value: application.publicListingOptIn
+        ? "Requested (requires manual verification & moderation approval)"
+        : "No — Private internal roster only",
+    },
+    { label: "Coarse Globe Region", value: regionLabel },
+    { label: "Publication State", value: meta.visibility },
+    { label: "Received (UTC)", value: meta.receivedAt },
   ];
 
-  const html =
-    `<h2>New Studio Network collaborator registration</h2><table cellpadding="6">` +
-    rows.map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${escapeHtml(v)}</td></tr>`).join("") +
-    `</table><h3>Introduction</h3><p style="white-space:pre-wrap">${escapeHtml(application.introduction)}</p>`;
-  const text = rows.map(([k, v]) => `${k}: ${v}`).join("\n") + `\n\n${application.introduction}`;
-
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env("RESEND_API_KEY")}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: env("INQUIRY_FROM_EMAIL"),
-      to: [toEmail],
-      reply_to: application.email,
-      subject: `Studio Network collaborator: ${application.name} (${application.skills[0] ?? "Specialist"})`,
-      html,
-      text,
-    }),
-    signal: AbortSignal.timeout(8000),
-    cache: "no-store",
+  const html = buildLabeledEmailHtml({
+    badge: "Studio Network Application",
+    heading: `New Studio Network collaborator: ${application.name}`,
+    introNote:
+      "Submitted via the Studio Network registration form (/studio-network). Kept strictly private by default until manually verified and approved.",
+    rows,
+    messageHeading: "Collaborator Introduction",
+    messageBody: application.introduction,
   });
-  if (!res.ok) throw new Error(`Email provider responded with ${res.status}`);
+
+  const text =
+    "=== STUDIO NETWORK COLLABORATOR APPLICATION ===\n" +
+    rows.map((r) => `${r.label}: ${r.value}`).join("\n") +
+    `\n\n--- Collaborator Introduction ---\n${application.introduction}`;
+
+  await sendResendEmail({
+    apiKey: envVar("RESEND_API_KEY"),
+    from: fromEmail,
+    to: [toEmail],
+    replyTo: application.email,
+    subject: `[Studio Network Application] ${application.skills[0] ?? "Specialist"} — ${application.name}`,
+    html,
+    text,
+    formTag: "studio_network_application",
+    formHeader: "studio-network-application",
+  });
 }
 
 export async function deliverCollaboratorApplication(

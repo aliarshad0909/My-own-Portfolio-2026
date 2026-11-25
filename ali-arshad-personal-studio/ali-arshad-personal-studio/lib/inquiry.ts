@@ -2,6 +2,7 @@
  * Inquiry schema + validation shared by the contact form (client)
  * and /api/inquiry (server). No secrets in this file.
  */
+import { cleanEmail, cleanMultiline, cleanSingleLine } from "@/lib/form-sanitize";
 import { SERVICES } from "@/lib/services";
 import { GPU_COMPUTE_CONTACT_SERVICE } from "@/lib/gpu-compute";
 
@@ -40,18 +41,16 @@ export type InquiryErrors = Partial<Record<keyof InquiryInput, string>>;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
-
-/** Normalise unknown input into an InquiryInput (never trusts the client). */
+/** Normalise and sanitize unknown input into an InquiryInput (never trusts the client). */
 export function normaliseInquiry(raw: Record<string, unknown>): InquiryInput {
   return {
-    name: str(raw.name),
-    email: str(raw.email).toLowerCase(),
-    company: str(raw.company),
-    service: str(raw.service),
-    description: str(raw.description),
-    budget: str(raw.budget),
-    timeline: str(raw.timeline),
+    name: cleanSingleLine(raw.name),
+    email: cleanEmail(raw.email),
+    company: cleanSingleLine(raw.company),
+    service: cleanSingleLine(raw.service),
+    description: cleanMultiline(raw.description),
+    budget: cleanSingleLine(raw.budget),
+    timeline: cleanSingleLine(raw.timeline),
     consent: raw.consent === true || raw.consent === "true" || raw.consent === "on",
   };
 }

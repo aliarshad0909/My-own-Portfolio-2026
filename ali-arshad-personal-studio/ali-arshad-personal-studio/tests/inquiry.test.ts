@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
+import { extractClientIp, isPlausibleFillTime, isSameOrigin, sanitizeHeaderValue } from "@/lib/form-security";
 import { BUDGET_OPTIONS, LIMITS, SERVICE_OPTIONS, TIMELINE_OPTIONS, normaliseInquiry, validateInquiry, type InquiryInput } from "@/lib/inquiry";
 import { deliverInquiry, deliveryChannels, isDeliveryConfigured } from "@/lib/inquiry-server";
 import { rateLimit } from "@/lib/rate-limit";
@@ -63,6 +64,51 @@ describe("inquiry normalisation", () => {
     assert.equal(n.email, "test@example.com");
     assert.equal(n.consent, true);
     assert.equal(n.description, "", "a non-string becomes empty rather than being stringified");
+  });
+
+  it("strips control characters and collapses CR/LF header-injection attempts during normalisation", () => {
+    const n = normaliseInquiry({
+      name: "Ali\r\nBcc: attacker@evil.test\u0000",
+      email: "  Client@Example.COM\r\n ",
+      company: "Acme\t\nCorp",
+      service: SERVICE_OPTIONS[0],
+      description: "Line one\r\nLine two\u0000\n\n\n\n\nLine three with enough length.",
+      consent: true,
+    });
+    assert.equal(n.name, "Ali Bcc: attacker@evil.test");
+    assert.equal(n.email, "client@example.com");
+    assert.equal(n.company, "Acme Corp");
+    assert.equal(n.description.includes("\u0000"), false);
+    assert.equal(n.description.includes("\r"), false);
+    assert.equal(sanitizeHeaderValue("Hello\r\nBcc: evil@test.com"), "Hello Bcc: evil@test.com");
+  });
+
+  it("rejects NaN, Infinity, non-numbers, and fast bot submissions in fill-time guard", () => {
+    assert.equal(isPlausibleFillTime(NaN, 2500), false);
+    assert.equal(isPlausibleFillTime(Infinity, 2500), false);
+    assert.equal(isPlausibleFillTime("9999", 2500), false);
+    assert.equal(isPlausibleFillTime(1200, 2500), false);
+    assert.equal(isPlausibleFillTime(2500, 2500), true);
+  });
+
+  it("extracts Vercel edge IP first and enforces same-origin browser requests", () => {
+    const req = new Request("https://www.aliarshad.co/api/inquiry", {
+      method: "POST",
+      headers: {
+        host: "www.aliarshad.co",
+        origin: "https://www.aliarshad.co",
+        "x-vercel-forwarded-for": "198.51.100.7, 10.0.0.1",
+        "x-forwarded-for": "203.0.113.99",
+      },
+    });
+    assert.equal(extractClientIp(req), "198.51.100.7");
+    assert.equal(isSameOrigin(req), true);
+
+    const crossOrigin = new Request("https://www.aliarshad.co/api/inquiry", {
+      method: "POST",
+      headers: { host: "www.aliarshad.co", origin: "https://evil.example" },
+    });
+    assert.equal(isSameOrigin(crossOrigin), false);
   });
 
   it("never trusts a non-boolean consent", () => {
@@ -155,19 +201,23 @@ describe("delivery", () => {
     assert.match(body.receivedAt, /^\d{4}-\d\d-\d\dT/);
   });
 
-  it("sends through Resend with reply-to set to the enquirer", async () => {
+  it("sends through Resend with Contact Inquiry label, tags, headers, and reply-to set to the enquirer", async () => {
     process.env.RESEND_API_KEY = "re_test";
-    process.env.INQUIRY_TO_EMAIL = "inbox@example.test";
-    process.env.INQUIRY_FROM_EMAIL = "Studio <studio@example.test>";
-    stubFetch(() => new Response(JSON.stringify({ id: "x" }), { status: 200 }));
+    process.env.INQUIRY_TO_EMAIL = "a.arshad3001@gmail.com";
+    process.env.INQUIRY_FROM_EMAIL = "Ali Arshad Studio <hello@aliarshad.co>";
+    stubFetch(() => new Response(JSON.stringify({ id: "email_123" }), { status: 200 }));
 
     const result = await deliverInquiry(VALID);
     assert.equal(result.delivered, true);
     assert.equal(calls[0].url, "https://api.resend.com/emails");
     const body = JSON.parse(String(calls[0].init.body));
-    assert.deepEqual(body.to, ["inbox@example.test"]);
+    assert.deepEqual(body.to, ["a.arshad3001@gmail.com"]);
     assert.equal(body.reply_to, VALID.email);
+    assert.match(body.subject, /^\[Contact Inquiry\]/);
     assert.match(body.subject, /Test Person/);
+    assert.equal(body.headers["X-Portfolio-Form"], "contact-inquiry");
+    assert.deepEqual(body.tags, [{ name: "form", value: "contact_inquiry" }]);
+    assert.ok(body.text.includes("PORTFOLIO CONTACT INQUIRY"));
     assert.ok(body.text.includes(VALID.description));
   });
 
