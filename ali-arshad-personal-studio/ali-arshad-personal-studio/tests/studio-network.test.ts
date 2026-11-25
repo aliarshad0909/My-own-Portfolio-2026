@@ -94,6 +94,88 @@ describe("studio network server delivery", () => {
     }
   });
 
+  it("delivers Studio Network applications via Resend with distinct label, escaped HTML, and shared Gmail recipient", async () => {
+    const keys = [
+      "RESEND_API_KEY",
+      "INQUIRY_TO_EMAIL",
+      "INQUIRY_FROM_EMAIL",
+      "STUDIO_NETWORK_TO_EMAIL",
+      "STUDIO_NETWORK_FROM_EMAIL",
+      "STUDIO_NETWORK_WEBHOOK_URL",
+      "INQUIRY_WEBHOOK_URL",
+    ];
+    const saved = Object.fromEntries(keys.map((k) => [k, process.env[k]]));
+    const prevFetch = globalThis.fetch;
+    let capturedUrl = "";
+    let capturedBody = "";
+
+    try {
+      for (const k of keys) delete process.env[k];
+      process.env.RESEND_API_KEY = "re_test_key";
+      process.env.INQUIRY_TO_EMAIL = "a.arshad3001@gmail.com";
+      process.env.INQUIRY_FROM_EMAIL = "Ali Arshad Studio <hello@aliarshad.co>";
+      assert.deepEqual(networkDeliveryChannels(), { webhook: false, email: true });
+      assert.equal(isNetworkDeliveryConfigured(), true);
+
+      globalThis.fetch = (async (url: unknown, init?: RequestInit) => {
+        capturedUrl = String(url);
+        capturedBody = String(init?.body ?? "");
+        return new Response(JSON.stringify({ id: "email_net_1" }), { status: 200 });
+      }) as typeof fetch;
+
+      const clean = normaliseCollaborator({
+        ...VALID_RAW,
+        introduction: '<img src=x onerror=alert(1)> Experienced Next.js engineer building reliable US client systems.',
+      });
+      const res = await deliverCollaboratorApplication(clean);
+      assert.equal(res.delivered, true);
+      assert.deepEqual(res.failures, []);
+      assert.equal(capturedUrl, "https://api.resend.com/emails");
+      const parsed = JSON.parse(capturedBody);
+      assert.deepEqual(parsed.to, ["a.arshad3001@gmail.com"]);
+      assert.equal(parsed.reply_to, "jordan@example.com");
+      assert.match(parsed.subject, /^\[Studio Network Application\]/);
+      assert.match(parsed.subject, /Jordan Ellis/);
+      assert.equal(parsed.headers["X-Portfolio-Form"], "studio-network-application");
+      assert.deepEqual(parsed.tags, [{ name: "form", value: "studio_network_application" }]);
+      assert.equal(parsed.html.includes("<img"), false);
+      assert.ok(parsed.html.includes("&lt;img"));
+      assert.ok(parsed.text.includes("STUDIO NETWORK COLLABORATOR APPLICATION"));
+    } finally {
+      globalThis.fetch = prevFetch;
+      for (const [k, v] of Object.entries(saved)) {
+        if (v === undefined) delete process.env[k];
+        else process.env[k] = v;
+      }
+    }
+  });
+
+  it("reports provider errors cleanly without faking delivery", async () => {
+    const keys = ["RESEND_API_KEY", "INQUIRY_TO_EMAIL", "INQUIRY_FROM_EMAIL", "STUDIO_NETWORK_WEBHOOK_URL", "INQUIRY_WEBHOOK_URL"];
+    const saved = Object.fromEntries(keys.map((k) => [k, process.env[k]]));
+    const prevFetch = globalThis.fetch;
+    try {
+      for (const k of keys) delete process.env[k];
+      process.env.RESEND_API_KEY = "re_test_key";
+      process.env.INQUIRY_TO_EMAIL = "a.arshad3001@gmail.com";
+      process.env.INQUIRY_FROM_EMAIL = "Ali Arshad Studio <hello@aliarshad.co>";
+      globalThis.fetch = (async () =>
+        new Response(JSON.stringify({ name: "validation_error", message: "Domain not verified" }), { status: 403 })) as typeof fetch;
+
+      const res = await deliverCollaboratorApplication(normaliseCollaborator(VALID_RAW));
+      assert.equal(res.delivered, false);
+      assert.equal(res.failures.length, 1);
+      assert.match(res.failures[0], /403/);
+      assert.match(res.failures[0], /Domain not verified/);
+    } finally {
+      globalThis.fetch = prevFetch;
+      for (const [k, v] of Object.entries(saved)) {
+        if (v === undefined) delete process.env[k];
+        else process.env[k] = v;
+      }
+    }
+  });
+
   it("delivers to webhook when configured and returns delivered=true", async () => {
     const prevWebhook = process.env.STUDIO_NETWORK_WEBHOOK_URL;
     const prevSecret = process.env.STUDIO_NETWORK_WEBHOOK_SECRET;

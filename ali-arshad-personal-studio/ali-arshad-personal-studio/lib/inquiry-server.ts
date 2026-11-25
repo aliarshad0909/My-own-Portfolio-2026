@@ -1,15 +1,17 @@
 /**
- * Server-only inquiry delivery. Reads secrets from environment variables.
- * Never import this file from a client component.
+ * Server-only delivery for Contact / Project Inquiry submissions (`/api/inquiry`).
+ * Reads secrets strictly from server environment variables — never import from client code.
  */
+import { buildLabeledEmailHtml, envVar, sendResendEmail } from "@/lib/form-security";
 import type { InquiryInput } from "@/lib/inquiry";
-
-const env = (k: string) => (process.env[k] ?? "").trim();
 
 export function deliveryChannels() {
   return {
-    webhook: env("INQUIRY_WEBHOOK_URL") !== "",
-    email: env("RESEND_API_KEY") !== "" && env("INQUIRY_TO_EMAIL") !== "" && env("INQUIRY_FROM_EMAIL") !== "",
+    webhook: envVar("INQUIRY_WEBHOOK_URL") !== "",
+    email:
+      envVar("RESEND_API_KEY") !== "" &&
+      envVar("INQUIRY_TO_EMAIL") !== "" &&
+      envVar("INQUIRY_FROM_EMAIL") !== "",
   };
 }
 
@@ -18,17 +20,19 @@ export function isDeliveryConfigured(): boolean {
   return c.webhook || c.email;
 }
 
-const escapeHtml = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-
 async function sendWebhook(inquiry: InquiryInput, meta: { receivedAt: string }) {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  const secret = env("INQUIRY_WEBHOOK_SECRET");
+  const secret = envVar("INQUIRY_WEBHOOK_SECRET");
   if (secret) headers["x-inquiry-secret"] = secret;
-  const res = await fetch(env("INQUIRY_WEBHOOK_URL"), {
+  const res = await fetch(envVar("INQUIRY_WEBHOOK_URL"), {
     method: "POST",
     headers,
-    body: JSON.stringify({ source: "ali-arshad-studio", ...meta, inquiry }),
+    body: JSON.stringify({
+      source: "ali-arshad-studio",
+      formType: "contact_inquiry",
+      ...meta,
+      inquiry,
+    }),
     signal: AbortSignal.timeout(8000),
     cache: "no-store",
   });
@@ -36,36 +40,42 @@ async function sendWebhook(inquiry: InquiryInput, meta: { receivedAt: string }) 
 }
 
 async function sendEmail(inquiry: InquiryInput, meta: { receivedAt: string }) {
-  const rows: [string, string][] = [
-    ["Name", inquiry.name],
-    ["Email", inquiry.email],
-    ["Company / brand", inquiry.company || "—"],
-    ["Service", inquiry.service],
-    ["Budget", inquiry.budget || "—"],
-    ["Timeline", inquiry.timeline || "—"],
-    ["Received", meta.receivedAt],
+  const rows = [
+    { label: "Form Source", value: "Contact / Project Inquiry (/contact)" },
+    { label: "Name", value: inquiry.name },
+    { label: "Email", value: inquiry.email, href: `mailto:${inquiry.email}` },
+    { label: "Company / Brand", value: inquiry.company || "—" },
+    { label: "Service Requested", value: inquiry.service },
+    { label: "Budget Range", value: inquiry.budget || "—" },
+    { label: "Expected Timeline", value: inquiry.timeline || "—" },
+    { label: "Received (UTC)", value: meta.receivedAt },
   ];
-  const html =
-    `<h2>New project inquiry</h2><table cellpadding="6">` +
-    rows.map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${escapeHtml(v)}</td></tr>`).join("") +
-    `</table><h3>Project description</h3><p style="white-space:pre-wrap">${escapeHtml(inquiry.description)}</p>`;
-  const text = rows.map(([k, v]) => `${k}: ${v}`).join("\n") + `\n\n${inquiry.description}`;
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env("RESEND_API_KEY")}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: env("INQUIRY_FROM_EMAIL"),
-      to: [env("INQUIRY_TO_EMAIL")],
-      reply_to: inquiry.email,
-      subject: `New inquiry: ${inquiry.name} (${inquiry.service})`,
-      html,
-      text,
-    }),
-    signal: AbortSignal.timeout(8000),
-    cache: "no-store",
+  const html = buildLabeledEmailHtml({
+    badge: "Portfolio Contact Inquiry",
+    heading: `New project inquiry from ${inquiry.name}`,
+    introNote: "Submitted via the Contact form (/contact). Reply directly to respond to the client.",
+    rows,
+    messageHeading: "Project Description",
+    messageBody: inquiry.description,
   });
-  if (!res.ok) throw new Error(`Email provider responded with ${res.status}`);
+
+  const text =
+    "=== PORTFOLIO CONTACT INQUIRY ===\n" +
+    rows.map((r) => `${r.label}: ${r.value}`).join("\n") +
+    `\n\n--- Project Description ---\n${inquiry.description}`;
+
+  await sendResendEmail({
+    apiKey: envVar("RESEND_API_KEY"),
+    from: envVar("INQUIRY_FROM_EMAIL"),
+    to: [envVar("INQUIRY_TO_EMAIL")],
+    replyTo: inquiry.email,
+    subject: `[Contact Inquiry] ${inquiry.service} — ${inquiry.name}`,
+    html,
+    text,
+    formTag: "contact_inquiry",
+    formHeader: "contact-inquiry",
+  });
 }
 
 /**

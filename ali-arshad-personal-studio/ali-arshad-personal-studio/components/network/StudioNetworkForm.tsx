@@ -19,7 +19,7 @@ type Status =
   | { kind: "idle" }
   | { kind: "submitting" }
   | { kind: "success" }
-  | { kind: "error"; message: string; setup?: boolean };
+  | { kind: "error"; message: string; setup?: boolean; rateLimited?: boolean };
 
 const EMPTY: CollaboratorInput = {
   name: "",
@@ -125,7 +125,12 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
           setErrors(data.errors);
           focusFirstError(data.errors);
         }
-        setStatus({ kind: "error", message: data.message, setup: data.code === "not_configured" });
+        setStatus({
+          kind: "error",
+          message: data.message,
+          setup: data.code === "not_configured",
+          rateLimited: data.code === "rate_limited",
+        });
       } else {
         setStatus({
           kind: "error",
@@ -151,7 +156,14 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
             Thank you. Your details were delivered privately to Ali Arshad. Nothing is published to the public globe
             automatically — public placement requires explicit opt-in, identity verification, and manual moderation approval.
           </p>
-          <button type="button" className="btn btn--secondary btn--sm" onClick={() => setStatus({ kind: "idle" })}>
+          <button
+            type="button"
+            className="btn btn--secondary btn--sm"
+            onClick={() => {
+              startedAt.current = Date.now();
+              setStatus({ kind: "idle" });
+            }}
+          >
             <span>Submit another profile</span>
           </button>
         </div>
@@ -437,7 +449,13 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
         >
           <Icon name="alert" size={22} />
           <div>
-            <h3 className="card-title">{status.setup ? "Not sent: form not connected" : "Submission not sent"}</h3>
+            <h3 className="card-title">
+              {status.setup
+                ? "Not sent: form not connected"
+                : status.rateLimited
+                  ? "Please wait before submitting again"
+                  : "Submission not sent"}
+            </h3>
             <p>{status.message}</p>
           </div>
         </div>
