@@ -14,7 +14,16 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   async headers() {
-    return [{ source: "/(.*)", headers: securityHeaders }];
+    const adminNoIndexHeaders = [
+      { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+      { key: "Cache-Control", value: "no-store, private" },
+    ];
+    return [
+      { source: "/(.*)", headers: securityHeaders },
+      { source: "/admin", headers: adminNoIndexHeaders },
+      { source: "/admin/:path*", headers: adminNoIndexHeaders },
+      { source: "/api/admin/:path*", headers: adminNoIndexHeaders },
+    ];
   },
 };
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { recordStudioApplication } from "@/lib/admin/db";
 import { extractClientIp, isPlausibleFillTime, isSameOrigin } from "@/lib/form-security";
 import { rateLimit } from "@/lib/rate-limit";
 import {
@@ -107,6 +108,8 @@ export async function POST(request: Request) {
       502,
     );
   }
+
+  await recordStudioApplication(application);
 
   // Submissions remain private by default; moderation & written verification are always required before public globe listing.
   return json({ ok: true, privacyState: "private_pending_review" }, 200);
