@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { ChangingFocus } from "@/components/ui/ChangingFocus";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { SITE } from "@/lib/site";
 
@@ -20,7 +19,7 @@ export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero__accent" aria-hidden="true" />
-      <div className="container hero__inner hero__inner--mark">
+      <div className="container hero__inner hero__inner--portrait">
         <div className="hero__copy enter">
           <p className="eyebrow">
             {SITE.name} — {SITE.descriptor}
@@ -77,8 +76,8 @@ export function Hero() {
           </ul>
         </div>
 
-        {/* Open visual stage: existing personal portrait beside the unboxed 3D "A" logo (no card, no caption) */}
-        <div className="hero__stage">
+        {/* Homepage hero portrait only; the 3D studio mark remains on other pages. */}
+        <div className="hero__stage hero__stage--portrait">
           <div className="hero__portrait-stage enter enter--portrait">
             <Image
               src="/images/portraits/portrait-hero.webp"
@@ -86,12 +85,9 @@ export function Hero() {
               width={1024}
               height={1536}
               priority
-              sizes="(min-width: 1280px) 360px, (min-width: 1024px) 28vw, 280px"
+              sizes="(min-width: 1280px) 480px, (min-width: 1024px) 36vw, 80vw"
               className="hero__portrait-img"
             />
-          </div>
-          <div className="hero__mark-stage">
-            <SignatureMark3D variant="hero" />
           </div>
         </div>
       </div>
