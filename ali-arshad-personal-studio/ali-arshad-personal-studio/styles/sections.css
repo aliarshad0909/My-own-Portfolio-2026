@@ -7908,25 +7908,24 @@ code,
    4-FAMILY SERVICES GRID, PROJECT BRIEF STRIP & RESPONSIVE RHYTHM POLISH
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* 1. Homepage Hero Portrait + Unboxed 3D "A" Composition & Contact Unboxed 3D "A" */
+/* 1. Homepage portrait-only hero; Contact retains its separate 3D mark */
 .hero {
   isolation: isolate;
   background: var(--bg);
 }
 
-.hero__inner--mark {
+.hero__inner--portrait {
   align-items: center;
   gap: clamp(28px, 4vw, 44px);
   padding-block: clamp(36px, 5vw, 56px) clamp(32px, 4.5vw, 48px);
 }
 
-/* Open hero stage composing existing portrait beside unboxed 3D "A" (no card, no caption) */
-.hero__stage {
+/* A single unboxed portrait anchors the open visual area */
+.hero__stage--portrait {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   align-items: center;
-  gap: 12px;
   width: 100%;
   padding-top: 8px;
 }
@@ -7934,7 +7933,7 @@ code,
 .hero__portrait-stage {
   position: relative;
   isolation: isolate;
-  width: min(100%, 280px);
+  width: min(100%, 320px);
   overflow: visible;
 }
 
@@ -7958,105 +7957,42 @@ code,
   display: block;
   width: 100%;
   height: auto;
-  -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
-}
-
-.hero__mark-stage {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  padding-block: 4px;
-}
-
-.sig3d--hero {
-  width: clamp(168px, 44vw, 216px);
-}
-
-.sig3d--hero .sig3d__ambient {
-  inset: -24%;
-  background: radial-gradient(ellipse 72% 68% at 50% 48%,
-      rgba(255, 122, 92, 0.34) 0%,
-      rgba(196, 76, 48, 0.16) 44%,
-      transparent 74%);
-  filter: blur(28px);
-}
-
-.contact__mark-stage {
-  display: grid;
-  place-items: center;
-  margin-top: clamp(24px, 3.2vw, 40px);
-  padding-block: clamp(12px, 2vw, 24px);
-}
-
-.sig3d--contact {
-  width: clamp(190px, 20vw, 260px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
 }
 
 @media (min-width: 768px) {
-  .hero__stage {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.85fr);
-    align-items: center;
-    justify-items: center;
-    gap: clamp(14px, 2vw, 24px);
-    max-width: 600px;
-    margin-inline: auto;
-    padding-top: 12px;
-  }
-
   .hero__portrait-stage {
-    width: min(100%, 320px);
-  }
-
-  .hero__mark-stage {
-    align-self: center;
-    padding-bottom: 12px;
-  }
-
-  .sig3d--hero {
-    width: clamp(180px, 22vw, 232px);
+    width: min(100%, 410px);
   }
 }
 
 @media (min-width: 1024px) {
-  .hero__inner--mark {
+  .hero__inner--portrait {
     grid-template-columns: minmax(0, 52fr) minmax(0, 48fr);
     align-items: center;
     gap: clamp(20px, 2.8vw, 40px);
     padding-block: clamp(32px, 3.6vw, 56px);
   }
 
-  .hero__inner--mark .hero__copy {
+  .hero__inner--portrait .hero__copy {
     padding-block: clamp(12px, 1.4vw, 24px);
   }
 
-  .hero__inner--mark .hero__title {
+  .hero__inner--portrait .hero__title {
     font-size: clamp(2.15rem, 0.85rem + 2.8vw, 3.55rem);
   }
 
-  .hero__stage {
-    grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.82fr);
-    align-items: center;
-    gap: clamp(12px, 1.6vw, 24px);
-    max-width: none;
-    margin-inline: 0;
+  .hero__stage--portrait {
+    align-self: stretch;
+    justify-items: end;
     padding-top: 0;
   }
 
   .hero__portrait-stage {
-    width: 100%;
-    max-width: 365px;
+    width: min(100%, 480px);
+    max-width: 480px;
     justify-self: end;
-  }
-
-  .hero__mark-stage {
-    align-self: center;
-    justify-self: center;
-    padding-block: 0 12px;
-  }
-
-  .sig3d--hero {
-    width: clamp(170px, 16.5vw, 240px);
   }
 }
 
