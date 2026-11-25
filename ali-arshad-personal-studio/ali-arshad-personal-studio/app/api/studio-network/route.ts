@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { extractClientIp, isPlausibleFillTime, isSameOrigin } from "@/lib/form-security";
 import { rateLimit } from "@/lib/rate-limit";
 import {
   normaliseCollaborator,
@@ -19,32 +20,15 @@ const MIN_FILL_MS = 2500;
 const json = (body: CollaboratorResponse, status: number, headers?: Record<string, string>) =>
   NextResponse.json(body, { status, headers: { "Cache-Control": "no-store", ...headers } });
 
-function clientKey(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  const ip = forwarded?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
-  return `studio-network:${ip}`;
-}
-
-function sameOrigin(request: Request): boolean {
-  const origin = request.headers.get("origin");
-  if (!origin) return true;
-  try {
-    const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
-    return new URL(origin).host === host;
-  } catch {
-    return false;
-  }
-}
-
 export async function POST(request: Request) {
-  if (!sameOrigin(request)) {
+  if (!isSameOrigin(request)) {
     return json({ ok: false, code: "bad_request", message: "This request could not be accepted." }, 403);
   }
   if (!(request.headers.get("content-type") ?? "").includes("application/json")) {
     return json({ ok: false, code: "bad_request", message: "This request could not be accepted." }, 415);
   }
 
-  const limited = rateLimit(clientKey(request));
+  const limited = rateLimit(`studio-network:${extractClientIp(request)}`);
   if (!limited.allowed) {
     return json(
       {
@@ -78,9 +62,9 @@ export async function POST(request: Request) {
     );
   }
 
+  // Basic spam protection: hidden honeypot field + minimum human fill timing check.
   const honeypot = typeof raw.companyWebsite === "string" ? raw.companyWebsite.trim() : "";
-  const elapsed = typeof raw.elapsedMs === "number" ? raw.elapsedMs : 0;
-  if (honeypot !== "" || elapsed < MIN_FILL_MS) {
+  if (honeypot !== "" || !isPlausibleFillTime(raw.elapsedMs, MIN_FILL_MS)) {
     return json(
       { ok: false, code: "bad_request", message: "Your submission could not be accepted. Please wait a moment and try again." },
       400,
@@ -118,7 +102,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "delivery_failed",
-        message: "Your submission could not be delivered right now. Please try again in a few minutes.",
+        message: "Your submission could not be delivered right now. Please try again in a few minutes or connect on LinkedIn.",
       },
       502,
     );

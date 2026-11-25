@@ -3,6 +3,7 @@
  * validation, and normalization.
  * Safe for both client components and Node API routes.
  */
+import { cleanEmail, cleanMultiline, cleanSingleLine } from "@/lib/form-sanitize";
 
 export const COLLABORATOR_SKILLS = [
   "Full-Stack Web / Next.js",
@@ -177,31 +178,27 @@ export type CollaboratorResponse =
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-function clean(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
-}
-
 export function normaliseCollaborator(raw: Record<string, unknown>): CollaboratorInput {
   const rawSkills = Array.isArray(raw.skills) ? raw.skills : [];
   const skills = Array.from(
     new Set(
       rawSkills
-        .map((item) => clean(item))
+        .map((item) => cleanSingleLine(item))
         .filter((s) => (COLLABORATOR_SKILLS as readonly string[]).includes(s)),
     ),
   );
 
   const publicListingOptIn = raw.publicListingOptIn === true;
-  const approximateRegion = publicListingOptIn ? clean(raw.approximateRegion) : "";
+  const approximateRegion = publicListingOptIn ? cleanSingleLine(raw.approximateRegion) : "";
 
   return {
-    name: clean(raw.name),
-    email: clean(raw.email).toLowerCase(),
-    locationTimezone: clean(raw.locationTimezone),
+    name: cleanSingleLine(raw.name),
+    email: cleanEmail(raw.email),
+    locationTimezone: cleanSingleLine(raw.locationTimezone),
     skills,
-    portfolioUrl: clean(raw.portfolioUrl),
-    availability: clean(raw.availability),
-    introduction: clean(raw.introduction),
+    portfolioUrl: cleanSingleLine(raw.portfolioUrl),
+    availability: cleanSingleLine(raw.availability),
+    introduction: cleanMultiline(raw.introduction),
     consent: raw.consent === true,
     publicListingOptIn,
     approximateRegion,

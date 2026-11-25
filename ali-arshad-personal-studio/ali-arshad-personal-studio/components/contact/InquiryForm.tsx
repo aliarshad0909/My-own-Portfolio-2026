@@ -19,7 +19,7 @@ type Status =
   | { kind: "idle" }
   | { kind: "submitting" }
   | { kind: "success" }
-  | { kind: "error"; message: string; setup?: boolean };
+  | { kind: "error"; message: string; setup?: boolean; rateLimited?: boolean };
 
 const EMPTY: InquiryInput = { name: "", email: "", company: "", service: "", description: "", budget: "", timeline: "", consent: false };
 
@@ -105,7 +105,12 @@ export function InquiryForm({ configured, fallbackEmail = "", upworkUrl = "", li
           setErrors(data.errors);
           focusFirstError(data.errors);
         }
-        setStatus({ kind: "error", message: data.message, setup: data.code === "not_configured" });
+        setStatus({
+          kind: "error",
+          message: data.message,
+          setup: data.code === "not_configured",
+          rateLimited: data.code === "rate_limited",
+        });
       } else {
         setStatus({ kind: "error", message: "Something went wrong while sending your inquiry. Please try again in a moment." });
       }
@@ -125,7 +130,14 @@ export function InquiryForm({ configured, fallbackEmail = "", upworkUrl = "", li
           <p className="form-status__next">
             While you wait, the <a href="/case-studies">case studies</a> show how I approach a project from brief to delivery.
           </p>
-          <button type="button" className="btn btn--secondary btn--sm" onClick={() => setStatus({ kind: "idle" })}>
+          <button
+            type="button"
+            className="btn btn--secondary btn--sm"
+            onClick={() => {
+              startedAt.current = Date.now();
+              setStatus({ kind: "idle" });
+            }}
+          >
             <span>Send another inquiry</span>
           </button>
         </div>
@@ -290,7 +302,13 @@ export function InquiryForm({ configured, fallbackEmail = "", upworkUrl = "", li
         <div className={`form-status ${status.setup ? "form-status--setup" : "form-status--error"}`} role="alert" tabIndex={-1} ref={statusRef}>
           <Icon name="alert" size={22} />
           <div>
-            <h3 className="card-title">{status.setup ? "Not sent: form not connected" : "Your inquiry was not sent"}</h3>
+            <h3 className="card-title">
+              {status.setup
+                ? "Not sent: form not connected"
+                : status.rateLimited
+                  ? "Please wait before sending again"
+                  : "Your inquiry was not sent"}
+            </h3>
             <p>{status.message}</p>
           </div>
         </div>
