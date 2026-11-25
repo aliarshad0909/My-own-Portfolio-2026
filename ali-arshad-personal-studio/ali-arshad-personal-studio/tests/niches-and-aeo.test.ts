@@ -1,11 +1,16 @@
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { BLOG_POSTS, estimateReadingMinutes } from "@/lib/content/blog";
 import { RESOURCES } from "@/lib/content/resources";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
-import { CORE_PROJECTS, PROJECTS, isIndexable as isProjectIndexable } from "@/lib/projects";
+import {
+  COMMERCIAL_PROJECTS,
+  CORE_PROJECTS,
+  PROJECTS,
+  isIndexable as isProjectIndexable,
+} from "@/lib/projects";
 import { getKeyword } from "@/lib/seo/keyword-registry";
 import { isIndexable } from "@/lib/seo/publication";
 import { brokenLinks, isKnownRoute } from "@/lib/seo/routes";
@@ -13,6 +18,12 @@ import { SERVICE_HUBS, allSpokes, getSpoke, spokesForProject } from "@/lib/seo/s
 import { indexableSeoRoutes } from "@/lib/seo/sitemap-routes";
 import { CORE_SITEMAP_PAGES } from "@/lib/site";
 import { AVAILABILITY_OPTIONS, STACK_FILTERS, filterProjects } from "@/lib/work-finder";
+import {
+  WORK_COLLECTIONS,
+  collectionForProject,
+  collectionNeighbours,
+  groupProjectsByCollection,
+} from "@/lib/work-collections";
 import {
   articleSchema,
   blogArticleSchema,
@@ -280,20 +291,103 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
     assert.deepEqual(inDev.map((p) => p.slug), ["blender-product-visualisation"]);
   });
 
-  it("ships 80 distinct project showcases with strict noindex gating on Concepts/Prototypes and zero broken links", () => {
+  it("ships 100 commercial project showcases + 20 playable game experiments with runnable repo paths, strict noindex gating, and zero broken links", () => {
     assert.equal(CORE_PROJECTS.length, 14);
-    assert.equal(PROJECTS.length, 80);
+    assert.equal(COMMERCIAL_PROJECTS.length, 100);
+    assert.equal(PROJECTS.length, 120);
     const slugs = PROJECTS.map((p) => p.slug);
-    assert.equal(new Set(slugs).size, 80, "all 80 project slugs must be unique");
+    assert.equal(new Set(slugs).size, 120, "all 120 project & game slugs must be unique");
+
+    const repoRoot = path.resolve(APP_ROOT, "..", "..");
 
     for (const p of PROJECTS) {
       assert.ok(isKnownRoute(`/work/${p.slug}`), `/work/${p.slug} must be a known route`);
-      if (p.status === "Concept" || p.status === "Sample Scenario" || p.status === "Prototype" || p.status === "In Development") {
+      assert.ok(p.sourceRepoPath, `${p.slug} must declare a runnable sourceRepoPath`);
+      const resolvedPath = p.sourceRepoPath!.startsWith("ali-arshad-personal-studio/")
+        ? path.join(repoRoot, p.sourceRepoPath!)
+        : path.join(repoRoot, p.sourceRepoPath!);
+      assert.ok(existsSync(resolvedPath), `${p.slug} sourceRepoPath does not exist on disk: ${p.sourceRepoPath}`);
+
+      if (
+        p.status === "Concept" ||
+        p.status === "Sample Scenario" ||
+        p.status === "Prototype" ||
+        p.status === "In Development" ||
+        p.status === "Playable Experiment"
+      ) {
         assert.equal(isProjectIndexable(p), false, `${p.slug} (${p.status}) must stay noindex`);
+      }
+      if (p.generatedVisual) {
+        assert.ok(
+          existsSync(path.join(APP_ROOT, "public", p.generatedVisual.src)),
+          `${p.slug} generatedVisual missing on disk: ${p.generatedVisual.src}`,
+        );
+        assert.match(p.generatedVisual.label, /Not a (Real )?Screenshot|AI-Generated|AI Illustration|Concept Illustration/i);
+      }
+      if (p.architectureDiagram) {
+        assert.ok(
+          existsSync(path.join(APP_ROOT, "public", p.architectureDiagram.src)),
+          `${p.slug} architectureDiagram missing on disk: ${p.architectureDiagram.src}`,
+        );
       }
       const links = [...(p.relatedServicePaths ?? []), ...(p.relatedToolPaths ?? [])];
       assert.deepEqual(brokenLinks(links), [], `${p.slug} has broken service/tool links`);
     }
+
+    const games = filterProjects(PROJECTS, {
+      category: "All",
+      serviceId: null,
+      availability: "game",
+      stackId: "all",
+      query: "",
+    });
+    assert.equal(games.length, 20, "Work finder must surface all 20 playable game experiments");
+
+    const grouped = groupProjectsByCollection(PROJECTS);
+    assert.equal(grouped.length, WORK_COLLECTIONS.length, "every Work collection must contain projects");
+    const groupedTotal = grouped.reduce((sum, g) => sum + g.items.length, 0);
+    assert.equal(groupedTotal, PROJECTS.length, "7 Work collections must partition all 120 entries cleanly");
+
+    // Verify key AI-concept builds route into their intended problem collections & collectionNeighbours works
+    const mcpProj = PROJECTS.find((p) => p.slug === "mcp-policy-gateway");
+    const tokenProj = PROJECTS.find((p) => p.slug === "design-token-wcag-auditor");
+    assert.ok(mcpProj && collectionForProject(mcpProj) === "ai-products-agents");
+    assert.ok(tokenProj && collectionForProject(tokenProj) === "creative-motion-production");
+    for (const g of grouped) {
+      const sample = g.items[0];
+      const nav = collectionNeighbours(PROJECTS, sample);
+      assert.ok(nav.prev && nav.next, `collection ${g.collection.id} must yield prev & next navigation`);
+      assert.equal(nav.total, g.items.length);
+    }
+
+    // Verify all 10 monorepo standalone apps carry real multi-screen captures on disk
+    const monorepoSlugs = [
+      "stockflow-mobile-companion",
+      "financeos-accounting-suite",
+      "flowos-automation-studio",
+      "sourceos-procurement-hub",
+      "orexa-interactive-learning-os",
+      "supportos-helpdesk-console",
+      "projectos-delivery-workspace",
+      "insightos-bi-workspace",
+      "peopleos-team-directory",
+      "bookos-appointment-scheduler",
+    ];
+    for (const slug of monorepoSlugs) {
+      const proj = PROJECTS.find((p) => p.slug === slug);
+      assert.ok(proj, `missing monorepo project ${slug}`);
+      assert.ok(proj!.gallery.length >= 3, `${slug} must wire multi-screen gallery captures`);
+      assert.ok(existsSync(path.join(APP_ROOT, "public", proj!.cover.src)), `missing real cover for ${slug}`);
+      for (const item of proj!.gallery) {
+        if (item.type === "image") {
+          assert.ok(existsSync(path.join(APP_ROOT, "public", item.src)), `missing gallery screen ${item.src}`);
+        }
+      }
+    }
+
+    assert.ok(CORE_SITEMAP_PAGES.includes("/project-planner"));
+    assert.ok(isKnownRoute("/project-planner"));
+    assert.ok(isKnownRoute("/demo-scenarios"));
   });
 });
 
@@ -308,12 +402,22 @@ describe("studio blog & RSS feed", () => {
     assert.equal(new Set(slugs).size, 8);
     const iso = /^\d{4}-\d{2}-\d{2}$/;
 
+    const seenVisuals = new Set<string>();
     for (const post of BLOG_POSTS) {
       assert.ok(isKnownRoute(`/blog/${post.slug}`));
       assert.match(post.publishedAt, iso);
       assert.match(post.updatedAt, iso);
       assert.ok(post.updatedAt >= post.publishedAt);
       assert.ok(estimateReadingMinutes(post) >= 2);
+      assert.ok(post.visual, `blog:${post.slug} must carry a purposeful visual`);
+      assert.ok(
+        existsSync(path.join(APP_ROOT, "public", post.visual!.src)),
+        `blog:${post.slug} visual missing on disk: ${post.visual!.src}`,
+      );
+      assert.ok(!seenVisuals.has(post.visual!.src), `blog:${post.slug} must use a distinct visual asset`);
+      seenVisuals.add(post.visual!.src);
+      assert.ok(post.visual!.alt.length >= 20, `blog:${post.slug} visual needs descriptive alt text`);
+      assert.ok(post.visual!.caption.length >= 20, `blog:${post.slug} visual needs descriptive caption`);
       assert.deepEqual(
         brokenLinks(post.relatedLinks.map((l) => l.href)),
         [],

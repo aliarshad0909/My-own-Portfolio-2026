@@ -9,9 +9,15 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 20px);
+  scroll-padding-top: calc(var(--header-h) + 28px);
   background: var(--bg);
   color-scheme: dark;
+}
+
+section[id],
+article[id],
+[id]:target {
+  scroll-margin-top: calc(var(--header-h) + 28px);
 }
 
 body {

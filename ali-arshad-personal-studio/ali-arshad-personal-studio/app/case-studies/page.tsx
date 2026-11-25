@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
@@ -12,7 +13,7 @@ import { servicesForProject } from "@/lib/services";
 export const metadata: Metadata = pageMetadata({
   title: "Case Studies: How Each Project Was Built",
   description:
-    "How ideas became working products, creative systems and practical solutions: the challenge, the approach, the engineering decisions and what was verified, across twelve projects.",
+    "How ideas became working products, creative systems and practical solutions: the challenge, the approach, the engineering decisions and what was verified across flagship studio builds.",
   path: "/case-studies",
 });
 
@@ -22,12 +23,12 @@ export const metadata: Metadata = pageMetadata({
  * changed here without touching the project records.
  */
 const FEATURED_ORDER = [
+  "pipelineos-crm",
+  "stockflow-inventory",
   "tessera-clayworks-storefront",
-  "ledgerlight-block-explorer",
-  "sentryline-security-posture",
   "halcyon-brand-system",
-  "meridian-inventory-operations",
   "northwind-analytics-dashboard",
+  "sentryline-security-posture",
 ];
 
 function orderStudies(studies: Project[]): { featured: Project[]; rest: Project[] } {
@@ -115,6 +116,12 @@ export default function CaseStudiesPage() {
 
   return (
     <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Case Studies", path: "/case-studies" },
+        ]}
+      />
       <PageHero
         eyebrow="Case Studies"
         title={
@@ -131,8 +138,9 @@ export default function CaseStudiesPage() {
             <p className="notice notice--wide">
               <Icon name="alert" size={18} />
               <span>
-                Entries marked &ldquo;Demo Ready&rdquo; are working demonstrations built to show capability, not client engagements. Their brands and data
-                are fictional, and none is publicly deployed. Results sections list tested behaviour, never commercial outcomes.
+                Entries marked &ldquo;Demo Ready&rdquo; are working studio demonstrations built under fictional brands and seeded data — not paid
+                client engagements. Several ship with public live sandboxes, while others are verified locally in this repository. Results sections
+                list verified technical behavior, never fabricated commercial outcomes.
               </span>
             </p>
           ) : null}

@@ -32,6 +32,16 @@ export type BlogSection = {
   bullets?: string[];
 };
 
+export type BlogVisual = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption: string;
+  /** True for dark technical diagrams that should use the obsidian diagram frame. */
+  darkDiagram?: boolean;
+};
+
 export type BlogPost = {
   slug: string;
   title: string;
@@ -41,6 +51,8 @@ export type BlogPost = {
   publishedAt: string;
   updatedAt: string;
   tags: string[];
+  /** Purposeful domain-specific screenshot or architecture diagram accompanying this article. */
+  visual?: BlogVisual;
   /** Explicit factual vs. opinion/status note shown cleanly on the article. */
   editorialNote?: string;
   sections: BlogSection[];
@@ -68,6 +80,14 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["TypeScript", "React", "Accessibility", "State Machines", "Games"],
+    visual: {
+      src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+      alt: "Modular TypeScript state-engine and lazy-loaded React UI architecture schematic",
+      width: 1200,
+      height: 720,
+      caption: "Modular TypeScript architecture separating deterministic pure-logic modules from lazy-loaded interactive React views.",
+      darkDiagram: true,
+    },
     editorialNote:
       "Build log describing original portfolio experiments built directly inside this repository — not client work.",
     sections: [
@@ -108,6 +128,13 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["Next.js", "PostgreSQL", "Drizzle ORM", "CRM", "Inventory"],
+    visual: {
+      src: "/images/projects/pipelineos/dashboard.png",
+      alt: "PipelineOS CRM live sandbox dashboard displaying revenue KPIs, pipeline conversion metrics, and recent activity",
+      width: 1440,
+      height: 900,
+      caption: "Live screenshot of the PipelineOS CRM PostgreSQL sandbox running with synthetic seeded data.",
+    },
     editorialNote:
       "Describes real studio demonstration builds (fictional seeded data, publicly testable at crm.aliarshad.co and stock.aliarshad.co — not paid client deployments).",
     sections: [
@@ -147,6 +174,14 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["AI Agents", "MCP", "RAG", "Guardrails", "Architecture"],
+    visual: {
+      src: "/images/site-visuals/specializations/ai-agent-guardrail-loop.svg",
+      alt: "AI agent guardrail architecture showing read-only retrieval, schema-validated tool calls, confidence floors, and human escalation",
+      width: 1200,
+      height: 720,
+      caption: "Practical AI guardrail loop pairing structured tool protocols with deterministic abstention and human review.",
+      darkDiagram: true,
+    },
     editorialNote:
       "Distinguishes documented open specifications (cited directly below) from studio engineering recommendations.",
     sections: [
@@ -199,6 +234,14 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["n8n", "Automation", "Operations", "Self-Hosting"],
+    visual: {
+      src: "/images/site-visuals/resources/n8n-vs-zapier-scaling.svg",
+      alt: "Cost and scalability comparison diagram between self-hosted n8n workflows and per-task SaaS automation tiers",
+      width: 1200,
+      height: 720,
+      caption: "Operational trade-off schematic comparing per-task SaaS automation billing against self-hosted n8n infrastructure.",
+      darkDiagram: true,
+    },
     sections: [
       {
         heading: "Where self-hosted n8n shines for growing operations teams",
@@ -239,6 +282,13 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["WCAG 2.2", "Design Systems", "Branding", "Accessibility", "CSS"],
+    visual: {
+      src: "/images/projects/brand-system/contrast.webp",
+      alt: "Halcyon Brand System live WCAG 2.2 relative-luminance contrast matrix and pair checker screenshot",
+      width: 1600,
+      height: 1075,
+      caption: "Real screenshot from the Halcyon Brand System demonstration measuring WCAG 2.2 contrast ratios live on render.",
+    },
     sections: [
       {
         heading: "Why brand palettes break between pitch decks and real web UI",
@@ -278,6 +328,14 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["Blender", "Python", "ffmpeg", "Creative Production", "3D"],
+    visual: {
+      src: "/images/site-visuals/services/creative-production/production-encoding-pipeline.svg",
+      alt: "Automated ffprobe and ffmpeg media encoding pipeline producing H.264 faststart, VP9, WebP posters, and storyboard contact sheets",
+      width: 1200,
+      height: 720,
+      caption: "Technical architecture diagram of the tested ffmpeg/ffprobe pipeline — no unverified showreel footage.",
+      darkDiagram: true,
+    },
     editorialNote:
       "Transparent status note: our bpy geometry/lighting builder (20 tests) and ffmpeg encoding CLI (28 tests) are built and verified, while final rendered 3D stills and cleared client showreel footage remain in preparation.",
     sections: [
@@ -311,6 +369,14 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["Remote Delivery", "Scoping", "Freelance", "Client Process"],
+    visual: {
+      src: "/images/site-visuals/resources/studio-vs-agency-model.svg",
+      alt: "Comparison diagram contrasting direct one-studio technical execution against layered agency account hand-offs",
+      width: 1200,
+      height: 720,
+      caption: "Direct studio delivery model showing written scoping, staged preview builds, and clean client repository ownership.",
+      darkDiagram: true,
+    },
     sections: [
       {
         heading: "Start with constraints, not a bloated feature wishlist",
@@ -342,6 +408,14 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-11-24",
     updatedAt: "2026-11-24",
     tags: ["SEO", "AEO", "JSON-LD", "llms.txt", "Next.js"],
+    visual: {
+      src: "/images/site-visuals/resources/nextjs-app-router-seo.svg",
+      alt: "Technical SEO and structured data diagram for Next.js App Router showing SSR HTML, @id JSON-LD graphs, and strict sitemap gating",
+      width: 1200,
+      height: 720,
+      caption: "Machine-readable portfolio architecture pairing crawlable SSR routes with @id-linked JSON-LD and strict noindex gates.",
+      darkDiagram: true,
+    },
     sections: [
       {
         heading: "Entity clarity beats keyword stuffing",

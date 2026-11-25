@@ -1,5 +1,28 @@
+import type { GameSlug } from "@/lib/games/catalog";
 import { EXPANSION_PROJECTS_A, type ConceptVisualSpec } from "@/lib/projects-expansion-a";
 import { EXPANSION_PROJECTS_B } from "@/lib/projects-expansion-b";
+import { EXPANSION_PROJECTS_C } from "@/lib/projects-expansion-c";
+import { GAME_WORK_ENTRIES } from "@/lib/projects-games";
+
+const REPO_TREE_BASE =
+  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/studio-polish-curated-work";
+
+const CORE_SOURCE_DIR: Record<string, string> = {
+  "pipelineos-crm": "apps/pipelineos",
+  "stockflow-inventory": "apps/stockflow",
+  "tessera-clayworks-storefront": "demos/commerce-storefront",
+  "northwind-analytics-dashboard": "demos/analytics-dashboard",
+  "tideline-support-agent": "demos/support-agent",
+  "kestrel-voice-sales-agent": "demos/voice-sales-agent",
+  "inbound-lead-qualification-workflow": "demos/n8n-lead-automation",
+  "meridian-inventory-operations": "demos/supply-chain",
+  "lantern-sourcing-platform": "demos/sourcing-platform",
+  "blender-product-visualisation": "demos/blender-product-viz",
+  "motion-production-pipeline": "demos/motion-production",
+  "halcyon-brand-system": "demos/brand-system",
+  "ledgerlight-block-explorer": "demos/chain-explorer",
+  "sentryline-security-posture": "demos/security-dashboard",
+};
 
 /**
  * Central project records.
@@ -24,6 +47,7 @@ export const PROJECT_CATEGORIES = [
   "Web & Software",
   "AI Automation",
   "Business Solutions",
+  "Games & Experiments",
 ] as const;
 
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
@@ -32,21 +56,31 @@ export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
  * Professional Work      — paid or employed work Ali genuinely contributed to.
  * Original Concept       — built from scratch by Ali; the scenario may be fictional, the software is real.
  * Open-Source Adaptation — built on someone else's licensed project; see `attribution`.
+ * Personal Experiment    — self-initiated browser game or interactive lab built out of personal interest.
  */
-export type ProjectType = "Professional Work" | "Original Concept" | "Open-Source Adaptation";
+export type ProjectType =
+  | "Professional Work"
+  | "Original Concept"
+  | "Open-Source Adaptation"
+  | "Personal Experiment";
 
 /**
- * Planned        — scoped but not started. Not indexed, not shown in the gallery.
- * In Development — being built. Not indexed.
- * Demo Ready     — built and locally tested in this repository; NOT publicly deployed unless `liveUrl` is set.
- * Verified       — a real professional engagement confirmed with the client, including naming permission.
- * Published      — live, written up, and approved for public listing. Indexed.
+ * Planned             — scoped but not started. Not indexed, not shown in the gallery.
+ * In Development      — being built. Not indexed.
+ * Demo Ready          — built and locally tested in this repository; NOT publicly deployed unless `liveUrl` is set.
+ * Prototype           — built runnable prototype verified locally in apps/ or project-lab/. Not indexed.
+ * Playable Experiment — playable browser game experiment in /games/[slug]. Not indexed under /work/*.
+ * Concept             — illustrative architecture concept + small local workflow slice. Not indexed.
+ * Sample Scenario     — illustrative fictional business brief + architecture scope. Not indexed.
+ * Verified            — a real professional engagement confirmed with the client, including naming permission.
+ * Published           — live, written up, and approved for public listing. Indexed.
  */
 export type ProjectStatus =
   | "Planned"
   | "In Development"
   | "Demo Ready"
   | "Prototype"
+  | "Playable Experiment"
   | "Concept"
   | "Sample Scenario"
   | "Verified"
@@ -142,8 +176,18 @@ export type Project = {
   gallery: ProjectMedia[];
   /** Live deployment, once one exists. */
   liveUrl?: string;
-  /** Public source code, when sharing is appropriate. */
+  /** Playable internal route for Games & Experiments entries (e.g. /games/signal-link). */
+  playUrl?: string;
+  /** Linked game slug for rendering original GameCoverArt on /work. */
+  gameSlug?: GameSlug;
+  /** Public source code URL pointing to an actual folder/file in this repository. */
   sourceUrl?: string;
+  /** Verified relative repository path (e.g. apps/pipelineos, demos/support-agent, project-lab/...). */
+  sourceRepoPath?: string;
+  /** Explicit engineering or scope limitations shown transparently on the detail page. */
+  limitations?: string;
+  /** Optional AI-generated architectural concept visual explicitly labeled as non-screenshot art. */
+  generatedVisual?: { src: string; alt: string; label: string };
   attribution?: Attribution;
   /** Optional technical architecture diagram shown inside the project / case study write-up. */
   architectureDiagram?: {
@@ -223,6 +267,13 @@ const COMMERCE: Project = {
     { type: "image", src: "/images/projects/commerce/order.webp", alt: "Order confirmation screen showing the demo order number and totals", width: 1600, height: 900 },
     { type: "image", src: "/images/projects/commerce/mobile.webp", alt: "The shop and product pages on a phone-sized screen", width: 1382, height: 1420 },
   ],
+  architectureDiagram: {
+    src: "/images/site-visuals/industries/ecommerce-ops-architecture.svg",
+    alt: "E-commerce storefront and operations schematic connecting storefront catalog, integer-cent cart logic, and order tracking",
+    width: 1200,
+    height: 720,
+    caption: "Storefront architecture schematic connecting filterable catalog variants, integer-cent pricing, and stock-checked checkout.",
+  },
   caseStudy: {
     background:
       "Tessera Clayworks is a fictional small-batch ceramics studio invented for this project. The brief was to build the storefront such a business would actually need, so the work shows commerce mechanics rather than a styled template.",
@@ -404,6 +455,13 @@ const SUPPORT_AGENT: Project = {
     { type: "image", src: "/images/projects/support-agent/conversation.webp", alt: "A conversation where the agent answers a refund question and cites the source article", width: 1500, height: 1055 },
     { type: "image", src: "/images/projects/support-agent/mobile.webp", alt: "The agent on a phone-sized screen", width: 780, height: 1640 },
   ],
+  architectureDiagram: {
+    src: "/images/site-visuals/specializations/ai-agent-guardrail-loop.svg",
+    alt: "Grounded retrieval and confidence-threshold escalation loop showing BM25 search, citation checking, and human hand-off",
+    width: 1200,
+    height: 720,
+    caption: "Retrieval guardrail architecture enforcing confidence thresholds, cited answers, and explicit human escalation.",
+  },
   caseStudy: {
     background:
       "Tideline is an invented outdoor-equipment retailer. The agent exists to show retrieval and escalation behaviour, which is where most support automation actually succeeds or fails.",
@@ -570,6 +628,13 @@ const N8N: Project = {
     height: 700,
   },
   gallery: [],
+  architectureDiagram: {
+    src: "/images/diagrams/crm-dedupe-sync-flow.svg",
+    alt: "CRM deduplication and inbound routing schematic illustrating validation, scoring, static-data dedupe window, and owner assignment",
+    width: 1200,
+    height: 720,
+    caption: "Inbound qualification and deduplication schematic showing how validated leads route into CRM without duplicate records.",
+  },
   caseStudy: {
     background:
       "Automation work is usually shown as a screenshot of a canvas, which proves only that nodes were placed. This project exists to show the logic inside the nodes, tested.",
@@ -649,6 +714,13 @@ const SUPPLY_CHAIN: Project = {
   gallery: [
     { type: "image", src: "/images/projects/supply-chain/mobile.webp", alt: "The stock table on a phone-sized screen", width: 780, height: 1640 },
   ],
+  architectureDiagram: {
+    src: "/images/site-visuals/industries/logistics-supply-flow.svg",
+    alt: "Append-only inventory and purchasing flow schematic from supplier receipts through ledger movements to reorder advice",
+    width: 1200,
+    height: 720,
+    caption: "Append-only movement ledger schematic unifying stock balances, purchase receipts, transfers, and reorder alerts.",
+  },
   caseStudy: {
     background:
       "Meridian is an invented distributor. The system covers the part of operations where mistakes are expensive: knowing what you have, what is coming, and what to order.",
@@ -729,6 +801,13 @@ const SOURCING: Project = {
   gallery: [
     { type: "image", src: "/images/projects/sourcing-platform/mobile.webp", alt: "The supplier comparison on a phone-sized screen", width: 780, height: 1640 },
   ],
+  architectureDiagram: {
+    src: "/images/diagrams/landed-cost-waterfall.svg",
+    alt: "Landed-cost waterfall diagram breaking factory unit price, freight, HS-code duty, and incoterm allocation into final warehouse cost",
+    width: 1200,
+    height: 720,
+    caption: "Landed-cost waterfall showing how incoterms, freight weight rules, and HS duties re-rank competing supplier quotes.",
+  },
   caseStudy: {
     background:
       "Lantern is an invented sourcing desk. The tool addresses the mistake that costs importers the most money: choosing a supplier on unit price.",
@@ -1584,12 +1663,29 @@ export const CORE_PROJECTS: Project[] = [
   PIPELINEOS, STOCKFLOW,
   COMMERCE, ANALYTICS, SUPPORT_AGENT, VOICE_AGENT, N8N, SUPPLY_CHAIN,
   SOURCING, BLENDER, MOTION, BRAND_SYSTEM, CHAIN_EXPLORER, SECURITY,
-];
+].map((proj) => {
+  const dir = CORE_SOURCE_DIR[proj.slug];
+  return dir
+    ? {
+        ...proj,
+        sourceRepoPath: dir,
+        sourceUrl: `${REPO_TREE_BASE}/${dir}`,
+      }
+    : proj;
+});
 
-export const PROJECTS: Project[] = [
+/** 100 distinct software, AI, analytics, sourcing, brand, and creative project showcases. */
+export const COMMERCIAL_PROJECTS: Project[] = [
   ...CORE_PROJECTS,
   ...EXPANSION_PROJECTS_A,
   ...EXPANSION_PROJECTS_B,
+  ...EXPANSION_PROJECTS_C,
+];
+
+/** Full Work portfolio: 100 technical/creative project showcases + 20 playable browser game experiments. */
+export const PROJECTS: Project[] = [
+  ...COMMERCIAL_PROJECTS,
+  ...GAME_WORK_ENTRIES,
 ];
 
 /**
@@ -1629,6 +1725,7 @@ export const isIndexable = (p: Project) => p.status === "Published" || p.status 
 export const isLive = (p: Project) =>
   p.status === "Demo Ready" ||
   p.status === "Prototype" ||
+  p.status === "Playable Experiment" ||
   p.status === "Concept" ||
   p.status === "Sample Scenario" ||
   p.status === "Verified" ||
@@ -1639,11 +1736,13 @@ export const STATUS_NOTE: Record<ProjectStatus, string> = {
   "In Development": "This project is being built. Details may change.",
   "Demo Ready": "This is a working demonstration, not a client engagement. The brand and data are fictional.",
   Prototype:
-    "This is a functioning studio prototype built and locally verified inside this repository using fictional seeded data — not a paid client deployment.",
+    "This is a runnable studio prototype built and locally tested inside this repository using synthetic data — not a paid client deployment.",
+  "Playable Experiment":
+    "Personal browser game experiment built out of personal interest in interactive UI and state machines — not client work or a claimed game-development service line.",
   Concept:
-    "Architecture Concept — illustrative studio design & technical scope showing how we would build this system. Not a completed implementation, live demo, or client engagement.",
+    "Architecture Concept — illustrative studio design & technical scope paired with a small representative workflow prototype in project-lab/concepts/. Not a finished production build or client engagement.",
   "Sample Scenario":
-    "Sample Scenario — illustrative fictional business brief & proposed studio architecture. Not a real client, completed engagement, or verified outcome.",
+    "Sample Scenario — illustrative fictional business brief & proposed architecture paired with a small representative workflow prototype. Not a real client, completed engagement, or verified outcome.",
   Verified: "This was a real engagement, confirmed with the client.",
   Published: "",
 };

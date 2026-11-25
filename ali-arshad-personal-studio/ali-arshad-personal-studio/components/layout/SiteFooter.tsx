@@ -70,6 +70,9 @@ export function SiteFooter() {
               <Link href="/work">Portfolio / Work</Link>
             </li>
             <li>
+              <Link href="/project-planner">Visual Project Planner</Link>
+            </li>
+            <li>
               <Link href="/products">Product Directory</Link>
             </li>
             <li>

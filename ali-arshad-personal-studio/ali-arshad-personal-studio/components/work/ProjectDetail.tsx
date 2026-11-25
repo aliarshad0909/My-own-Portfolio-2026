@@ -1,19 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ArrowLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { TrackedLink } from "@/components/ui/TrackedLink";
+import { GameCoverArt } from "@/components/games/GameCoverArt";
 import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
-import { STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
+import { PROJECTS, STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
 import { SERVICE_HUBS, spokesForProject } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
 import { servicesForProject } from "@/lib/services";
 import { GPU_COMPUTE_PATH, GPU_RELATED_PROJECT_SLUGS } from "@/lib/gpu-compute";
+import {
+  WORK_COLLECTIONS,
+  audienceForProject,
+  collectionForProject,
+  collectionNeighbours,
+  deliveryAttribution,
+} from "@/lib/work-collections";
 
 function labelFromPath(path: string): string {
   const seg = path.split("/").filter(Boolean).pop() ?? path;
@@ -72,17 +81,55 @@ export function ProjectDetail({ project, variant }: Props) {
   const hubs = hubsForProject(project.slug);
   const spokes = spokesForProject(project.slug);
   const gpuRelated = isGpuRelatedProject(project.slug);
-  const { prev, next } = isCaseStudy ? neighbours(project.slug) : { prev: undefined, next: undefined };
+  const colId = collectionForProject(project);
+  const collection = WORK_COLLECTIONS.find((c) => c.id === colId) ?? WORK_COLLECTIONS[0];
+  const audience = audienceForProject(project);
+  const delivery = deliveryAttribution(project);
+  const { prev, next } = isCaseStudy
+    ? neighbours(project.slug)
+    : collectionNeighbours(PROJECTS, project);
+  const collectionHref = `/work?collection=${collection.id}`;
 
   return (
     <>
+      <Breadcrumbs
+        items={
+          isCaseStudy
+            ? [
+                { name: "Home", path: "/" },
+                { name: "Case Studies", path: "/case-studies" },
+                { name: project.title, path: `/case-studies/${project.slug}` },
+              ]
+            : [
+                { name: "Home", path: "/" },
+                { name: "Work", path: "/work" },
+                { name: collection.shortTitle, path: collectionHref },
+                { name: project.title, path: `/work/${project.slug}` },
+              ]
+        }
+      />
       <article className="detail">
         <header className="page-hero">
           <div className="container enter">
-            <Link href={backHref} className="back-link">
-              <Icon name="arrow-right" size={16} className="flip" />
-              <span>{isCaseStudy ? "All case studies" : "All work"}</span>
-            </Link>
+            <div className="detail__back-row">
+              {isCaseStudy ? (
+                <Link href={backHref} className="back-link">
+                  <Icon name="arrow-right" size={16} className="flip" />
+                  <span>All case studies</span>
+                </Link>
+              ) : (
+                <>
+                  <Link href={collectionHref} className="back-link">
+                    <Icon name="arrow-right" size={16} className="flip" />
+                    <span>Back to {collection.shortTitle}</span>
+                  </Link>
+                  <span className="detail__back-divider" aria-hidden="true">·</span>
+                  <Link href="/work" className="back-link">
+                    <span>All Work</span>
+                  </Link>
+                </>
+              )}
+            </div>
             <div className="detail__meta">
               <span className="eyebrow eyebrow--plain">{isCaseStudy ? "Case study" : "Project"}</span>
               <TypeBadge type={project.projectType} />
@@ -96,8 +143,14 @@ export function ProjectDetail({ project, variant }: Props) {
                 <span>{statusNote}</span>
               </p>
             ) : null}
-            {project.liveUrl || project.sourceUrl ? (
+            {project.playUrl || project.liveUrl || project.sourceUrl ? (
               <div className="detail__links">
+                {project.playUrl ? (
+                  <Link className="btn btn--primary btn--md" href={project.playUrl}>
+                    <Icon name="play" size={17} />
+                    <span>Play Live in Browser</span>
+                  </Link>
+                ) : null}
                 {project.liveUrl ? (
                   <TrackedLink
                     className="btn btn--primary btn--md"
@@ -112,7 +165,7 @@ export function ProjectDetail({ project, variant }: Props) {
                 ) : null}
                 {project.sourceUrl ? (
                   <a className="btn btn--secondary btn--md" href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
-                    <span>View source code</span>
+                    <span>View source in repository</span>
                     <Icon name="arrow-up-right" size={18} className="btn__icon" />
                   </a>
                 ) : null}
@@ -122,8 +175,50 @@ export function ProjectDetail({ project, variant }: Props) {
         </header>
 
         <div className="container">
+          {/* Structured At-a-Glance Project Brief */}
+          <dl className="panel detail__brief-strip" aria-label="Project brief at a glance">
+            <div>
+              <dt>Collection</dt>
+              <dd>
+                <Link href={`/work?collection=${collection.id}`}>{collection.title}</Link>
+              </dd>
+            </div>
+            <div>
+              <dt>Who it is for</dt>
+              <dd>{audience}</dd>
+            </div>
+            <div>
+              <dt>Delivery model</dt>
+              <dd>
+                <strong>{delivery.label}</strong>
+              </dd>
+            </div>
+            <div>
+              <dt>Matching service</dt>
+              <dd>
+                <Link href={collection.serviceHref}>{collection.serviceLabel} →</Link>
+              </dd>
+            </div>
+          </dl>
+
           <div className="detail__cover">
-            {project.conceptVisual ? (
+            {project.gameSlug ? (
+              <GameCoverArt slug={project.gameSlug} />
+            ) : project.generatedVisual ? (
+              <div className="detail__generated-cover">
+                <Image
+                  src={project.generatedVisual.src}
+                  alt={project.generatedVisual.alt}
+                  width={1200}
+                  height={675}
+                  priority
+                  sizes="(min-width: 1240px) 1240px, 100vw"
+                />
+                <span className="detail__generated-badge">
+                  {project.generatedVisual.label} — Illustrative artwork, not a production screenshot
+                </span>
+              </div>
+            ) : project.conceptVisual ? (
               <ConceptCoverArt spec={project.conceptVisual} title={project.title} status={project.status} />
             ) : (
               <Image src={project.cover.src} alt={project.cover.alt} width={project.cover.width} height={project.cover.height} priority sizes="(min-width: 1240px) 1240px, 100vw" />
@@ -398,6 +493,61 @@ export function ProjectDetail({ project, variant }: Props) {
                 </ul>
               </section>
 
+              {project.limitations ? (
+                <section aria-labelledby="limitations-title">
+                  <h2 className="section-title section-title--sm" id="limitations-title">
+                    Scope &amp; honest limitations
+                  </h2>
+                  <p>{project.limitations}</p>
+                </section>
+              ) : null}
+
+              {project.sourceRepoPath ? (
+                <section aria-labelledby="run-source-title">
+                  <h2 className="section-title section-title--sm" id="run-source-title">
+                    Runnable repository source
+                  </h2>
+                  <div className="demo-access-panel">
+                    <p className="demo-access-panel__note">
+                      Inspect or run this build locally directly from the repository using synthetic demo data (no production secrets required).
+                    </p>
+                    <dl className="demo-access-panel__grid">
+                      <div>
+                        <dt>Repository path</dt>
+                        <dd>
+                          <code>{project.sourceRepoPath}</code>
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>Local run &amp; test</dt>
+                        <dd>
+                          <code>
+                            {project.sourceRepoPath.startsWith("project-lab/")
+                              ? `cd ${project.sourceRepoPath} && node index.mjs && node --test test.mjs`
+                              : project.gameSlug
+                                ? "cd ali-arshad-personal-studio/ali-arshad-personal-studio && npm test"
+                                : `See ${project.sourceRepoPath}/README.md`}
+                          </code>
+                        </dd>
+                      </div>
+                    </dl>
+                    {project.sourceUrl ? (
+                      <div className="demo-access-panel__cta">
+                        <a
+                          className="btn btn--secondary btn--sm"
+                          href={project.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span>Open source folder on GitHub</span>
+                          <Icon name="arrow-up-right" size={16} className="btn__icon" />
+                        </a>
+                      </div>
+                    ) : null}
+                  </div>
+                </section>
+              ) : null}
+
               {project.architectureDiagram ? (
                 <section id="architecture" aria-labelledby="architecture-diagram-title">
                   <h2 className="section-title section-title--sm" id="architecture-diagram-title">
@@ -410,7 +560,7 @@ export function ProjectDetail({ project, variant }: Props) {
                         alt={project.architectureDiagram.alt}
                         width={project.architectureDiagram.width}
                         height={project.architectureDiagram.height}
-                        loading="lazy"
+                        loading="eager"
                         sizes="(min-width: 1024px) 780px, 94vw"
                       />
                     </div>
@@ -565,40 +715,78 @@ export function ProjectDetail({ project, variant }: Props) {
           {project.gallery.length > 0 ? (
             <section className="detail__gallery" aria-labelledby="gallery-title">
               <h2 className="section-title section-title--sm" id="gallery-title">
-                {isCaseStudy ? "Visual demonstration" : "Screenshots"}
+                {isCaseStudy ? "Visual demonstration — multiple screens & states" : "Captured interface screens & states"}
               </h2>
-              {isCaseStudy ? (
-                <p className="fine-print detail__gallery-note">
-                  Captured from the running application{project.usesSampleMedia ? ", except where a card is marked as sample artwork" : ""}.
-                </p>
-              ) : null}
+              <p className="fine-print detail__gallery-note">
+                Real screens captured from the running repository application{project.usesSampleMedia ? ", except where explicitly marked as sample artwork" : ""}.
+              </p>
               <MediaGallery items={project.gallery} />
             </section>
           ) : null}
+
+          {/* Bidirectional Service Alignment Card */}
+          <section className="detail__service-align panel" aria-label="Related studio service and next steps">
+            <div>
+              <p className="eyebrow eyebrow--plain">{delivery.label}</p>
+              <h2 className="card-title" style={{ marginTop: "4px" }}>
+                {project.gameSlug
+                  ? "Interactive personal experiment — explore the Games Lab or studio services"
+                  : `Need a tailored build in ${collection.title}?`}
+              </h2>
+              <p className="section-sub" style={{ marginTop: "6px" }}>
+                {delivery.detail}
+              </p>
+            </div>
+            <div className="detail__service-align-actions">
+              <Link href={collection.serviceHref} className="btn btn--secondary btn--sm">
+                <span>{collection.serviceLabel}</span>
+                <Icon name="arrow-up-right" size={15} />
+              </Link>
+              <Link href={`/work?collection=${collection.id}`} className="btn btn--secondary btn--sm">
+                <span>More in {collection.shortTitle}</span>
+              </Link>
+              {project.playUrl ? (
+                <Link href={project.playUrl} className="btn btn--primary btn--sm">
+                  <Icon name="play" size={15} />
+                  <span>Play Live Game</span>
+                </Link>
+              ) : (
+                <Link href="/project-planner" className="btn btn--primary btn--sm">
+                  <span>Plan a Similar Build</span>
+                </Link>
+              )}
+            </div>
+          </section>
         </div>
       </article>
 
-      {isCaseStudy && (prev || next) ? (
-        <nav className="case-nav" aria-label="Case study navigation">
+      {prev || next ? (
+        <nav className="case-nav" aria-label={isCaseStudy ? "Case study navigation" : `${collection.shortTitle} project navigation`}>
           <div className="container case-nav__inner">
             {prev ? (
-              <Link href={`/case-studies/${prev.slug}`} className="case-nav__link case-nav__link--prev">
+              <Link
+                href={isCaseStudy ? `/case-studies/${prev.slug}` : `/work/${prev.slug}`}
+                className="case-nav__link case-nav__link--prev"
+              >
                 <span className="case-nav__label">
                   <Icon name="arrow-right" size={15} className="flip" />
-                  Previous
+                  Previous {isCaseStudy ? "case study" : "in collection"}
                 </span>
                 <span className="case-nav__title">{prev.title}</span>
               </Link>
             ) : (
               <span />
             )}
-            <Link href="/case-studies" className="case-nav__all">
-              All case studies
+            <Link href={isCaseStudy ? "/case-studies" : collectionHref} className="case-nav__all">
+              {isCaseStudy ? "All case studies" : `Back to ${collection.shortTitle}`}
             </Link>
             {next ? (
-              <Link href={`/case-studies/${next.slug}`} className="case-nav__link case-nav__link--next">
+              <Link
+                href={isCaseStudy ? `/case-studies/${next.slug}` : `/work/${next.slug}`}
+                className="case-nav__link case-nav__link--next"
+              >
                 <span className="case-nav__label">
-                  Next
+                  Next {isCaseStudy ? "case study" : "in collection"}
                   <Icon name="arrow-right" size={15} />
                 </span>
                 <span className="case-nav__title">{next.title}</span>

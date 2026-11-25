@@ -3,7 +3,7 @@
  * Reuses the studio's Resend / Webhook delivery configuration so no extra paid
  * service is required. Never import from client components.
  */
-import type { CollaboratorInput } from "@/lib/studio-network";
+import { findCoarseRegion, type CollaboratorInput } from "@/lib/studio-network";
 
 const env = (k: string) => (process.env[k] ?? "").trim();
 
@@ -25,7 +25,7 @@ export function isNetworkDeliveryConfigured(): boolean {
 const escapeHtml = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
-async function sendWebhook(application: CollaboratorInput, meta: { receivedAt: string }) {
+async function sendWebhook(application: CollaboratorInput, meta: { receivedAt: string; visibility: string }) {
   const url = env("STUDIO_NETWORK_WEBHOOK_URL") || env("INQUIRY_WEBHOOK_URL");
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   const secret = env("STUDIO_NETWORK_WEBHOOK_SECRET") || env("INQUIRY_WEBHOOK_SECRET");
@@ -34,15 +34,22 @@ async function sendWebhook(application: CollaboratorInput, meta: { receivedAt: s
   const res = await fetch(url, {
     method: "POST",
     headers,
-    body: JSON.stringify({ source: "ali-arshad-studio-network", ...meta, application }),
+    body: JSON.stringify({
+      source: "ali-arshad-studio-network",
+      moderationStatus: "pending",
+      publishedToGlobe: false,
+      ...meta,
+      application,
+    }),
     signal: AbortSignal.timeout(8000),
     cache: "no-store",
   });
   if (!res.ok) throw new Error(`Webhook responded with ${res.status}`);
 }
 
-async function sendEmail(application: CollaboratorInput, meta: { receivedAt: string }) {
+async function sendEmail(application: CollaboratorInput, meta: { receivedAt: string; visibility: string }) {
   const toEmail = env("STUDIO_NETWORK_TO_EMAIL") || env("INQUIRY_TO_EMAIL");
+  const regionLabel = findCoarseRegion(application.approximateRegion)?.label ?? "Private (not opted into public globe)";
   const rows: [string, string][] = [
     ["Name", application.name],
     ["Email", application.email],
@@ -50,6 +57,9 @@ async function sendEmail(application: CollaboratorInput, meta: { receivedAt: str
     ["Primary Skills", application.skills.join(", ")],
     ["Portfolio / Samples", application.portfolioUrl],
     ["Availability", application.availability],
+    ["Public Globe Opt-In", application.publicListingOptIn ? "Requested (requires verification & approval)" : "No — Private only"],
+    ["Coarse Globe Region", regionLabel],
+    ["Default Publication State", meta.visibility],
     ["Received", meta.receivedAt],
   ];
 
@@ -80,7 +90,10 @@ export async function deliverCollaboratorApplication(
   application: CollaboratorInput,
 ): Promise<{ delivered: boolean; failures: string[] }> {
   const channels = networkDeliveryChannels();
-  const meta = { receivedAt: new Date().toISOString() };
+  const meta = {
+    receivedAt: new Date().toISOString(),
+    visibility: "Private by default — never auto-published to public globe",
+  };
   const tasks: Promise<void>[] = [];
   if (channels.webhook) tasks.push(sendWebhook(application, meta));
   if (channels.email) tasks.push(sendEmail(application, meta));

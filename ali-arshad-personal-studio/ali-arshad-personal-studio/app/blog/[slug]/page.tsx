@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
@@ -47,6 +48,9 @@ export default async function BlogArticlePage({
   if (!post) notFound();
 
   const readingMin = estimateReadingMinutes(post);
+  const idx = BLOG_POSTS.findIndex((p) => p.slug === post.slug);
+  const prevPost = BLOG_POSTS[(idx - 1 + BLOG_POSTS.length) % BLOG_POSTS.length];
+  const nextPost = BLOG_POSTS[(idx + 1) % BLOG_POSTS.length];
   const morePosts = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
@@ -88,14 +92,32 @@ export default async function BlogArticlePage({
       ) : null}
 
       <article className="section">
-        <div className="container" style={{ maxWidth: "820px" }}>
+        <div className="container blog-article__inner">
+          {post.visual ? (
+            <figure className="article-figure blog-article__figure">
+              <div
+                className={`article-figure__frame ${post.visual.darkDiagram ? "article-figure__frame--dark-diagram" : ""}`.trim()}
+              >
+                <Image
+                  src={post.visual.src}
+                  alt={post.visual.alt}
+                  width={post.visual.width}
+                  height={post.visual.height}
+                  priority
+                  sizes="(min-width: 900px) 780px, 94vw"
+                />
+              </div>
+              <figcaption className="article-figure__caption">
+                <span>{post.visual.caption}</span>
+              </figcaption>
+            </figure>
+          ) : null}
+
           {post.sections.map((sec) => (
-            <section key={sec.heading} style={{ marginBottom: "2.25rem" }}>
-              <h2 className="section-title section-title--sm" style={{ marginBottom: "0.85rem" }}>
-                {sec.heading}
-              </h2>
+            <section key={sec.heading} className="blog-article__section">
+              <h2 className="section-title section-title--sm">{sec.heading}</h2>
               {sec.paragraphs.map((para, i) => (
-                <p key={i} className="measure" style={{ color: "var(--muted)", lineHeight: 1.72, marginBottom: "1rem" }}>
+                <p key={i} className="measure">
                   {para}
                 </p>
               ))}
@@ -114,7 +136,7 @@ export default async function BlogArticlePage({
 
           {post.sources && post.sources.length > 0 ? <Sources items={post.sources} /> : null}
 
-          <div className="panel" style={{ marginTop: "2.5rem" }}>
+          <div className="panel blog-article__connected">
             <p className="eyebrow eyebrow--plain">Connected studio pages</p>
             <ul className="hub-card-grid" style={{ marginTop: "14px" }}>
               {post.relatedLinks.map((lnk) => (
@@ -142,6 +164,28 @@ export default async function BlogArticlePage({
           </div>
         </div>
       </article>
+
+      <nav className="case-nav" aria-label="Article navigation">
+        <div className="container case-nav__inner">
+          <Link href={`/blog/${prevPost.slug}`} className="case-nav__link case-nav__link--prev">
+            <span className="case-nav__label">
+              <Icon name="arrow-right" size={15} className="flip" />
+              Previous dispatch
+            </span>
+            <span className="case-nav__title">{prevPost.title}</span>
+          </Link>
+          <Link href="/blog" className="case-nav__all">
+            All {BLOG_POSTS.length} articles
+          </Link>
+          <Link href={`/blog/${nextPost.slug}`} className="case-nav__link case-nav__link--next">
+            <span className="case-nav__label">
+              Next dispatch
+              <Icon name="arrow-right" size={15} />
+            </span>
+            <span className="case-nav__title">{nextPost.title}</span>
+          </Link>
+        </div>
+      </nav>
 
       <section className="section section--surface section--tight" aria-labelledby="more-blog-title">
         <div className="container">

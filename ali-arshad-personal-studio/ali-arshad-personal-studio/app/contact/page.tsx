@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Faq } from "@/components/ui/Faq";
-import type { FaqItem } from "@/lib/structured-data";
-import Image from "next/image";
 import Link from "next/link";
 import { InquiryForm } from "@/components/contact/InquiryForm";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Faq } from "@/components/ui/Faq";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { SignatureMark3D } from "@/components/ui/SignatureMark3D";
+import { GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
 import { isDeliveryConfigured } from "@/lib/inquiry-server";
 import { pageMetadata } from "@/lib/seo";
 import { SERVICES } from "@/lib/services";
-import { GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
-import { SITE, activeSocials } from "@/lib/site";
+import { FREELANCE, SITE, activeSocials } from "@/lib/site";
+import type { FaqItem } from "@/lib/structured-data";
 
 // Evaluate delivery env vars per request so Vercel env updates take effect immediately.
 export const dynamic = "force-dynamic";
@@ -18,14 +18,14 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = pageMetadata({
   title: "Contact: Start a Project",
   description:
-    "Start a project with Ali Arshad. Share what you're building, the budget and timeline if you know them, and get a considered reply on fit, scope and next steps.",
+    "Start a project with Ali Arshad. Reach out directly via Upwork or LinkedIn, shape an exploratory brief with the Visual Project Planner, or use the project inquiry form once connected.",
   path: "/contact",
 });
 
 const FAQ_ITEMS: FaqItem[] = [
   {
     q: "What should the first message include?",
-    a: "A sentence or two on what you are trying to achieve is more useful than a long brief. Budget and timeline help if you know them, but neither is required to start the conversation.",
+    a: "A sentence or two on what you are trying to achieve is more useful than a long brief. Budget and timeline help if you know them, but neither is required to start the conversation — or you can generate a structured starting brief in the Visual Project Planner.",
   },
   {
     q: "Which service should I choose if the problem spans several?",
@@ -33,9 +33,9 @@ const FAQ_ITEMS: FaqItem[] = [
   },
 ];
 
-/** What a sender can expect after pressing send. No turnaround promise is made that cannot be kept. */
+/** What a sender can expect after reaching out. No turnaround promise is made that cannot be kept. */
 const NEXT_STEPS: { icon: IconName; title: string; text: string }[] = [
-  { icon: "mail", title: "I read it myself", text: "Every inquiry lands with me personally, not a support queue." },
+  { icon: "mail", title: "I read it myself", text: "Every message lands with me personally, not an account manager or support queue." },
   { icon: "users", title: "A short call if it fits", text: "If the project looks like a match, I will suggest a call to understand the goal, constraints and what success looks like." },
   { icon: "briefcase", title: "A written scope", text: "You get a plain-language proposal: what will be built, in what order, what it costs and what it depends on from your side." },
 ];
@@ -44,21 +44,78 @@ export default function ContactPage() {
   const socials = activeSocials();
   // Read on the server so no configuration detail reaches the browser.
   const configured = isDeliveryConfigured();
+  const linkedinUrl = socials.find((s) => s.icon === "linkedin")?.url ?? "";
 
   return (
     <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ]}
+      />
       <section className="page-hero contact" aria-labelledby="contact-title">
         <div className="container contact__inner">
           <div className="contact__intro">
-            <div className="enter">
-              <p className="eyebrow">Contact</p>
+            <div className="contact__copy">
+              <p className="eyebrow">Contact · Direct Independent Studio</p>
               <h1 className="page-title" id="contact-title">
                 Let&rsquo;s talk about <span className="accent">your project</span>
               </h1>
               <p className="lead">
-                Tell me what you&rsquo;re building, what&rsquo;s in the way, and when you need it. I reply with honest thoughts on fit, scope and next steps,
-                including when the right answer is a smaller project than you had in mind.
+                Tell me what you&rsquo;re building, what&rsquo;s in the way, and when you need it. I reply personally with
+                honest thoughts on fit, scope, and next steps — including when a smaller phase-1 build is the smarter move.
               </p>
+
+              {/* Clear direct channels available immediately */}
+              <div className="contact__channels panel" aria-label="Direct ways to connect right now">
+                <p className="eyebrow eyebrow--plain">Direct channels available now</p>
+                <div className="contact__channel-actions">
+                  <a
+                    href={FREELANCE.upwork.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn--primary btn--sm"
+                  >
+                    <span>{FREELANCE.upwork.ctaLabel}</span>
+                    <Icon name="arrow-up-right" size={15} />
+                  </a>
+                  {linkedinUrl ? (
+                    <a
+                      href={linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn--secondary btn--sm"
+                    >
+                      <Icon name="linkedin" size={16} />
+                      <span>Message on LinkedIn</span>
+                    </a>
+                  ) : null}
+                  <Link href="/project-planner" className="btn btn--secondary btn--sm">
+                    <span>Open Visual Project Planner</span>
+                    <Icon name="arrow-right" size={15} />
+                  </Link>
+                </div>
+
+                {socials.length > 0 ? (
+                  <ul className="contact__social-pills" aria-label="Verified professional profiles">
+                    {socials.map((s) => (
+                      <li key={s.label}>
+                        <a
+                          href={s.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="location-pill"
+                          aria-label={`${s.label} (opens in a new tab)`}
+                        >
+                          <Icon name={s.icon} size={15} />
+                          <span style={{ marginLeft: "6px" }}>{s.label}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
 
               <ul className="contact__details">
                 {SITE.email ? (
@@ -82,54 +139,40 @@ export default function ContactPage() {
                 <li>
                   <Icon name="globe" size={20} />
                   <span>
-                    <small>Working with</small>
-                    Clients internationally, remotely
+                    <small>Delivery model</small>
+                    100% remote studio working across US &amp; international time zones
                   </span>
                 </li>
                 <li>
                   <Icon name="layers" size={20} />
                   <span>
-                    <small>Services</small>
-                    <Link href="/services">{SERVICES.length} studio areas</Link>{" "}
-                    + <Link href={GPU_COMPUTE_PATH}>RTX GPU compute consultation</Link>
+                    <small>Capabilities</small>
+                    <em className="contact__inline-links" style={{ fontStyle: "normal" }}>
+                      <Link href="/services">{SERVICES.length} studio areas</Link> +{" "}
+                      <Link href={GPU_COMPUTE_PATH}>RTX GPU compute consultation</Link>
+                    </em>
                   </span>
                 </li>
               </ul>
-
-              {socials.length > 0 ? (
-                <ul className="social-list" aria-label="Professional profiles">
-                  {socials.map((s) => (
-                    <li key={s.label}>
-                      <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (opens in a new tab)`}>
-                        <Icon name={s.icon} size={20} />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
             </div>
 
-            <div className="contact__brand-pair">
-              <div className="portrait-frame portrait-frame--contact">
-                <Image
-                  src="/images/portraits/portrait-contact.webp"
-                  alt="Portrait of Ali Arshad wearing a dark blazer"
-                  width={1173}
-                  height={1341}
-                  sizes="(min-width: 1024px) 320px, 60vw"
-                />
-              </div>
-              <div className="contact__mark-space">
-                <SignatureMark3D variant="contact" />
-                <p className="fine-print">Ali Arshad Personal Studio · Remote nationwide &amp; international</p>
-              </div>
+            {/* Unboxed sculpted 3D "A" mark integrated directly into open space (no portrait, no card, no caption) */}
+            <div className="contact__mark-stage">
+              <SignatureMark3D variant="contact" />
             </div>
           </div>
 
-          <div className="panel panel--lg contact__form enter">
-            <h2 className="section-title section-title--sm">Project inquiry</h2>
-            <p className="section-sub">Fields marked with * are required. Budget and timeline are optional, and a rough idea is fine.</p>
-            <InquiryForm configured={configured} fallbackEmail={SITE.email} />
+          <div className="panel panel--lg contact__form">
+            <h2 className="section-title section-title--sm">Project inquiry form</h2>
+            <p className="section-sub">
+              Fields marked with * are required. Budget and timeline are optional, and a rough idea is completely fine.
+            </p>
+            <InquiryForm
+              configured={configured}
+              fallbackEmail={SITE.email}
+              upworkUrl={FREELANCE.upwork.url}
+              linkedinUrl={linkedinUrl}
+            />
           </div>
         </div>
       </section>
@@ -137,7 +180,7 @@ export default function ContactPage() {
       <section className="section section--surface" aria-labelledby="next-title">
         <div className="container">
           <div className="section-head reveal">
-            <p className="eyebrow eyebrow--plain">After you send</p>
+            <p className="eyebrow eyebrow--plain">After you reach out</p>
             <h2 className="section-title" id="next-title">
               What happens next
             </h2>
@@ -155,8 +198,10 @@ export default function ContactPage() {
             ))}
           </ol>
           <p className="fine-print contact__fine">
-            Not sure which service you need? Choose &ldquo;Not sure yet&rdquo; and describe the problem: working out the right approach is part of the job. For
-            specialist areas such as blockchain or security, I coordinate with qualified partners and say so upfront.
+            Not sure which service you need? Try the <Link href="/project-planner">Visual Project Planner</Link> or
+            choose &ldquo;Not sure yet&rdquo; and describe the problem. For specialist areas such as security reviews or
+            blockchain, I coordinate with vetted independent partners via the{" "}
+            <Link href="/studio-network">Studio Network</Link> and disclose involvement upfront.
           </p>
         </div>
       </section>

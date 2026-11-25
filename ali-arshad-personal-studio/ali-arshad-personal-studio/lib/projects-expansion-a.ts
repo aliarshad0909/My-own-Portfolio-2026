@@ -1,9 +1,255 @@
-import type { Project, ProjectCategory, ProjectStatus } from "@/lib/projects";
+import type { Project, ProjectCategory, ProjectImage, ProjectMedia, ProjectStatus } from "@/lib/projects";
+
+const REPO_TREE_BASE =
+  "https://github.com/aliarshad0909/My-own-Portfolio-2026/tree/feature/studio-polish-curated-work";
+
+const MONOREPO_APP_DIR: Record<string, string> = {
+  "stockflow-mobile-companion": "apps/stockflow-mobile",
+  "financeos-accounting-suite": "apps/financeos",
+  "flowos-automation-studio": "apps/flowos",
+  "sourceos-procurement-hub": "apps/sourceos",
+  "orexa-interactive-learning-os": "apps/orexa",
+  "supportos-helpdesk-console": "apps/supportos",
+  "projectos-delivery-workspace": "apps/projectos",
+  "insightos-bi-workspace": "apps/insightos",
+  "peopleos-team-directory": "apps/peopleos",
+  "bookos-appointment-scheduler": "apps/bookos",
+};
+
+/**
+ * Verified multi-screen real application captures already on disk for the
+ * 10 standalone monorepo applications (`apps/*`). Using authentic multi-screen
+ * captures instead of generic SVG placeholders makes each showcase visually rich
+ * and genuinely inspectable.
+ */
+const REAL_MONOREPO_MEDIA: Record<
+  string,
+  {
+    cover: ProjectImage;
+    gallery: ProjectMedia[];
+    architectureDiagram?: Project["architectureDiagram"];
+  }
+> = {
+  "stockflow-mobile-companion": {
+    cover: {
+      src: "/images/projects/stockflow/mobile-dashboard.png",
+      alt: "StockFlow Mobile Expo warehouse companion dashboard screen showing warehouse stock summary and quick actions",
+      width: 1200,
+      height: 750,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/stockflow/mobile-scanner.png", alt: "StockFlow Mobile barcode scanner screen looking up EAN-13 SKU details live", width: 1200, height: 750 },
+      { type: "image", src: "/images/projects/stockflow/mobile-adjust.png", alt: "StockFlow Mobile live stock adjustment form writing directly to /api/v1", width: 1200, height: 750 },
+      { type: "image", src: "/images/projects/stockflow/mobile-orders.png", alt: "StockFlow Mobile purchase and sales order receiving checklist", width: 1200, height: 750 },
+    ],
+    architectureDiagram: {
+      src: "/images/projects/stockflow/architecture.svg",
+      alt: "Architecture diagram showing StockFlow Mobile Expo companion syncing over /api/v1 with PostgreSQL multi-warehouse ledger",
+      width: 1200,
+      height: 720,
+      caption: "Shared PostgreSQL /api/v1 architecture connecting web operations and the Expo mobile warehouse companion.",
+    },
+  },
+  "financeos-accounting-suite": {
+    cover: {
+      src: "/images/projects/financeos/dashboard.png",
+      alt: "FinanceOS accounting workspace dashboard displaying cashflow KPIs, receivables, and recent ledger activity",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/financeos/ledger.png", alt: "FinanceOS balanced double-entry journal ledger view", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/financeos/invoices.png", alt: "FinanceOS client invoice register with payment statuses and aging summary", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/financeos/reconciliation.png", alt: "FinanceOS bank statement reconciliation workflow matching ledger lines", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/site-visuals/industries/saas-stack-architecture.svg",
+      alt: "Full-stack Next.js and PostgreSQL transactional SaaS architecture diagram",
+      width: 1200,
+      height: 720,
+      caption: "Transactional Next.js App Router + PostgreSQL architecture enforcing balanced integer-cent ledger entries.",
+    },
+  },
+  "flowos-automation-studio": {
+    cover: {
+      src: "/images/projects/flowos/dashboard.png",
+      alt: "FlowOS automation console overview showing active pipelines, recent execution metrics, and error rates",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/flowos/editor.png", alt: "FlowOS visual trigger-condition-action workflow editor", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/flowos/runs.png", alt: "FlowOS per-run execution trace inspecting webhook payload transformations and retries", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/flowos/templates.png", alt: "FlowOS reusable business automation template library", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/diagrams/google-workspace-n8n-flow.svg",
+      alt: "Event-driven workflow automation diagram with validation, branching, and logged retry stages",
+      width: 1200,
+      height: 720,
+      caption: "Trigger, transformation, conditional routing, and observable execution-log architecture.",
+    },
+  },
+  "sourceos-procurement-hub": {
+    cover: {
+      src: "/images/projects/sourceos/dashboard.png",
+      alt: "SourceOS procurement hub dashboard summarizing active RFQs, supplier quotes, and order milestones",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/sourceos/rfqs.png", alt: "SourceOS side-by-side supplier RFQ quote comparison table", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/sourceos/landed-cost.png", alt: "SourceOS unit landed-cost model breaking down FOB, freight, duty, and fees", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/sourceos/orders.png", alt: "SourceOS purchase order and factory production milestone tracker", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/diagrams/landed-cost-waterfall.svg",
+      alt: "Landed-cost waterfall schematic from factory ex-works price through freight, duty, and final warehouse unit cost",
+      width: 1200,
+      height: 720,
+      caption: "Deterministic landed-cost waterfall decomposing supplier quotes into true warehouse unit margin.",
+    },
+  },
+  "orexa-interactive-learning-os": {
+    cover: {
+      src: "/images/projects/orexa/dashboard.png",
+      alt: "Orexa interactive learning workspace dashboard showing active courses, learner streaks, and progress metrics",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/orexa/courses.png", alt: "Orexa structured course catalog and modular lesson overview", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/orexa/tutor.png", alt: "Orexa guided interactive tutor and concept explanation pane", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/orexa/assessments.png", alt: "Orexa timed mastery quiz interface with instant score review", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+      alt: "Next.js App Router and structured curriculum persistence schematic for Orexa interactive learning workspace",
+      width: 1200,
+      height: 720,
+      caption: "Modular Next.js App Router + PostgreSQL architecture separating lesson state, interactive tutor cues, and quiz grading.",
+    },
+  },
+  "supportos-helpdesk-console": {
+    cover: {
+      src: "/images/projects/supportos/dashboard.png",
+      alt: "SupportOS helpdesk console dashboard displaying open ticket volume, SLA timers, and resolution pacing",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/supportos/inbox.png", alt: "SupportOS priority ticket inbox with agent assignment and policy macro drafts", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/supportos/kb.png", alt: "SupportOS searchable policy knowledge base powering agent replies", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/supportos/portal.png", alt: "SupportOS customer self-service ticket status and intake portal", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/site-visuals/specializations/ai-agent-guardrail-loop.svg",
+      alt: "Human-in-the-loop AI support drafting and policy guardrail workflow schematic",
+      width: 1200,
+      height: 720,
+      caption: "Grounded policy retrieval with explicit human review and SLA escalation gates.",
+    },
+  },
+  "projectos-delivery-workspace": {
+    cover: {
+      src: "/images/projects/projectos/dashboard.png",
+      alt: "ProjectOS delivery workspace dashboard showing active client engagements, milestone burn, and upcoming deadlines",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/projectos/board.png", alt: "ProjectOS Kanban sprint task board with priority and owner labels", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/projectos/projects.png", alt: "ProjectOS portfolio list tracking milestone hours versus budget", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/projectos/client-view.png", alt: "ProjectOS clean shareable client milestone progress digest", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+      alt: "Full-stack Next.js App Router and PostgreSQL delivery architecture for ProjectOS sprint and client portals",
+      width: 1200,
+      height: 720,
+      caption: "Server-rendered App Router workspace isolating internal sprint boards from shareable read-only client views.",
+    },
+  },
+  "insightos-bi-workspace": {
+    cover: {
+      src: "/images/projects/insightos/dashboard.png",
+      alt: "InsightOS self-serve BI dashboard displaying executive KPIs, revenue trends, and retention deltas",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/insightos/dashboards.png", alt: "InsightOS saved executive and operational dashboard directory", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/insightos/explorer.png", alt: "InsightOS interactive query and metric slice explorer", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/insightos/datasets.png", alt: "InsightOS structured dataset registry with freshness status", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/site-visuals/industries/sector-systems-overview.svg",
+      alt: "Unified analytics data flow connecting operational datasets to executive KPI boards in InsightOS",
+      width: 1200,
+      height: 720,
+      caption: "Single-source metric aggregation feeding saved executive boards and ad-hoc slice explorers.",
+    },
+  },
+  "peopleos-team-directory": {
+    cover: {
+      src: "/images/projects/peopleos/dashboard.png",
+      alt: "PeopleOS remote team operations dashboard showing headcount, time-zone coverage, and pending leave approvals",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/peopleos/directory.png", alt: "PeopleOS searchable team directory with role and time-zone overlap indicators", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/peopleos/leave.png", alt: "PeopleOS PTO request queue and manager approval workflow", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/peopleos/recruitment.png", alt: "PeopleOS structured hiring pipeline and onboarding checklist tracker", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/site-visuals/industries/saas-stack-architecture.svg",
+      alt: "Multi-module SaaS architecture uniting employee directory, leave approvals, and hiring flows",
+      width: 1200,
+      height: 720,
+      caption: "Typed relational schema connecting team directory, PTO approval workflows, and onboarding stages.",
+    },
+  },
+  "bookos-appointment-scheduler": {
+    cover: {
+      src: "/images/projects/bookos/dashboard.png",
+      alt: "BookOS appointment scheduling dashboard showing daily bookings, provider utilization, and upcoming sessions",
+      width: 1440,
+      height: 900,
+    },
+    gallery: [
+      { type: "image", src: "/images/projects/bookos/calendar.png", alt: "BookOS multi-provider daily and weekly schedule calendar", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/bookos/catalog.png", alt: "BookOS service duration, buffer-time, and pricing catalog configuration", width: 1440, height: 900 },
+      { type: "image", src: "/images/projects/bookos/book.png", alt: "BookOS customer-facing time-zone-safe slot picker and confirmation screen", width: 1440, height: 900 },
+    ],
+    architectureDiagram: {
+      src: "/images/site-visuals/specializations/nextjs-app-router-architecture.svg",
+      alt: "Transactional booking architecture enforcing time-zone normalization and double-booking guards",
+      width: 1200,
+      height: 720,
+      caption: "Conflict-safe availability slot engine backed by PostgreSQL transactions and UTC-normalized provider schedules.",
+    },
+  },
+};
 
 export type ConceptVisualSpec = {
   accent: string;
   code: string;
-  pattern: "grid" | "flow" | "chart" | "commerce" | "agent" | "media" | "ledger" | "brand";
+  pattern:
+  | "grid"
+  | "flow"
+  | "chart"
+  | "commerce"
+  | "agent"
+  | "media"
+  | "ledger"
+  | "brand"
+  | "eval"
+  | "gateway"
+  | "finops"
+  | "webhook"
+  | "scanner"
+  | "schema";
 };
 
 export type ExpansionInput = {
@@ -18,16 +264,27 @@ export type ExpansionInput = {
   approach: string;
   features: string[];
   deliverables: string[];
+  limitations?: string;
   technologies: string[];
   tags: string[];
   relatedServicePaths: string[];
   relatedToolPaths?: string[];
+  sourceRepoPath?: string;
+  sourceUrl?: string;
+  generatedVisual?: { src: string; alt: string; label: string };
   visual: ConceptVisualSpec;
   liveUrl?: string;
 };
 
 export function buildExpansionProject(input: ExpansionInput): Project {
   const isPrototype = input.status === "Prototype";
+  const resolvedRepoPath =
+    input.sourceRepoPath ??
+    MONOREPO_APP_DIR[input.slug] ??
+    `project-lab/concepts/${input.slug}`;
+  const resolvedSourceUrl = input.sourceUrl ?? `${REPO_TREE_BASE}/${resolvedRepoPath}`;
+  const realMedia = REAL_MONOREPO_MEDIA[input.slug];
+
   return {
     id: input.id,
     slug: input.slug,
@@ -38,33 +295,51 @@ export function buildExpansionProject(input: ExpansionInput): Project {
     summary: input.summary,
     projectType: "Original Concept",
     status: input.status,
-    role: isPrototype ? "Sole builder (studio repository application)" : "Architecture concept & scope author",
+    role: isPrototype ? "Sole builder (studio repository prototype)" : "Architecture concept & workflow prototype author",
     contribution: input.deliverables,
     technologies: input.technologies,
     featured: false,
-    usesSampleMedia: !isPrototype,
-    cover: {
-      src: "/images/projects/placeholder-interior.webp",
-      alt: `${input.title} — ${input.status} architectural blueprint illustration`,
-      width: 1200,
-      height: 675,
-    },
-    gallery: [],
+    usesSampleMedia: realMedia ? false : !isPrototype,
+    cover: realMedia
+      ? realMedia.cover
+      : input.generatedVisual
+        ? {
+            src: input.generatedVisual.src,
+            alt: input.generatedVisual.alt,
+            width: 1200,
+            height: 675,
+          }
+        : {
+            src: "/images/projects/placeholder-interior.webp",
+            alt: `${input.title} — ${input.status} architectural blueprint illustration`,
+            width: 1200,
+            height: 675,
+          },
+    gallery: realMedia ? realMedia.gallery : [],
+    architectureDiagram: realMedia?.architectureDiagram,
     liveUrl: input.liveUrl,
+    sourceUrl: resolvedSourceUrl,
+    sourceRepoPath: resolvedRepoPath,
+    limitations:
+      input.limitations ??
+      (isPrototype
+        ? "Verified locally inside this repository using synthetic seeded data — not a public multi-tenant production deployment."
+        : "Architecture concept paired with a lightweight representative workflow prototype in project-lab/concepts/ — not a completed full-stack deployment or client engagement."),
     isCatalogExpansion: true,
     nicheLabel: input.niche,
     relatedServicePaths: input.relatedServicePaths,
     relatedToolPaths: input.relatedToolPaths,
-    conceptVisual: input.visual,
+    generatedVisual: realMedia ? undefined : input.generatedVisual,
+    conceptVisual: realMedia ? undefined : input.visual,
     caseStudy: {
-      background: `${input.niche} showcase (${input.status}). ${isPrototype ? "Built and verified locally in the studio monorepo as an inspectable software prototype — not a client deployment." : "Illustrative architecture concept designed to demonstrate how the studio approaches this domain — not a completed implementation or client engagement."}`,
+      background: `${input.niche} showcase (${input.status}). ${isPrototype ? "Built and verified locally in this repository as an inspectable runnable prototype — not a client deployment." : "Illustrative architecture concept paired with a small representative runnable workflow in project-lab/concepts/ — not a finished production build or client engagement."}`,
       challenge: input.problem,
       approach: input.approach,
       features: input.features,
       process: input.deliverables,
       solution: isPrototype
-        ? "Implemented and locally verified inside the Ali Arshad Personal Studio monorepo using fictional seeded datasets."
-        : "Prepared as a structured technical blueprint ready to customize into a scoped client build.",
+        ? `Runnable locally from ${resolvedRepoPath} with automated tests and synthetic fixtures.`
+        : `Documented technical blueprint with a representative local workflow slice in ${resolvedRepoPath}, ready to adapt into a scoped client build.`,
     },
   };
 }

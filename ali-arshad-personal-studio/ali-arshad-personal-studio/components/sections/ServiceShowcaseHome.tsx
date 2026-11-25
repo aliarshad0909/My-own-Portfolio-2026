@@ -69,8 +69,11 @@ export function ServiceShowcaseHome() {
             <Link href="/services#compare-services" className="location-pill location-pill--all">
               Compare services &amp; 26 niches →
             </Link>
+            <Link href="/project-planner" className="location-pill location-pill--all">
+              Visual Project Planner →
+            </Link>
             <Link href="/work" className="location-pill">
-              Project Finder (80 showcases)
+              Project Finder (100 projects + 20 games)
             </Link>
             <Link href="/games" className="location-pill">
               20 Playable Browser Games

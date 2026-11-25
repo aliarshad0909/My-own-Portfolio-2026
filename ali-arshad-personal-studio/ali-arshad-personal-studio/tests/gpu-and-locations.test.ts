@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { afterEach, describe, it } from "node:test";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 import { allStateCityPlans } from "@/lib/geo/city-backlog";
@@ -163,8 +165,9 @@ describe("51-jurisdiction city expansion backlog & fictional demo customer profi
     }
   });
 
-  it("defines 3 transparently fictional customer profiles with synthetic markers and valid studio links", () => {
-    assert.equal(FICTIONAL_DEMO_PROFILES.length, 3);
+  it("defines 4 transparently fictional customer profiles with synthetic markers, AI-labeled fictional portraits, and valid studio links", () => {
+    assert.equal(FICTIONAL_DEMO_PROFILES.length, 4);
+    const sitemap = new Set(indexableSeoRoutes());
     assert.ok(
       FICTIONAL_DEMO_PROFILES.some((p) => p.hasPhysicalStorefrontInScenario),
       "expected simulated physical store profile",
@@ -173,17 +176,40 @@ describe("51-jurisdiction city expansion backlog & fictional demo customer profi
       FICTIONAL_DEMO_PROFILES.some((p) => !p.hasPhysicalStorefrontInScenario),
       "expected simulated 100% remote company profile",
     );
+    let totalPortraits = 0;
     for (const profile of FICTIONAL_DEMO_PROFILES) {
-      assert.match(profile.disclosureBadge, /Fictional Demo Customer/i);
+      assert.ok(isKnownRoute(`/demo-scenarios/${profile.slug}`), `missing demo scenario route for ${profile.slug}`);
+      assert.ok(!sitemap.has(`/demo-scenarios/${profile.slug}`), `fictional scenario ${profile.slug} must never be in sitemap`);
+      assert.match(profile.disclosureBadge, /Fictional Demo (Customer|Scenario)/i);
       assert.match(profile.disclosureBadge, /Not a Real Client/i);
       assert.match(profile.mapPin.approximateCoordsLabel, /Synthetic/i);
-      assert.match(profile.mapPin.caption, /not a real (business address|client or address|company or office location)/i);
+      assert.match(profile.mapPin.caption, /not a real (business address|client or address|company or office location|healthcare provider or address)/i);
+      assert.ok(profile.mapMarkers.length >= 2, `${profile.slug} should include synthetic map markers`);
+      assert.ok(profile.teamHierarchy.length >= 3, `${profile.slug} should define a fictional team hierarchy`);
+
+      for (const member of profile.teamHierarchy) {
+        totalPortraits += 1;
+        assert.match(member.portraitDisclosure, /AI-Generated Fictional Illustration/i);
+        assert.match(member.portraitDisclosure, /Not a Real Person/i);
+        assert.ok(
+          existsSync(path.join(process.cwd(), "public", member.portraitSrc)),
+          `missing fictional portrait on disk: ${member.portraitSrc}`,
+        );
+      }
+
       assert.deepEqual(
-        brokenLinks(profile.pairedExamples.map((ex) => ex.href)),
+        brokenLinks([
+          ...profile.pairedExamples.map((ex) => ex.href),
+          ...profile.relatedServices.map((s) => s.href),
+        ]),
         [],
-        `${profile.id} has broken paired example link`,
+        `${profile.id} has broken linked studio path`,
       );
+      for (const slug of profile.relatedProjectSlugs) {
+        assert.ok(getProject(slug), `${profile.slug} references missing project ${slug}`);
+      }
     }
+    assert.equal(totalPortraits, 13, "expected 13 AI-illustrated fictional team members across the 4 scenarios");
     const retailMatches = selectFictionalProfilesForServices(["ecommerce-development"], 2);
     assert.ok(retailMatches.some((p) => p.id === "alder-loom"));
   });

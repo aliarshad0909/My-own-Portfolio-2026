@@ -8,7 +8,7 @@ import { PendingMedia, RelatedProjectList, ServiceShowcase } from "@/components/
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
 import { Faq } from "@/components/ui/Faq";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
 import { GPU_COMPUTE_CONTACT_SERVICE, GPU_COMPUTE_PATH } from "@/lib/gpu-compute";
 import { pageMetadata } from "@/lib/seo";
@@ -26,109 +26,99 @@ function hubsForPillar(pillarId: string): ServiceHub[] {
 export const metadata: Metadata = pageMetadata({
   title: "Services: Web Development, AI Automation, Video & 3D",
   description:
-    "Compare creative production, Next.js and React web development, AI agents, n8n workflow automation, brand management, global sourcing, and specialist collaboration — delivered remotely from Ali Arshad's independent studio.",
+    "Explore four clear service families — SaaS & Web Engineering, AI Agents & Automation, Creative & Brand Production, and Global Sourcing & Specialist Collaboration — aligned directly with working portfolio demonstrations.",
   path: "/services",
 });
 
-/** Scannable comparison rows grounded strictly in existing services and verified repo builds. */
-const COMPARISON_ROWS: {
+/** Four consolidated service families eliminating duplicate hub/niche directories while keeping every capability visible. */
+type ServiceFamily = {
   id: string;
-  name: string;
-  href: string;
+  icon: IconName;
+  title: string;
+  delivery: "Direct by Ali Arshad" | "Direct Sourcing + Partner-Led Specialists";
   bestFor: string;
   deliverables: string;
-  proof: { label: string; href: string; kind: "Live demo" | "Locally tested" | "Pipeline tested" | "Partner-led" };
-  niches: { label: string; href: string }[];
-}[] = [
+  workCollectionHref: string;
+  workCollectionLabel: string;
+  proof: { label: string; href: string; kind: "Live Demo" | "Locally Tested" | "Pipeline Tested" | "Partner-Led" };
+  pillarIds: string[];
+  hubSlugs: string[];
+  extraLinks?: { label: string; href: string }[];
+};
+
+const SERVICE_FAMILIES: ServiceFamily[] = [
   {
-    id: "web-development",
-    name: "Web & Software Development",
-    href: "/services/web-development",
-    bestFor: "Founders & teams outgrowing templates, launching MVPs, or replacing spreadsheets with custom software",
-    deliverables: "Next.js App Router apps, React portals, custom CRMs, storefronts, REST APIs & PostgreSQL backends",
-    proof: { label: "PipelineOS CRM (live) & StockFlow (live)", href: "/products/pipelineos-crm", kind: "Live demo" },
-    niches: [
-      { label: "Next.js", href: "/services/web-development/nextjs" },
-      { label: "Custom CRM", href: "/services/web-development/custom-crm-development" },
-      { label: "API Integration", href: "/services/web-development/api-integration" },
-      { label: "Custom Storefronts", href: "/services/ecommerce-development/custom-storefronts" },
-      { label: "Inventory Software", href: "/services/business-dashboards/inventory-software" },
-    ],
+    id: "family-web-saas",
+    icon: "code",
+    title: "SaaS, Web Apps, E-Commerce & Dashboards",
+    delivery: "Direct by Ali Arshad",
+    bestFor: "Founders & teams launching MVPs, custom CRMs, storefronts, or replacing spreadsheets with reliable software.",
+    deliverables: "Next.js App Router apps, PostgreSQL backends, custom storefronts, analytics dashboards & inventory systems.",
+    workCollectionHref: "/work?collection=saas-web-apps",
+    workCollectionLabel: "Browse SaaS, E-Commerce & Analytics Work",
+    proof: { label: "PipelineOS CRM & StockFlow (Live Sandboxes)", href: "/products/pipelineos-crm", kind: "Live Demo" },
+    pillarIds: ["web-development"],
+    hubSlugs: ["web-development", "ecommerce-development", "business-dashboards"],
   },
   {
-    id: "ai-automation",
-    name: "AI Agents & n8n Automation",
-    href: "/services/n8n-automation",
-    bestFor: "Sales, support & ops teams drowning in manual copy-paste work, slow lead follow-up, or repetitive FAQs",
-    deliverables: "Self-hostable n8n workflows, grounded BM25/RAG support agents, voice/chat lead qualification & CRM sync",
-    proof: { label: "Tideline, Kestrel & 15-node n8n workflow", href: "/case-studies/inbound-lead-qualification-workflow", kind: "Locally tested" },
-    niches: [
-      { label: "Google Workspace", href: "/services/n8n-automation/google-workspace-automation" },
-      { label: "CRM Automation", href: "/services/n8n-automation/crm-automation" },
-      { label: "Lead Qualification", href: "/services/n8n-automation/lead-qualification" },
-      { label: "Support Agents", href: "/services/ai-agents/support" },
-      { label: "Sales Agents", href: "/services/ai-agents/sales" },
-    ],
+    id: "family-ai-automation",
+    icon: "bot",
+    title: "AI Products, Agents & n8n Automation",
+    delivery: "Direct by Ali Arshad",
+    bestFor: "Sales, support & ops teams cutting manual copy-paste tasks, slow lead triage, or repetitive inbox work.",
+    deliverables: "Self-hostable n8n workflows, grounded BM25/RAG support agents, voice/chat lead qualification & CRM bridges.",
+    workCollectionHref: "/work?collection=ai-products-agents",
+    workCollectionLabel: "Browse AI & Automation Work",
+    proof: { label: "Tideline Support Agent & 15-Node n8n Workflow", href: "/case-studies/inbound-lead-qualification-workflow", kind: "Locally Tested" },
+    pillarIds: ["ai-automation"],
+    hubSlugs: ["ai-agents", "n8n-automation"],
   },
   {
-    id: "creative-production",
-    name: "Creative Production",
-    href: "/services/creative-production",
-    bestFor: "Product brands & founders needing launch edits, UI motion explainers, or web-optimized video delivery",
-    deliverables: "Hook-first video edits, motion graphics, 9:16/4:5/16:9 ad cuts, H.264/VP9 web encodes & scripted Blender scenes",
-    proof: { label: "Motion Media Pipeline (28 ffmpeg tests)", href: "/case-studies/motion-production-pipeline", kind: "Pipeline tested" },
-    niches: [
-      { label: "Video Editing", href: "/services/creative-production/video-editing" },
-      { label: "Motion Graphics", href: "/services/creative-production/motion" },
-      { label: "Social Video Ads", href: "/services/creative-production/social-video" },
-    ],
+    id: "family-creative-brand",
+    icon: "clapperboard",
+    title: "Video, Motion, 3D & Brand Growth",
+    delivery: "Direct by Ali Arshad",
+    bestFor: "Product brands & founders needing launch edits, UI motion, scripted 3D pipelines, or WCAG-tested visual systems.",
+    deliverables: "Video editing, motion graphics, social ad cuts, probed ffmpeg encodes, brand systems, HTML email & campaign pages.",
+    workCollectionHref: "/work?collection=creative-motion-production",
+    workCollectionLabel: "Browse Video, Motion & Brand Work",
+    proof: { label: "Halcyon Brand System & Motion Pipeline", href: "/case-studies/halcyon-brand-system", kind: "Pipeline Tested" },
+    pillarIds: ["creative-production", "brand-growth"],
+    hubSlugs: ["creative-production", "branding"],
   },
   {
-    id: "brand-growth",
-    name: "Brand Management & Growth",
-    href: "/services/branding",
-    bestFor: "US & international brands needing a developer-ready visual system, steady social publishing, or email/ad alignment",
-    deliverables: "WCAG-checked brand systems, SVG kits, social operations, 600px HTML email templates & campaign landing pages",
-    proof: { label: "Halcyon Brand System (50 checks) & HubSpot/Google certs", href: "/case-studies/halcyon-brand-system", kind: "Locally tested" },
-    niches: [
-      { label: "Brand Identity", href: "/services/branding/identity" },
-      { label: "Social Management", href: "/services/branding/social-media-management" },
-      { label: "Email Marketing", href: "/services/branding/email-marketing" },
-      { label: "Paid Ad Support", href: "/services/branding/paid-advertising-support" },
-    ],
-  },
-  {
-    id: "global-sourcing",
-    name: "Global Sourcing & Supply Chain",
-    href: "/services/global-sourcing",
-    bestFor: "Ecommerce sellers & physical product brands vetting factories, comparing mixed incoterms, or modelling landed margin",
-    deliverables: "Standardised RFQs, direct-contact supplier shortlists, weighted scorecards & volumetric landed-cost models",
-    proof: { label: "Lantern Sourcing (52 tests) & Landed Cost Tool", href: "/case-studies/lantern-sourcing-platform", kind: "Locally tested" },
-    niches: [
-      { label: "Supplier Research", href: "/services/global-sourcing/supplier-research" },
-      { label: "Supplier Comparison", href: "/services/global-sourcing/supplier-comparison" },
-      { label: "Landed-Cost Analysis", href: "/services/global-sourcing/landed-cost-analysis" },
-    ],
-  },
-  {
-    id: "specialist-collaboration",
-    name: "Specialist Technical Collaboration",
-    href: "/studio-network",
-    bestFor: "Multi-discipline builds needing security reviews, blockchain engineering, or parallel sprint capacity under one lead",
-    deliverables: "Upfront specialist scoping, single-point project coordination & transparent independent collaborator attribution",
-    proof: { label: "Sentryline Security & Ledgerlight Explorer", href: "/studio-network", kind: "Partner-led" },
-    niches: [
-      { label: "Studio Network", href: "/studio-network" },
+    id: "family-sourcing-specialists",
+    icon: "users",
+    title: "Global Sourcing & Specialist Collaboration",
+    delivery: "Direct Sourcing + Partner-Led Specialists",
+    bestFor: "Physical product teams vetting factories/landed cost, or complex builds requiring security, Web3, or parallel sprint depth.",
+    deliverables: "Direct supplier research & landed-cost modeling; transparent partner-led security reviews, blockchain & consultation-led RTX GPU compute.",
+    workCollectionHref: "/work?collection=ecommerce-operations",
+    workCollectionLabel: "Browse Operations & Security Work",
+    proof: { label: "Lantern Sourcing & Studio Network Model", href: "/studio-network", kind: "Partner-Led" },
+    pillarIds: ["global-sourcing", "specialist-collaboration"],
+    hubSlugs: ["global-sourcing"],
+    extraLinks: [
+      { label: "Studio Network (Partner Model)", href: "/studio-network" },
       { label: "RTX GPU Compute (Consultation)", href: GPU_COMPUTE_PATH },
     ],
   },
 ];
 
-/** Grounded in what the service sections and work pages actually say — no claims beyond them. */
+/** Maps each detailed service pillar to its aligned Work collection for consistent cross-navigation. */
+const PILLAR_WORK_COLLECTION: Record<string, { href: string; label: string }> = {
+  "creative-production": { href: "/work?collection=creative-motion-production", label: "Creative & Motion Collection" },
+  "web-development": { href: "/work?collection=saas-web-apps", label: "SaaS & Web Apps Collection" },
+  "ai-automation": { href: "/work?collection=ai-products-agents", label: "AI Products & Automation Work" },
+  "brand-growth": { href: "/work?collection=creative-motion-production", label: "Brand & Creative Collection" },
+  "global-sourcing": { href: "/work?collection=ecommerce-operations", label: "E-Commerce & Operations Collection" },
+  "specialist-collaboration": { href: "/work?collection=automation-integrations", label: "Security & Integration Work" },
+};
+
 const FAQ_ITEMS: FaqItem[] = [
   {
-    q: "What services does Ali Arshad offer?",
-    a: "Six connected service areas: creative production (video editing, motion graphics and Blender 3D product visualization), web and software development with Next.js, React and TypeScript, AI agents and workflow automation with n8n, brand management and growth, global sourcing and supply chain coordination, and specialist technical collaboration for work that needs a partner. Dedicated consultation-led RTX GPU compute rental is also available on a scoped hourly basis.",
+    q: "What services does Ali Arshad offer directly vs. with collaborators?",
+    a: "Web & SaaS development, e-commerce, analytics dashboards, AI agents, n8n workflow automation, creative production, brand systems, and global sourcing coordination are delivered directly by Ali Arshad. For specialist domains like deep security reviews, blockchain, or high-volume parallel sprints, vetted independent collaborators join transparently through the Studio Network with Ali remaining your single point of contact.",
   },
   {
     q: "How do you work remotely with US and international clients?",
@@ -136,27 +126,14 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "Are the portfolio projects real client engagements or demonstrations?",
-    a: "The portfolio case studies and 12 SaaS applications in the Product Directory are clearly labeled studio demonstrations built under fictional companies and seeded data — including publicly deployed live sandboxes for PipelineOS CRM (crm.aliarshad.co) and StockFlow Inventory (stock.aliarshad.co). They prove real engineering execution without fabricating client claims.",
-  },
-  {
-    q: "Can Ali build custom AI agents and n8n workflows?",
-    a: "Yes. AI agents and n8n automation are core services: scoped agents for support, sales qualification and knowledge retrieval, plus self-hostable n8n workflows with tested JavaScript Code nodes, error workflows and human approval gates where judgement matters.",
-  },
-  {
-    q: "Does Ali develop custom e-commerce storefronts and inventory systems?",
-    a: "Yes. From custom Next.js storefronts with integer-cent pricing and stock-enforced checkouts (demonstrated in Tessera Clayworks) to append-only multi-warehouse inventory backends (demonstrated live in StockFlow and locally in Meridian). Where standard Shopify is simpler and cheaper, I recommend it honestly.",
+    a: "The portfolio case studies and standalone applications are clearly labeled studio demonstrations, locally verified prototypes, or architecture concepts built under fictional companies and seeded data — including publicly deployed live sandboxes for PipelineOS CRM (crm.aliarshad.co) and StockFlow Inventory (stock.aliarshad.co). They prove real engineering execution without fabricating client claims.",
   },
   {
     q: "What is included in a typical engagement?",
-    a: "A short discovery conversation, then a plain-language written scope covering what will be built, in what order, what it costs and what it depends on from your side. Work is delivered in reviewable stages, and hand-over includes documentation and an agreed support arrangement. Every project is quoted individually with no fixed public rate sheet.",
-  },
-  {
-    q: "How is specialist collaboration handled?",
-    a: "Some projects need expertise outside my own, such as blockchain, deep security reviews or parallel native mobile sprints. For those I stay your single point of contact, bring in vetted independent specialists through the Studio Network, and disclose partner involvement upfront rather than presenting their work as mine.",
+    a: "A short discovery conversation (or a brief exported from the Visual Project Planner), followed by a plain-language written scope covering what will be built, in what order, what it costs, and what it depends on from your side. Work ships in reviewable milestones with documentation and full ownership hand-off.",
   },
 ];
 
-/** The inquiry-to-follow-up flow illustrated under AI Agents & Automation. */
 const AUTOMATION_FLOW: FlowStep[] = [
   { label: "New inquiry", detail: "Form, inbox or chat", icon: "mail" },
   { label: "AI qualification", detail: "Scored against your criteria", icon: "bot" },
@@ -164,7 +141,6 @@ const AUTOMATION_FLOW: FlowStep[] = [
   { label: "Human follow-up", detail: "A person takes the real conversation", icon: "users", human: true },
 ];
 
-/** The sourcing flow illustrated under Global Sourcing & Supply Chain. */
 const SOURCING_FLOW: FlowStep[] = [
   { label: "Requirements", detail: "Specification, volume, target cost", icon: "briefcase" },
   { label: "Supplier research", detail: "Shortlist and first contact", icon: "globe" },
@@ -173,7 +149,6 @@ const SOURCING_FLOW: FlowStep[] = [
   { label: "Shipping follow-up", detail: "Tracking through to arrival", icon: "clock" },
 ];
 
-/** Renders the visual half of a section. Each service earns its own treatment. */
 function ServiceVisual({ service }: { service: Service }) {
   const projects = projectsForService(service.id);
 
@@ -182,9 +157,9 @@ function ServiceVisual({ service }: { service: Service }) {
       <PendingMedia
         heading="Showreel in preparation"
         lines={[
-          "The 3D scene system and the media pipeline behind this service are built and tested, but no finished render or film has been produced yet.",
-          "Rather than show a stock image or a frame from someone else's work, this space is held for real output.",
-          "Earlier editing and motion work is being cleared for publication.",
+          "The 3D scene system and the media pipeline behind this service are built and tested, but no finished client showreel has been published yet.",
+          "Rather than display stock footage or unverified work, this space stays reserved for cleared output.",
+          "Inspect the verified ffmpeg media pipeline and Halcyon WCAG brand system in the Work collections.",
         ]}
       />
     );
@@ -194,9 +169,9 @@ function ServiceVisual({ service }: { service: Service }) {
     return (
       <div className="visual-stack">
         <FlowDiagram
-          title="A typical inbound flow"
+          title="A typical inbound automation flow"
           steps={AUTOMATION_FLOW}
-          caption="An illustration of how these pieces fit together, not a screenshot of a running system. The demonstrations below implement the qualification and support stages."
+          caption="An illustration of how these stages connect — not a screenshot. The linked demonstrations below implement the qualification and support stages."
         />
         <RelatedProjectList projects={projects} />
       </div>
@@ -209,7 +184,7 @@ function ServiceVisual({ service }: { service: Service }) {
         <FlowDiagram
           title="How a sourcing project runs"
           steps={SOURCING_FLOW}
-          caption="The coordination sequence for a sourcing project. Supplier quality, customs clearance and delivery dates depend on third parties and are never guaranteed."
+          caption="The coordination sequence for a sourcing engagement. Supplier quality, customs clearance and delivery dates depend on third parties and are never guaranteed."
         />
         <RelatedProjectList projects={projects} />
       </div>
@@ -221,8 +196,6 @@ function ServiceVisual({ service }: { service: Service }) {
 }
 
 export default function ServicesPage() {
-  const hubsWithSpokes = PUBLISHED_HUBS.filter((h) => h.spokes.some((s) => isIndexable(s.publicationState)));
-
   return (
     <>
       <JsonLd
@@ -238,97 +211,122 @@ export default function ServicesPage() {
         ]}
       />
       <PageHero
-        eyebrow="Services · Remote Independent Studio"
+        eyebrow="Services · Four Connected Studio Families"
         title={
           <>
-            Creative and technical solutions, <span className="accent">built around your business</span>
+            Creative and technical solutions, <span className="accent">aligned directly with real builds</span>
           </>
         }
-        lead="Compare six connected disciplines — software engineering, AI automation, creative production, brand growth, global sourcing, and transparent specialist collaboration — delivered remotely for US and international teams."
+        lead="Every capability is grouped into four clear service families — distinguishing what Ali builds directly from specialist work coordinated through vetted independent collaborators, with direct links to working studio demonstrations."
       >
         <div className="hero__actions">
           <ButtonLink href="/contact">Discuss your project</ButtonLink>
-          <ButtonLink href="#compare-services" variant="secondary" icon={null}>
-            Compare services
+          <ButtonLink href="/project-planner" variant="secondary" icon={null}>
+            Visual Project Planner
           </ButtonLink>
-          <ButtonLink href="/products" variant="secondary" icon={null}>
-            Try live SaaS demos
+          <ButtonLink href="/work" variant="secondary" icon={null}>
+            Explore Curated Work
           </ButtonLink>
         </div>
       </PageHero>
 
       <ServiceNav services={SERVICES} />
 
+      {/* Consolidated 4-Family Service Directory (replaces overlapping comparison + hub + niche walls) */}
       <section className="section section--tight" id="compare-services" aria-labelledby="compare-services-title">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow eyebrow--plain">Quick comparison</p>
+            <p className="eyebrow eyebrow--plain">Service families &amp; direct delivery clarity</p>
             <h2 className="section-title section-title--sm" id="compare-services-title">
-              Find the right service for your bottleneck
+              Four focused families — zero overlapping agency menus
             </h2>
             <p className="section-sub">
-              Every engagement starts with a plain-language written scope. Compare fit, typical deliverables, verifiable studio demonstrations, and focused niche pages below.
+              Choose the family closest to your bottleneck to inspect dedicated service hubs, focused niche pages, and
+              the exact working portfolio builds that back them up.
             </p>
           </div>
 
-          <div className="decision-table-wrap">
-            <table className="decision-table decision-table--services">
-              <thead>
-                <tr>
-                  <th scope="col">Service Area</th>
-                  <th scope="col">Best Fit</th>
-                  <th scope="col">Core Deliverables</th>
-                  <th scope="col">Supporting Proof</th>
-                  <th scope="col">Focused Niche Pages</th>
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARISON_ROWS.map((row) => (
-                  <tr key={row.id}>
-                    <th scope="row">
-                      <Link href={row.href} className="service-compare__link">
-                        {row.name}
-                      </Link>
-                      <span className="service-compare__jump">
-                        <a href={`#${row.id}`}>Read overview ↓</a>
-                      </span>
-                    </th>
-                    <td>{row.bestFor}</td>
-                    <td>{row.deliverables}</td>
-                    <td>
-                      <span className="service-compare__badge">{row.proof.kind}</span>
-                      <Link href={row.proof.href} className="service-compare__proof-link">
-                        {row.proof.label}
-                      </Link>
-                    </td>
-                    <td>
-                      <div className="service-compare__pills">
-                        {row.niches.map((niche) => (
-                          <Link key={niche.href} href={niche.href} className="location-pill">
-                            {niche.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="service-family-grid">
+            {SERVICE_FAMILIES.map((family) => {
+              const matchedHubs = PUBLISHED_HUBS.filter((h) => family.hubSlugs.includes(h.slug));
+              const isPartner = family.delivery.includes("Partner");
+              return (
+                <article key={family.id} className="panel service-family-card">
+                  <div className="service-family-card__top">
+                    <span className="hub-deliverable__icon" aria-hidden="true">
+                      <Icon name={family.icon} size={19} />
+                    </span>
+                    <span className={`badge ${isPartner ? "badge--partner" : "badge--demo"}`}>
+                      {family.delivery}
+                    </span>
+                  </div>
+
+                  <h3 className="card-title">{family.title}</h3>
+                  <p className="service-family-card__best">{family.bestFor}</p>
+                  <p className="fine-print">
+                    <strong>Deliverables:</strong> {family.deliverables}
+                  </p>
+
+                  <div className="service-family-card__proof">
+                    <span className="service-compare__badge">{family.proof.kind}</span>
+                    <Link href={family.proof.href} className="service-compare__proof-link">
+                      {family.proof.label}
+                    </Link>
+                  </div>
+
+                  <div className="service-family-card__links">
+                    <p className="label">Dedicated hubs &amp; specializations</p>
+                    <div className="location-pill-list">
+                      {matchedHubs.map((hub) => (
+                        <Link key={hub.slug} href={`/services/${hub.slug}`} className="location-pill location-pill--all">
+                          {hub.h1} →
+                        </Link>
+                      ))}
+                      {matchedHubs.flatMap((hub) =>
+                        hub.spokes
+                          .filter((sp) => isIndexable(sp.publicationState))
+                          .map((sp) => (
+                            <Link
+                              key={`${hub.slug}/${sp.slug}`}
+                              href={`/services/${hub.slug}/${sp.slug}`}
+                              className="location-pill"
+                            >
+                              {sp.h1}
+                            </Link>
+                          )),
+                      )}
+                      {family.extraLinks?.map((extra) => (
+                        <Link key={extra.href} href={extra.href} className="location-pill">
+                          {extra.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="service-family-card__footer">
+                    <Link href={family.workCollectionHref} className="arrow-link">
+                      <span>{family.workCollectionLabel}</span>
+                      <Icon name="arrow-up-right" size={15} />
+                    </Link>
+                    <a href={`#${family.pillarIds[0]}`} className="fine-print">
+                      Read scope details ↓
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      <section className="section section--flush-top" aria-label="Service areas">
+      {/* Detailed 6 Studio Pillars — preserves all deep anchors (#web-development, #ai-automation, etc.) */}
+      <section className="section section--flush-top" aria-label="Detailed studio capabilities">
         <div className="container service-stack">
           {SERVICES.map((s, i) => {
             const projects = projectsForService(s.id);
             const visual = <ServiceVisual service={s} />;
             const matchedHubs = hubsForPillar(s.id);
-            const matchedSpokes = matchedHubs.flatMap((h) =>
-              h.spokes
-                .filter((sp) => isIndexable(sp.publicationState))
-                .map((sp) => ({ hubSlug: h.slug, slug: sp.slug, label: sp.h1 })),
-            );
+            const workCol = PILLAR_WORK_COLLECTION[s.id];
 
             return (
               <article
@@ -347,7 +345,9 @@ export default function ServicesPage() {
                       {s.title}
                     </h2>
                   </div>
-                  {s.partnerDelivered ? <span className="badge badge--partner">Delivered with partners</span> : null}
+                  <span className={`badge ${s.partnerDelivered ? "badge--partner" : "badge--demo"}`}>
+                    {s.partnerDelivered ? "Coordinated with vetted partners" : "Delivered directly by Ali Arshad"}
+                  </span>
 
                   <p className="service-block__positioning">{s.positioning}</p>
                   <p className="service-block__desc">{s.description}</p>
@@ -393,30 +393,15 @@ export default function ServicesPage() {
                     </div>
                   </div>
 
-                  {matchedHubs.length > 0 || s.id === "specialist-collaboration" ? (
+                  {matchedHubs.length > 0 ? (
                     <div className="service-block__niches">
-                      <p className="label">Dedicated hubs &amp; focused niche pages</p>
+                      <p className="label">Deep-dive hub{matchedHubs.length > 1 ? "s" : ""}</p>
                       <div className="location-pill-list">
                         {matchedHubs.map((hub) => (
                           <Link key={hub.slug} href={`/services/${hub.slug}`} className="location-pill location-pill--all">
                             {hub.h1} →
                           </Link>
                         ))}
-                        {matchedSpokes.map((sp) => (
-                          <Link key={`${sp.hubSlug}/${sp.slug}`} href={`/services/${sp.hubSlug}/${sp.slug}`} className="location-pill">
-                            {sp.label}
-                          </Link>
-                        ))}
-                        {s.id === "specialist-collaboration" ? (
-                          <>
-                            <Link href="/studio-network" className="location-pill location-pill--all">
-                              Studio Network →
-                            </Link>
-                            <Link href={GPU_COMPUTE_PATH} className="location-pill">
-                              RTX GPU Compute (Consultation)
-                            </Link>
-                          </>
-                        ) : null}
                       </div>
                     </div>
                   ) : null}
@@ -430,7 +415,11 @@ export default function ServicesPage() {
 
                   <div className="service-block__actions">
                     <ButtonLink href={contactHref(s)}>Discuss a project</ButtonLink>
-                    {projects.length > 0 ? (
+                    {workCol ? (
+                      <ButtonLink href={workCol.href} variant="secondary" icon={null}>
+                        {workCol.label}
+                      </ButtonLink>
+                    ) : projects.length > 0 ? (
                       <ButtonLink href={relatedWorkHref(s)} variant="secondary" icon={null}>
                         View related work
                       </ButtonLink>
@@ -444,8 +433,8 @@ export default function ServicesPage() {
           })}
 
           <p className="fine-print">
-            Typical deliverables describe the shape of a project, not past client work. Every project is quoted individually after a conversation about
-            goals, scope and timeline.
+            Typical deliverables describe the shape of a scoped build, not past client engagements. Every project is
+            quoted individually after discovery — zero fixed public rate sheets.
           </p>
         </div>
       </section>
@@ -453,108 +442,36 @@ export default function ServicesPage() {
       <section className="section section--surface section--tight" aria-labelledby="remote-delivery-title">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow eyebrow--plain">Remote-first collaboration</p>
+            <p className="eyebrow eyebrow--plain">Remote-first collaboration &amp; infrastructure</p>
             <h2 className="section-title section-title--sm" id="remote-delivery-title">
-              How I work remotely with US and international clients
+              How Ali works remotely with US and international clients
             </h2>
             <p className="section-sub">
-              Ali Arshad Personal Studio is an independent studio of one operating remotely — no physical US branch offices or staffed agency layers are claimed.
+              Independent studio of one operating remotely — no physical US offices or hidden agency hand-offs.
             </p>
           </div>
           <div className="remote-delivery-grid">
             <div className="panel">
               <h3 className="card-title">Scheduled time-zone overlap</h3>
               <p className="section-sub" style={{ marginTop: "8px" }}>
-                Discovery calls, milestone demos, and scope reviews schedule around US Eastern, Central, Mountain, and Pacific working hours, backed by crisp async written updates between calls.
+                Discovery calls, milestone demos, and scope reviews schedule around US Eastern, Central, Mountain, and Pacific working hours, backed by crisp async written updates.
               </p>
             </div>
             <div className="panel">
               <h3 className="card-title">Written scope &amp; staged previews</h3>
               <p className="section-sub" style={{ marginTop: "8px" }}>
-                Before writing code or cutting assets, you get a plain-language scope and milestone order. You test real preview URLs and reviewable cuts at each stage rather than waiting for a final reveal.
+                Before writing code or cutting assets, you get a plain-language scope and milestone order, testing real preview URLs at each stage.
               </p>
             </div>
             <div className="panel">
-              <h3 className="card-title">Full ownership &amp; honest boundaries</h3>
+              <h3 className="card-title">Full ownership &amp; transparent partners</h3>
               <p className="section-sub" style={{ marginTop: "8px" }}>
-                Repositories, n8n workflow JSON, brand SVGs, and hosting accounts belong to your business. Where specialist depth is required, independent partners via <Link href="/studio-network">the Studio Network</Link> are disclosed upfront.
+                Repositories, n8n JSON, brand SVGs, and hosting belong to you. When specialist depth is needed, vetted collaborators via the <Link href="/studio-network">Studio Network</Link> are disclosed upfront.
               </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="section section--tight" aria-label="In-depth service pages">
-        <div className="container">
-          <div className="section-head">
-            <p className="eyebrow eyebrow--plain">Dedicated service hubs</p>
-            <h2 className="section-title">Go deeper on a specific service</h2>
-            <p className="section-sub">
-              Each core service has its own deep-dive hub with workflow architecture, deliverables, technology integrations, demonstration builds, specializations and FAQs.
-            </p>
-          </div>
-          <ul className="hub-card-grid">
-            {PUBLISHED_HUBS.map((h) => (
-              <li key={h.slug}>
-                <Link href={`/services/${h.slug}`} className="hub-link-card">
-                  <span className="hub-link-card__kind">
-                    Service hub · {h.spokes.filter((s) => isIndexable(s.publicationState)).length} niche pages
-                  </span>
-                  <span className="hub-link-card__title">
-                    <span>{h.h1}</span>
-                    <Icon name="arrow-up-right" size={16} />
-                  </span>
-                  <span className="hub-link-card__desc">{h.lead}</span>
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href={GPU_COMPUTE_PATH} className="hub-link-card">
-                <span className="hub-link-card__kind">Consultation-led infrastructure</span>
-                <span className="hub-link-card__title">
-                  <span>RTX GPU compute rental</span>
-                  <Icon name="arrow-up-right" size={16} />
-                </span>
-                <span className="hub-link-card__desc">
-                  Rent dedicated RTX server time for AI inference, model testing, or 3D GPU rendering — scoped by meeting with a custom hourly quote.
-                </span>
-              </Link>
-            </li>
-          </ul>
-
-          <div className="niche-directory" style={{ marginTop: "36px" }}>
-            <div className="section-head">
-              <p className="eyebrow eyebrow--plain">Focused specializations</p>
-              <h2 className="section-title section-title--sm">Explore all published service niche pages</h2>
-              <p className="section-sub">
-                Distinct deep-dive pages covering specific deliverables, architectures, tools, and verified demonstrations — zero swapped-keyword doorway pages.
-              </p>
-            </div>
-            <div className="niche-directory-grid">
-              {hubsWithSpokes.map((hub) => {
-                const liveSpokes = hub.spokes.filter((s) => isIndexable(s.publicationState));
-                return (
-                  <div key={hub.slug} className="panel niche-directory__group">
-                    <h3 className="card-title">
-                      <Link href={`/services/${hub.slug}`}>{hub.h1}</Link>
-                    </h3>
-                    <ul className="niche-directory__list">
-                      {liveSpokes.map((sp) => (
-                        <li key={sp.slug}>
-                          <Link href={`/services/${hub.slug}/${sp.slug}`}>
-                            <span>{sp.h1}</span>
-                            <Icon name="arrow-up-right" size={14} />
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="panel location-fit-strip" style={{ marginTop: "28px" }}>
+          <div className="panel location-fit-strip" style={{ marginTop: "24px" }}>
             <p className="eyebrow eyebrow--plain">Consultation-led GPU compute</p>
             <h3 className="section-title section-title--sm" style={{ marginTop: "6px" }}>
               Need dedicated RTX compute time instead of a self-serve cloud cluster?
@@ -576,13 +493,15 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <Faq id="services-faq" eyebrow="Common questions" title="Questions clients usually start with" items={FAQ_ITEMS} surface />
+      <Faq id="services-faq" eyebrow="Common questions" title="Questions clients usually start with" items={FAQ_ITEMS} />
 
       <ContactCTA
         standalone
         title="Not sure where to start? Let's work backward from your goal."
-        text="Tell me what you're trying to build, improve or automate. I'll help identify the right technical and creative approach, even if that means a smaller project than you expected."
+        text="Shape an exploratory brief in the Visual Project Planner or tell me directly what you're trying to build, improve, or automate."
         button="Start a conversation"
+        secondaryHref="/project-planner"
+        secondaryLabel="Open Visual Project Planner"
       />
     </>
   );

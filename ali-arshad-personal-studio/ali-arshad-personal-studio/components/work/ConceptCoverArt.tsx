@@ -1,157 +1,232 @@
 import type { ConceptVisualSpec } from "@/lib/projects-expansion-a";
+import type { ProjectStatus } from "@/lib/projects";
 
-/**
- * Bespoke dark-studio architectural blueprint SVG covers for the 66 expansion
- * project showcases so every card & detail header looks intentionally designed
- * with zero repetitive stock placeholder images.
- */
-export function ConceptCoverArt({
-  spec,
-  title,
-  status,
-}: {
+type Props = {
   spec: ConceptVisualSpec;
   title: string;
-  status: string;
-}) {
+  status: ProjectStatus;
+};
+
+/**
+ * Original technical schematic SVG artwork for Concepts, Sample Scenarios, and
+ * Built Prototypes without raster screenshots. Distinct across 14 architectural
+ * patterns, strictly lightweight, and explicitly badged as schematic/concept
+ * artwork rather than a production client screenshot.
+ */
+export function ConceptCoverArt({ spec, title, status }: Props) {
   const { accent, code, pattern } = spec;
+  const badgeText = status === "Prototype" ? "PROTOTYPE SCHEMATIC" : status.toUpperCase();
 
   return (
     <svg
-      viewBox="0 0 800 450"
-      width={800}
-      height={450}
+      viewBox="0 0 640 360"
+      width={640}
+      height={360}
       className="concept-cover-svg"
       role="img"
-      aria-label={`${title} — ${status} architectural blueprint`}
+      aria-label={`${title} — ${status} architectural schematic illustration (not a client screenshot)`}
     >
       <defs>
-        <radialGradient id={`glow-${code}`} cx="78%" cy="22%" r="68%">
+        <linearGradient id={`bg-${code}`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#0d131d" />
+          <stop offset="100%" stopColor="#141d2b" />
+        </linearGradient>
+        <radialGradient id={`glow-${code}`} cx="78%" cy="22%" r="60%">
           <stop offset="0%" stopColor={accent} stopOpacity="0.26" />
-          <stop offset="60%" stopColor={accent} stopOpacity="0.04" />
-          <stop offset="100%" stopColor="#090c11" stopOpacity="0" />
+          <stop offset="100%" stopColor={accent} stopOpacity="0" />
         </radialGradient>
-        <pattern id={`grid-${code}`} width="40" height="40" patternUnits="userSpaceOnUse">
-          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" strokeWidth="1" />
-        </pattern>
       </defs>
 
-      <rect width="800" height="450" fill="#0c1118" />
-      <rect width="800" height="450" fill={`url(#grid-${code})`} opacity="0.65" />
-      <rect width="800" height="450" fill={`url(#glow-${code})`} />
+      <rect width="640" height="360" fill={`url(#bg-${code})`} />
+      <rect width="640" height="360" fill={`url(#glow-${code})`} />
 
-      {/* Top technical header strip */}
-      <rect x="34" y="28" width="108" height="28" rx="14" fill="#141c27" stroke={accent} strokeWidth="1.5" />
-      <text x="88" y="47" textAnchor="middle" fill={accent} fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace">
-        {code}
-      </text>
-      <rect x="154" y="28" width="150" height="28" rx="14" fill="#141c27" stroke="#334155" strokeWidth="1" />
-      <text x="229" y="47" textAnchor="middle" fill="#cbd5e1" fontSize="12" fontWeight="600" fontFamily="ui-monospace, monospace">
-        {status.toUpperCase()}
-      </text>
+      <g stroke="#223044" strokeWidth="1" opacity="0.55">
+        {[80, 160, 240, 320, 400, 480, 560].map((x) => (
+          <line key={x} x1={x} y1={0} x2={x} y2={360} />
+        ))}
+        {[72, 144, 216, 288].map((y) => (
+          <line key={y} x1={0} y1={y} x2={640} y2={y} />
+        ))}
+      </g>
 
-      {/* Pattern-specific clean architectural diagram */}
-      {pattern === "flow" ? (
+      {pattern === "flow" || pattern === "webhook" ? (
         <g>
-          <path d="M120 225 H280 M360 225 H520 M600 225 H690" stroke={accent} strokeWidth="4" strokeDasharray="8 6" />
+          <path d="M90 185 H220 M280 185 H380 M440 185 H540" stroke={accent} strokeWidth="2.5" strokeDasharray={pattern === "webhook" ? "7 5" : undefined} />
+          <path d="M250 185 Q315 110 380 140 M250 185 Q315 260 380 230" fill="none" stroke="#64748b" strokeWidth="2" strokeDasharray="5 5" />
           {[
-            { x: 64, l: "TRIGGER" },
-            { x: 280, l: "VALIDATE" },
-            { x: 520, l: "DELIVER" },
-          ].map((n) => (
-            <g key={n.l}>
-              <rect x={n.x} y={176} width={116} height={98} rx={14} fill="#141d29" stroke={accent} strokeWidth="2" />
-              <circle cx={n.x + 24} cy={202} r={6} fill={accent} />
-              <text x={n.x + 58} y={238} textAnchor="middle" fill="#f8f5ef" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace">
-                {n.l}
-              </text>
-            </g>
+            [62, 160, 60, 50],
+            [218, 160, 64, 50],
+            [380, 114, 70, 48],
+            [380, 206, 70, 48],
+            [522, 160, 64, 50],
+          ].map(([x, y, w, h], i) => (
+            <rect key={i} x={x} y={y} width={w} height={h} rx="10" fill="#101824" stroke={i === 1 || i === 4 ? accent : "#384b63"} strokeWidth="2" />
           ))}
+          {pattern === "webhook" ? (
+            <circle cx="250" cy="185" r="9" fill={accent} />
+          ) : null}
         </g>
-      ) : pattern === "chart" ? (
+      ) : null}
+
+      {pattern === "chart" || pattern === "finops" ? (
         <g>
-          <rect x="70" y="106" width="660" height="260" rx="16" fill="#121a24" stroke="#283548" strokeWidth="1.5" />
-          {[140, 210, 280, 350, 420, 490, 560, 630].map((x, i) => {
-            const h = [78, 114, 96, 152, 134, 178, 162, 206][i];
-            return <rect key={x} x={x} y={336 - h} width={38} height={h} rx={7} fill={i >= 6 ? accent : "#243244"} fillOpacity={i >= 6 ? 0.85 : 1} />;
-          })}
-          <polyline points="159,240 229,204 299,224 369,166 439,184 509,140 579,156 649,116" fill="none" stroke="#f8f5ef" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        </g>
-      ) : pattern === "agent" ? (
-        <g>
-          <circle cx="400" cy="228" r="76" fill="#141d29" stroke={accent} strokeWidth="2.5" />
-          <circle cx="400" cy="228" r="120" fill="none" stroke={accent} strokeOpacity="0.32" strokeDasharray="6 6" strokeWidth="2" />
+          <rect x="74" y="102" width="492" height="196" rx="12" fill="#0f1723" stroke="#29384d" strokeWidth="1.5" />
           {[
-            [180, 150, "RETRIEVE"],
-            [620, 150, "VERIFY"],
-            [180, 310, "CITE"],
-            [620, 310, "ESCALATE"],
-          ].map(([x, y, lbl]) => (
-            <g key={lbl as string}>
-              <line x1={x as number} y1={y as number} x2={400} y2={228} stroke={accent} strokeOpacity="0.45" strokeWidth="2" />
-              <rect x={(x as number) - 64} y={(y as number) - 24} width={128} height={48} rx={12} fill="#141d29" stroke="#334155" strokeWidth="1.5" />
-              <text x={x as number} y={(y as number) + 5} textAnchor="middle" fill="#f8f5ef" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace">
-                {lbl as string}
-              </text>
-            </g>
+            [114, 212, 42, 62],
+            [180, 174, 42, 100],
+            [246, 192, 42, 82],
+            [312, 142, 42, 132],
+            [378, 158, 42, 116],
+            [444, 126, 42, 148],
+          ].map(([x, y, w, h], i) => (
+            <rect key={i} x={x} y={y} width={w} height={h} rx="6" fill={i >= 4 ? accent : "#243447"} opacity={i >= 4 ? 0.9 : 0.85} />
           ))}
-          <text x="400" y="233" textAnchor="middle" fill={accent} fontSize="15" fontWeight="700" fontFamily="ui-monospace, monospace">
-            AGENT CORE
-          </text>
+          <polyline points="135,204 201,166 267,184 333,134 399,148 465,118" fill="none" stroke="#f8f5ef" strokeWidth="2.5" strokeLinecap="round" />
+          {pattern === "finops" ? (
+            <line x1="90" y1="148" x2="544" y2="148" stroke={accent} strokeWidth="1.5" strokeDasharray="6 4" />
+          ) : null}
         </g>
-      ) : pattern === "commerce" ? (
+      ) : null}
+
+      {pattern === "eval" ? (
         <g>
-          <rect x="86" y="106" width="380" height="256" rx="16" fill="#131c27" stroke="#2d3b4e" strokeWidth="1.5" />
-          <rect x="116" y="136" width="144" height="144" rx="12" fill={accent} fillOpacity="0.18" stroke={accent} strokeWidth="2" />
-          <rect x="282" y="140" width="150" height="18" rx="6" fill="#f8f5ef" fillOpacity="0.85" />
-          <rect x="282" y="172" width="110" height="14" rx="5" fill="#64748b" />
-          <rect x="282" y="220" width="136" height="44" rx="10" fill={accent} />
-          <rect x="498" y="106" width="216" height="256" rx="16" fill="#131c27" stroke={accent} strokeOpacity="0.55" strokeWidth="1.5" />
-          {[144, 194, 244, 294].map((y, i) => (
-            <rect key={y} x="524" y={y} width={164} height={32} rx={8} fill={i === 3 ? accent : "#1c2736"} fillOpacity={i === 3 ? 0.3 : 1} />
+          <circle cx="210" cy="196" r="76" fill="#0f1723" stroke="#2e4057" strokeWidth="2" />
+          <circle cx="210" cy="196" r="54" fill="none" stroke={accent} strokeWidth="7" strokeDasharray="248 92" strokeLinecap="round" />
+          <circle cx="210" cy="196" r="24" fill="#172334" stroke="#38bdf8" strokeWidth="2" />
+          <rect x="330" y="114" width="232" height="44" rx="10" fill="#101824" stroke={accent} strokeWidth="1.8" />
+          <rect x="330" y="174" width="232" height="44" rx="10" fill="#101824" stroke="#34d399" strokeWidth="1.8" />
+          <rect x="330" y="234" width="232" height="44" rx="10" fill="#101824" stroke="#384b63" strokeWidth="1.5" />
+          {[136, 196, 256].map((cy, i) => (
+            <circle key={cy} cx="354" cy={cy} r="7" fill={i < 2 ? "#34d399" : accent} />
           ))}
         </g>
-      ) : pattern === "ledger" ? (
+      ) : null}
+
+      {pattern === "gateway" || pattern === "scanner" ? (
         <g>
-          <rect x="80" y="104" width="640" height="260" rx="16" fill="#121a24" stroke="#283548" strokeWidth="1.5" />
-          {[138, 192, 246, 300].map((y, i) => (
+          <polygon points="320,96 404,132 404,218 320,276 236,218 236,132" fill="#101824" stroke={accent} strokeWidth="2.4" />
+          <polygon points="320,126 376,150 376,208 320,246 264,208 264,150" fill="none" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="4 4" />
+          <line x1="90" y1="184" x2="236" y2="184" stroke={accent} strokeWidth="2.5" />
+          <line x1="404" y1="164" x2="548" y2="164" stroke="#34d399" strokeWidth="2.5" />
+          <line x1="404" y1="206" x2="516" y2="206" stroke="#fb7185" strokeWidth="2" strokeDasharray="5 5" />
+          <circle cx="320" cy="184" r="14" fill={accent} />
+        </g>
+      ) : null}
+
+      {pattern === "schema" ? (
+        <g>
+          <rect x="74" y="114" width="186" height="176" rx="10" fill="#101824" stroke="#384b63" strokeWidth="1.8" />
+          <rect x="380" y="114" width="186" height="176" rx="10" fill="#101824" stroke={accent} strokeWidth="2" />
+          <path d="M260 162 H380 M260 206 H380 M260 250 H380" stroke={accent} strokeWidth="2" strokeDasharray="5 4" />
+          {[142, 182, 222, 260].map((y, i) => (
             <g key={y}>
-              <rect x="108" y={y} width="584" height="38" rx="8" fill="#182332" stroke={i === 1 ? accent : "#263447"} />
-              <circle cx="132" cy={y + 19} r="6" fill={i % 2 === 0 ? "#34d399" : accent} />
-              <rect x="156" y={y + 13} width="180" height="12" rx="4" fill="#94a3b8" fillOpacity="0.55" />
-              <rect x="546" y={y + 11} width="118" height="16" rx="6" fill={accent} fillOpacity="0.28" />
+              <rect x="94" y={y} width="124" height="12" rx="6" fill={i === 1 ? "#38bdf8" : "#253447"} />
+              <rect x="400" y={y} width="136" height="12" rx="6" fill={i === 2 ? accent : "#2c3d54"} />
             </g>
           ))}
         </g>
-      ) : pattern === "media" ? (
+      ) : null}
+
+      {pattern === "agent" ? (
         <g>
-          <rect x="96" y="102" width="608" height="200" rx="16" fill="#121a24" stroke={accent} strokeWidth="2" />
-          <polygon points="374,166 446,202 374,238" fill={accent} />
-          <rect x="96" y="324" width="608" height="40" rx="10" fill="#141e2b" stroke="#2d3b4e" />
-          <rect x="116" y="336" width="220" height="16" rx="8" fill={accent} />
-          <rect x="352" y="336" width="140" height="16" rx="8" fill="#38bdf8" fillOpacity="0.7" />
-        </g>
-      ) : pattern === "brand" ? (
-        <g>
-          {[0, 1, 2, 3].map((i) => (
-            <rect key={i} x={92 + i * 160} y={114} width={136} height={150} rx={16} fill={i === 0 ? accent : i === 1 ? "#16202e" : i === 2 ? "#38bdf8" : "#f8f5ef"} stroke="#334155" strokeWidth="1.5" />
+          <circle cx="320" cy="192" r="52" fill="#101824" stroke={accent} strokeWidth="2.5" />
+          <circle cx="320" cy="192" r="24" fill={accent} opacity="0.25" />
+          <circle cx="320" cy="192" r="10" fill={accent} />
+          {[
+            [156, 130],
+            [484, 130],
+            [156, 254],
+            [484, 254],
+          ].map(([cx, cy], i) => (
+            <g key={i}>
+              <line x1="320" y1="192" x2={cx} y2={cy} stroke="#384b63" strokeWidth="2" strokeDasharray="4 4" />
+              <circle cx={cx} cy={cy} r="22" fill="#101824" stroke="#475a75" strokeWidth="2" />
+              <circle cx={cx} cy={cy} r="6" fill="#f8f5ef" opacity="0.85" />
+            </g>
           ))}
-          <rect x="92" y="294" width="616" height="68" rx="14" fill="#131c27" stroke="#2b384a" />
-          <text x="122" y="337" fill="#f8f5ef" fontSize="26" fontWeight="700">Aa Bb Cc · WCAG 2.2 Verified</text>
         </g>
-      ) : (
+      ) : null}
+
+      {pattern === "commerce" ? (
         <g>
-          <rect x="76" y="104" width="200" height="260" rx="14" fill="#131c27" stroke="#293648" />
-          <rect x="300" y="104" width="424" height="118" rx="14" fill="#141e2b" stroke={accent} strokeWidth="1.8" />
-          <rect x="300" y="242" width="202" height="122" rx="14" fill="#131c27" stroke="#293648" />
-          <rect x="522" y="242" width="202" height="122" rx="14" fill="#131c27" stroke="#293648" />
-          <circle cx="116" cy="146" r="14" fill={accent} fillOpacity="0.28" stroke={accent} strokeWidth="2" />
-          <rect x="104" y="184" width="136" height="12" rx="4" fill="#64748b" />
-          <rect x="104" y="210" width="108" height="12" rx="4" fill="#334155" />
-          <rect x="328" y="138" width="210" height="18" rx="6" fill="#f8f5ef" fillOpacity="0.85" />
-          <rect x="328" y="170" width="320" height="12" rx="4" fill="#94a3b8" fillOpacity="0.55" />
+          <rect x="74" y="106" width="210" height="186" rx="12" fill="#101824" stroke={accent} strokeWidth="2" />
+          <rect x="94" y="128" width="170" height="92" rx="8" fill={accent} opacity="0.2" />
+          <rect x="94" y="236" width="110" height="12" rx="6" fill="#f8f5ef" opacity="0.85" />
+          <rect x="94" y="258" width="76" height="10" rx="5" fill="#64748b" />
+          <rect x="308" y="106" width="258" height="84" rx="12" fill="#101824" stroke="#2c3d54" strokeWidth="1.5" />
+          <rect x="308" y="208" width="258" height="84" rx="12" fill="#101824" stroke="#2c3d54" strokeWidth="1.5" />
+          <rect x="330" y="132" width="140" height="12" rx="6" fill="#f8f5ef" opacity="0.85" />
+          <rect x="330" y="156" width="204" height="10" rx="5" fill="#475569" />
+          <rect x="330" y="234" width="166" height="12" rx="6" fill={accent} opacity="0.9" />
+          <rect x="330" y="258" width="180" height="10" rx="5" fill="#475569" />
         </g>
-      )}
+      ) : null}
+
+      {pattern === "ledger" ? (
+        <g>
+          {[112, 168, 224].map((y, idx) => (
+            <g key={y}>
+              <rect x="74" y={y} width="492" height="44" rx="10" fill="#101824" stroke={idx === 0 ? accent : "#2c3d54"} strokeWidth="1.8" />
+              <circle cx="102" cy={y + 22} r="7" fill={idx === 0 ? accent : "#38bdf8"} />
+              <rect x="124" y={y + 16} width="150" height="12" rx="6" fill="#e2e8f0" opacity="0.8" />
+              <rect x="310" y={y + 16} width="108" height="12" rx="6" fill="#475569" />
+              <rect x="466" y={y + 13} width="80" height="18" rx="9" fill={accent} opacity="0.24" />
+            </g>
+          ))}
+        </g>
+      ) : null}
+
+      {pattern === "media" ? (
+        <g>
+          <rect x="82" y="102" width="476" height="148" rx="14" fill="#101824" stroke={accent} strokeWidth="2" />
+          <polygon points="298,150 298,202 346,176" fill={accent} />
+          <rect x="82" y="266" width="476" height="28" rx="8" fill="#101824" stroke="#2c3d54" />
+          <rect x="92" y="274" width="188" height="12" rx="6" fill={accent} opacity="0.85" />
+          <rect x="292" y="274" width="126" height="12" rx="6" fill="#38bdf8" opacity="0.7" />
+        </g>
+      ) : null}
+
+      {pattern === "brand" ? (
+        <g>
+          <circle cx="194" cy="196" r="76" fill={accent} opacity="0.22" stroke={accent} strokeWidth="2" />
+          <circle cx="242" cy="196" r="54" fill="none" stroke="#f8f5ef" strokeOpacity="0.6" strokeWidth="2" />
+          {[0, 1, 2, 3].map((i) => (
+            <rect
+              key={i}
+              x={348 + i * 54}
+              y={132}
+              width="42"
+              height="128"
+              rx="10"
+              fill={i === 0 ? accent : i === 1 ? "#38bdf8" : i === 2 ? "#f8f5ef" : "#243245"}
+              opacity={i === 2 ? 0.85 : 0.9}
+            />
+          ))}
+        </g>
+      ) : null}
+
+      {pattern === "grid" ? (
+        <g>
+          <rect x="74" y="108" width="150" height="184" rx="12" fill="#101824" stroke="#2c3d54" strokeWidth="1.5" />
+          <rect x="242" y="108" width="324" height="84" rx="12" fill="#101824" stroke={accent} strokeWidth="2" />
+          <rect x="242" y="208" width="154" height="84" rx="12" fill="#101824" stroke="#2c3d54" strokeWidth="1.5" />
+          <rect x="412" y="208" width="154" height="84" rx="12" fill="#101824" stroke="#2c3d54" strokeWidth="1.5" />
+          <circle cx="102" cy="138" r="10" fill={accent} opacity="0.3" stroke={accent} strokeWidth="2" />
+          <rect x="266" y="134" width="160" height="12" rx="6" fill="#f8f5ef" opacity="0.85" />
+          <rect x="266" y="158" width="248" height="10" rx="5" fill="#475569" />
+        </g>
+      ) : null}
+
+      <g>
+        <rect x="28" y="24" width="102" height="28" rx="14" fill="#111824" stroke={accent} strokeWidth="1.4" />
+        <text x="79" y="42" textAnchor="middle" fill={accent} fontFamily="ui-monospace, monospace" fontSize="12" fontWeight="700">
+          {code}
+        </text>
+        <rect x="140" y="24" width="184" height="28" rx="14" fill="#111824" stroke="#334155" strokeWidth="1.2" />
+        <text x="232" y="42" textAnchor="middle" fill="#cbd5e1" fontFamily="ui-monospace, monospace" fontSize="10.5" fontWeight="600">
+          {badgeText}
+        </text>
+      </g>
     </svg>
   );
 }

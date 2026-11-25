@@ -6,6 +6,7 @@ import { trackEvent } from "@/lib/analytics";
 import {
   COLLABORATOR_AVAILABILITY,
   COLLABORATOR_LIMITS,
+  COLLABORATOR_REGIONS,
   COLLABORATOR_SKILLS,
   normaliseCollaborator,
   validateCollaborator,
@@ -29,6 +30,8 @@ const EMPTY: CollaboratorInput = {
   availability: "",
   introduction: "",
   consent: false,
+  publicListingOptIn: false,
+  approximateRegion: "",
 };
 
 const FIELD_ORDER: (keyof CollaboratorInput)[] = [
@@ -39,6 +42,7 @@ const FIELD_ORDER: (keyof CollaboratorInput)[] = [
   "portfolioUrl",
   "availability",
   "introduction",
+  "approximateRegion",
   "consent",
 ];
 
@@ -112,6 +116,7 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
         trackEvent("studio_network_submit", {
           skillCount: input.skills.length,
           availability: input.availability,
+          publicOptIn: input.publicListingOptIn,
         });
         setStatus({ kind: "success" });
         setValues(EMPTY);
@@ -141,10 +146,10 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
       <div className="form-status form-status--success" role="status" tabIndex={-1} ref={statusRef}>
         <Icon name="check" size={24} />
         <div>
-          <h3 className="card-title">Registration received</h3>
+          <h3 className="card-title">Registration received (kept private by default)</h3>
           <p>
-            Thank you. Your details have been delivered to Ali Arshad. I review submissions personally and reach out when a project scope matches
-            your specialty and time zone.
+            Thank you. Your details were delivered privately to Ali Arshad. Nothing is published to the public globe
+            automatically — public placement requires explicit opt-in, identity verification, and manual moderation approval.
           </p>
           <button type="button" className="btn btn--secondary btn--sm" onClick={() => setStatus({ kind: "idle" })}>
             <span>Submit another profile</span>
@@ -173,7 +178,7 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
           <div>
             <h3 className="card-title">Form inbox not connected yet</h3>
             <p>
-              Submissions cannot be delivered through this form until an email provider or webhook is configured on the server.
+              Submissions cannot be delivered or stored through this form until an email provider or webhook is configured on the server.
               {fallbackEmail ? (
                 <>
                   {" "}
@@ -234,12 +239,12 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
 
       <div className="form__row">
         <div className="field">
-          <label htmlFor="net-locationTimezone">Location &amp; time zone *</label>
+          <label htmlFor="net-locationTimezone">Approximate city / region &amp; time zone *</label>
           <input
             id="net-locationTimezone"
             name="locationTimezone"
             type="text"
-            placeholder="e.g. Austin, TX (US Central) or Remote (EST overlap)"
+            placeholder="e.g. Austin, TX (US Central) — do not enter a street address"
             required
             maxLength={COLLABORATOR_LIMITS.locationTimezone}
             value={values.locationTimezone}
@@ -339,6 +344,58 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
         {err("introduction")}
       </div>
 
+      {/* Optional Public Globe Listing Opt-In (OFF by default) */}
+      <fieldset className="form__fieldset network-privacy-box">
+        <legend className="form__legend">Public globe visibility (private by default)</legend>
+        <div className="field field--check">
+          <input
+            id="net-publicListingOptIn"
+            name="publicListingOptIn"
+            type="checkbox"
+            checked={values.publicListingOptIn}
+            onChange={(e) => {
+              const checked = e.target.checked;
+              setValues((v) => ({
+                ...v,
+                publicListingOptIn: checked,
+                approximateRegion: checked ? v.approximateRegion : "",
+              }));
+              if (errors.approximateRegion) setErrors((er) => ({ ...er, approximateRegion: undefined }));
+            }}
+          />
+          <label htmlFor="net-publicListingOptIn">
+            <strong>Optional:</strong> Consider my profile for the public Studio Network Globe after manual verification and
+            moderation approval. (Leave unchecked to remain strictly private in Ali&rsquo;s internal roster.)
+          </label>
+        </div>
+
+        {values.publicListingOptIn ? (
+          <div className="field" style={{ marginTop: "12px" }}>
+            <label htmlFor="net-approximateRegion">Approximate metro / region for public globe *</label>
+            <select
+              id="net-approximateRegion"
+              name="approximateRegion"
+              required={values.publicListingOptIn}
+              value={values.approximateRegion}
+              onChange={(e) => set("approximateRegion", e.target.value)}
+              aria-invalid={errors.approximateRegion ? true : undefined}
+              aria-describedby={describedBy("approximateRegion", "net-region-hint")}
+            >
+              <option value="">Select coarse region (never an exact address)</option>
+              {COLLABORATOR_REGIONS.map((reg) => (
+                <option key={reg.id} value={reg.id}>
+                  {reg.area} — {reg.label}
+                </option>
+              ))}
+            </select>
+            <p className="field__hint" id="net-region-hint">
+              Only this broad metro area is ever shown on the globe — never a street address, home location, or email.
+            </p>
+            {err("approximateRegion")}
+          </div>
+        ) : null}
+      </fieldset>
+
       {/* Honeypot anti-spam trap */}
       <div className="form__trap" aria-hidden="true">
         <label htmlFor="companyWebsite">Leave this field empty</label>
@@ -365,8 +422,8 @@ export function StudioNetworkForm({ configured, fallbackEmail = "", linkedinUrl 
           aria-describedby={describedBy("consent")}
         />
         <label htmlFor="net-consent">
-          I agree that Ali Arshad may review and store these details solely to evaluate independent project collaboration, as described in the{" "}
-          <a href="/privacy">Privacy Notice</a>. Nothing I submit will be published publicly without my explicit written permission. *
+          I agree that Ali Arshad may review these details solely to evaluate independent project collaboration, as described in the{" "}
+          <a href="/privacy">Privacy Notice</a>. Nothing I submit is published publicly without explicit opt-in, verification, and approval. *
         </label>
         {err("consent")}
       </div>

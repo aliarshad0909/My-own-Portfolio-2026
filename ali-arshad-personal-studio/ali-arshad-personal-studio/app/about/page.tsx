@@ -5,6 +5,7 @@ import { personSchema, profilePageSchema, type FaqItem } from "@/lib/structured-
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ArrowLink } from "@/components/ui/Button";
 import { ButtonLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
@@ -84,6 +85,12 @@ export default function AboutPage() {
     <>
       <JsonLd data={profilePageSchema()} />
       <JsonLd data={personSchema()} />
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+        ]}
+      />
       <PageHero
         eyebrow="About"
         title={

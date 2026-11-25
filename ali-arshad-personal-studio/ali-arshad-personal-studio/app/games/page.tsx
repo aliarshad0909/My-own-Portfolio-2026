@@ -97,11 +97,11 @@ export default function GamesIndexPage() {
               <Link href="/work" className="hub-link-card">
                 <span className="hub-link-card__kind">Portfolio</span>
                 <span className="hub-link-card__title">
-                  <span>80 Project Showcases (Demos &amp; Concepts)</span>
+                  <span>Curated Portfolio across 7 Collections</span>
                   <Icon name="arrow-up-right" size={16} />
                 </span>
                 <span className="hub-link-card__desc">
-                  Inspect live PostgreSQL SaaS sandboxes, locally tested demos, and distinct architecture concepts.
+                  Inspect live PostgreSQL SaaS sandboxes, locally tested prototypes, and labeled architecture concepts.
                 </span>
               </Link>
             </li>

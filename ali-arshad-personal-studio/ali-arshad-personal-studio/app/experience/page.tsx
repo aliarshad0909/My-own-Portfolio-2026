@@ -5,6 +5,7 @@ import { CredentialGallery } from "@/components/credentials/CredentialGallery";
 import { ExperienceTimeline } from "@/components/experience/ExperienceTimeline";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { ExpertiseList } from "@/components/sections/Expertise";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon, type IconName } from "@/components/ui/Icon";
@@ -54,6 +55,13 @@ export default function ExperiencePage() {
 
   return (
     <>
+      <Breadcrumbs
+        items={[
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+          { name: "Experience", path: "/experience" },
+        ]}
+      />
       <PageHero
         eyebrow="Experience"
         title={

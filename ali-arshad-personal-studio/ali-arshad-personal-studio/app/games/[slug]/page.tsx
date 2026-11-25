@@ -41,7 +41,12 @@ export default async function GameDetailPage({
   const game = getGame(slug);
   if (!game) notFound();
 
-  const otherGames = STUDIO_GAMES.filter((g) => g.slug !== game.slug);
+  const idx = STUDIO_GAMES.findIndex((g) => g.slug === game.slug);
+  const prevGame = STUDIO_GAMES[(idx - 1 + STUDIO_GAMES.length) % STUDIO_GAMES.length];
+  const nextGame = STUDIO_GAMES[(idx + 1) % STUDIO_GAMES.length];
+  const sameCategory = STUDIO_GAMES.filter((g) => g.slug !== game.slug && g.category === game.category);
+  const crossCategory = STUDIO_GAMES.filter((g) => g.slug !== game.slug && g.category !== game.category);
+  const relatedGames = [...sameCategory, ...crossCategory].slice(0, 5);
 
   return (
     <>
@@ -63,6 +68,14 @@ export default async function GameDetailPage({
           <span className="badge badge--concept">{game.experimentLabel}</span>
           <span className="badge">{game.category}</span>
           <span className="badge">Browser playable · {game.estimatedTime}</span>
+        </div>
+        <div className="hero__actions" style={{ marginTop: "16px" }}>
+          <ButtonLink href={`/work/game-${game.slug}`} variant="secondary" icon={null}>
+            Read build story &amp; engineering notes
+          </ButtonLink>
+          <ButtonLink href="/work?collection=games-experiments" variant="secondary" icon={null}>
+            Games collection in Work
+          </ButtonLink>
         </div>
       </PageHero>
 
@@ -126,6 +139,28 @@ export default async function GameDetailPage({
         </div>
       </section>
 
+      <nav className="case-nav" aria-label="Game navigation">
+        <div className="container case-nav__inner">
+          <Link href={`/games/${prevGame.slug}`} className="case-nav__link case-nav__link--prev">
+            <span className="case-nav__label">
+              <Icon name="arrow-right" size={15} className="flip" />
+              Previous game
+            </span>
+            <span className="case-nav__title">{prevGame.title}</span>
+          </Link>
+          <Link href="/games" className="case-nav__all">
+            All {STUDIO_GAMES.length} games
+          </Link>
+          <Link href={`/games/${nextGame.slug}`} className="case-nav__link case-nav__link--next">
+            <span className="case-nav__label">
+              Next game
+              <Icon name="arrow-right" size={15} />
+            </span>
+            <span className="case-nav__title">{nextGame.title}</span>
+          </Link>
+        </div>
+      </nav>
+
       <section className="section section--tight" aria-labelledby="more-games-title">
         <div className="container">
           <div className="section-head section-head--row">
@@ -136,12 +171,12 @@ export default async function GameDetailPage({
               </h2>
             </div>
             <ButtonLink href="/games" variant="secondary" icon={null}>
-              All games &amp; experiments
+              All {STUDIO_GAMES.length} games &amp; experiments
             </ButtonLink>
           </div>
 
           <ul className="hub-card-grid">
-            {otherGames.map((other) => (
+            {relatedGames.map((other) => (
               <li key={other.slug}>
                 <Link href={`/games/${other.slug}`} className="hub-link-card">
                   <span className="hub-link-card__kind">
@@ -159,11 +194,11 @@ export default async function GameDetailPage({
               <Link href="/work" className="hub-link-card">
                 <span className="hub-link-card__kind">Commercial portfolio</span>
                 <span className="hub-link-card__title">
-                  <span>Inspect 14 studio demonstrations</span>
+                  <span>Explore 7 curated Work collections</span>
                   <Icon name="arrow-up-right" size={16} />
                 </span>
                 <span className="hub-link-card__desc">
-                  Explore full-stack Next.js apps, PostgreSQL SaaS sandboxes, AI agents, and n8n workflows.
+                  Inspect live PostgreSQL SaaS sandboxes, locally tested monorepo apps, AI agents, and n8n workflows.
                 </span>
               </Link>
             </li>
