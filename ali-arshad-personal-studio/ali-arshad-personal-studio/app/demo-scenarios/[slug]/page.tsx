@@ -206,32 +206,39 @@ export default async function FictionalScenarioDetailPage({
             </ul>
           </div>
 
-          {/* Detailed fictional member cards */}
+          {/* Illustrative operational environment photograph (replaces cartoon/illustrated avatar cards) */}
+          <div style={{ marginTop: "24px", marginBottom: "24px" }}>
+            <figure className="editorial-media">
+              <div className="editorial-media__frame editorial-media__frame--16-9">
+                <Image
+                  src={profile.teamHierarchy[0]?.portraitSrc ?? "/images/services/studio-network-editorial.jpg"}
+                  alt={`Illustrative editorial workspace scene for ${profile.fictionalName} (fictional demo scenario, not a real client)`}
+                  fill
+                  sizes="(min-width: 1024px) 1040px, 94vw"
+                  className="editorial-media__img"
+                />
+                <span className="editorial-media__badge">Illustrative editorial photo · Fictional scenario</span>
+              </div>
+              <figcaption className="editorial-media__caption">
+                Documentary-style editorial visual representing the simulated {profile.industry.toLowerCase()} operating setting — not a real client location or staff photo.
+              </figcaption>
+            </figure>
+          </div>
+
+          {/* Role usage breakdown cards (clean editorial cards without cartoon avatars) */}
           <div className="fictional-team-grid">
             {profile.teamHierarchy.map((member) => {
               const manager = member.reportsTo ? memberMap.get(member.reportsTo) : null;
               return (
                 <article key={member.id} className="panel fictional-member-card">
-                  <div className="fictional-member-card__media">
-                    <Image
-                      src={member.portraitSrc}
-                      alt={`${member.portraitAlt} (${member.portraitDisclosure})`}
-                      width={512}
-                      height={512}
-                      loading="eager"
-                      sizes="(min-width: 1024px) 260px, (min-width: 640px) 45vw, 90vw"
-                    />
-                    <span className="fictional-member-card__stamp">{member.portraitDisclosure}</span>
-                  </div>
                   <div className="fictional-member-card__body">
-                    <span className="badge badge--draft">{member.portraitDisclosure}</span>
-                    <h3 className="card-title">{member.fictionalName}</h3>
+                    <span className="badge badge--draft">Illustrative Role · Fictional Scenario</span>
+                    <h3 className="card-title">{member.role}</h3>
                     <p className="fictional-member-card__role">
-                      {member.role} · {member.department}
+                      {member.department} · Simulated region: {member.simulatedRegion}
                     </p>
                     <p className="fine-print">
-                      Region: {member.simulatedRegion} ·{" "}
-                      {manager ? `Reports to ${manager.fictionalName}` : "Top-level scenario owner"}
+                      {manager ? `Reports to ${manager.role}` : "Top-level scenario owner"}
                     </p>
                     <p className="fictional-member-card__usage">
                       <strong>How this role uses the system:</strong> {member.howTheyUseSystem}

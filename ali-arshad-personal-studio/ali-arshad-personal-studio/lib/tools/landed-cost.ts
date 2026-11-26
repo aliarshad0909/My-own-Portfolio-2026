@@ -1,13 +1,9 @@
 /**
  * Landed cost calculator — pure logic, unit tested.
  *
- * Total landed cost = goods (converted via exchange rate) + international freight
- * + insurance + customs duty + import tax (VAT/GST) + customs clearance
- * + local transportation + additional expenses.
- *
- * Backwards-compatible with the original `landedCost(input)` signature while
- * supporting currency conversion, import taxes, clearance, local delivery and
- * target selling-price margin/markup calculations.
+ * Total landed cost = goods (converted via exchange rate) + packaging/tooling
+ * + international freight + insurance + customs duty + import tax (VAT/GST)
+ * + customs clearance + local transportation + additional expenses.
  *
  * Planning estimate only — never presented as an official customs determination.
  */
@@ -23,6 +19,8 @@ export type LandedCostInput = {
    * Example: 1 for USD→USD, 0.14 for CNY→USD. Defaults to 1.
    */
   exchangeRate?: number;
+  /** Optional packaging, custom labeling, mold, or tooling charges for the order (USD). Defaults to 0. */
+  packagingTooling?: number;
   /** Total international freight/shipping for the order, in reporting currency (USD). */
   freight: number;
   /** Customs duty rate as a percentage of goods value, e.g. 6.5. */
@@ -44,10 +42,9 @@ export type LandedCostInput = {
 export type LandedCostResult = {
   currency: string;
   exchangeRate: number;
-  /** Raw purchase total in supplier currency before FX conversion. */
   supplierGoodsValue: number;
-  /** Product purchase total in reporting currency (USD). */
   goodsValue: number;
+  packagingTooling: number;
   freight: number;
   insurance: number;
   duty: number;
@@ -55,13 +52,10 @@ export type LandedCostResult = {
   customsClearance: number;
   localTransport: number;
   otherFees: number;
-  /** Sum of all costs above raw product purchase total. */
   extraCostsTotal: number;
   totalLandedCost: number;
   perUnitLandedCost: number;
-  /** Landed cost as a multiple of the raw goods value (e.g. 1.32). */
   upliftFactor: number;
-  /** Margin/markup metrics when a positive targetSellingPrice is provided. */
   profitPerUnit: number | null;
   markupPct: number | null;
   grossMarginPct: number | null;
@@ -79,6 +73,7 @@ export function landedCost(input: LandedCostInput): LandedCostResult {
 
   const unitCost = safeNonNeg(input.unitCost);
   const quantity = Math.max(Math.floor(safeNonNeg(input.quantity)), 0);
+  const packagingTooling = round2(safeNonNeg(input.packagingTooling));
   const freight = round2(safeNonNeg(input.freight));
   const dutyRate = safeNonNeg(input.dutyRatePct) / 100;
   const importTaxRate = safeNonNeg(input.importTaxRatePct) / 100;
@@ -93,7 +88,9 @@ export function landedCost(input: LandedCostInput): LandedCostResult {
   const duty = round2(goodsValue * dutyRate);
   const importTax = round2((goodsValue + duty) * importTaxRate);
 
-  const extraCostsTotal = round2(freight + insurance + duty + importTax + customsClearance + localTransport + otherFees);
+  const extraCostsTotal = round2(
+    packagingTooling + freight + insurance + duty + importTax + customsClearance + localTransport + otherFees,
+  );
   const totalLandedCost = round2(goodsValue + extraCostsTotal);
   const perUnitLandedCost = quantity > 0 ? round2(totalLandedCost / quantity) : 0;
   const upliftFactor = goodsValue > 0 ? round2(totalLandedCost / goodsValue) : 0;
@@ -113,6 +110,7 @@ export function landedCost(input: LandedCostInput): LandedCostResult {
     exchangeRate,
     supplierGoodsValue,
     goodsValue,
+    packagingTooling,
     freight,
     insurance,
     duty,

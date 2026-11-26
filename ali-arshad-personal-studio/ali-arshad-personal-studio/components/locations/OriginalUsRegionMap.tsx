@@ -37,7 +37,6 @@ export function OriginalUsRegionMap({ scenarioName, markers, caption, detailed =
         role="img"
         aria-label={`Original studio 4-region US schematic map illustrating fictional scenario ${scenarioName}. ${summaryText}`}
       >
-        <title>{scenarioName} — Fictional Illustrative Markers on Original US Regional Map</title>
         <defs>
           <linearGradient id="orig-usm-bg" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#0d1116" />

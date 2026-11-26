@@ -9,9 +9,9 @@ import { shouldRender } from "@/lib/seo/publication";
 import { TOOLS, toolState } from "@/lib/tools/catalog";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Calculator Centre: 10 Free Business, SaaS, Sourcing & Finance Calculators",
+  title: "Calculator Centre: 12 Free Sourcing, GPU Scope, SaaS & Business Calculators",
   description:
-    "Ten free browser-based business calculators: Shipping Cost, Landed Cost, Currency Exchange, Automation ROI, Project Estimator, SaaS Cost, Inventory Reorder, Profit Margin, Supplier Comparison and Project Budget.",
+    "Twelve free browser-based calculators: Landed Cost, MOQ & Quantity Helper, Shipping & CBM, Live Currency Converter (USD/CNY), GPU Workload Estimator, Automation ROI, Project Estimator, SaaS Cost, Inventory Reorder, Profit Margin, Supplier Comparison and Project Budget.",
   path: "/tools",
 });
 

@@ -50,12 +50,12 @@ export const CURRENCIES: CurrencyMeta[] = [
 export const SUPPORTED_CURRENCY_CODES: CurrencyCode[] = CURRENCIES.map((c) => c.code);
 
 export const POPULAR_PAIRS: { from: CurrencyCode; to: CurrencyCode; label: string }[] = [
+  { from: "USD", to: "CNY", label: "USD → CNY" },
+  { from: "CNY", to: "USD", label: "CNY → USD" },
   { from: "USD", to: "PKR", label: "USD → PKR" },
   { from: "EUR", to: "USD", label: "EUR → USD" },
-  { from: "GBP", to: "PKR", label: "GBP → PKR" },
-  { from: "AED", to: "PKR", label: "AED → PKR" },
-  { from: "USD", to: "CNY", label: "USD → CNY" },
   { from: "GBP", to: "USD", label: "GBP → USD" },
+  { from: "AED", to: "USD", label: "AED → USD" },
 ];
 
 export type RatesMap = Partial<Record<CurrencyCode, number>>;

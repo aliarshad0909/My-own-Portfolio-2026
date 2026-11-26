@@ -12,7 +12,11 @@ export const COLLABORATOR_SKILLS = [
   "UI/UX & Brand Design",
   "Video Editing, Motion & 3D",
   "Security, Cloud & DevOps",
+  "GPU / Linux Systems Engineering",
   "E-Commerce & Operations Consulting",
+  "Product Sourcing, Freight & Customs",
+  "Social Media, Paid Media & Copywriting",
+  "LinkedIn Outreach & B2B Sales Dev",
 ] as const;
 
 export const COLLABORATOR_AVAILABILITY = [

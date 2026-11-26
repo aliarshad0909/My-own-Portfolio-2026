@@ -177,7 +177,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Executive & Buying",
         reportsTo: null,
         simulatedRegion: "West Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/alder-claire-bennett.jpg",
+        portraitSrc: "/images/services/scenario-home-goods.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional retail founder named Claire Bennett",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -190,7 +190,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Digital Storefront",
         reportsTo: "alder-claire",
         simulatedRegion: "West Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/alder-devon-park.jpg",
+        portraitSrc: "/images/services/scenario-home-goods.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional ecommerce lead named Devon Park",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -203,7 +203,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Logistics & Inventory",
         reportsTo: "alder-claire",
         simulatedRegion: "West Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/alder-priya-nair.jpg",
+        portraitSrc: "/images/services/scenario-home-goods.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional warehouse coordinator named Priya Nair",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -283,7 +283,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Executive Operations",
         reportsTo: null,
         simulatedRegion: "Midwest Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/beacon-marcus-hale.jpg",
+        portraitSrc: "/images/services/sourcing-warehouse-packing.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional operations VP named Marcus Hale",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -296,7 +296,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Commercial Sales",
         reportsTo: "beacon-marcus",
         simulatedRegion: "South Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/beacon-elena-morales.jpg",
+        portraitSrc: "/images/services/sourcing-warehouse-packing.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional sales desk manager named Elena Morales",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -309,7 +309,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Warehouse Operations",
         reportsTo: "beacon-marcus",
         simulatedRegion: "Midwest Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/beacon-tomas-kowalski.jpg",
+        portraitSrc: "/images/services/sourcing-warehouse-packing.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional yard supervisor named Tomas Kowalski",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -399,7 +399,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Product & Operations",
         reportsTo: null,
         simulatedRegion: "Northeast Region (Simulated Remote)",
-        portraitSrc: "/images/fictional-teams/northstar-hannah-cho.jpg",
+        portraitSrc: "/images/services/gpu-workstation-console.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional product ops leader named Hannah Cho",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -412,7 +412,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Core Engineering",
         reportsTo: "northstar-hannah",
         simulatedRegion: "West Region (Simulated Remote)",
-        portraitSrc: "/images/fictional-teams/northstar-samir-patel.jpg",
+        portraitSrc: "/images/services/gpu-workstation-console.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional platform engineer named Samir Patel",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -425,7 +425,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Customer Support",
         reportsTo: "northstar-hannah",
         simulatedRegion: "South Region (Simulated Remote)",
-        portraitSrc: "/images/fictional-teams/northstar-naomi-brooks.jpg",
+        portraitSrc: "/images/services/gpu-workstation-console.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional support lead named Naomi Brooks",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -438,7 +438,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "AI Reliability",
         reportsTo: "northstar-samir",
         simulatedRegion: "Midwest Region (Simulated Remote)",
-        portraitSrc: "/images/fictional-teams/northstar-liam-oconnor.jpg",
+        portraitSrc: "/images/services/gpu-workstation-console.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional AI evaluation engineer named Liam O'Connor",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -523,7 +523,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Clinical Leadership",
         reportsTo: null,
         simulatedRegion: "Northeast Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/cedarbrook-dr-maya-chen.jpg",
+        portraitSrc: "/images/services/scenario-clinic-desk.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional clinical director named Dr. Maya Chen",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -536,7 +536,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Practice Operations",
         reportsTo: "cedarbrook-maya",
         simulatedRegion: "Northeast Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/cedarbrook-david-okafor.jpg",
+        portraitSrc: "/images/services/scenario-clinic-desk.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional practice operations manager named David Okafor",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:
@@ -549,7 +549,7 @@ export const FICTIONAL_DEMO_PROFILES: FictionalCustomerProfile[] = [
         department: "Front Desk & Intake",
         reportsTo: "cedarbrook-david",
         simulatedRegion: "South Region (Simulated)",
-        portraitSrc: "/images/fictional-teams/cedarbrook-sofia-alvarez.jpg",
+        portraitSrc: "/images/services/scenario-clinic-desk.jpg",
         portraitAlt: "AI-generated stylized editorial illustration of a fictional patient coordinator named Sofia Alvarez",
         portraitDisclosure: PORTRAIT_DISCLOSURE,
         howTheyUseSystem:

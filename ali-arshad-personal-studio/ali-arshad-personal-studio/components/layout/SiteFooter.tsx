@@ -11,14 +11,14 @@ const STUDIO_LINKS = [
 ];
 
 const SERVICE_LINKS = [
-  { label: "Creative Production", href: "/services/creative-production" },
-  { label: "Video Editing & Motion Graphics", href: "/services/creative-production/video-editing" },
+  { label: "GPU & Compute", href: "/services/gpu-compute" },
+  { label: "Product Sourcing", href: "/services/product-sourcing" },
+  { label: "Social Media Setup & Management", href: "/services/social-media-management" },
+  { label: "LinkedIn Outreach & Sales Dev", href: "/services/linkedin-outreach" },
   { label: "Web Development", href: "/services/web-development" },
-  { label: "AI Agents", href: "/services/ai-agents" },
-  { label: "n8n Automation", href: "/services/n8n-automation" },
-  { label: "RTX GPU Compute", href: "/services/gpu-compute" },
+  { label: "AI Agents & n8n Automation", href: "/services/ai-agents" },
+  { label: "Creative Production & 3D", href: "/services/creative-production" },
   { label: "Branding & Growth", href: "/services/branding" },
-  { label: "Sourcing & Supply Chain", href: "/services/global-sourcing" },
 ];
 
 export function SiteFooter() {

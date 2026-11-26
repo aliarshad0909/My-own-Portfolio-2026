@@ -28,20 +28,29 @@ import {
   GPU_COMPUTE_SPECS,
   GPU_RELATED_PROJECT_SLUGS,
   GPU_RELATED_TOOLS,
+  GPU_TOPIC_PAGES,
 } from "@/lib/gpu-compute";
 
 describe("GPU compute consultation service", () => {
-  it("stays PublicNoIndex (reviewable, excluded from sitemap) with consultation-scoped specs, zero [TBD] text, and valid links", () => {
-    assert.equal(GPU_COMPUTE_PUBLICATION_STATE, "PublicNoIndex");
-    assert.equal(isIndexable(GPU_COMPUTE_PUBLICATION_STATE), false);
+  it("publishes the 7-page quote-led GPU & Compute hub with consultation-scoped specs, zero [TBD] text, zero fabricated rates, and valid links", () => {
+    assert.equal(GPU_COMPUTE_PUBLICATION_STATE, "Published");
+    assert.equal(isIndexable(GPU_COMPUTE_PUBLICATION_STATE), true);
     assert.ok(isKnownRoute(GPU_COMPUTE_PATH));
-    assert.ok(!indexableSeoRoutes().includes(GPU_COMPUTE_PATH));
+    const sitemapRoutes = new Set(indexableSeoRoutes());
+    assert.ok(sitemapRoutes.has(GPU_COMPUTE_PATH), "GPU overview must be indexed in sitemap");
+    assert.equal(GPU_TOPIC_PAGES.length, 6, "expected 6 focused GPU topic subpages");
+    for (const topic of GPU_TOPIC_PAGES) {
+      const topicPath = `${GPU_COMPUTE_PATH}/${topic.slug}`;
+      assert.ok(isKnownRoute(topicPath), `missing GPU subpage route ${topicPath}`);
+      assert.ok(sitemapRoutes.has(topicPath), `GPU subpage missing from sitemap: ${topicPath}`);
+    }
     assert.ok(SERVICE_OPTIONS.includes(GPU_COMPUTE_CONTACT_SERVICE));
     assert.equal(SERVICE_OPTIONS.at(-1), "Not sure yet");
 
     for (const spec of GPU_COMPUTE_SPECS) {
       assert.equal(spec.status, "Confirmed during consultation");
       assert.ok(!/\[TBD/i.test(spec.value), `GPU spec must not show [TBD] placeholder: ${spec.value}`);
+      assert.ok(!/\$\d/.test(spec.value), `GPU spec must not publish fabricated dollar rates: ${spec.value}`);
     }
     for (const slug of GPU_RELATED_PROJECT_SLUGS) {
       assert.ok(getProject(slug), `missing GPU related project ${slug}`);

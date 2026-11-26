@@ -381,7 +381,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
     ],
     projectSlugs: ["halcyon-brand-system"],
     relatedTools: [],
-    relatedHubs: ["/services/web-development", "/services/ecommerce-development"],
+    relatedHubs: ["/services/social-media-management", "/services/linkedin-outreach", "/services/web-development"],
     faqs: [
       {
         q: "Do I get more than a logo file?",
@@ -436,8 +436,13 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Cost", detail: "Landed cost modelled honestly" },
     ],
     projectSlugs: ["lantern-sourcing-platform", "stockflow-inventory"],
-    relatedTools: ["/tools/landed-cost-calculator"],
-    relatedHubs: ["/services/business-dashboards"],
+    relatedTools: [
+      "/tools/landed-cost-calculator",
+      "/tools/moq-quantity-helper",
+      "/tools/shipping-cost-calculator",
+      "/tools/currency-exchange-calculator",
+    ],
+    relatedHubs: ["/services/product-sourcing", "/services/business-dashboards"],
     faqs: [
       {
         q: "Are you a licensed customs broker or freight forwarder?",

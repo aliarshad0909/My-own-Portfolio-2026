@@ -9,8 +9,10 @@
  */
 
 import { isIndexable } from "@/lib/seo/publication";
+import { GPU_COMPUTE_PATH, GPU_COMPUTE_PUBLICATION_STATE, GPU_TOPIC_PAGES } from "@/lib/gpu-compute";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { cityServiceAreas, serviceAreaMatrix } from "@/lib/seo/service-areas";
+import { PRODUCT_SOURCING_PATH, SOURCING_SUBPAGES } from "@/lib/sourcing";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 import { RESOURCES } from "@/lib/content/resources";
@@ -21,8 +23,22 @@ import { getKeyword } from "@/lib/seo/keyword-registry";
 export function indexableSeoRoutes(): string[] {
   const out: string[] = [];
 
-  // Section index pages — real, useful landing pages (not doorway pages).
-  out.push("/locations", "/services", "/tools", "/resources", "/industries");
+  // Section index pages & flagship dedicated services
+  out.push(
+    "/locations",
+    "/services",
+    "/services/product-sourcing",
+    "/services/social-media-management",
+    "/services/linkedin-outreach",
+    "/tools",
+    "/resources",
+    "/industries",
+  );
+  if (isIndexable(GPU_COMPUTE_PUBLICATION_STATE)) {
+    out.push(GPU_COMPUTE_PATH);
+    for (const topic of GPU_TOPIC_PAGES) out.push(`${GPU_COMPUTE_PATH}/${topic.slug}`);
+  }
+  for (const sub of SOURCING_SUBPAGES) out.push(`${PRODUCT_SOURCING_PATH}/${sub.slug}`);
   if (isIndexable(getKeyword("net-studio-network")?.state ?? "Researched")) {
     out.push("/studio-network");
   }
