@@ -154,12 +154,12 @@ function LiveVisualMockup({ state, label }: { state: PlannerState; label: string
               <span className="planner-mockup__eyebrow" style={{ color: palette.accent }}>
                 {typeMeta.label} · {state.accessibilityTarget.toUpperCase()}
               </span>
-              <h4
+              <p
                 className="planner-mockup__h1"
                 style={{ fontFamily: typo.headingFont, fontSize: hScale }}
               >
                 {previewHeading}
-              </h4>
+              </p>
               <p className="planner-mockup__lead" style={{ color: palette.muted }}>
                 {state.problemNote.trim()
                   ? state.problemNote.trim().slice(0, 110)

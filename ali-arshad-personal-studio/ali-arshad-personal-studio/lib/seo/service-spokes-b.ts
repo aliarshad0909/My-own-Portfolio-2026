@@ -58,7 +58,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         "Brand video editing pairs hook-first storytelling and on-brand captions with probed H.264 (+faststart), VP9, and social-ratio exports ready for fast web embeds and paid feeds.",
       relatedResource: { href: "/resources/motion-graphics-pricing", label: "Read: What drives video & motion production cost?" },
       scopeNotice:
-        "Cleared client showreel edits are currently being prepared for public display. The technical web-encoding pipeline behind delivery is verified and documented in the Motion Production case study.",
+        "Studio-authored motion graphics previews are playable directly below (lazy-loaded with posters). External client edits remain private until written client and talent permission is confirmed, and the technical ffmpeg encoding pipeline is documented separately in the Motion Production case study.",
       faqs: [
         { q: "What raw files do I need to supply?", a: "Camera footage, phone clips, screen recordings or voiceovers via Google Drive or Dropbox — plus brand fonts, logo SVG and any reference pacing you like." },
         { q: "How many revision rounds are included?", a: "Typically two structured feedback rounds per deliverable, agreed in writing upfront so timelines stay predictable." },
@@ -113,7 +113,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
         "Motion graphics and product explainers clarify complex workflows in 15–45 seconds, delivered with storyboard contact sheets, reduced-motion poster stills, and web-optimized encodes.",
       relatedResource: { href: "/resources/motion-graphics-pricing", label: "Read: Motion graphics pricing & scope guide" },
       scopeNotice:
-        "Finished cleared motion samples are in preparation for public listing. Delivery encoding and storyboard contact-sheet automation are live and verified in the Motion Production demo.",
+        "Three self-initiated Studio Motion Demos are playable directly below (lazy-loaded with WebP posters). External client edits stay private until explicit written permission is confirmed, and encoding automation is documented separately in the Motion Production case study.",
       faqs: [
         { q: "What drives the price of a motion graphics project?", a: "Asset creation complexity, style-frame detail and revision depth matter far more than raw runtime. A tight 20-second custom UI explainer often takes more craft than a 60-second text-card video." },
         { q: "Can motion clips respect prefers-reduced-motion on our website?", a: "Yes — every web video ships with an exact-aspect poster image so browsers with reduced-motion enabled see a crisp still frame instead of forced autoplay." },
@@ -217,7 +217,7 @@ export const SPOKES_CREATIVE_BRAND_SOURCING: Record<string, ServiceSpoke[]> = {
       quickAnswer:
         "Social advertising creatives deliver brand-locked 9:16 and 4:5 short-form edits with modular opening hooks and safe-zone captions — built for clean creative testing without agency retainers.",
       scopeNotice:
-        "Cleared client ad reels are pending publication permission. Brand-system social templates and encoding tooling are documented in the Halcyon and Motion Production case studies.",
+        "Self-initiated Studio Motion Demos are playable directly below. External client ad reels stay private until written client and talent permission is confirmed; social brand templates and encoding tooling are documented in the Halcyon and Motion Production case studies.",
       faqs: [
         { q: "Do you guarantee ad ROAS or CPA improvements?", a: "No honest studio guarantees ad-platform outcomes — media performance depends on offer, pricing, audience and landing page. I focus on sharp, testable creative execution." },
         { q: "Can you edit raw UGC or founder-shot phone footage?", a: "Yes — tightening authentic founder or product footage into clean, well-paced social ads is one of the highest-leverage formats." },

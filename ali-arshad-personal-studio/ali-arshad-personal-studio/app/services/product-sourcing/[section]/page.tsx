@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SourcingCatalogShowcase } from "@/components/sourcing/SourcingCatalogShowcase";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
 import { EditorialMedia } from "@/components/ui/EditorialMedia";
@@ -15,6 +16,7 @@ import {
   PRODUCT_SOURCING_CONTACT_SERVICE,
   PRODUCT_SOURCING_PATH,
   SOURCING_CATEGORIES,
+  SOURCING_RESPONSIBILITY_SPLIT,
   SOURCING_SUBPAGES,
   SOURCING_TOOLS,
   getSourcingSubpage,
@@ -82,7 +84,7 @@ export default async function ProductSourcingSubpage({
           <EditorialMedia
             src={page.photo.src}
             alt={page.photo.alt}
-            badge="Illustrative editorial photo"
+            badge={page.photo.badge ?? "Illustrative editorial photo"}
             caption={page.photo.caption}
             priority
           />
@@ -137,6 +139,18 @@ export default async function ProductSourcingSubpage({
             </article>
           ))}
 
+          {page.showCatalogExamples ? (
+            <div style={{ marginTop: "8px" }}>
+              <div className="section-head" style={{ marginBottom: "18px" }}>
+                <p className="eyebrow eyebrow--plain">Catalog-backed product examples</p>
+                <h2 className="section-title section-title--sm">
+                  Filter representative product lines by category
+                </h2>
+              </div>
+              <SourcingCatalogShowcase />
+            </div>
+          ) : null}
+
           {page.showCategories ? (
             <div className="card-grid card-grid--3">
               {SOURCING_CATEGORIES.map((cat) => (
@@ -159,6 +173,39 @@ export default async function ProductSourcingSubpage({
                   </p>
                 </article>
               ))}
+            </div>
+          ) : null}
+
+          {page.showResponsibilitySplit ? (
+            <div className="split-cards">
+              <div className="panel">
+                <p className="eyebrow eyebrow--plain">Direct coordination</p>
+                <h2 className="card-title" style={{ marginBottom: "12px" }}>
+                  What Ali Arshad coordinates directly
+                </h2>
+                <ul className="check-list check-list--spaced">
+                  {SOURCING_RESPONSIBILITY_SPLIT.directCoordination.map((item) => (
+                    <li key={item}>
+                      <Icon name="check" size={16} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="panel">
+                <p className="eyebrow eyebrow--plain">Licensed &amp; specialized providers</p>
+                <h2 className="card-title" style={{ marginBottom: "12px" }}>
+                  What requires suppliers, labs &amp; licensed brokers
+                </h2>
+                <ul className="check-list check-list--spaced">
+                  {SOURCING_RESPONSIBILITY_SPLIT.externalSpecialists.map((item) => (
+                    <li key={item}>
+                      <Icon name="shield" size={16} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ) : null}
 
@@ -229,7 +276,7 @@ export default async function ProductSourcingSubpage({
         standalone
         eyebrow="Request a sourcing quote"
         title="Ready to scope your product brief?"
-        text="Share your product requirements, target volume, and destination country. We will check feasibility honestly before requesting quotes."
+        text="Share your product requirements, target volume, and destination country. You will receive an honest feasibility review before quotes are requested."
         button="Send sourcing requirements"
         href={contactHref}
         secondaryHref={`${PRODUCT_SOURCING_PATH}/${nextPage.slug}`}

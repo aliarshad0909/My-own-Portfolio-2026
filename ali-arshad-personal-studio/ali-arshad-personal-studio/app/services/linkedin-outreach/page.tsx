@@ -15,9 +15,9 @@ export const LINKEDIN_OUTREACH_PATH = "/services/linkedin-outreach";
 export const LINKEDIN_OUTREACH_CONTACT_SERVICE = "LinkedIn Outreach & Sales Development";
 
 export const metadata: Metadata = pageMetadata({
-  title: "LinkedIn Outreach & Sales Development — Human-Reviewed B2B Prospecting",
+  title: "LinkedIn Outreach & B2B Sales Development",
   description:
-    "Focused B2B LinkedIn outreach: ICP definition, Sales Navigator workflow, manual prospect quality checks, personalized messaging, CRM handoff, and client-approved Dripify setup — zero spam or guaranteed volume claims.",
+    "Human-reviewed B2B LinkedIn outreach: ICP definition, Sales Navigator workflows, manual list QA, personalized messaging, CRM handoff, and client-approved Dripify setup.",
   path: LINKEDIN_OUTREACH_PATH,
 });
 

@@ -333,11 +333,11 @@ export const BLOG_POSTS: BlogPost[] = [
       alt: "Automated ffprobe and ffmpeg media encoding pipeline producing H.264 faststart, VP9, WebP posters, and storyboard contact sheets",
       width: 1200,
       height: 720,
-      caption: "Technical architecture diagram of the tested ffmpeg/ffprobe pipeline — no unverified showreel footage.",
+      caption: "Technical architecture diagram of the tested ffmpeg/ffprobe media preparation pipeline.",
       darkDiagram: true,
     },
     editorialNote:
-      "Transparent status note: our bpy geometry/lighting builder (20 tests) and ffmpeg encoding CLI (28 tests) are built and verified, while final rendered 3D stills and cleared client showreel footage remain in preparation.",
+      "Transparent status note: the bpy geometry/lighting builder (20 tests) and ffmpeg encoding CLI (28 tests) are built and verified, while playable Studio Motion Demos live on /services/creative-production. External client footage stays private until written clearance is confirmed.",
     sections: [
       {
         heading: "Scripted camera math prevents shot-to-shot drift",

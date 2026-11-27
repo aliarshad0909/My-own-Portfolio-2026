@@ -12,7 +12,8 @@ type PageMeta = {
 
 /** Consistent per-page metadata: title, description, canonical and social cards. */
 export function pageMetadata({ title, description, path, index = true }: PageMeta): Metadata {
-  const fullTitle = path === "/" ? title : `${title}: ${SITE.name}`;
+  const alreadyBranded = /\bAli Arshad\b/i.test(title);
+  const fullTitle = path === "/" || alreadyBranded ? title : `${title} | ${SITE.name}`;
   return {
     title: fullTitle,
     description,

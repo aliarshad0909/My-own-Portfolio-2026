@@ -130,9 +130,9 @@ export default function AboutPage() {
           </div>
           <div className="prose reveal">
             <p>
-              My background began in business. I studied for a Bachelor of Business Administration with a major in Supply Chain Management at Bahria
-              University Islamabad, where the subject was how organisations move resources, information and money through a process, and where those
-              processes get stuck.
+              My background began in business and global supply chains. I studied for a Bachelor of Business Administration with a major in Supply
+              Chain Management at Bahria University Islamabad and bring more than 10 years of stated hands-on product sourcing experience — focusing
+              on how organizations move physical goods, information, and capital through a process without silent bottlenecks.
             </p>
             <p>
               Over time my interests expanded into software development, creative production and intelligent automation. None of that replaced the

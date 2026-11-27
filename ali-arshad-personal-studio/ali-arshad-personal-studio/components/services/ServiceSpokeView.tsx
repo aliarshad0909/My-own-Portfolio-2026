@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { FlowDiagram } from "@/components/services/FlowDiagram";
 import { ServiceDemoShowcase } from "@/components/services/ServiceDemoShowcase";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -10,8 +11,9 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { APPROVED_PUBLIC_VIDEOS, CLIENT_VIDEO_RIGHTS_NOTICE } from "@/lib/creative-videos";
 import { locationsForServiceHub } from "@/lib/geo/location-connections";
-import { getProject, type Project } from "@/lib/projects";
+import { getProject, projectHref, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHubEnrichment } from "@/lib/seo/service-enrichment";
 import type { ServiceHub, ServiceSpoke } from "@/lib/seo/service-hubs";
@@ -37,11 +39,10 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
 
   const heroVisual = spoke.heroVisual;
   const linkedProject = heroVisual?.projectSlug ? getProject(heroVisual.projectSlug) : undefined;
-  const linkedHref = linkedProject
-    ? linkedProject.caseStudy
-      ? `/case-studies/${linkedProject.slug}`
-      : `/work/${linkedProject.slug}`
-    : undefined;
+  const linkedHref = linkedProject ? projectHref(linkedProject) : undefined;
+  const showStudioVideos =
+    hub.slug === "creative-production" &&
+    (spoke.slug === "video-editing" || spoke.slug === "motion" || spoke.slug === "social-video");
 
   const frameClass = [
     "hub-hero-card__frame",
@@ -244,6 +245,23 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
           ) : null}
         </div>
       </section>
+
+      {showStudioVideos ? (
+        <section className="section" id="motion-examples" aria-labelledby="spoke-motion-demos">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+              <h2 className="section-title section-title--sm" id="spoke-motion-demos">
+                Web-optimized studio motion examples
+              </h2>
+              <p className="section-sub">
+                Press play on any card to stream on demand — kept clearly distinct from the engineering media pipeline case study below.
+              </p>
+            </div>
+            <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+          </div>
+        </section>
+      ) : null}
 
       {projects.length > 0 ? (
         <section className="section" aria-label="Supporting demonstration build">

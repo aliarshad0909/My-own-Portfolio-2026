@@ -159,14 +159,28 @@ function ServiceVisual({ service }: { service: Service }) {
 
   if (service.id === "creative-production") {
     return (
-      <PendingMedia
-        heading="Showreel in preparation"
-        lines={[
-          "The 3D scene system and the media pipeline behind this service are built and tested, but no finished client showreel has been published yet.",
-          "Rather than display stock footage or unverified work, this space stays reserved for cleared output.",
-          "Inspect the verified ffmpeg media pipeline and Halcyon WCAG brand system in the Work collections.",
-        ]}
-      />
+      <div className="visual-stack">
+        <div className="panel">
+          <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+          <h3 className="card-title" style={{ marginTop: "4px" }}>
+            Preview web-optimized motion clips &amp; verified encoding tooling
+          </h3>
+          <p className="fine-print" style={{ marginTop: "8px", lineHeight: 1.6 }}>
+            Play studio-authored motion clips directly on the Creative Production hub, kept distinct from the tested ffmpeg media pipeline case study.
+            External client video edits remain private until written public-display permission is confirmed.
+          </p>
+          <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "10px" }}>
+            <Link href="/services/creative-production#motion-examples" className="btn btn--primary btn--sm">
+              <span>Watch studio motion previews</span>
+              <Icon name="play" size={14} className="btn__icon" />
+            </Link>
+            <Link href="/case-studies/motion-production-pipeline" className="btn btn--secondary btn--sm">
+              <span>Media pipeline case study</span>
+            </Link>
+          </div>
+        </div>
+        <RelatedProjectList projects={projects} />
+      </div>
     );
   }
 

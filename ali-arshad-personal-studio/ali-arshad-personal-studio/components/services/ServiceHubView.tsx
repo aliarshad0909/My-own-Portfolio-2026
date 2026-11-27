@@ -12,12 +12,14 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { CredentialCard } from "@/components/credentials/CredentialCard";
 import { getIndustry } from "@/lib/content/industries";
 import { getResource } from "@/lib/content/resources";
+import { APPROVED_PUBLIC_VIDEOS, CLIENT_VIDEO_RIGHTS_NOTICE } from "@/lib/creative-videos";
 import { visibleCredentials } from "@/lib/credentials";
 import { locationsForServiceHub } from "@/lib/geo/location-connections";
-import { getProject, type Project } from "@/lib/projects";
+import { getProject, projectHref, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHubEnrichment, type ServiceHubEnrichment } from "@/lib/seo/service-enrichment";
 import type { ServiceHub } from "@/lib/seo/service-hubs";
@@ -46,7 +48,7 @@ function HeroVisual({ enrichment }: { enrichment: ServiceHubEnrichment }) {
   if (enrichment.heroPreview) {
     const project = getProject(enrichment.heroPreview.projectSlug);
     if (!project || project.usesSampleMedia) return null;
-    const target = project.caseStudy ? `/case-studies/${project.slug}` : `/work/${project.slug}`;
+    const target = projectHref(project);
 
     return (
       <div className="hub-hero-card">
@@ -631,6 +633,20 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
           <>
             {factsStrip}
             {scopeNotice}
+            <section className="section section--surface" id="motion-examples" aria-labelledby="creative-motion-demos">
+              <div className="container">
+                <div className="section-head">
+                  <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+                  <h2 className="section-title" id="creative-motion-demos">
+                    Studio-authored motion graphics &amp; web-ready video samples
+                  </h2>
+                  <p className="section-sub">
+                    Click play on any poster below to load the lightweight H.264 clip on demand — zero video bytes download until you press play.
+                  </p>
+                </div>
+                <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+              </div>
+            </section>
             {architectureSection(false)}
             {demoSection(true)}
             {problemsSection(false)}

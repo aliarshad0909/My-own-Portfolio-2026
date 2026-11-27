@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useId, useMemo, useState } from "react";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { THREADS, type ExperienceEntry, type ExperienceKind } from "@/lib/experience";
-import { PROJECTS } from "@/lib/projects";
+import { PROJECTS, projectHref } from "@/lib/projects";
 
 type Filter = "all" | ExperienceKind;
 
@@ -143,7 +143,7 @@ export function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) 
                         <ul className="xp__related">
                           {related.map((p) => (
                             <li key={p.slug}>
-                              <Link href={p.caseStudy ? `/case-studies/${p.slug}` : `/work/${p.slug}`} className="xp__related-link">
+                              <Link href={projectHref(p)} className="xp__related-link">
                                 <span>{p.title}</span>
                                 <Icon name="arrow-up-right" size={14} />
                               </Link>

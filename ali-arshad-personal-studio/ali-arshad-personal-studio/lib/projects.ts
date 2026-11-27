@@ -1713,6 +1713,17 @@ export const featuredProjects = (count = 3) => PROJECTS.filter((p) => p.featured
 
 export const caseStudies = () => CORE_PROJECTS.filter((p) => p.caseStudy !== undefined);
 
+const DEDICATED_CASE_STUDY_SLUGS = new Set(
+  CORE_PROJECTS.filter((p) => p.caseStudy !== undefined).map((p) => p.slug),
+);
+
+/** True only when a project has a dedicated /case-studies/[slug] route (prevents 404 links for expansion projects). */
+export const hasDedicatedCaseStudy = (p: Project): boolean => DEDICATED_CASE_STUDY_SLUGS.has(p.slug);
+
+/** Single canonical public URL for a project: /case-studies/[slug] for flagship case studies, /work/[slug] otherwise. */
+export const projectHref = (p: Project): string =>
+  hasDedicatedCaseStudy(p) ? `/case-studies/${p.slug}` : `/work/${p.slug}`;
+
 /**
  * Indexable work: published projects and finished core demonstration builds.
  * Unbuilt Concepts, Sample Scenarios, local Prototypes, and In-Development

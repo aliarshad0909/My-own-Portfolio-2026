@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
-import { PROJECTS, type Project } from "@/lib/projects";
+import { PROJECTS, projectHref, type Project } from "@/lib/projects";
 
 /**
  * Restrained homepage selection of four additional demonstrations spanning
@@ -26,7 +26,7 @@ function shortHook(p: Project): string {
 }
 
 function caseHref(p: Project): string {
-  return p.caseStudy ? `/case-studies/${p.slug}` : `/work/${p.slug}`;
+  return projectHref(p);
 }
 
 export function FeaturedWork() {

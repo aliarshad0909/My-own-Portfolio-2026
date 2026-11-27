@@ -1,9 +1,21 @@
 import assert from "node:assert/strict";
+import { existsSync, statSync } from "node:fs";
+import path from "node:path";
 import { describe, it } from "node:test";
+import { APPROVED_PUBLIC_VIDEOS, CREATIVE_SHOWCASE_VIDEOS } from "@/lib/creative-videos";
 import { GPU_TOPIC_PAGES } from "@/lib/gpu-compute";
 import { SERVICE_OPTIONS } from "@/lib/inquiry";
+import { PROJECTS, caseStudies, hasDedicatedCaseStudy, isIndexable as isProjectIndexable, projectHref } from "@/lib/projects";
 import { isKnownRoute } from "@/lib/seo/routes";
-import { INCOTERMS_TABLE, SOURCING_CATEGORIES, SOURCING_SUBPAGES, SOURCING_WORKFLOW } from "@/lib/sourcing";
+import {
+  INCOTERMS_TABLE,
+  SOURCING_CATALOG_EXAMPLES,
+  SOURCING_CATEGORIES,
+  SOURCING_LOOKBOOK_PDF_PATH,
+  SOURCING_OVERVIEW_FAQS,
+  SOURCING_SUBPAGES,
+  SOURCING_WORKFLOW,
+} from "@/lib/sourcing";
 import { evaluateGpuQuoteScope } from "@/lib/tools/gpu-estimator";
 import { landedCost } from "@/lib/tools/landed-cost";
 import { calculateMoqPlan } from "@/lib/tools/moq";
@@ -165,16 +177,60 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
     assert.ok(SERVICE_OPTIONS.includes("LinkedIn Outreach & Sales Development"));
   });
 
-  it("keeps private supplier contacts, phone numbers, and unverified claims out of public sourcing data", () => {
+  it("keeps private supplier contacts, wholesale prices, and absolute claims out of public sourcing data", () => {
     const serialized = JSON.stringify({
       categories: SOURCING_CATEGORIES,
+      catalog: SOURCING_CATALOG_EXAMPLES,
       workflow: SOURCING_WORKFLOW,
       incoterms: INCOTERMS_TABLE,
       subpages: SOURCING_SUBPAGES,
+      faqs: SOURCING_OVERVIEW_FAQS,
     });
+    assert.equal(SOURCING_SUBPAGES.length, 9, "expected 9 Product Sourcing subpages including quote-comparison");
+    assert.equal(SOURCING_CATALOG_EXAMPLES.length, 12, "expected 12 curated catalog-backed product examples");
     assert.equal(/whatsapp/i.test(serialized), false, "must never leak supplier WhatsApp info");
-    assert.equal(/yangantoys|wangyang|yangwang/i.test(serialized), false, "must never leak private supplier names");
-    assert.equal(/more than 10 years|10\+ years/i.test(serialized), false, "must not publish unconfirmed 10+ years claim");
-    assert.equal(/guaranteed lowest price|guaranteed ddp/i.test(serialized), false, "must not make guaranteed price/DDP claims");
+    assert.equal(/yangantoys|wangyang|yangwang|hongbin|senchiva|qingfeng|esonghome/i.test(serialized), false, "must never leak confidential supplier names");
+    assert.equal(/\+86|@qq\.com|@163\.com/i.test(serialized), false, "must never leak supplier contact details");
+    assert.equal(/\b(lowest price|best quality|guaranteed ddp)\b/i.test(serialized), false, "must avoid absolute guarantees");
+
+    // Verify all 12 catalog images and branded PDF lookbook exist on disk and are optimized
+    for (const item of SOURCING_CATALOG_EXAMPLES) {
+      const full = path.join(process.cwd(), "public", item.image);
+      assert.ok(existsSync(full), `missing catalog image on disk: ${item.image}`);
+      assert.ok(isKnownRoute(item.calculatorHref), `broken sourcing calculator link: ${item.calculatorHref}`);
+    }
+    const pdfFull = path.join(process.cwd(), "public", SOURCING_LOOKBOOK_PDF_PATH);
+    assert.ok(existsSync(pdfFull), `missing lookbook PDF: ${SOURCING_LOOKBOOK_PDF_PATH}`);
+    assert.ok(statSync(pdfFull).size < 1_000_000, "lookbook PDF should stay lightweight (<1 MB)");
+  });
+
+  it("publishes only cleared studio motion videos with posters and prevents unapproved client leaks", () => {
+    assert.ok(APPROVED_PUBLIC_VIDEOS.length >= 3, "expected at least 3 studio-authored motion demos");
+    const serialized = JSON.stringify(CREATIVE_SHOWCASE_VIDEOS);
+    assert.equal(/sans edit|nathan\s*barry|john\s*delony|brightarc/i.test(serialized), false, "unapproved client video names must never leak");
+    for (const v of APPROVED_PUBLIC_VIDEOS) {
+      assert.ok(existsSync(path.join(process.cwd(), "public", v.src)), `missing video asset: ${v.src}`);
+      assert.ok(existsSync(path.join(process.cwd(), "public", v.poster)), `missing video poster: ${v.poster}`);
+    }
+  });
+
+  it("routes flagship case studies to /case-studies/[slug] and expansion prototypes to /work/[slug] with zero duplicate sitemap slugs", () => {
+    const csSlugs = new Set(caseStudies().map((p) => p.slug));
+    for (const p of PROJECTS) {
+      const href = projectHref(p);
+      assert.ok(isKnownRoute(href), `projectHref(${p.slug}) resolved to unknown route ${href}`);
+      if (csSlugs.has(p.slug)) {
+        assert.equal(hasDedicatedCaseStudy(p), true);
+        assert.equal(href, `/case-studies/${p.slug}`);
+      } else {
+        assert.equal(hasDedicatedCaseStudy(p), false);
+        assert.equal(href, `/work/${p.slug}`);
+      }
+    }
+    // Verify zero overlap between indexable non-case-study /work slugs and /case-studies slugs
+    const workOnlyIndexable = PROJECTS.filter((p) => isProjectIndexable(p) && !hasDedicatedCaseStudy(p));
+    for (const p of workOnlyIndexable) {
+      assert.equal(csSlugs.has(p.slug), false);
+    }
   });
 });

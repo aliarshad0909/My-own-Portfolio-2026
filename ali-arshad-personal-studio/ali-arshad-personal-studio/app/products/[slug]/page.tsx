@@ -86,8 +86,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = getStudioProduct(slug);
   if (!product) return {};
   return pageMetadata({
-    title: `${product.name} — ${product.tagline}`,
-    description: product.shortDescription,
+    title: `${product.name} — Studio Product Showcase`,
+    description: `${product.tagline}: ${product.shortDescription}`,
     path: `/products/${product.slug}`,
   });
 }

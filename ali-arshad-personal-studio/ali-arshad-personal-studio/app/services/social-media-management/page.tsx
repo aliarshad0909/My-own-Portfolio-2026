@@ -16,9 +16,9 @@ export const SOCIAL_MEDIA_PATH = "/services/social-media-management";
 export const SOCIAL_MEDIA_CONTACT_SERVICE = "Social Media Setup & Management";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Social Media Setup & Management (Instagram Launch, Grids & Content Systems)",
+  title: "Social Media Setup & Instagram Management",
   description:
-    "Structured Instagram profile setup, positioning, launch-grid planning, Story Highlights, content calendars, and approval-gated publishing workflows — backed by active HubSpot Social Media Certification.",
+    "Structured Instagram profile setup, positioning, launch-grid planning, Story Highlights, and approval-gated content calendars backed by HubSpot Certification.",
   path: SOCIAL_MEDIA_PATH,
 });
 

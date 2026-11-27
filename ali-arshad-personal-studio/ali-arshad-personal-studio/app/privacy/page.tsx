@@ -107,16 +107,16 @@ export default function PrivacyPage() {
             <p className="eyebrow eyebrow--plain">03 · Delivery, Storage &amp; Unconfigured State</p>
             <h3 className="card-title">How form messages are processed</h3>
             <p>
-              This portfolio website does <strong>not</strong> write contact or collaborator submissions into a public website database, nor does it
-              sell, rent, or share inquiries with third-party brokers or mailing lists.
+              This portfolio website does <strong>not</strong> publish contact or collaborator submissions publicly, nor does it sell, rent, or add
+              inquiry submitters to marketing mailing lists without explicit opt-in consent.
             </p>
             <ul className="check-list">
               <li>
                 <Icon name="check" size={15} />
                 <span>
-                  <strong>Configured delivery channels:</strong> When enabled in the deployment environment, validated submissions are forwarded
-                  server-side directly to Ali Arshad via the <strong>Resend</strong> transactional email API and/or a private studio webhook endpoint
-                  so Ali can reply to your inquiry.
+                  <strong>Configured delivery channels:</strong> When enabled in the deployment environment, validated submissions are delivered
+                  server-side to Ali Arshad via the <strong>Resend</strong> transactional email API (and, where configured for the private
+                  owner-only admin console, persisted privately in an encrypted-in-transit database for follow-up tracking).
                 </span>
               </li>
               <li>
