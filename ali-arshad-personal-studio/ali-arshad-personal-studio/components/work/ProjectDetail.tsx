@@ -8,9 +8,11 @@ import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { GameCoverArt } from "@/components/games/GameCoverArt";
+import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
+import { APPROVED_PUBLIC_VIDEOS, CLIENT_VIDEO_RIGHTS_NOTICE } from "@/lib/creative-videos";
 import { PROJECTS, STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
 import { SERVICE_HUBS, spokesForProject } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
@@ -711,6 +713,19 @@ export function ProjectDetail({ project, variant }: Props) {
               ) : null}
             </div>
           </div>
+
+          {project.slug === "motion-production-pipeline" ? (
+            <section className="detail__gallery" aria-labelledby="case-motion-demos-title">
+              <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Separate From Engineering CLI</p>
+              <h2 className="section-title section-title--sm" id="case-motion-demos-title">
+                First-party web-optimized motion clips authored by Ali Arshad
+              </h2>
+              <p className="fine-print detail__gallery-note">
+                Click play on any poster to load lightweight H.264/VP9 clips on demand. These are studio-authored motion demos rather than client reels.
+              </p>
+              <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+            </section>
+          ) : null}
 
           {project.gallery.length > 0 ? (
             <section className="detail__gallery" aria-labelledby="gallery-title">

@@ -40,7 +40,6 @@ export function VideoShowcasePlayer({ videos, notice }: Props) {
                 {isPlaying ? (
                   <video
                     className="video-card__video"
-                    src={v.src}
                     poster={v.poster}
                     controls
                     autoPlay
@@ -48,6 +47,8 @@ export function VideoShowcasePlayer({ videos, notice }: Props) {
                     preload="metadata"
                     aria-label={`${v.title} (${v.workType})`}
                   >
+                    {v.webmSrc ? <source src={v.webmSrc} type="video/webm" /> : null}
+                    <source src={v.src} type="video/mp4" />
                     Your browser does not support embedded HTML5 video.
                   </video>
                 ) : (

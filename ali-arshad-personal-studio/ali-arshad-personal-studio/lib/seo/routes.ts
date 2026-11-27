@@ -26,6 +26,7 @@ import { KEYWORD_REGISTRY } from "@/lib/seo/keyword-registry";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { cityServiceAreas, serviceAreaMatrix } from "@/lib/seo/service-areas";
 import { PRODUCT_SOURCING_PATH, SOURCING_SUBPAGES } from "@/lib/sourcing";
+import { ALL_SOURCING_PRODUCTS, SOURCING_CATALOG_PATH } from "@/lib/sourcing-catalog";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 
@@ -65,6 +66,8 @@ export function knownRoutes(): Set<string> {
 
   for (const t of GPU_TOPIC_PAGES) routes.add(`${GPU_COMPUTE_PATH}/${t.slug}`);
   for (const s of SOURCING_SUBPAGES) routes.add(`${PRODUCT_SOURCING_PATH}/${s.slug}`);
+  routes.add(SOURCING_CATALOG_PATH);
+  for (const item of ALL_SOURCING_PRODUCTS) routes.add(item.pagePath);
 
   for (const p of PROJECTS) routes.add(`/work/${p.slug}`);
   for (const p of caseStudies()) routes.add(`/case-studies/${p.slug}`);

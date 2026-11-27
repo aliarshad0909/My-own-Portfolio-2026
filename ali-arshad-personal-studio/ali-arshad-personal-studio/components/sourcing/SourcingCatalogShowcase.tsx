@@ -10,6 +10,7 @@ import {
   SOURCING_LOOKBOOK_PDF_PATH,
   type SourcingCatalogExample,
 } from "@/lib/sourcing";
+import { MASTER_CATALOG_PDF_PATH, SOURCING_CATALOG_PATH, SOURCING_CATALOG_STATS } from "@/lib/sourcing-catalog";
 
 const FILTER_OPTIONS: { id: "all" | SourcingCatalogExample["categoryId"]; label: string }[] = [
   { id: "all", label: "All Categories" },
@@ -114,31 +115,40 @@ export function SourcingCatalogShowcase({ compact = false }: Props) {
 
       <div className="panel sourcing-lookbook-cta">
         <div>
-          <p className="eyebrow eyebrow--plain">Branded Studio Lookbook · Privacy-Safe PDF</p>
+          <p className="eyebrow eyebrow--plain">
+            Master Catalogue PDF &amp; Searchable Directory · {SOURCING_CATALOG_STATS.totalUniqueProducts} Unique Models
+          </p>
           <h3 className="card-title" style={{ marginTop: "4px" }}>
-            Download the Ali Arshad Personal Studio Sourcing Overview
+            Download “Ali Arshad — Product Sourcing Catalogue” or search individual product PDFs
           </h3>
           <p className="fine-print" style={{ marginTop: "6px" }}>
-            A compact 3-page presentation summarizing catalog-backed categories, non-confidential specification checks, the 7-stage workflow, and
-            Incoterms responsibilities — ready to share with your team. Zero private supplier contacts or outdated wholesale sheets included.
+            Browse all {SOURCING_CATALOG_STATS.totalUniqueProducts} deduplicated OEM reference models and lighting series across 5 categories — each
+            with its own branded downloadable specification PDF, honest availability status, and zero confidential supplier contacts or outdated prices.
           </p>
         </div>
         <div className="sourcing-lookbook-cta__actions">
+          <a
+            href={MASTER_CATALOG_PDF_PATH}
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Ali-Arshad-Product-Sourcing-Catalogue.pdf"
+            className="btn btn--primary btn--sm"
+          >
+            <span>Master Catalogue (PDF)</span>
+            <Icon name="arrow-up-right" size={15} className="btn__icon" />
+          </a>
+          <Link href={SOURCING_CATALOG_PATH} className="btn btn--secondary btn--sm">
+            <span>Search all {SOURCING_CATALOG_STATS.totalUniqueProducts} products</span>
+          </Link>
           <a
             href={SOURCING_LOOKBOOK_PDF_PATH}
             target="_blank"
             rel="noopener noreferrer"
             download="Ali-Arshad-Studio-Sourcing-Lookbook.pdf"
-            className="btn btn--primary btn--sm"
+            className="text-link"
           >
-            <span>Download Lookbook (PDF)</span>
-            <Icon name="arrow-up-right" size={15} className="btn__icon" />
+            3-page Executive Lookbook (PDF) →
           </a>
-          {compact ? (
-            <Link href="/services/product-sourcing/categories" className="btn btn--secondary btn--sm">
-              <span>Browse all 12 catalog examples</span>
-            </Link>
-          ) : null}
         </div>
       </div>
     </div>

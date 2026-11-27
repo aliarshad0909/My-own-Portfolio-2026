@@ -10,7 +10,7 @@
  *   - WebSite:             https://www.aliarshad.co/#website
  */
 import { CREDENTIALS } from "@/lib/credentials";
-import type { BlogPost } from "@/lib/content/blog";
+import { estimateReadingMinutes, estimateWordCount, type BlogPost } from "@/lib/content/blog";
 import type { GameDefinition } from "@/lib/games/catalog";
 import type { StudioProduct } from "@/lib/products/catalog";
 import type { Project } from "@/lib/projects";
@@ -340,6 +340,10 @@ export function gameListSchema(games: GameDefinition[]) {
  */
 export function blogArticleSchema(post: BlogPost) {
   const url = abs(`/blog/${post.slug}`);
+  const rasterImage =
+    post.visual && /\.(png|jpe?g|webp)$/i.test(post.visual.src)
+      ? abs(post.visual.src)
+      : abs("/opengraph-image.jpg");
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -347,9 +351,11 @@ export function blogArticleSchema(post: BlogPost) {
     description: post.excerpt,
     url,
     mainEntityOfPage: url,
-    image: abs("/opengraph-image.jpg"),
+    image: rasterImage,
     articleSection: post.category,
     keywords: post.tags.join(", "),
+    wordCount: estimateWordCount(post),
+    timeRequired: `PT${estimateReadingMinutes(post)}M`,
     author: personRef(),
     publisher: studioRef(),
     isAccessibleForFree: true,

@@ -392,14 +392,14 @@ describe("work project finder (strictly backed by real PROJECTS data)", () => {
 });
 
 describe("studio blog & RSS feed", () => {
-  it("ships 8 original dated blog articles with valid JSON-LD, reading times, and zero broken links", () => {
-    assert.equal(BLOG_POSTS.length, 8);
+  it("ships 10 original dated blog articles with valid JSON-LD, topic clusters, reading times, and zero broken links", () => {
+    assert.equal(BLOG_POSTS.length, 10);
     assert.ok(CORE_SITEMAP_PAGES.includes("/blog"));
     assert.ok(isKnownRoute("/blog"));
     assert.ok(isKnownRoute("/blog/rss.xml"));
 
     const slugs = BLOG_POSTS.map((p) => p.slug);
-    assert.equal(new Set(slugs).size, 8);
+    assert.equal(new Set(slugs).size, 10);
     const iso = /^\d{4}-\d{2}-\d{2}$/;
 
     const seenVisuals = new Set<string>();
@@ -409,6 +409,11 @@ describe("studio blog & RSS feed", () => {
       assert.match(post.updatedAt, iso);
       assert.ok(post.updatedAt >= post.publishedAt);
       assert.ok(estimateReadingMinutes(post) >= 2);
+      assert.ok(post.sections.length >= 3, `blog:${post.slug} should have a clear multi-part story arc`);
+      assert.ok(post.relatedPostSlugs.length >= 2, `blog:${post.slug} should link into a topic cluster`);
+      for (const relSlug of post.relatedPostSlugs) {
+        assert.ok(slugs.includes(relSlug), `blog:${post.slug} references unknown relatedPostSlug: ${relSlug}`);
+      }
       assert.ok(post.visual, `blog:${post.slug} must carry a purposeful visual`);
       assert.ok(
         existsSync(path.join(APP_ROOT, "public", post.visual!.src)),
@@ -418,11 +423,17 @@ describe("studio blog & RSS feed", () => {
       seenVisuals.add(post.visual!.src);
       assert.ok(post.visual!.alt.length >= 20, `blog:${post.slug} visual needs descriptive alt text`);
       assert.ok(post.visual!.caption.length >= 20, `blog:${post.slug} visual needs descriptive caption`);
+      const sectionHrefs = post.sections
+        .flatMap((s) => (s.links ?? []).map((l) => l.href))
+        .filter((h) => !h.endsWith(".pdf"));
       assert.deepEqual(
-        brokenLinks(post.relatedLinks.map((l) => l.href)),
+        brokenLinks([...post.relatedLinks.map((l) => l.href), ...sectionHrefs]),
         [],
-        `blog:${post.slug} has broken related links`,
+        `blog:${post.slug} has broken related or inline section links`,
       );
+      for (const pdfHref of post.sections.flatMap((s) => (s.links ?? []).map((l) => l.href)).filter((h) => h.endsWith(".pdf"))) {
+        assert.ok(existsSync(path.join(APP_ROOT, "public", pdfHref)), `blog:${post.slug} missing linked PDF: ${pdfHref}`);
+      }
       const schema = blogArticleSchema(post);
       assert.equal(schema["@type"], "BlogPosting");
       assert.ok(schema.author["@id"].endsWith("/#person"));
@@ -431,6 +442,6 @@ describe("studio blog & RSS feed", () => {
 
     const list = blogListSchema(BLOG_POSTS);
     assert.equal(list["@type"], "Blog");
-    assert.equal(list.blogPost.length, 8);
+    assert.equal(list.blogPost.length, 10);
   });
 });

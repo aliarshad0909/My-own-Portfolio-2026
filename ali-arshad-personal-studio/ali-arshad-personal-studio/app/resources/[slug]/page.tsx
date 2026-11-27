@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { EditorNote } from "@/components/ui/EditorNote";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { BLOG_POSTS, getBlogPost } from "@/lib/content/blog";
 import { RESOURCES, getResource } from "@/lib/content/resources";
 import { getProject } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
@@ -46,7 +47,29 @@ function formatDate(iso: string): string {
   return `${d} ${MONTHS[m - 1]} ${y}`;
 }
 
+const RESOURCE_TO_BLOG_SLUG: Record<string, string> = {
+  "what-is-landed-cost": "product-sourcing-landed-cost-catalog-checklist",
+  "n8n-vs-zapier": "when-self-hosted-n8n-beats-saas-automation",
+  "what-is-n8n": "when-self-hosted-n8n-beats-saas-automation",
+  "automation-roi": "when-self-hosted-n8n-beats-saas-automation",
+  "ai-agent-vs-chatbot": "mcp-tool-use-guardrails-business-ai-agents",
+  "ai-agent-use-cases": "mcp-tool-use-guardrails-business-ai-agents",
+  "nextjs-seo": "structured-data-llms-txt-honest-aeo",
+  "website-redesign-checklist": "structured-data-llms-txt-honest-aeo",
+  "brand-style-guide": "designing-accessible-dark-mode-brand-systems",
+  "freelancer-vs-agency": "how-one-remote-studio-scopes-ships-software",
+  "custom-web-app-cost": "how-one-remote-studio-scopes-ships-software",
+  "choosing-a-tech-stack": "engineering-pipelineos-stockflow-sandboxes",
+  "shopify-vs-custom-ecommerce": "engineering-pipelineos-stockflow-sandboxes",
+  "motion-graphics-pricing": "reproducible-blender-bpy-rigs-ffmpeg-pipelines",
+  "3d-renders-for-ecommerce": "reproducible-blender-bpy-rigs-ffmpeg-pipelines",
+};
+
 function resolveRelated(href: string): { kind: string; title: string; description: string } {
+  if (href.startsWith("/blog/")) {
+    const bp = getBlogPost(href.slice("/blog/".length));
+    if (bp) return { kind: "Studio Blog Dispatch", title: bp.title, description: bp.excerpt };
+  }
   if (href.startsWith("/tools/")) {
     const tool = TOOLS.find((t) => `/tools/${t.slug}` === href);
     if (tool) return { kind: "Tool", title: tool.h1, description: tool.lead };
@@ -79,7 +102,13 @@ export default async function ResourcePage({ params }: Props) {
   const r = getResource(slug);
   if (!r || !shouldRender(r.publicationState)) notFound();
 
-  const relatedCards = r.related.map((href) => ({ href, ...resolveRelated(href) }));
+  const matchedBlogSlug = RESOURCE_TO_BLOG_SLUG[r.slug];
+  const matchedBlog = matchedBlogSlug ? getBlogPost(matchedBlogSlug) : BLOG_POSTS[0];
+  const relatedHrefs = [...r.related];
+  if (matchedBlog && !relatedHrefs.includes(`/blog/${matchedBlog.slug}`)) {
+    relatedHrefs.push(`/blog/${matchedBlog.slug}`);
+  }
+  const relatedCards = relatedHrefs.map((href) => ({ href, ...resolveRelated(href) }));
 
   return (
     <>

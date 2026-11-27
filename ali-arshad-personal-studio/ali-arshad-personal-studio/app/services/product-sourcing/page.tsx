@@ -16,13 +16,13 @@ import {
   PRODUCT_SOURCING_CONTACT_SERVICE,
   PRODUCT_SOURCING_PATH,
   SOURCING_CATEGORIES,
-  SOURCING_LOOKBOOK_PDF_PATH,
   SOURCING_OVERVIEW_FAQS,
   SOURCING_RESPONSIBILITY_SPLIT,
   SOURCING_SUBPAGES,
   SOURCING_TOOLS,
   SOURCING_WORKFLOW,
 } from "@/lib/sourcing";
+import { MASTER_CATALOG_PDF_PATH, SOURCING_CATALOG_PATH, SOURCING_CATALOG_STATS } from "@/lib/sourcing-catalog";
 import { singleServiceSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = pageMetadata({
@@ -74,17 +74,17 @@ export default function ProductSourcingPage() {
       >
         <div className="hero__actions">
           <ButtonLink href={contactHref}>Request a sourcing quote</ButtonLink>
-          <ButtonLink href={`${PRODUCT_SOURCING_PATH}/categories`} variant="secondary" icon={null}>
-            Browse catalog examples
+          <ButtonLink href={SOURCING_CATALOG_PATH} variant="secondary" icon={null}>
+            Search {SOURCING_CATALOG_STATS.totalUniqueProducts} catalog products
           </ButtonLink>
           <a
-            href={SOURCING_LOOKBOOK_PDF_PATH}
+            href={MASTER_CATALOG_PDF_PATH}
             target="_blank"
             rel="noopener noreferrer"
-            download="Ali-Arshad-Studio-Sourcing-Lookbook.pdf"
+            download="Ali-Arshad-Product-Sourcing-Catalogue.pdf"
             className="btn btn--secondary btn--md"
           >
-            <span>Download Lookbook (PDF)</span>
+            <span>Master Catalogue (PDF)</span>
             <Icon name="arrow-up-right" size={16} className="btn__icon" />
           </a>
         </div>
@@ -217,9 +217,13 @@ export default function ProductSourcingPage() {
             ))}
           </div>
 
-          <div style={{ marginTop: "22px" }}>
-            <Link href={`${PRODUCT_SOURCING_PATH}/categories`} className="arrow-link">
-              <span>Inspect all 12 catalog-backed product examples</span>
+          <div style={{ marginTop: "22px", display: "flex", flexWrap: "wrap", gap: "18px", alignItems: "center" }}>
+            <Link href={SOURCING_CATALOG_PATH} className="arrow-link">
+              <span>Search all {SOURCING_CATALOG_STATS.totalUniqueProducts} catalog products &amp; download individual PDFs</span>
+              <Icon name="arrow-right" size={15} />
+            </Link>
+            <Link href="/blog/product-sourcing-landed-cost-catalog-checklist" className="arrow-link">
+              <span>Read: Why factory unit price misleads buyers</span>
               <Icon name="arrow-right" size={15} />
             </Link>
           </div>

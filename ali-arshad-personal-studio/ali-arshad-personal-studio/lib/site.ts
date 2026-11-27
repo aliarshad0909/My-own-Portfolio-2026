@@ -79,6 +79,7 @@ export const NAV_ITEMS: NavItem[] = [
 export const MOBILE_SECONDARY_ITEMS: NavItem[] = [
   { label: "GPU & Compute", href: "/services/gpu-compute" },
   { label: "Product Sourcing", href: "/services/product-sourcing" },
+  { label: "Product Sourcing Catalogue", href: "/services/product-sourcing/catalog" },
   { label: "Social Media Setup", href: "/services/social-media-management" },
   { label: "LinkedIn Outreach", href: "/services/linkedin-outreach" },
   { label: "Visual Project Planner", href: "/project-planner" },

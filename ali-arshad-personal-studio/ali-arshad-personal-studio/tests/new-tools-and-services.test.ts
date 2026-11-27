@@ -16,6 +16,13 @@ import {
   SOURCING_SUBPAGES,
   SOURCING_WORKFLOW,
 } from "@/lib/sourcing";
+import {
+  ALL_SOURCING_PRODUCTS,
+  INDEXABLE_SOURCING_PRODUCTS,
+  MASTER_CATALOG_PDF_PATH,
+  SOURCING_CATALOG_INDEX,
+  SOURCING_CATALOG_PATH,
+} from "@/lib/sourcing-catalog";
 import { evaluateGpuQuoteScope } from "@/lib/tools/gpu-estimator";
 import { landedCost } from "@/lib/tools/landed-cost";
 import { calculateMoqPlan } from "@/lib/tools/moq";
@@ -205,12 +212,47 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
   });
 
   it("publishes only cleared studio motion videos with posters and prevents unapproved client leaks", () => {
-    assert.ok(APPROVED_PUBLIC_VIDEOS.length >= 3, "expected at least 3 studio-authored motion demos");
+    assert.equal(APPROVED_PUBLIC_VIDEOS.length, 4, "expected 4 studio-authored motion demos");
     const serialized = JSON.stringify(CREATIVE_SHOWCASE_VIDEOS);
     assert.equal(/sans edit|nathan\s*barry|john\s*delony|brightarc/i.test(serialized), false, "unapproved client video names must never leak");
     for (const v of APPROVED_PUBLIC_VIDEOS) {
       assert.ok(existsSync(path.join(process.cwd(), "public", v.src)), `missing video asset: ${v.src}`);
       assert.ok(existsSync(path.join(process.cwd(), "public", v.poster)), `missing video poster: ${v.poster}`);
+      if (v.webmSrc) {
+        assert.ok(existsSync(path.join(process.cwd(), "public", v.webmSrc)), `missing webm asset: ${v.webmSrc}`);
+      }
+    }
+  });
+
+  it("ships complete 841-model Product Sourcing Catalogue with Master PDF, individual PDFs, and zero privacy leaks", () => {
+    assert.equal(ALL_SOURCING_PRODUCTS.length, 841, "expected 841 deduplicated sourcing products/series");
+    assert.equal(SOURCING_CATALOG_INDEX.length, 841, "client search index must match full catalog count");
+    assert.ok(INDEXABLE_SOURCING_PRODUCTS.length >= 700, "expected spec-documented catalog pages to be indexable");
+    assert.equal(isKnownRoute(SOURCING_CATALOG_PATH), true);
+
+    const masterFull = path.join(process.cwd(), "public", MASTER_CATALOG_PDF_PATH);
+    assert.ok(existsSync(masterFull), `missing master catalogue PDF: ${MASTER_CATALOG_PDF_PATH}`);
+    assert.ok(statSync(masterFull).size > 100_000, "master catalogue PDF appears unexpectedly small");
+
+    const rawCatalog = JSON.stringify(ALL_SOURCING_PRODUCTS);
+    assert.equal(
+      /yangantoys|yangwang|wangyang|leowang|hongbin|esong|qingfeng|senchiva|luxmogan|upwardlighting|grace\s*guo|kelly\s*ho|michael\s*liao|whatsapp|wechat|13902721737|13825511247|\$\s*\d+/i.test(
+        rawCatalog,
+      ),
+      false,
+      "catalog data must never expose supplier names, contacts, or wholesale prices",
+    );
+
+    const slugs = new Set<string>();
+    for (const item of ALL_SOURCING_PRODUCTS) {
+      assert.ok(!slugs.has(item.slug), `duplicate catalog slug: ${item.slug}`);
+      slugs.add(item.slug);
+      assert.equal(isKnownRoute(item.pagePath), true, `unregistered product route: ${item.pagePath}`);
+      assert.equal(isKnownRoute(item.calculatorHref), true, `broken calculator href: ${item.calculatorHref}`);
+      assert.equal(isKnownRoute(item.guideHref), true, `broken guide href: ${item.guideHref}`);
+      assert.ok(existsSync(path.join(process.cwd(), "public", item.pdfPath)), `missing product PDF: ${item.pdfPath}`);
+      assert.ok(existsSync(path.join(process.cwd(), "public", item.image)), `missing product image: ${item.image}`);
+      assert.match(item.availabilityStatus, /confirmed on request/i);
     }
   });
 

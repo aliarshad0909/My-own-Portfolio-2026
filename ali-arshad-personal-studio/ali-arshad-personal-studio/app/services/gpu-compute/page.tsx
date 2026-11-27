@@ -27,7 +27,7 @@ import {
   GPU_TOPIC_PAGES,
   GPU_WORKLOADS,
 } from "@/lib/gpu-compute";
-import { getProject } from "@/lib/projects";
+import { getProject, projectHref } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { singleServiceSchema } from "@/lib/structured-data";
@@ -345,7 +345,7 @@ export default function GpuComputePage() {
             </div>
             <ul className="hub-card-grid">
               {relatedProjects.map((p) => {
-                const href = p.caseStudy ? `/case-studies/${p.slug}` : `/work/${p.slug}`;
+                const href = projectHref(p);
                 return (
                   <li key={p.slug}>
                     <Link href={href} className="hub-link-card">
@@ -416,6 +416,16 @@ export default function GpuComputePage() {
                   <Icon name="arrow-up-right" size={16} />
                 </span>
                 <span className="hub-link-card__desc">Supplier coordination, sample checks, quality assurance, and landed-cost modeling.</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/blog/single-host-gpu-compute-when-consultation-beats-cloud" className="hub-link-card">
+                <span className="hub-link-card__kind">Studio Dispatch</span>
+                <span className="hub-link-card__title">
+                  <span>Single-Host GPU Compute vs. Hyperscaler Cloud</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </span>
+                <span className="hub-link-card__desc">Honest operational guide on when scoped workstation time saves effort and when elastic clouds win.</span>
               </Link>
             </li>
           </ul>

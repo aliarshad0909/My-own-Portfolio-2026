@@ -21,6 +21,7 @@ import {
   SOURCING_TOOLS,
   getSourcingSubpage,
 } from "@/lib/sourcing";
+import { SOURCING_CATALOG_PATH, SOURCING_CATALOG_STATS } from "@/lib/sourcing-catalog";
 import { singleServiceSchema } from "@/lib/structured-data";
 
 export const dynamicParams = false;
@@ -102,6 +103,9 @@ export default async function ProductSourcingSubpage({
         <div className="location-pill-list">
           <Link href={PRODUCT_SOURCING_PATH} className="location-pill">
             Overview
+          </Link>
+          <Link href={SOURCING_CATALOG_PATH} className="location-pill">
+            Full Catalogue ({SOURCING_CATALOG_STATS.totalUniqueProducts})
           </Link>
           {SOURCING_SUBPAGES.map((sub) => (
             <Link

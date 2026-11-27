@@ -13,6 +13,7 @@ const STUDIO_LINKS = [
 const SERVICE_LINKS = [
   { label: "GPU & Compute", href: "/services/gpu-compute" },
   { label: "Product Sourcing", href: "/services/product-sourcing" },
+  { label: "Sourcing Catalogue (PDFs)", href: "/services/product-sourcing/catalog" },
   { label: "Social Media Setup & Management", href: "/services/social-media-management" },
   { label: "LinkedIn Outreach & Sales Dev", href: "/services/linkedin-outreach" },
   { label: "Web Development", href: "/services/web-development" },

@@ -13,6 +13,7 @@ import { GPU_COMPUTE_PATH, GPU_COMPUTE_PUBLICATION_STATE, GPU_TOPIC_PAGES } from
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { cityServiceAreas, serviceAreaMatrix } from "@/lib/seo/service-areas";
 import { PRODUCT_SOURCING_PATH, SOURCING_SUBPAGES } from "@/lib/sourcing";
+import { INDEXABLE_SOURCING_PRODUCTS, SOURCING_CATALOG_PATH } from "@/lib/sourcing-catalog";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 import { RESOURCES } from "@/lib/content/resources";
@@ -39,6 +40,8 @@ export function indexableSeoRoutes(): string[] {
     for (const topic of GPU_TOPIC_PAGES) out.push(`${GPU_COMPUTE_PATH}/${topic.slug}`);
   }
   for (const sub of SOURCING_SUBPAGES) out.push(`${PRODUCT_SOURCING_PATH}/${sub.slug}`);
+  out.push(SOURCING_CATALOG_PATH);
+  for (const prod of INDEXABLE_SOURCING_PRODUCTS) out.push(prod.pagePath);
   if (isIndexable(getKeyword("net-studio-network")?.state ?? "Researched")) {
     out.push("/studio-network");
   }
