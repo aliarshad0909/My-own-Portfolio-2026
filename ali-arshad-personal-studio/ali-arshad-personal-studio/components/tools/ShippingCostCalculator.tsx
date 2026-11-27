@@ -27,6 +27,7 @@ const INITIAL_INPUT: ShippingCostInput = {
   volumetricDivisor: 5000,
   ratePerChargeableUnit: 8.5,
   handlingCharges: 35,
+  cartonCount: 1,
 };
 
 const usd = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -136,10 +137,10 @@ export function ShippingCostCalculator() {
           <small className="calc__hint">{methodMeta.note}</small>
         </label>
 
-        <div className="calc__row">
+        <div className="calc__row calc__row--3">
           <label className="calc__field">
             <span>
-              Actual weight <span className="calc__suffix">({r.weightUnit})</span>
+              Weight / carton <span className="calc__suffix">({r.weightUnit})</span>
             </span>
             <input
               type="number"
@@ -148,6 +149,20 @@ export function ShippingCostCalculator() {
               step={0.1}
               value={input.actualWeight}
               onChange={(e) => setNum("actualWeight", e.target.value)}
+            />
+          </label>
+
+          <label className="calc__field">
+            <span>
+              Cartons <span className="calc__suffix">(qty)</span>
+            </span>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={1}
+              step={1}
+              value={input.cartonCount ?? 1}
+              onChange={(e) => setNum("cartonCount", e.target.value || "1")}
             />
           </label>
 

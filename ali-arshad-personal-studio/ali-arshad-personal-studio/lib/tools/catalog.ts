@@ -265,7 +265,45 @@ export const TOOLS: ToolDef[] = [
     ],
     relatedHub: "/services/web-development",
     relatedResource: "/resources/custom-web-app-cost",
-    secondaryService: { label: "Explore RTX GPU compute rental", href: "/services/gpu-compute" },
+    secondaryService: { label: "Explore GPU & Compute", href: "/services/gpu-compute" },
+  },
+  {
+    slug: "moq-quantity-helper",
+    keywordId: "tool-moq-helper",
+    icon: "briefcase",
+    category: "Sourcing & MOQ",
+    title: "MOQ & Order Quantity Helper (Cartons, CBM & Capital Outlay)",
+    h1: "MOQ & Order Quantity Helper",
+    lead: "Translate supplier MOQ, pcs/carton, and master carton dimensions into full cartons, total CBM volume, container fill %, and purchase capital outlay.",
+    previewHighlight: "Full carton rounding, CBM volume, 20ft/40ft container fill & tier scenarios",
+    caveat:
+      "Planning estimate only — excludes international freight, insurance, customs duties, and destination clearance. Confirm final carton dimensions and MOQ directly with the supplier.",
+    howItWorks: [
+      "Rounds your planned quantity up to full export master cartons using the supplier's pcs/carton packing ratio.",
+      "Calculates total shipment volume in CBM (L × W × H ÷ 1,000,000 × cartons), total gross weight, and indicative 20ft/40ft container fill percentages.",
+      "Compares your order outlay (goods + optional packaging/tooling setup) at MOQ, planned volume, and 2× scale against your budget cap.",
+    ],
+    relatedHub: "/services/product-sourcing",
+    relatedResource: "/resources/what-is-landed-cost",
+  },
+  {
+    slug: "gpu-quote-estimator",
+    keywordId: "tool-gpu-quote-estimator",
+    icon: "layers",
+    category: "GPU & Compute",
+    title: "GPU & Compute Workload Scope & Quote Request Estimator",
+    h1: "GPU Workload & Quote Scope Estimator",
+    lead: "Screen single-host workload fit (3D rendering, Linux dev/test, batch processing, bounded inference) and export a structured requirements brief — zero invented rates.",
+    previewHighlight: "Single-host fit screen, runtime totals & 1-click quote request hand-off",
+    caveat:
+      "Scope-preparation tool only — no hourly rates, uptime SLAs, or guaranteed availability are published here. Hardware specifications, availability windows, and custom pricing are confirmed in writing per request.",
+    howItWorks: [
+      "Captures your workload class, estimated runtime hours, VRAM/RAM/storage footprint, and preferred SSH/container/batch access mode.",
+      "Flags constraints upfront when requirements exceed modest single-host boundaries (such as 24/7 production SLAs or certified compliance).",
+      "Generates a clean, copyable workload brief you can send directly to /contact for a real capacity check and custom written quote.",
+    ],
+    relatedHub: "/services/gpu-compute",
+    relatedResource: "/resources/custom-web-app-cost",
   },
 ];
 

@@ -14,12 +14,12 @@ import {
 
 type FeedState =
   | { status: "loading" }
-  | { status: "ready"; rates: RatesMap; updatedAt: string; provider: string }
+  | { status: "ready"; rates: RatesMap; updatedAt: string; provider: string; stale: boolean; staleReason?: string }
   | { status: "error"; message: string };
 
 const DEFAULT_AMOUNT = 1000;
 const DEFAULT_FROM: CurrencyCode = "USD";
-const DEFAULT_TO: CurrencyCode = "PKR";
+const DEFAULT_TO: CurrencyCode = "CNY";
 
 export function CurrencyExchangeCalculator() {
   const [amount, setAmount] = useState<number>(DEFAULT_AMOUNT);
@@ -33,12 +33,19 @@ export function CurrencyExchangeCalculator() {
     try {
       const res = await fetch("/api/exchange-rates");
       const data = (await res.json().catch(() => null)) as
-        | { ok: true; rates: RatesMap; updatedAt: string; provider: string }
+        | { ok: true; stale?: boolean; staleReason?: string; rates: RatesMap; updatedAt: string; provider: string }
         | { ok: false; error?: string }
         | null;
 
       if (res.ok && data && data.ok === true && data.rates) {
-        setFeed({ status: "ready", rates: data.rates, updatedAt: data.updatedAt, provider: data.provider });
+        setFeed({
+          status: "ready",
+          rates: data.rates,
+          updatedAt: data.updatedAt,
+          provider: data.provider,
+          stale: Boolean(data.stale),
+          staleReason: data.staleReason,
+        });
       } else {
         setFeed({
           status: "error",
@@ -88,7 +95,7 @@ export function CurrencyExchangeCalculator() {
 
   const summaryText = result.ok
     ? [
-        `Currency Exchange Conversion`,
+        `Currency Exchange Estimate (Reference Only)`,
         `${formatCurrencyAmount(result.amount, result.from)} = ${formatCurrencyAmount(result.convertedAmount, result.to)}`,
         `Exchange rate: 1 ${result.from} = ${result.rate} ${result.to}`,
         `Inverse rate: 1 ${result.to} = ${result.inverseRate} ${result.from}`,
@@ -98,7 +105,7 @@ export function CurrencyExchangeCalculator() {
             : result.source === "identity"
               ? "Same currency (1:1)"
               : feed.status === "ready"
-                ? `${feed.provider} (updated ${feed.updatedAt})`
+                ? `${feed.provider}${feed.stale ? " [STALE FALLBACK]" : ""} (updated ${feed.updatedAt})`
                 : "Reference feed"
         }`,
       ].join("\n")
@@ -108,7 +115,7 @@ export function CurrencyExchangeCalculator() {
     <div className="calc">
       <div className="calc__fields">
         <div className="calc__field">
-          <span>Popular currency pairs</span>
+          <span>Popular sourcing &amp; business pairs</span>
           <div className="calc__choices" aria-label="Popular currency pairs">
             {POPULAR_PAIRS.map((pair) => {
               const active = from === pair.from && to === pair.to;
@@ -191,7 +198,7 @@ export function CurrencyExchangeCalculator() {
             inputMode="decimal"
             min={0}
             step={0.0001}
-            placeholder={result.ok && result.source === "live" ? `Using live rate (${result.rate})` : `Enter 1 ${from} in ${to}`}
+            placeholder={result.ok && result.source === "live" ? `Using reference rate (${result.rate})` : `Enter 1 ${from} in ${to}`}
             value={manualRateStr}
             onChange={(e) => setManualRateStr(e.target.value)}
           />
@@ -199,6 +206,21 @@ export function CurrencyExchangeCalculator() {
             Leave blank to use the cached mid-market reference rate, or type your bank or supplier&rsquo;s exact quote.
           </small>
         </label>
+
+        {feed.status === "ready" && feed.stale ? (
+          <div className="notice" role="status">
+            <Icon name="alert" size={16} />
+            <div>
+              <p>
+                <strong>Stale cached rate shown:</strong> {feed.staleReason || "Upstream feed is temporarily unreachable."} Displaying last
+                verified snapshot from {feed.updatedAt} — verify with your bank or enter a manual rate above.
+              </p>
+              <button type="button" className="calc__retry-link" onClick={() => void loadRates()}>
+                Retry fresh rate fetch
+              </button>
+            </div>
+          </div>
+        ) : null}
 
         {feed.status === "error" ? (
           <div className="notice" role="status">
@@ -226,7 +248,9 @@ export function CurrencyExchangeCalculator() {
                 ? "Manual rate override active"
                 : result.source === "identity"
                   ? "Same currency selected"
-                  : "Cached mid-market reference rate"}
+                  : feed.status === "ready" && feed.stale
+                    ? "Stale fallback snapshot — verify before quoting"
+                    : "Cached mid-market reference rate"}
             </p>
 
             <dl className="calc__breakdown">
@@ -248,7 +272,7 @@ export function CurrencyExchangeCalculator() {
                   {result.source === "manual"
                     ? "Custom user rate"
                     : feed.status === "ready"
-                      ? feed.provider
+                      ? `${feed.provider}${feed.stale ? " (stale cache)" : ""}`
                       : "Identity"}
                 </dd>
               </div>
@@ -277,4 +301,3 @@ export function CurrencyExchangeCalculator() {
     </div>
   );
 }
-

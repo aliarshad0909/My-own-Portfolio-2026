@@ -97,6 +97,8 @@ export type ShippingCostInput = {
   ratePerChargeableUnit: number;
   /** Additional handling, fuel, pickup or documentation charges, USD. */
   handlingCharges: number;
+  /** Optional number of identical cartons in the shipment (defaults to 1). */
+  cartonCount?: number;
 };
 
 export type ShippingCostResult = {
@@ -135,14 +137,16 @@ export function calculateShippingCost(input: ShippingCostInput): ShippingCostRes
   const length = safeNonNeg(input.length);
   const width = safeNonNeg(input.width);
   const height = safeNonNeg(input.height);
+  const cartons = Math.max(1, Math.floor(safeNonNeg(input.cartonCount ?? 1) || 1));
   const divisor = Number.isFinite(input.volumetricDivisor) && input.volumetricDivisor > 0 ? input.volumetricDivisor : unitSystem === "metric" ? 5000 : 139;
   const rate = safeNonNeg(input.ratePerChargeableUnit);
   const handlingCharges = round2(safeNonNeg(input.handlingCharges));
 
-  const rawVolume = length * width * height;
+  const rawVolume = length * width * height * cartons;
+  const totalActualWeight = actualWeight * cartons;
   const volumetricWeight = round2(rawVolume / divisor);
-  const actualRounded = round2(actualWeight);
-  const chargeableWeight = round2(Math.max(actualWeight, rawVolume / divisor));
+  const actualRounded = round2(totalActualWeight);
+  const chargeableWeight = round2(Math.max(totalActualWeight, rawVolume / divisor));
 
   const billedBy: ShippingCostResult["billedBy"] =
     Math.abs(volumetricWeight - actualRounded) < 0.005
@@ -152,18 +156,18 @@ export function calculateShippingCost(input: ShippingCostInput): ShippingCostRes
         : "actual";
 
   // Metric equivalents for consistent freight-forwarder reference
-  const actualWeightKg = unitSystem === "metric" ? actualRounded : round2(actualWeight / LB_PER_KG);
+  const actualWeightKg = unitSystem === "metric" ? actualRounded : round2(totalActualWeight / LB_PER_KG);
   const volumetricWeightKg = unitSystem === "metric" ? volumetricWeight : round2((rawVolume / divisor) / LB_PER_KG);
   const chargeableWeightKg = round2(Math.max(actualWeightKg, volumetricWeightKg));
 
   const lengthCm = unitSystem === "metric" ? length : length * CM_PER_INCH;
   const widthCm = unitSystem === "metric" ? width : width * CM_PER_INCH;
   const heightCm = unitSystem === "metric" ? height : height * CM_PER_INCH;
-  const volumeCbm = round4((lengthCm * widthCm * heightCm) / 1_000_000);
+  const volumeCbm = round4((lengthCm * widthCm * heightCm * cartons) / 1_000_000);
 
   const freightCost = round2(chargeableWeight * rate);
   const totalEstimatedCost = round2(freightCost + handlingCharges);
-  const effectiveCostPerActualUnit = actualWeight > 0 ? round2(totalEstimatedCost / actualWeight) : 0;
+  const effectiveCostPerActualUnit = totalActualWeight > 0 ? round2(totalEstimatedCost / totalActualWeight) : 0;
 
   return {
     unitSystem,

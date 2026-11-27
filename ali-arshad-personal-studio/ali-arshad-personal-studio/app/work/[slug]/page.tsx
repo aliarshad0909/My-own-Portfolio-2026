@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ProjectDetail } from "@/components/work/ProjectDetail";
 import { breadcrumbSchema, creativeWorkSchema } from "@/lib/structured-data";
-import { PROJECTS, isIndexable } from "@/lib/projects";
+import { PROJECTS, hasDedicatedCaseStudy, isIndexable } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -21,11 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = records().find((p) => p.slug === slug);
   if (!project) return {};
+  const isCaseStudyCanonical = hasDedicatedCaseStudy(project);
   return pageMetadata({
     title: project.title,
     description: project.summary,
-    path: `/work/${project.slug}`,
-    index: isIndexable(project),
+    path: isCaseStudyCanonical ? `/case-studies/${project.slug}` : `/work/${project.slug}`,
+    index: !isCaseStudyCanonical && isIndexable(project),
   });
 }
 

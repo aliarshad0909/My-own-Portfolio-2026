@@ -66,32 +66,32 @@ export function ServiceShowcaseHome() {
             </p>
           </div>
           <div className="location-pill-list">
-            <Link href="/services#compare-services" className="location-pill location-pill--all">
-              Compare services &amp; 26 niches →
+            <Link href="/services/gpu-compute" className="location-pill location-pill--all">
+              GPU &amp; Compute Hub →
             </Link>
-            <Link href="/project-planner" className="location-pill location-pill--all">
-              Visual Project Planner →
+            <Link href="/services/product-sourcing" className="location-pill location-pill--all">
+              Product Sourcing Hub →
             </Link>
-            <Link href="/work" className="location-pill">
-              Project Finder (100 projects + 20 games)
+            <Link href="/services/social-media-management" className="location-pill location-pill--all">
+              Social Media Setup →
             </Link>
-            <Link href="/games" className="location-pill">
-              20 Playable Browser Games
+            <Link href="/services/linkedin-outreach" className="location-pill location-pill--all">
+              LinkedIn Outreach →
             </Link>
-            <Link href="/blog" className="location-pill">
-              Studio Blog (8 articles)
-            </Link>
-            <Link href="/products" className="location-pill">
-              12 SaaS Product Demos
+            <Link href="/services#compare-services" className="location-pill">
+              Compare All Services
             </Link>
             <Link href="/tools" className="location-pill">
-              10 Free Calculators
+              12 Free Calculators &amp; Live FX
             </Link>
-            <Link href="/resources" className="location-pill">
-              15 Guides &amp; Resources
+            <Link href="/work" className="location-pill">
+              Work &amp; Case Studies
             </Link>
-            <Link href="/locations" className="location-pill">
-              Remote US Coverage
+            <Link href="/products" className="location-pill">
+              Live SaaS Product Demos
+            </Link>
+            <Link href="/studio-network" className="location-pill">
+              Studio Network
             </Link>
           </div>
         </div>

@@ -310,6 +310,16 @@ export function InquiryForm({ configured, fallbackEmail = "", upworkUrl = "", li
                   : "Your inquiry was not sent"}
             </h3>
             <p>{status.message}</p>
+            {!status.setup && !status.rateLimited ? (
+              <button
+                type="submit"
+                className="btn btn--secondary btn--sm"
+                style={{ marginTop: "10px" }}
+                disabled={submitting}
+              >
+                <span>Retry sending</span>
+              </button>
+            ) : null}
           </div>
         </div>
       ) : null}

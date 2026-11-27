@@ -1788,7 +1788,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       darkDiagram: true,
     },
     scopeNotice:
-      "Transparency note: The engineering tooling behind this offering — an ffmpeg web-video preparation pipeline (28 tests) and a scripted Blender/bpy scene system (20 tests) — is built and verified. Finished 3D renders and cleared client showreel footage are not yet published on this site, so this page does not display stock photography or synthetic stand-ins.",
+      "Transparency note: Playable Studio Motion Demos authored directly by Ali Arshad are embedded below (lazy-loaded with WebP posters), kept distinct from the verified ffmpeg web-video pipeline (28 tests) and scripted Blender/bpy scene builder (20 tests). External client video edits remain unpublished until explicit written permission is confirmed.",
     facts: [
       { label: "Video & motion", value: "Short-form edits, motion & social ads" },
       { label: "3D pipeline", value: "Reproducible Blender / Python scenes" },
@@ -2034,15 +2034,15 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
         href: "/services/branding",
       },
     ],
-    demoHeading: "Verified tooling & transparent media status",
+    demoHeading: "Verified encoding pipeline (distinct from video reels)",
     demoLead:
-      "The media preparation pipeline is built and verified against real ffmpeg/ffprobe runs. Because finished client edits and Blender renders are not yet cleared or rendered in this repo, the space beside it states that honestly.",
+      "The playable Studio Motion Demos above show finished motion output. Separately, the engineering case study below documents the automated ffmpeg/ffprobe encoding CLI (28 tests) used to prepare fast web and social video deliverables.",
     pendingMedia: {
-      heading: "Showreel & 3D renders in preparation",
+      heading: "External client footage & 3D renders status",
       lines: [
-        "The Blender/bpy scene builder (20 tests) and ffmpeg media pipeline (28 tests) are built and verified, but no finished 3D render or cleared client film is published here yet.",
-        "Rather than borrow stock video or generate synthetic stand-ins, this slot stays honestly reserved for real cleared output.",
-        "Renders and edits for client projects are produced per engagement from your brief and product assets.",
+        "Three Studio Motion Demos authored directly by Ali Arshad are playable above with lazy-loaded WebP posters.",
+        "External client video edits are kept private until explicit written client and talent display permission is confirmed — never published without clearance.",
+        "The scripted Blender/bpy scene builder (20 tests) is ready for per-engagement renders; finished Cycles renders will be added once generated.",
       ],
     },
     processHeading: "How a creative production engagement runs",

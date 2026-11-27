@@ -50,12 +50,12 @@ export const CURRENCIES: CurrencyMeta[] = [
 export const SUPPORTED_CURRENCY_CODES: CurrencyCode[] = CURRENCIES.map((c) => c.code);
 
 export const POPULAR_PAIRS: { from: CurrencyCode; to: CurrencyCode; label: string }[] = [
+  { from: "USD", to: "CNY", label: "USD → CNY" },
+  { from: "CNY", to: "USD", label: "CNY → USD" },
   { from: "USD", to: "PKR", label: "USD → PKR" },
   { from: "EUR", to: "USD", label: "EUR → USD" },
-  { from: "GBP", to: "PKR", label: "GBP → PKR" },
-  { from: "AED", to: "PKR", label: "AED → PKR" },
-  { from: "USD", to: "CNY", label: "USD → CNY" },
   { from: "GBP", to: "USD", label: "GBP → USD" },
+  { from: "AED", to: "USD", label: "AED → USD" },
 ];
 
 export type RatesMap = Partial<Record<CurrencyCode, number>>;
@@ -72,21 +72,21 @@ export type CurrencyConversionInput = {
 
 export type CurrencyConversionResult =
   | {
-      ok: true;
-      amount: number;
-      from: CurrencyCode;
-      to: CurrencyCode;
-      rate: number;
-      inverseRate: number;
-      convertedAmount: number;
-      source: "live" | "manual" | "identity";
-    }
+    ok: true;
+    amount: number;
+    from: CurrencyCode;
+    to: CurrencyCode;
+    rate: number;
+    inverseRate: number;
+    convertedAmount: number;
+    source: "live" | "manual" | "identity";
+  }
   | {
-      ok: false;
-      reason: "rate_unavailable";
-      from: CurrencyCode;
-      to: CurrencyCode;
-    };
+    ok: false;
+    reason: "rate_unavailable";
+    from: CurrencyCode;
+    to: CurrencyCode;
+  };
 
 const round4 = (n: number) => Math.round(n * 10000) / 10000;
 const round6 = (n: number) => Math.round(n * 1_000_000) / 1_000_000;

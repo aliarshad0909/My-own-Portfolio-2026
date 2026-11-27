@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArticleSocialBar } from "@/components/blog/ArticleSocialBar";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Sources } from "@/components/seo/Sources";
@@ -13,8 +14,10 @@ import {
   allBlogSlugs,
   estimateReadingMinutes,
   getBlogPost,
+  relatedBlogPostsFor,
 } from "@/lib/content/blog";
 import { pageMetadata } from "@/lib/seo";
+import { activeSocials, siteBaseUrl } from "@/lib/site";
 import { blogArticleSchema } from "@/lib/structured-data";
 
 export const dynamicParams = false;
@@ -32,7 +35,7 @@ export async function generateMetadata({
   const post = getBlogPost(slug);
   if (!post) return {};
   return pageMetadata({
-    title: `${post.title} | Ali Arshad Studio Blog`,
+    title: post.seoTitle ?? post.title,
     description: post.excerpt,
     path: `/blog/${post.slug}`,
   });
@@ -51,7 +54,9 @@ export default async function BlogArticlePage({
   const idx = BLOG_POSTS.findIndex((p) => p.slug === post.slug);
   const prevPost = BLOG_POSTS[(idx - 1 + BLOG_POSTS.length) % BLOG_POSTS.length];
   const nextPost = BLOG_POSTS[(idx + 1) % BLOG_POSTS.length];
-  const morePosts = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const morePosts = relatedBlogPostsFor(post, 3);
+  const socials = activeSocials();
+  const articleUrl = new URL(`/blog/${post.slug}`, siteBaseUrl()).toString();
 
   return (
     <>
@@ -65,18 +70,24 @@ export default async function BlogArticlePage({
       />
 
       <PageHero
-        eyebrow={`${post.category} · ${readingMin} min read`}
+        eyebrow={`${post.category} · ${post.topicCluster} · ${readingMin} min read`}
         title={post.title}
         lead={post.excerpt}
       >
         <div className="blog-card__meta" style={{ marginTop: "14px" }}>
-          <span>By {post.author}</span>
+          <span>
+            By <Link href="/about" className="text-link">{post.author}</Link>
+          </span>
           <span>·</span>
-          <span>Published {post.publishedAt}</span>
+          <span>
+            Published <time dateTime={post.publishedAt}>{post.publishedAt}</time>
+          </span>
           {post.updatedAt !== post.publishedAt ? (
             <>
               <span>·</span>
-              <span>Updated {post.updatedAt}</span>
+              <span>
+                Updated <time dateTime={post.updatedAt}>{post.updatedAt}</time>
+              </span>
             </>
           ) : null}
         </div>
@@ -131,18 +142,41 @@ export default async function BlogArticlePage({
                   ))}
                 </ul>
               ) : null}
+              {sec.links && sec.links.length > 0 ? (
+                <div className="blog-section-links" aria-label={`Related resources for ${sec.heading}`}>
+                  {sec.links.map((lnk) =>
+                    lnk.href.endsWith(".pdf") || lnk.href.endsWith(".txt") ? (
+                      <a
+                        key={lnk.href}
+                        href={lnk.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="location-pill"
+                      >
+                        {lnk.label} ↗
+                      </a>
+                    ) : (
+                      <Link key={lnk.href} href={lnk.href} className="location-pill">
+                        {lnk.label} →
+                      </Link>
+                    ),
+                  )}
+                </div>
+              ) : null}
             </section>
           ))}
 
           {post.sources && post.sources.length > 0 ? <Sources items={post.sources} /> : null}
 
+          <ArticleSocialBar articleUrl={articleUrl} articleTitle={post.title} socials={socials} />
+
           <div className="panel blog-article__connected">
-            <p className="eyebrow eyebrow--plain">Connected studio pages</p>
+            <p className="eyebrow eyebrow--plain">Connected studio pages &amp; tools</p>
             <ul className="hub-card-grid" style={{ marginTop: "14px" }}>
               {post.relatedLinks.map((lnk) => (
                 <li key={lnk.href}>
-                  {lnk.href.endsWith(".txt") ? (
-                    <a href={lnk.href} className="hub-link-card">
+                  {lnk.href.endsWith(".txt") || lnk.href.endsWith(".pdf") ? (
+                    <a href={lnk.href} target="_blank" rel="noopener noreferrer" className="hub-link-card">
                       <span className="hub-link-card__kind">{lnk.kind}</span>
                       <span className="hub-link-card__title">
                         <span>{lnk.label}</span>
@@ -191,9 +225,9 @@ export default async function BlogArticlePage({
         <div className="container">
           <div className="section-head section-head--row">
             <div>
-              <p className="eyebrow eyebrow--plain">Keep reading</p>
+              <p className="eyebrow eyebrow--plain">Topic cluster · Keep reading</p>
               <h2 className="section-title section-title--sm" id="more-blog-title">
-                More studio dispatches
+                Related studio dispatches
               </h2>
             </div>
             <Link href="/blog" className="text-link">
@@ -222,8 +256,8 @@ export default async function BlogArticlePage({
       <ContactCTA
         standalone
         eyebrow="Work with Ali Arshad"
-        title="Ready to scope a real build?"
-        text="Share what you are building or automating and get a direct, plain-language written reply."
+        title="Ready to scope a real build or sourcing brief?"
+        text="Share what you are building, automating, or sourcing and get a direct, plain-language written reply."
       />
     </>
   );

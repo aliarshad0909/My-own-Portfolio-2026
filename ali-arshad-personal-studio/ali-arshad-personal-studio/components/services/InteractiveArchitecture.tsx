@@ -65,7 +65,9 @@ export function InteractiveArchitecture({ eyebrow = "Architecture", title, lead,
       <div className="arch__head">
         <div>
           <p className="eyebrow eyebrow--plain">{eyebrow}</p>
-          <figcaption className="section-title section-title--sm">{title}</figcaption>
+          <figcaption>
+            <h2 className="section-title section-title--sm">{title}</h2>
+          </figcaption>
           {lead ? <p className="arch__lead measure">{lead}</p> : null}
         </div>
         <p className="arch__hint" aria-hidden="true">

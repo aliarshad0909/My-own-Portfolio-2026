@@ -1,0 +1,10 @@
+# Preserve exact binary bytes for generated PDFs, images, and videos across Windows/Linux checkouts
+*.pdf binary
+*.webp binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.mp4 binary
+*.webm binary
+*.ico binary
+*.woff2 binary

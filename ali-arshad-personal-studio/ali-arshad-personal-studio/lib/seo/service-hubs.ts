@@ -381,7 +381,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
     ],
     projectSlugs: ["halcyon-brand-system"],
     relatedTools: [],
-    relatedHubs: ["/services/web-development", "/services/ecommerce-development"],
+    relatedHubs: ["/services/social-media-management", "/services/linkedin-outreach", "/services/web-development"],
     faqs: [
       {
         q: "Do I get more than a logo file?",
@@ -436,8 +436,13 @@ export const SERVICE_HUBS: ServiceHub[] = [
       { label: "Cost", detail: "Landed cost modelled honestly" },
     ],
     projectSlugs: ["lantern-sourcing-platform", "stockflow-inventory"],
-    relatedTools: ["/tools/landed-cost-calculator"],
-    relatedHubs: ["/services/business-dashboards"],
+    relatedTools: [
+      "/tools/landed-cost-calculator",
+      "/tools/moq-quantity-helper",
+      "/tools/shipping-cost-calculator",
+      "/tools/currency-exchange-calculator",
+    ],
+    relatedHubs: ["/services/product-sourcing", "/services/business-dashboards"],
     faqs: [
       {
         q: "Are you a licensed customs broker or freight forwarder?",
@@ -445,7 +450,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       },
       {
         q: "What supply-chain background is this grounded in?",
-        a: "A Bachelor of Business Administration (BBA) specializing in Supply Chain Management, supported directly by the Lantern supplier-sourcing and Meridian inventory-operations software demonstrations.",
+        a: "A Bachelor of Business Administration (BBA) specializing in Supply Chain Management paired with more than 10 years of stated hands-on sourcing experience, supported directly by the catalog-backed Product Sourcing showcase and the Lantern supplier-sourcing software demonstration.",
       },
       {
         q: "Why compare suppliers on landed cost instead of unit price?",
@@ -501,8 +506,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
         a: "Yes — rendering from a 3D model lets you generate consistent angles, material colourways and turntables without booking repeat studio shoots. The scene architecture behind it is built as reproducible Blender/Python code (three material presets, six camera angles and a 120-frame turntable, covered by 20 tests); finished renders are produced per engagement on a Blender workstation.",
       },
       {
-        q: "Why is there no embedded showreel on this page yet?",
-        a: "Because earlier client edits are still being cleared for public listing and no standalone Blender render is published in this repository yet. Rather than display stock footage or unattributed frames, the studio keeps that slot transparently labelled until cleared work is published.",
+        q: "What video and motion examples can I preview on this page?",
+        a: "Three self-initiated Studio Motion Demos are playable right on this page (lazy-loaded with crisp posters), kept cleanly separate from the technical Motion Production: Media Pipeline case study. External client video edits remain private until written client and talent release is confirmed.",
       },
       {
         q: "What formats and aspect ratios do you deliver?",

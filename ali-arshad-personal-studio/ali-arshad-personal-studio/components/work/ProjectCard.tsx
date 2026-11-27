@@ -2,11 +2,11 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { ProjectMedia } from "@/components/work/ProjectMedia";
-import type { Project } from "@/lib/projects";
+import { projectHref, type Project } from "@/lib/projects";
 
 type Props = {
   project: Project;
-  /** "detail" links to /work/[slug]; "case-study" links to /case-studies/[slug]. */
+  /** "detail" links to canonical project URL; "case-study" forces /case-studies/[slug] when available. */
   linkTo?: "detail" | "case-study";
   showRole?: boolean;
   sizes?: string | undefined;
@@ -20,7 +20,7 @@ export function ProjectCard({
   sizes,
   headingLevel: Heading = "h3",
 }: Props) {
-  const href = linkTo === "case-study" ? `/case-studies/${project.slug}` : `/work/${project.slug}`;
+  const href = linkTo === "case-study" ? projectHref(project) : projectHref(project);
   return (
     <article className="project-card">
       <Link href={href} className="project-card__link" aria-label={`${project.title}, view project`}>

@@ -20,6 +20,7 @@ const INITIAL_INPUT: Required<LandedCostInput> = {
   quantity: 500,
   currency: "USD",
   exchangeRate: 1,
+  packagingTooling: 250,
   freight: 900,
   insurance: 120,
   dutyRatePct: 6.5,
@@ -73,6 +74,8 @@ function NumberField({
 
 export function LandedCostCalculator() {
   const [input, setInput] = useState<Required<LandedCostInput>>(INITIAL_INPUT);
+  const [fxStatus, setFxStatus] = useState<string>("");
+  const [fetchingFx, setFetchingFx] = useState(false);
   const r = landedCost(input);
 
   const update = <K extends keyof Required<LandedCostInput>>(key: K, value: Required<LandedCostInput>[K]) => {
@@ -81,6 +84,7 @@ export function LandedCostCalculator() {
 
   const handleCurrencyChange = (code: string) => {
     const found = SUPPLIER_CURRENCIES.find((c) => c.code === code);
+    setFxStatus("");
     setInput((prev) => ({
       ...prev,
       currency: code,
@@ -88,10 +92,40 @@ export function LandedCostCalculator() {
     }));
   };
 
+  async function syncLiveRate() {
+    if (input.currency === "USD") {
+      update("exchangeRate", 1);
+      setFxStatus("USD is the reporting currency (1.00).");
+      return;
+    }
+    setFetchingFx(true);
+    setFxStatus("");
+    try {
+      const res = await fetch("/api/exchange-rates");
+      const data = (await res.json().catch(() => null)) as
+        | { ok: true; stale?: boolean; provider: string; updatedAt: string; rates: Record<string, number> }
+        | { ok: false; error?: string }
+        | null;
+      if (res.ok && data && data.ok && data.rates[input.currency]) {
+        const usdPerUnit = Math.round((1 / data.rates[input.currency]) * 10000) / 10000;
+        update("exchangeRate", usdPerUnit);
+        setFxStatus(
+          `${data.stale ? "Stale fallback" : "Reference"} rate loaded (${data.provider}, updated ${data.updatedAt}).`,
+        );
+      } else {
+        setFxStatus("Live FX feed unavailable — keep editing the manual planning rate.");
+      }
+    } catch {
+      setFxStatus("Could not reach FX service — using manual rate.");
+    } finally {
+      setFetchingFx(false);
+    }
+  }
+
   const summaryText = [
     `Landed Cost Estimate (${input.quantity.toLocaleString("en-US")} units)`,
     `Supplier price: ${input.unitCost} ${r.currency}/unit (FX: 1 ${r.currency} = ${r.exchangeRate} USD) → Goods total: ${usd(r.goodsValue)}`,
-    `International shipping: ${usd(r.freight)} | Insurance: ${usd(r.insurance)}`,
+    `Packaging / tooling: ${usd(r.packagingTooling)} | International shipping: ${usd(r.freight)} | Insurance: ${usd(r.insurance)}`,
     `Customs duty (${input.dutyRatePct}%): ${usd(r.duty)} | Import tax (${input.importTaxRatePct}%): ${usd(r.importTax)}`,
     `Customs clearance: ${usd(r.customsClearance)} | Local transport: ${usd(r.localTransport)} | Additional expenses: ${usd(r.otherFees)}`,
     `Total landed cost: ${usd(r.totalLandedCost)} (${r.upliftFactor}× raw goods value)`,
@@ -101,7 +135,7 @@ export function LandedCostCalculator() {
           `At target selling price ${usd(input.targetSellingPrice)}: Profit ${usd(r.profitPerUnit)}/unit | Gross margin ${r.grossMarginPct}% | Markup ${r.markupPct}%`,
         ]
       : []),
-    `Note: Planning estimate only — confirm tariff classification with a licensed customs broker.`,
+    `Note: Planning estimate only — not a binding quote, customs determination, or shipping offer.`,
   ].join("\n");
 
   return (
@@ -124,10 +158,19 @@ export function LandedCostCalculator() {
             value={input.exchangeRate}
             onChange={(n) => update("exchangeRate", n || 1)}
             min={0.0001}
-            step={0.01}
-            hint={input.currency === "USD" ? "1.00 when supplier invoices in USD." : "Editable planning FX rate."}
+            step={0.005}
+            hint={fxStatus || (input.currency === "USD" ? "1.00 when supplier invoices in USD." : "Editable planning FX rate.")}
           />
         </div>
+
+        {input.currency !== "USD" ? (
+          <div>
+            <button type="button" className="btn btn--secondary btn--sm" onClick={() => void syncLiveRate()} disabled={fetchingFx}>
+              <Icon name="currency" size={15} />
+              <span>{fetchingFx ? "Fetching reference FX…" : `Load cached ${input.currency} → USD rate`}</span>
+            </button>
+          </div>
+        ) : null}
 
         <div className="calc__row">
           <NumberField
@@ -140,9 +183,16 @@ export function LandedCostCalculator() {
           <NumberField label="Order quantity" suffix="units" value={input.quantity} onChange={(n) => update("quantity", n)} step={10} />
         </div>
 
-        <div className="calc__row">
+        <div className="calc__row calc__row--3">
           <NumberField
-            label="International shipping / freight"
+            label="Packaging / tooling"
+            suffix="USD"
+            value={input.packagingTooling}
+            onChange={(n) => update("packagingTooling", n)}
+            step={25}
+          />
+          <NumberField
+            label="International freight"
             suffix="USD"
             value={input.freight}
             onChange={(n) => update("freight", n)}
@@ -184,7 +234,7 @@ export function LandedCostCalculator() {
             step={10}
           />
           <NumberField
-            label="Additional expenses"
+            label="Inspection / other fees"
             suffix="USD"
             value={input.otherFees}
             onChange={(n) => update("otherFees", n)}
@@ -203,7 +253,7 @@ export function LandedCostCalculator() {
       </div>
 
       <output className="calc__out" aria-live="polite">
-        <p className="calc__out-label">Landed cost per unit</p>
+        <p className="calc__out-label">Estimated landed cost per unit</p>
         <p className="calc__out-value">{usd(r.perUnitLandedCost)}</p>
         <p className="calc__out-pill">
           Total landed cost: <strong>{usd(r.totalLandedCost)}</strong> · {r.upliftFactor}× raw goods value
@@ -216,6 +266,10 @@ export function LandedCostCalculator() {
               {usd(r.goodsValue)}
               {r.currency !== "USD" ? ` (${r.supplierGoodsValue.toLocaleString("en-US")} ${r.currency})` : ""}
             </dd>
+          </div>
+          <div>
+            <dt>Packaging &amp; tooling</dt>
+            <dd>{usd(r.packagingTooling)}</dd>
           </div>
           <div>
             <dt>International shipping</dt>
@@ -242,11 +296,11 @@ export function LandedCostCalculator() {
             <dd>{usd(r.localTransport)}</dd>
           </div>
           <div>
-            <dt>Additional expenses</dt>
+            <dt>Inspection &amp; other fees</dt>
             <dd>{usd(r.otherFees)}</dd>
           </div>
           <div className="calc__breakdown-total">
-            <dt>Total landed cost</dt>
+            <dt>Total landed cost (estimate)</dt>
             <dd>{usd(r.totalLandedCost)}</dd>
           </div>
         </dl>
@@ -271,13 +325,17 @@ export function LandedCostCalculator() {
           </div>
         ) : null}
 
-        <CalculatorActions summaryText={summaryText} onReset={() => setInput(INITIAL_INPUT)} />
+        <CalculatorActions summaryText={summaryText} onReset={() => { setFxStatus(""); setInput(INITIAL_INPUT); }} />
 
         <div className="calc__cta-box">
-          <p>Need help estimating freight weight or live FX rates first?</p>
+          <p>Pair this estimate with carton volume, MOQ planning, or live FX conversion:</p>
           <div className="calc__cta-links">
+            <Link href="/tools/moq-quantity-helper" className="arrow-link">
+              <span>MOQ &amp; Quantity Helper</span>
+              <Icon name="arrow-right" size={15} />
+            </Link>
             <Link href="/tools/shipping-cost-calculator" className="arrow-link">
-              <span>Shipping Cost Calculator</span>
+              <span>Shipping &amp; CBM Calculator</span>
               <Icon name="arrow-right" size={15} />
             </Link>
             <Link href="/tools/currency-exchange-calculator" className="arrow-link">

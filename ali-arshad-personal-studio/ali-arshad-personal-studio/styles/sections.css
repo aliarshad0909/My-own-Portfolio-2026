@@ -8526,3 +8526,638 @@ section.container:has(> .notice) + article.section {
 .blog-article__connected {
   margin-top: clamp(28px, 3.6vw, 44px);
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STUDIO COMPLETE UPDATE: EDITORIAL PHOTOGRAPHY, SELECTIVE 3D TILT CARDS,
+   SUBHUB LAYOUTS, CREDENTIAL CALLOUT & SITEWIDE RESPONSIVE GUARDRAILS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Consistent editorial documentary photography frame (zero CLS / uniform ratio) */
+.editorial-media {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.editorial-media__frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-soft);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-card);
+}
+
+.editorial-media__frame--16-10 {
+  aspect-ratio: 16 / 10;
+}
+
+.editorial-media__frame--16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.editorial-media__frame--4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.editorial-media__img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.editorial-media__badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(9, 12, 17, 0.82);
+  border: 1px solid rgba(248, 245, 239, 0.16);
+  color: #e6e2da;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(8px);
+}
+
+.editorial-media__caption {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.editorial-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2.2vw, 28px);
+}
+
+@media (max-width: 820px) {
+  .editorial-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Selective interactive 3D card — lightweight CSS perspective with flat mobile & reduced-motion fallback */
+.tilt3d {
+  perspective: 1100px;
+  outline: none;
+}
+
+.tilt3d:focus-visible .tilt3d__inner {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+}
+
+.tilt3d__inner {
+  position: relative;
+  padding: clamp(20px, 2.6vw, 32px);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(520px circle at var(--tilt-gx, 50%) var(--tilt-gy, 50%), rgba(255, 122, 92, 0.12), transparent 58%),
+    var(--card);
+  box-shadow: var(--shadow-card);
+  transform: rotateX(var(--tilt-rx, 0deg)) rotateY(var(--tilt-ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 220ms var(--ease), border-color var(--fast) ease, box-shadow var(--med) ease;
+}
+
+.tilt3d.is-active .tilt3d__inner {
+  border-color: var(--coral-line);
+  box-shadow: var(--shadow-lift);
+}
+
+.tilt3d-card__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 28px;
+  margin-top: 18px;
+}
+
+@media (max-width: 768px) {
+  .tilt3d__inner {
+    transform: none !important;
+  }
+
+  .tilt3d-card__cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt3d__inner {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* Focused subhub navigation & content blocks (GPU & Compute, Product Sourcing) */
+.subhub-nav {
+  padding-top: 4px;
+  padding-bottom: 12px;
+}
+
+.subhub-body {
+  display: grid;
+  gap: clamp(18px, 2.4vw, 28px);
+}
+
+.subhub-section {
+  display: grid;
+  gap: 12px;
+}
+
+.subhub-para {
+  color: var(--muted);
+  line-height: 1.72;
+  max-width: 72ch;
+}
+
+.sourcing-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.sourcing-flow-step {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(9, 12, 17, 0.56);
+  border: 1px solid var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sourcing-flow-step__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sourcing-flow-step__title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.sourcing-flow-step__detail {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+/* Verified credential split callout (Social Media page) */
+.credential-callout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.9fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: center;
+}
+
+.credential-callout__img {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  background: #ffffff;
+}
+
+.credential-callout__img img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 860px) {
+  .credential-callout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Sitewide responsive alignment & overflow guardrails (1440 / 1280 / 1024 / 768 / 390px) */
+main,
+section,
+.container,
+.panel,
+.hub-link-card,
+.feature-card,
+.page-hero__copy,
+.page-hero__aside,
+.contact__intro,
+.contact__form,
+.network-apply__intro,
+.calc__fields,
+.calc__out {
+  min-width: 0;
+}
+
+.decision-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 639px) {
+  .hero__actions .btn,
+  .contact__channel-actions .btn {
+    width: 100%;
+  }
+
+  .calc__row,
+  .calc__row--3,
+  .calc__fx-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Split two-column responsibility cards (Sourcing & GPU Compute) */
+.split-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 820px) {
+  .split-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Catalog-backed Product Sourcing Showcase */
+.sourcing-catalog__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.sourcing-item-card {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sourcing-item-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #f5f2ec;
+  border-bottom: 1px solid var(--border-soft);
+  overflow: hidden;
+}
+
+.sourcing-item-card__media.is-dark {
+  background: #0b0d11;
+}
+
+.sourcing-item-card__img {
+  object-fit: cover;
+}
+
+.sourcing-item-card__badge {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(11, 13, 18, 0.86);
+  color: #f4f1ea;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.sourcing-item-card__body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.sourcing-item-card__summary {
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.sourcing-item-card__specs {
+  font-size: 0.88rem;
+}
+
+.sourcing-item-card__compliance {
+  padding-top: 8px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.sourcing-item-card__attr {
+  font-size: 0.78rem;
+  opacity: 0.82;
+}
+
+.sourcing-item-card__actions {
+  margin-top: auto;
+  padding-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sourcing-lookbook-cta {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.sourcing-lookbook-cta > div:first-child {
+  flex: 1 1 380px;
+  min-width: 0;
+}
+
+.sourcing-lookbook-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Lazy-loaded Video Showcase (Creative Production & Video Editing) */
+.video-card {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.video-card__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #090b0f;
+  border-bottom: 1px solid var(--border-soft);
+  overflow: hidden;
+}
+
+.video-card__stage--9-16 {
+  aspect-ratio: 9 / 16;
+  max-height: 460px;
+}
+
+.video-card__video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #090b0f;
+}
+
+.video-card__poster-btn {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: #090b0f;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+}
+
+.video-card__poster-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.video-card__poster-img {
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.video-card__poster-btn:hover .video-card__poster-img {
+  transform: scale(1.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-card__poster-img,
+  .video-card__poster-btn:hover .video-card__poster-img {
+    transition: none;
+    transform: none;
+  }
+}
+
+.video-card__play-pill {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255, 112, 82, 0.94);
+  color: #0b0d12;
+  font-weight: 700;
+  font-size: 0.86rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42);
+}
+
+.video-card__type-badge {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(11, 13, 18, 0.88);
+  color: #f4f1ea;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.video-card__body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.video-card__text {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.video-card__transcript {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-soft);
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.video-card__transcript summary {
+  cursor: pointer;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.video-card__transcript p {
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.video-card__stage--1-1 {
+  aspect-ratio: 16 / 9;
+  background: #090b0f;
+}
+
+.video-card__stage--1-1 .video-card__poster-img,
+.video-card__stage--1-1 .video-card__video {
+  object-fit: contain;
+}
+
+/* Searchable 841-Product Sourcing Catalogue & Detail Pages */
+.catalog-filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.catalog-filter-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.catalog-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.catalog-filter-field .work-finder__input {
+  width: 100%;
+  max-width: 100%;
+}
+
+.catalog-thumb-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+}
+
+.catalog-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.catalog-card__title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.catalog-card__title-link:hover,
+.catalog-card__title-link:focus-visible {
+  color: var(--coral);
+}
+
+.catalog-pagination {
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.catalog-detail-media {
+  padding: 0;
+  overflow: hidden;
+}
+
+.catalog-detail-media__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #f5f2ec;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.catalog-detail-media__img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 820px) {
+  .catalog-filter-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Blog contextual section links & social follow/share bar */
+.blog-section-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.article-social-bar {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.article-social-bar__group {
+  min-width: 0;
+}
+
+.article-social-bar__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.article-social-bar__links .location-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 760px) {
+  .article-social-bar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+

@@ -7,14 +7,48 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
 
+/** Flagship projects whose canonical public URL is /case-studies/[slug] (prevents /work vs /case-studies duplicate URLs). */
+const CANONICAL_CASE_STUDY_SLUGS = [
+  "pipelineos-crm",
+  "stockflow-inventory",
+  "tessera-clayworks-storefront",
+  "northwind-analytics-dashboard",
+  "tideline-support-agent",
+  "kestrel-voice-sales-agent",
+  "inbound-lead-qualification-workflow",
+  "meridian-inventory-operations",
+  "lantern-sourcing-platform",
+  "blender-product-visualisation",
+  "motion-production-pipeline",
+  "halcyon-brand-system",
+  "ledgerlight-block-explorer",
+  "sentryline-security-posture",
+];
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  async redirects() {
+    return CANONICAL_CASE_STUDY_SLUGS.map((slug) => ({
+      source: `/work/${slug}`,
+      destination: `/case-studies/${slug}`,
+      permanent: true,
+    }));
+  },
   async headers() {
-    return [{ source: "/(.*)", headers: securityHeaders }];
+    const adminNoIndexHeaders = [
+      { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+      { key: "Cache-Control", value: "no-store, private" },
+    ];
+    return [
+      { source: "/(.*)", headers: securityHeaders },
+      { source: "/admin", headers: adminNoIndexHeaders },
+      { source: "/admin/:path*", headers: adminNoIndexHeaders },
+      { source: "/api/admin/:path*", headers: adminNoIndexHeaders },
+    ];
   },
 };
 

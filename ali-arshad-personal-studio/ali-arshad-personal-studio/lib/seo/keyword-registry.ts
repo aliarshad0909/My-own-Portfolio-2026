@@ -773,6 +773,32 @@ export const KEYWORD_REGISTRY: KeywordOpportunity[] = [
     linksTo: ["/tools/web-project-estimator", "/products/projectos", "/contact"],
     linksFrom: ["/tools", "/products"],
   },
+  {
+    id: "tool-moq-helper",
+    keyword: "moq order quantity carton cbm calculator",
+    intent: "transactional",
+    cluster: "tool",
+    primaryUrl: "/tools/moq-quantity-helper",
+    supporting: ["supplier moq calculator", "carton cbm order planner"],
+    state: "Published",
+    evidenceRequired: [E.TOOL_WORKS, E.UNIQUE_COPY],
+    evidenceHave: [E.TOOL_WORKS, E.UNIQUE_COPY],
+    linksTo: ["/services/product-sourcing", "/tools/landed-cost-calculator", "/tools/shipping-cost-calculator", "/contact"],
+    linksFrom: ["/tools", "/services/product-sourcing"],
+  },
+  {
+    id: "tool-gpu-quote-estimator",
+    keyword: "gpu compute workload quote estimator",
+    intent: "transactional",
+    cluster: "tool",
+    primaryUrl: "/tools/gpu-quote-estimator",
+    supporting: ["gpu workload scope builder", "single host gpu compute inquiry"],
+    state: "Published",
+    evidenceRequired: [E.TOOL_WORKS, E.UNIQUE_COPY],
+    evidenceHave: [E.TOOL_WORKS, E.UNIQUE_COPY],
+    linksTo: ["/services/gpu-compute", "/contact"],
+    linksFrom: ["/tools", "/services/gpu-compute"],
+  },
 
   // ─────────────────────────────── Portfolio / work ─────────────────────────
   {

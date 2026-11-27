@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+import { recordContactInquiry } from "@/lib/admin/db";
 import { extractClientIp, isPlausibleFillTime, isSameOrigin } from "@/lib/form-security";
 import { normaliseInquiry, validateInquiry, type InquiryResponse } from "@/lib/inquiry";
-import { deliverInquiry, isDeliveryConfigured } from "@/lib/inquiry-server";
+import { deliverInquiry, deliveryChannels, isDeliveryConfigured } from "@/lib/inquiry-server";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -96,6 +97,10 @@ export async function POST(request: Request) {
       502,
     );
   }
+
+  const ch = deliveryChannels();
+  const channelLabel = [ch.email ? "resend" : "", ch.webhook ? "webhook" : ""].filter(Boolean).join("+") || "server";
+  await recordContactInquiry(inquiry, channelLabel);
 
   return json({ ok: true }, 200);
 }

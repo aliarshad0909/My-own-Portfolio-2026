@@ -19,11 +19,14 @@
 import { BLOG_POSTS } from "@/lib/content/blog";
 import { FICTIONAL_DEMO_PROFILES } from "@/lib/geo/fictional-profiles";
 import { STUDIO_GAMES } from "@/lib/games/catalog";
+import { GPU_COMPUTE_PATH, GPU_TOPIC_PAGES } from "@/lib/gpu-compute";
 import { PROJECTS, caseStudies } from "@/lib/projects";
 import { STUDIO_PRODUCTS } from "@/lib/products/catalog";
 import { KEYWORD_REGISTRY } from "@/lib/seo/keyword-registry";
 import { SERVICE_HUBS } from "@/lib/seo/service-hubs";
 import { cityServiceAreas, serviceAreaMatrix } from "@/lib/seo/service-areas";
+import { PRODUCT_SOURCING_PATH, SOURCING_SUBPAGES } from "@/lib/sourcing";
+import { ALL_SOURCING_PRODUCTS, SOURCING_CATALOG_PATH } from "@/lib/sourcing-catalog";
 import { US_STATES } from "@/lib/geo/states";
 import { PILOT_CITIES } from "@/lib/geo/cities";
 
@@ -40,6 +43,9 @@ export const STATIC_ROUTES = [
   "/llms.txt",
   "/services",
   "/services/gpu-compute",
+  "/services/product-sourcing",
+  "/services/social-media-management",
+  "/services/linkedin-outreach",
   "/about",
   "/case-studies",
   "/experience",
@@ -49,12 +55,19 @@ export const STATIC_ROUTES = [
   "/resources",
   "/industries",
   "/tools",
+  "/tools/moq-quantity-helper",
+  "/tools/gpu-quote-estimator",
   "/studio-network",
 ] as const;
 
 /** Every concrete route the site is prepared to serve or link to. */
 export function knownRoutes(): Set<string> {
   const routes = new Set<string>(STATIC_ROUTES);
+
+  for (const t of GPU_TOPIC_PAGES) routes.add(`${GPU_COMPUTE_PATH}/${t.slug}`);
+  for (const s of SOURCING_SUBPAGES) routes.add(`${PRODUCT_SOURCING_PATH}/${s.slug}`);
+  routes.add(SOURCING_CATALOG_PATH);
+  for (const item of ALL_SOURCING_PRODUCTS) routes.add(item.pagePath);
 
   for (const p of PROJECTS) routes.add(`/work/${p.slug}`);
   for (const p of caseStudies()) routes.add(`/case-studies/${p.slug}`);

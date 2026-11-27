@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { PendingMedia } from "@/components/services/ServiceShowcase";
 import { evidenceTierOf, type EvidenceTier } from "@/lib/seo/evidence";
-import type { Project } from "@/lib/projects";
+import { hasDedicatedCaseStudy, projectHref, type Project } from "@/lib/projects";
 
 const TIER_LABEL: Record<EvidenceTier, string> = {
   "not-built": "In development (no finished media)",
@@ -63,7 +63,7 @@ export function ServiceDemoShowcase({
             <article key={p.slug} className="demo-card">
               {showRealMedia ? (
                 <Link
-                  href={p.caseStudy ? `/case-studies/${p.slug}` : `/work/${p.slug}`}
+                  href={projectHref(p)}
                   className={`demo-card__media ${isSvg ? "demo-card__media--diagram" : ""}`.trim()}
                   aria-label={`${p.title}, inspect demonstration`}
                 >
@@ -84,7 +84,7 @@ export function ServiceDemoShowcase({
                 </div>
                 <p className="fine-print">{TIER_LABEL[evidenceTierOf(p)]}</p>
                 <h3 className="demo-card__title">
-                  <Link href={p.caseStudy ? `/case-studies/${p.slug}` : `/work/${p.slug}`}>{p.title}</Link>
+                  <Link href={projectHref(p)}>{p.title}</Link>
                 </h3>
                 <p className="demo-card__summary">{p.summary}</p>
 
@@ -102,15 +102,17 @@ export function ServiceDemoShowcase({
                 </ul>
 
                 <div className="demo-card__actions">
-                  {p.caseStudy ? (
+                  {hasDedicatedCaseStudy(p) ? (
                     <Link href={`/case-studies/${p.slug}`} className="arrow-link">
                       <span>Read case study</span>
                       <Icon name="arrow-up-right" size={16} />
                     </Link>
-                  ) : null}
-                  <Link href={`/work/${p.slug}`} className="demo-card__secondary">
-                    Project record
-                  </Link>
+                  ) : (
+                    <Link href={`/work/${p.slug}`} className="arrow-link">
+                      <span>Inspect project</span>
+                      <Icon name="arrow-up-right" size={16} />
+                    </Link>
+                  )}
                 </div>
               </div>
             </article>
@@ -124,7 +126,7 @@ export function ServiceDemoShowcase({
         <div className="demo-strip" aria-label={`Screens from ${leadProject.title}`}>
           <div className="demo-strip__head">
             <span className="label">Inside the demonstration: {leadProject.title}</span>
-            <Link href={`/case-studies/${leadProject.slug}`} className="demo-card__secondary">
+            <Link href={projectHref(leadProject)} className="demo-card__secondary">
               Full technical write-up
             </Link>
           </div>

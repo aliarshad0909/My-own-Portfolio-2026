@@ -27,7 +27,7 @@ const ARC: { thread: keyof typeof THREADS; icon: IconName; story: string }[] = [
   {
     thread: "business",
     icon: "globe",
-    story: "It started with a business degree focused on supply chain: how resources, information and money move through an organisation, and where they stall.",
+    story: "It started with a BBA in Supply Chain Management and more than 10 years of stated product sourcing experience: understanding how goods, suppliers, and landed costs actually move without silent bottlenecks.",
   },
   {
     thread: "creative",

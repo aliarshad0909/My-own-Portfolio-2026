@@ -2,13 +2,16 @@
   "name": "ali-arshad-personal-studio",
   "version": "1.0.0",
   "private": true,
-  "description": "Ali Arshad \u00e2\u20ac\u201d Personal Studio portfolio website",
+  "description": "Ali Arshad â€” Personal Studio portfolio website",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "node scripts/run-tests.mjs",
+    "admin:hash-password": "node scripts/admin-hash-password.mjs",
+    "admin:migrate": "node scripts/admin-migrate.mjs",
+    "admin:seed-demo": "node scripts/admin-seed-demo.mjs",
     "seo:csv": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/export-keyword-registry.mjs",
     "seo:audit": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-audit.mjs",
     "seo:report": "node --import ./scripts/alias-hook-register.mjs --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seo-report.mjs",
@@ -18,6 +21,7 @@
     "remotion:render:ai-agent": "remotion render remotion/index.ts AiAgentFlow public/videos/ai-agent-flow.mp4"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.1",
     "next": "^16.4.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

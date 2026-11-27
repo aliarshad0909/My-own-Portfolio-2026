@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
-import type { Project } from "@/lib/projects";
+import { projectHref, type Project } from "@/lib/projects";
 
 /**
  * The visual half of a service section.
@@ -85,7 +85,7 @@ export function RelatedProjectList({ projects }: { projects: Project[] }) {
     <ul className="related-mini">
       {projects.map((p) => (
         <li key={p.slug}>
-          <Link href={p.caseStudy ? `/case-studies/${p.slug}` : `/work/${p.slug}`} className="related-mini__link">
+          <Link href={projectHref(p)} className="related-mini__link">
             <span className="related-mini__name">{p.title}</span>
             <span className="related-mini__badges">
               <TypeBadge type={p.projectType} />

@@ -24,3 +24,5 @@ id_rsa*
 # Test artefacts
 playwright-report/
 test-results/
+.vercel
+.env*

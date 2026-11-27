@@ -85,22 +85,27 @@ const SERVICE_FAMILIES: ServiceFamily[] = [
     proof: { label: "Halcyon Brand System & Motion Pipeline", href: "/case-studies/halcyon-brand-system", kind: "Pipeline Tested" },
     pillarIds: ["creative-production", "brand-growth"],
     hubSlugs: ["creative-production", "branding"],
+    extraLinks: [
+      { label: "Social Media Setup & Management →", href: "/services/social-media-management" },
+      { label: "LinkedIn Outreach & Sales Dev →", href: "/services/linkedin-outreach" },
+    ],
   },
   {
     id: "family-sourcing-specialists",
     icon: "users",
-    title: "Global Sourcing & Specialist Collaboration",
+    title: "Product Sourcing, GPU Compute & Specialist Network",
     delivery: "Direct Sourcing + Partner-Led Specialists",
-    bestFor: "Physical product teams vetting factories/landed cost, or complex builds requiring security, Web3, or parallel sprint depth.",
-    deliverables: "Direct supplier research & landed-cost modeling; transparent partner-led security reviews, blockchain & consultation-led RTX GPU compute.",
+    bestFor: "Product importers vetting suppliers/landed cost, teams needing modest quote-led GPU compute, or builds needing specialist depth.",
+    deliverables: "Direct product sourcing, samples, QC & Incoterms modeling; quote-led GPU & Linux compute; transparent partner-led security & specialist work.",
     workCollectionHref: "/work?collection=ecommerce-operations",
     workCollectionLabel: "Browse Operations & Security Work",
-    proof: { label: "Lantern Sourcing & Studio Network Model", href: "/studio-network", kind: "Partner-Led" },
+    proof: { label: "Product Sourcing Hub & Studio Network", href: "/services/product-sourcing", kind: "Partner-Led" },
     pillarIds: ["global-sourcing", "specialist-collaboration"],
     hubSlugs: ["global-sourcing"],
     extraLinks: [
-      { label: "Studio Network (Partner Model)", href: "/studio-network" },
-      { label: "RTX GPU Compute (Consultation)", href: GPU_COMPUTE_PATH },
+      { label: "Product Sourcing Hub (9 Guides) →", href: "/services/product-sourcing" },
+      { label: "GPU & Compute Hub (7 Guides) →", href: GPU_COMPUTE_PATH },
+      { label: "Studio Network (Peers & Specialists)", href: "/studio-network" },
     ],
   },
 ];
@@ -154,14 +159,28 @@ function ServiceVisual({ service }: { service: Service }) {
 
   if (service.id === "creative-production") {
     return (
-      <PendingMedia
-        heading="Showreel in preparation"
-        lines={[
-          "The 3D scene system and the media pipeline behind this service are built and tested, but no finished client showreel has been published yet.",
-          "Rather than display stock footage or unverified work, this space stays reserved for cleared output.",
-          "Inspect the verified ffmpeg media pipeline and Halcyon WCAG brand system in the Work collections.",
-        ]}
-      />
+      <div className="visual-stack">
+        <div className="panel">
+          <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+          <h3 className="card-title" style={{ marginTop: "4px" }}>
+            Preview web-optimized motion clips &amp; verified encoding tooling
+          </h3>
+          <p className="fine-print" style={{ marginTop: "8px", lineHeight: 1.6 }}>
+            Play studio-authored motion clips directly on the Creative Production hub, kept distinct from the tested ffmpeg media pipeline case study.
+            External client video edits remain private until written public-display permission is confirmed.
+          </p>
+          <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "10px" }}>
+            <Link href="/services/creative-production#motion-examples" className="btn btn--primary btn--sm">
+              <span>Watch studio motion previews</span>
+              <Icon name="play" size={14} className="btn__icon" />
+            </Link>
+            <Link href="/case-studies/motion-production-pipeline" className="btn btn--secondary btn--sm">
+              <span>Media pipeline case study</span>
+            </Link>
+          </div>
+        </div>
+        <RelatedProjectList projects={projects} />
+      </div>
     );
   }
 

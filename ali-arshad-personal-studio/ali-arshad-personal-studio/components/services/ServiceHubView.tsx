@@ -12,16 +12,30 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { CredentialCard } from "@/components/credentials/CredentialCard";
+import { getBlogPost } from "@/lib/content/blog";
 import { getIndustry } from "@/lib/content/industries";
 import { getResource } from "@/lib/content/resources";
+import { APPROVED_PUBLIC_VIDEOS, CLIENT_VIDEO_RIGHTS_NOTICE } from "@/lib/creative-videos";
 import { visibleCredentials } from "@/lib/credentials";
 import { locationsForServiceHub } from "@/lib/geo/location-connections";
-import { getProject, type Project } from "@/lib/projects";
+import { getProject, projectHref, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHubEnrichment, type ServiceHubEnrichment } from "@/lib/seo/service-enrichment";
 import type { ServiceHub } from "@/lib/seo/service-hubs";
 import { singleServiceSchema } from "@/lib/structured-data";
+
+const HUB_TO_BLOG_SLUGS: Record<string, string[]> = {
+  "web-development": ["engineering-pipelineos-stockflow-sandboxes", "structured-data-llms-txt-honest-aeo"],
+  "ecommerce-development": ["engineering-pipelineos-stockflow-sandboxes", "how-one-remote-studio-scopes-ships-software"],
+  "business-dashboards": ["engineering-pipelineos-stockflow-sandboxes", "how-one-remote-studio-scopes-ships-software"],
+  "ai-agents": ["mcp-tool-use-guardrails-business-ai-agents", "when-self-hosted-n8n-beats-saas-automation"],
+  "n8n-automation": ["when-self-hosted-n8n-beats-saas-automation", "mcp-tool-use-guardrails-business-ai-agents"],
+  "creative-production": ["reproducible-blender-bpy-rigs-ffmpeg-pipelines", "single-host-gpu-compute-when-consultation-beats-cloud"],
+  branding: ["designing-accessible-dark-mode-brand-systems", "how-one-remote-studio-scopes-ships-software"],
+  "global-sourcing": ["product-sourcing-landed-cost-catalog-checklist", "how-one-remote-studio-scopes-ships-software"],
+};
 
 function contactHrefFor(serviceTitle: string) {
   return `/contact?service=${encodeURIComponent(serviceTitle)}`;
@@ -46,7 +60,7 @@ function HeroVisual({ enrichment }: { enrichment: ServiceHubEnrichment }) {
   if (enrichment.heroPreview) {
     const project = getProject(enrichment.heroPreview.projectSlug);
     if (!project || project.usesSampleMedia) return null;
-    const target = project.caseStudy ? `/case-studies/${project.slug}` : `/work/${project.slug}`;
+    const target = projectHref(project);
 
     return (
       <div className="hub-hero-card">
@@ -447,7 +461,19 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
       </section>
     ) : null;
 
-  const visibleRelatedLinks = enrichment.relatedLinks.filter((item) => isHrefRenderable(item.href));
+  const visibleRelatedLinks = [
+    ...enrichment.relatedLinks.filter((item) => isHrefRenderable(item.href)),
+    ...(HUB_TO_BLOG_SLUGS[hub.slug] ?? [])
+      .map((slug) => getBlogPost(slug))
+      .filter((bp): bp is NonNullable<typeof bp> => bp !== undefined)
+      .filter((bp) => !enrichment.relatedLinks.some((r) => r.href === `/blog/${bp.slug}`))
+      .map((bp) => ({
+        kind: "Studio Dispatch",
+        title: bp.title,
+        description: bp.excerpt,
+        href: `/blog/${bp.slug}`,
+      })),
+  ];
   const locationMatches = locationsForServiceHub(hub.slug, 8);
 
   const locationsSection =
@@ -631,6 +657,20 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
           <>
             {factsStrip}
             {scopeNotice}
+            <section className="section section--surface" id="motion-examples" aria-labelledby="creative-motion-demos">
+              <div className="container">
+                <div className="section-head">
+                  <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+                  <h2 className="section-title" id="creative-motion-demos">
+                    Studio-authored motion graphics &amp; web-ready video samples
+                  </h2>
+                  <p className="section-sub">
+                    Click play on any poster below to load the lightweight H.264 clip on demand — zero video bytes download until you press play.
+                  </p>
+                </div>
+                <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+              </div>
+            </section>
             {architectureSection(false)}
             {demoSection(true)}
             {problemsSection(false)}
