@@ -19,10 +19,12 @@ const FILTER_OPTIONS: { id: "all" | SourcingCatalogExample["categoryId"]; label:
   { id: "mobile-accessories", label: "Mobile & Power" },
   { id: "lighting-solar", label: "LED & Solar Lighting" },
   { id: "toys", label: "Toys & Learning" },
+  { id: "apparel-sportswear", label: "Apparel & Sportswear" },
+  { id: "fashion-jewelry", label: "Fashion Jewelry" },
 ];
 
 type Props = {
-  /** Render all 12 curated examples (with category filter) or a compact 6-item highlight grid. */
+  /** Render all curated examples (with category filter) or a compact 6-item highlight grid. */
   compact?: boolean;
 };
 
@@ -32,11 +34,11 @@ export function SourcingCatalogShowcase({ compact = false }: Props) {
   const items = compact
     ? [
         SOURCING_CATALOG_EXAMPLES[0], // Toasters
-        SOURCING_CATALOG_EXAMPLES[1], // Stand mixers
         SOURCING_CATALOG_EXAMPLES[3], // Hard-shell luggage lineup
         SOURCING_CATALOG_EXAMPLES[5], // Woven/MagSafe phone cases
         SOURCING_CATALOG_EXAMPLES[8], // Architectural COB LED downlights
-        SOURCING_CATALOG_EXAMPLES[10], // Magnetic building blocks
+        SOURCING_CATALOG_EXAMPLES[12] ?? SOURCING_CATALOG_EXAMPLES[10], // Apparel & Sportswear
+        SOURCING_CATALOG_EXAMPLES[13] ?? SOURCING_CATALOG_EXAMPLES[11], // Fashion Jewelry
       ]
     : activeCategory === "all"
       ? SOURCING_CATALOG_EXAMPLES
@@ -122,8 +124,8 @@ export function SourcingCatalogShowcase({ compact = false }: Props) {
             Download “Ali Arshad — Product Sourcing Catalogue” or search individual product PDFs
           </h3>
           <p className="fine-print" style={{ marginTop: "6px" }}>
-            Browse all {SOURCING_CATALOG_STATS.totalUniqueProducts} deduplicated OEM reference models and lighting series across 5 categories — each
-            with its own branded downloadable specification PDF, honest availability status, and zero confidential supplier contacts or outdated prices.
+            Browse all {SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} deduplicated OEM reference models and product series across 7 categories — each
+            with its own branded downloadable PDF, honest availability status, and zero confidential supplier contacts or outdated prices.
           </p>
         </div>
         <div className="sourcing-lookbook-cta__actions">

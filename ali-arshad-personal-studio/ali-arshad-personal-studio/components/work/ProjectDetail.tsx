@@ -12,7 +12,7 @@ import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import { MediaGallery } from "@/components/work/MediaGallery";
 import { ProjectCard } from "@/components/work/ProjectCard";
-import { APPROVED_PUBLIC_VIDEOS, CLIENT_VIDEO_RIGHTS_NOTICE } from "@/lib/creative-videos";
+import { CLIENT_VIDEO_RIGHTS_NOTICE, videosForCreativeSection } from "@/lib/creative-videos";
 import { PROJECTS, STATUS_NOTE, caseStudies, relatedProjects, type Project } from "@/lib/projects";
 import { SERVICE_HUBS, spokesForProject } from "@/lib/seo/service-hubs";
 import { isIndexable } from "@/lib/seo/publication";
@@ -716,14 +716,17 @@ export function ProjectDetail({ project, variant }: Props) {
 
           {project.slug === "motion-production-pipeline" ? (
             <section className="detail__gallery" aria-labelledby="case-motion-demos-title">
-              <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Separate From Engineering CLI</p>
+              <p className="eyebrow eyebrow--plain">Playable Video Portfolio &amp; Studio Motion Demos</p>
               <h2 className="section-title section-title--sm" id="case-motion-demos-title">
-                First-party web-optimized motion clips authored by Ali Arshad
+                Authorized long-form edits &amp; studio-authored motion clips
               </h2>
               <p className="fine-print detail__gallery-note">
-                Click play on any poster to load lightweight H.264/VP9 clips on demand. These are studio-authored motion demos rather than client reels.
+                Click play on any poster to load lightweight H.264/VP9 clips on demand. Long-form edits and studio motion demos are labeled separately from the CLI engineering pipeline above.{" "}
+                <Link href="/services/creative-production#motion-examples" className="text-link">
+                  Browse all 12 videos on Creative Production →
+                </Link>
               </p>
-              <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+              <VideoShowcasePlayer videos={videosForCreativeSection("case-study")} enableFilters notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
             </section>
           ) : null}
 

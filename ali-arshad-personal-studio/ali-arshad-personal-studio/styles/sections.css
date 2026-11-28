@@ -8910,8 +8910,24 @@ section,
 }
 
 .video-card__stage--9-16 {
-  aspect-ratio: 9 / 16;
-  max-height: 460px;
+  aspect-ratio: 4 / 5;
+  max-height: 430px;
+  background: radial-gradient(circle at center, rgba(255, 122, 92, 0.08), #090b0f 75%);
+}
+
+.video-card__stage--9-16 .video-card__poster-img,
+.video-card__stage--9-16 .video-card__video {
+  object-fit: contain;
+}
+
+.video-showcase__filters {
+  margin-bottom: 20px;
+}
+
+.video-card__attr {
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: var(--muted);
 }
 
 .video-card__video {
@@ -9159,5 +9175,162 @@ section,
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ───────── Ambient R3F Hero Canvas (Homepage only, strictly non-blocking) ───────── */
+.hero__r3f {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.72;
+  -webkit-mask-image: radial-gradient(circle at 64% 48%, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 54%, transparent 82%);
+  mask-image: radial-gradient(circle at 64% 48%, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 54%, transparent 82%);
+}
+
+.hero__inner {
+  z-index: 1;
+}
+
+@media (max-width: 959px), (prefers-reduced-motion: reduce) {
+  .hero__r3f {
+    display: none;
+  }
+}
+
+/* ───────── GSAP ScrollTrigger Storytelling Rail ───────── */
+.story-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.story-rail__head {
+  display: grid;
+  gap: 12px 28px;
+  align-items: end;
+}
+
+@media (min-width: 900px) {
+  .story-rail__head {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+}
+
+.story-rail__track {
+  position: relative;
+  height: 3px;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.2);
+  overflow: hidden;
+}
+
+.story-rail__fill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--coral-deep), var(--coral), var(--coral-hover));
+  border-radius: 999px;
+}
+
+.story-rail__grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .story-rail__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.story-rail__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: rgba(14, 19, 27, 0.72);
+  transition:
+    border-color var(--med) var(--ease),
+    background-color var(--med) var(--ease),
+    transform var(--med) var(--ease),
+    box-shadow var(--med) var(--ease);
+}
+
+.story-rail__card.is-active {
+  border-color: var(--coral-line);
+  background: rgba(27, 40, 55, 0.85);
+  box-shadow: 0 12px 30px rgba(2, 6, 14, 0.35), 0 0 0 1px rgba(255, 122, 92, 0.16);
+}
+
+.story-rail__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.story-rail__label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--coral);
+}
+
+.story-rail__title {
+  font-size: 1.125rem;
+  line-height: 1.25;
+}
+
+.story-rail__detail {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.62;
+}
+
+.story-rail__link {
+  margin-top: auto;
+  padding-top: 4px;
+  min-height: 36px;
+  font-size: 0.88rem;
+}
+
+/* ───────── Subtle Tactile Hover Elevation & Image Zoom ───────── */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .svc-card,
+  .hub-link-card,
+  .sourcing-item-card,
+  .video-card,
+  .feature-card {
+    transition:
+      transform 260ms var(--ease),
+      border-color 260ms var(--ease),
+      box-shadow 260ms var(--ease),
+      background-color 260ms var(--ease);
+  }
+
+  .sourcing-item-card:hover,
+  .video-card:hover,
+  .feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift), 0 0 0 1px rgba(255, 122, 92, 0.28);
+  }
+
+  .sourcing-item-card__img,
+  .video-card__poster-img {
+    transition: transform 420ms var(--ease);
+  }
+
+  .sourcing-item-card:hover .sourcing-item-card__img,
+  .video-card:hover .video-card__poster-img {
+    transform: scale(1.035);
+  }
+}
+
 
 

@@ -1,7 +1,39 @@
 import Link from "next/link";
+import { ScrollStoryRail, type ScrollStoryStep } from "@/components/motion/ScrollStoryRail";
 import { Icon } from "@/components/ui/Icon";
 import { SERVICES } from "@/lib/services";
 import { BUSINESS_PILLARS } from "@/lib/seo/service-areas";
+import { SOURCING_CATALOG_STATS } from "@/lib/sourcing-catalog";
+
+const STUDIO_ARC_STEPS: ScrollStoryStep[] = [
+  {
+    step: "01",
+    label: "Create & Position",
+    title: "Brand clarity, video editing & 3D visuals",
+    detail:
+      "Tight messaging, short-form and long-form video edits, motion graphics, and Blender 3D product visuals built so prospects grasp value immediately.",
+    href: "/services/creative-production",
+    linkLabel: "Explore 12 playable videos",
+  },
+  {
+    step: "02",
+    label: "Engineer & Ship",
+    title: "Custom Next.js web apps & interactive tools",
+    detail:
+      "Fast, type-safe Next.js/React applications, internal dashboards, and client-owned repositories with live sandboxes you can test before kickoff.",
+    href: "/services/web-development",
+    linkLabel: "Inspect web engineering",
+  },
+  {
+    step: "03",
+    label: "Automate & Coordinate",
+    title: "n8n workflows, AI agents & product sourcing",
+    detail:
+      "Self-hostable automation pipelines, grounded AI workflows, quote-led GPU compute, and catalog-backed OEM product sourcing coordination.",
+    href: "/services/product-sourcing/catalog",
+    linkLabel: `Browse ${SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} catalog models`,
+  },
+];
 
 /**
  * Deep-link each pillar to its most detailed destination: the dedicated service
@@ -39,7 +71,15 @@ export function ServiceShowcaseHome() {
           </p>
         </div>
 
-        <ul className="svc-grid">
+        <ScrollStoryRail
+          id="studio-delivery-arc"
+          eyebrow="How the disciplines connect"
+          heading="One continuous studio arc — zero agency hand-offs"
+          lead="Scroll through the three stages that connect creative presentation, production software, and operational execution."
+          steps={STUDIO_ARC_STEPS}
+        />
+
+        <ul className="svc-grid" style={{ marginTop: "28px" }}>
           {SERVICES.map((s, i) => (
             <li key={s.id} className="svc-card reveal">
               <Link href={serviceHref(s.id)} className="svc-card__link">
@@ -66,8 +106,14 @@ export function ServiceShowcaseHome() {
             </p>
           </div>
           <div className="location-pill-list">
-            <Link href="/services/gpu-compute" className="location-pill location-pill--all">
-              GPU &amp; Compute Hub →
+            <Link href="/services/product-sourcing/catalog" className="location-pill location-pill--all">
+              Product Catalogue ({SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} Models) →
+            </Link>
+            <Link href="/services/creative-production#motion-examples" className="location-pill location-pill--all">
+              Video Portfolio (12 Clips) →
+            </Link>
+            <Link href="/services/gpu-compute" className="location-pill">
+              GPU &amp; Compute Hub
             </Link>
             <Link href="/services/product-sourcing" className="location-pill location-pill--all">
               Product Sourcing Hub →

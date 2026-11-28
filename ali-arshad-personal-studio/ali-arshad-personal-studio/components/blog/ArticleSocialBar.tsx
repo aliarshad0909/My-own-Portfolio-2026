@@ -8,13 +8,25 @@ type Props = {
   articleUrl: string;
   articleTitle: string;
   socials: SocialLink[];
+  followHeading?: string;
+  followCopy?: string;
+  shareHeading?: string;
+  shareCopy?: string;
 };
 
 /**
- * Unobtrusive author follow + share bar for Studio Blog articles.
+ * Unobtrusive follow + share bar for Studio Blog articles and Service Hubs.
  * Uses only verified social URLs configured in lib/site.ts (never guessed).
  */
-export function ArticleSocialBar({ articleUrl, articleTitle, socials }: Props) {
+export function ArticleSocialBar({
+  articleUrl,
+  articleTitle,
+  socials,
+  followHeading = "Follow Ali Arshad",
+  followCopy = "New build logs, sourcing notes, and studio updates across verified public profiles:",
+  shareHeading = "Share this page",
+  shareCopy = "Found this breakdown useful? Share a direct link with your team:",
+}: Props) {
   const [copied, setCopied] = useState(false);
 
   const shareLinkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`;
@@ -31,11 +43,11 @@ export function ArticleSocialBar({ articleUrl, articleTitle, socials }: Props) {
   };
 
   return (
-    <aside className="panel article-social-bar" aria-label="Share article and follow Ali Arshad">
+    <aside className="panel article-social-bar" aria-label={`Share ${articleTitle} and follow Ali Arshad`}>
       <div className="article-social-bar__group">
-        <p className="eyebrow eyebrow--plain">Follow Ali Arshad</p>
+        <p className="eyebrow eyebrow--plain">{followHeading}</p>
         <p className="fine-print" style={{ marginTop: "4px" }}>
-          New build logs, sourcing notes, and studio updates across verified public profiles:
+          {followCopy}
         </p>
         <div className="article-social-bar__links">
           {socials.map((s) => (
@@ -55,9 +67,9 @@ export function ArticleSocialBar({ articleUrl, articleTitle, socials }: Props) {
       </div>
 
       <div className="article-social-bar__group">
-        <p className="eyebrow eyebrow--plain">Share this dispatch</p>
+        <p className="eyebrow eyebrow--plain">{shareHeading}</p>
         <p className="fine-print" style={{ marginTop: "4px" }}>
-          Found this breakdown useful? Share a direct link with your team:
+          {shareCopy}
         </p>
         <div className="article-social-bar__links">
           <a
@@ -85,7 +97,7 @@ export function ArticleSocialBar({ articleUrl, articleTitle, socials }: Props) {
             <span>{copied ? "Link copied" : "Copy link"}</span>
           </button>
           <span className="sr-only" role="status" aria-live="polite">
-            {copied ? "Article link copied to clipboard." : ""}
+            {copied ? "Page link copied to clipboard." : ""}
           </span>
         </div>
       </div>

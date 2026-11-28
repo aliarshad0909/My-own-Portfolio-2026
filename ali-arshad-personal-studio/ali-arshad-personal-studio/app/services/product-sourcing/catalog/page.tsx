@@ -23,7 +23,7 @@ import { siteBaseUrl } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
   title: "Product Sourcing Catalogue — Searchable Models & PDFs",
-  description: `Search and filter ${SOURCING_CATALOG_STATS.totalUniqueProducts} deduplicated OEM product models and fixture series across kitchen appliances, hard-shell luggage, mobile accessories, LED lighting, and toys — each with its own branded downloadable PDF.`,
+  description: `Search and filter ${SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} deduplicated OEM product models and series across kitchen appliances, hard-shell luggage, mobile accessories, LED lighting, toys, custom apparel/sportswear, and fashion jewelry — each with its own branded downloadable PDF.`,
   path: SOURCING_CATALOG_PATH,
 });
 
@@ -36,7 +36,7 @@ export default function ProductSourcingCatalogPage() {
     "@type": "CollectionPage",
     name: "Ali Arshad — Product Sourcing Catalogue",
     url: `${origin}${SOURCING_CATALOG_PATH}`,
-    description: `Searchable product sourcing reference catalogue indexing ${SOURCING_CATALOG_STATS.totalUniqueProducts} deduplicated OEM product models and series across 5 categories, each with an individual downloadable PDF.`,
+    description: `Searchable product sourcing reference catalogue indexing ${SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} deduplicated OEM product models and series across 7 categories, each with an individual downloadable PDF.`,
     isPartOf: { "@id": `${origin}/#website` },
     about: { "@id": `${origin}/#studio` },
     numberOfItems: SOURCING_CATALOG_STATS.totalUniqueProducts,
@@ -62,7 +62,7 @@ export default function ProductSourcingCatalogPage() {
             Ali Arshad — <span className="accent">Product Sourcing Catalogue</span>
           </>
         }
-        lead={`Search ${SOURCING_CATALOG_STATS.totalUniqueProducts} deduplicated OEM product models and lighting series (covering ${SOURCING_CATALOG_STATS.totalVariantCodes.toLocaleString()} documented SKU variants) across five categories. Every item includes its own branded downloadable PDF specification sheet and quote coordination path.`}
+        lead={`Search ${SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} deduplicated OEM product models and series (covering ${SOURCING_CATALOG_STATS.totalVariantCodes.toLocaleString()} documented SKU variants) across seven categories — including custom apparel/sportswear and fashion jewelry. Every item includes its own branded downloadable PDF and quote coordination path.`}
       >
         <div className="hero__actions">
           <a

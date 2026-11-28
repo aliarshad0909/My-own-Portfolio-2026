@@ -11,7 +11,7 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
-import { APPROVED_PUBLIC_VIDEOS, CLIENT_VIDEO_RIGHTS_NOTICE } from "@/lib/creative-videos";
+import { CLIENT_VIDEO_RIGHTS_NOTICE, videosForCreativeSection } from "@/lib/creative-videos";
 import { locationsForServiceHub } from "@/lib/geo/location-connections";
 import { getProject, projectHref, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
@@ -250,15 +250,19 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
         <section className="section" id="motion-examples" aria-labelledby="spoke-motion-demos">
           <div className="container">
             <div className="section-head">
-              <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+              <p className="eyebrow eyebrow--plain">Playable Video Portfolio &amp; Studio Demos · Lazy-Loaded</p>
               <h2 className="section-title section-title--sm" id="spoke-motion-demos">
-                Web-optimized studio motion examples
+                Authorized {spoke.h1.toLowerCase()} samples &amp; studio reels
               </h2>
               <p className="section-sub">
-                Press play on any card to stream on demand — kept clearly distinct from the engineering media pipeline case study below.
+                Press play on any card to load the web-optimized H.264 video on demand — original credits and brand attributions are preserved intact.
               </p>
             </div>
-            <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+            <VideoShowcasePlayer
+              videos={videosForCreativeSection(spoke.slug as "video-editing" | "social-video" | "motion")}
+              enableFilters
+              notice={CLIENT_VIDEO_RIGHTS_NOTICE}
+            />
           </div>
         </section>
       ) : null}
