@@ -3,9 +3,16 @@ import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { CREATIVE_AUDIO_SAMPLES } from "@/lib/creative-audio";
+import {
+  CREATOR_LIBRARY_EXCEPTIONS,
+  CREATOR_LIBRARY_ITEMS,
+  CREATOR_LIBRARY_PATH,
+  OCULUS_SOUNDS,
+} from "@/lib/creator-library";
 import { APPROVED_PUBLIC_VIDEOS, CREATIVE_SHOWCASE_VIDEOS } from "@/lib/creative-videos";
 import { GPU_TOPIC_PAGES } from "@/lib/gpu-compute";
 import { SERVICE_OPTIONS } from "@/lib/inquiry";
+import { INTERVIEW_FEATURE } from "@/lib/interview-feature";
 import { PROJECTS, caseStudies, hasDedicatedCaseStudy, isIndexable as isProjectIndexable, projectHref } from "@/lib/projects";
 import { isKnownRoute } from "@/lib/seo/routes";
 import {
@@ -212,8 +219,8 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
     assert.ok(statSync(pdfFull).size < 1_000_000, "lookbook PDF should stay lightweight (<1 MB)");
   });
 
-  it("publishes all 13 authorized portfolio and studio narrative/motion videos and 3 ElevenLabs audio cues on disk", () => {
-    assert.equal(APPROVED_PUBLIC_VIDEOS.length, 13, "expected 13 published videos (8 authorized portfolio edits + 5 studio narrative/motion demos)");
+  it("publishes all 14 authorized portfolio and studio videos, Meet Ali personal intro, and 3 ElevenLabs audio cues on disk", () => {
+    assert.equal(APPROVED_PUBLIC_VIDEOS.length, 14, "expected 14 published videos (8 authorized portfolio edits + 6 studio intro/narrative/motion demos)");
     assert.equal(
       APPROVED_PUBLIC_VIDEOS.filter((v) => v.workType === "Authorized Portfolio Edit").length,
       8,
@@ -221,9 +228,14 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
     );
     assert.equal(
       APPROVED_PUBLIC_VIDEOS.filter((v) => v.workType === "Studio Motion Demo").length,
-      5,
-      "expected 5 studio-authored narrative and motion demos",
+      6,
+      "expected 6 studio-authored intro, narrative and motion demos",
     );
+    assert.equal(INTERVIEW_FEATURE.status, "ready", "Meet Ali personal studio intro should be live");
+    assert.ok(existsSync(path.join(process.cwd(), "public", INTERVIEW_FEATURE.videoSrc)), "missing Meet Ali web MP4");
+    assert.ok(existsSync(path.join(process.cwd(), "public", INTERVIEW_FEATURE.posterSrc)), "missing Meet Ali poster WebP");
+    assert.ok(existsSync(path.join(process.cwd(), "public", INTERVIEW_FEATURE.captionsSrc)), "missing Meet Ali WebVTT captions");
+    assert.ok(INTERVIEW_FEATURE.transcript.startsWith("I'm Ali Arshad."), "Meet Ali verbatim transcript must be populated");
     for (const v of APPROVED_PUBLIC_VIDEOS) {
       assert.ok(existsSync(path.join(process.cwd(), "public", v.src)), `missing video asset: ${v.src}`);
       assert.ok(existsSync(path.join(process.cwd(), "public", v.poster)), `missing video poster: ${v.poster}`);
@@ -241,6 +253,36 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
       assert.ok(existsSync(path.join(process.cwd(), "public", a.captionsSrc)), `missing audio VTT: ${a.captionsSrc}`);
       assert.ok(a.transcript.length > 5, `missing verbatim transcript for ${a.id}`);
       assert.ok(a.sourceFileRecordedInManifest.endsWith(".wav"), `missing source filename record for ${a.id}`);
+    }
+  });
+
+  it("publishes all 46 Creator Resource Library packages and 508 indexed Oculus SFX with valid routes, previews, and external CDN URLs", () => {
+    assert.equal(CREATOR_LIBRARY_ITEMS.length, 46, "expected 46 Creator Resource Library packages");
+    assert.equal(OCULUS_SOUNDS.length, 508, "expected all 508 Oculus Audio Pack 01 sounds indexed");
+    assert.equal(CREATOR_LIBRARY_EXCEPTIONS.length, 7, "expected 7 documented audit exceptions (2 duplicates + 5 .crdownload)");
+    assert.equal(isKnownRoute(CREATOR_LIBRARY_PATH), true);
+
+    const slugs = new Set<string>();
+    for (const item of CREATOR_LIBRARY_ITEMS) {
+      assert.ok(!slugs.has(item.slug), `duplicate library slug: ${item.slug}`);
+      slugs.add(item.slug);
+      assert.equal(isKnownRoute(`${CREATOR_LIBRARY_PATH}/${item.slug}`), true, `unregistered library route: ${item.slug}`);
+      assert.ok(item.downloadUrl.startsWith("https://github.com/aliarshad0909/My-own-Portfolio-2026/releases/download/creator-library-v1/"));
+      assert.ok(item.creatorCredit.length > 3, `missing creator credit on ${item.slug}`);
+      assert.ok(item.licenseLabel.length > 3, `missing license label on ${item.slug}`);
+      assert.ok(item.sourceFilename.length > 3, `missing sourceFilename on ${item.slug}`);
+      if (item.previewImage) {
+        assert.ok(existsSync(path.join(process.cwd(), "public", item.previewImage)), `missing preview image: ${item.previewImage}`);
+      }
+      if (item.previewVideo) {
+        assert.ok(existsSync(path.join(process.cwd(), "public", item.previewVideo)), `missing preview video: ${item.previewVideo}`);
+      }
+      for (const tr of item.previewAudio) {
+        assert.ok(existsSync(path.join(process.cwd(), "public", tr.src)), `missing preview audio: ${tr.src}`);
+      }
+      for (const relSvc of item.relatedServices) {
+        assert.equal(isKnownRoute(relSvc), true, `broken related service link ${relSvc} on ${item.slug}`);
+      }
     }
   });
 

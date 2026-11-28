@@ -145,7 +145,7 @@ export default function WorkPage() {
                 Open Visual Project Planner →
               </Link>
               <Link href="/services/creative-production#motion-examples" className="location-pill location-pill--all">
-                13 Playable Videos &amp; 3 Voiceover Cues →
+                14 Playable Videos &amp; 3 Voiceover Cues →
               </Link>
               <Link href="/products" className="location-pill">
                 12 SaaS Product Demos

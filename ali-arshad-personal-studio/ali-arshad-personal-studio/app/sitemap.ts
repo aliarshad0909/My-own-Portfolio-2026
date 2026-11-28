@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { BLOG_POSTS } from "@/lib/content/blog";
+import { CREATOR_LIBRARY_ITEMS, CREATOR_LIBRARY_PATH } from "@/lib/creator-library";
 import { STUDIO_GAMES } from "@/lib/games/catalog";
 import { PROJECTS, caseStudies, hasDedicatedCaseStudy, isIndexable } from "@/lib/projects";
 import { CORE_SITEMAP_PAGES, siteBaseUrl } from "@/lib/site";
@@ -46,11 +47,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
+  const creatorLibrary = [
+    { url: abs(CREATOR_LIBRARY_PATH), lastModified: LASTMOD.services, priority: 0.8 },
+    ...CREATOR_LIBRARY_ITEMS.map((item) => ({
+      url: abs(`${CREATOR_LIBRARY_PATH}/${item.slug}`),
+      lastModified: LASTMOD.services,
+      priority: 0.65,
+    })),
+  ];
+
   // SEO architecture routes: service hubs, subpages, calculators, resources, industries.
-  const coreHrefs = new Set(CORE_SITEMAP_PAGES);
+  const coreHrefs = new Set([...CORE_SITEMAP_PAGES, CREATOR_LIBRARY_PATH]);
   const seo = indexableSeoRoutes()
     .filter((path) => !coreHrefs.has(path))
     .map((path) => ({ url: abs(path), lastModified: LASTMOD.services, priority: 0.7 }));
 
-  return [...pages, ...games, ...blogPosts, ...studies, ...projects, ...seo];
+  return [...pages, ...games, ...blogPosts, ...studies, ...projects, ...creatorLibrary, ...seo];
 }

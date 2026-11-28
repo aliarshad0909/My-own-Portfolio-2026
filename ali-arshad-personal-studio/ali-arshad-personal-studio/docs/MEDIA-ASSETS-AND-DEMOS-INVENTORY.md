@@ -17,9 +17,10 @@ This manifest accounts for **100% of files** across `E:\My-own-Portfolio-2026\Cl
 | `E:\My-own-Portfolio-2026\video editing` — Adobe Stock photography | 3 | 0 | 3 excluded (licensed stock; redistribution/portfolio claim prohibited) |
 | `E:\My-own-Portfolio-2026\video editing` — Mixkit templates & third-party libraries | 16 | 0 | 16 excluded (14 Mixkit template packs + Oculus CC BY 4.0 SFX pack + Starter Library; raw packs never redistributed) |
 | `E:\My-own-Portfolio-2026\video editing` — Incomplete Chrome downloads | 5 | 0 | 5 excluded (`.crdownload` partial/corrupt files) |
+| First-party Personal Studio Introduction (`ALI_ARSHAD_PREMIUM_V3_MASTER.mp4`) | 1 | 1 web-optimized 1080p MP4 (`meet-ali-interview.mp4`, 23.6 MB) + WebP poster + verbatim WebVTT captions | 0 (243.1 MB local master preserved untouched) |
 | First-party Studio Motion Demos (Remotion & Blender 3D) | 4 | 4 web-optimized MP4/WebM loops (+ WebP posters) | 0 |
 | First-party Studio Creative Visual Demonstrations | 4 | 4 WebP visuals (Photoshop, Illustrator, Social Grid, NFT Concept) | 0 |
-| **Total Public Playable Showcase Media** | — | **13 Playable Videos + 3 ElevenLabs Audio Cues + 4 Creative Visual Demos** | — |
+| **Total Public Playable Showcase Media** | — | **14 Playable Videos + 3 ElevenLabs Audio Cues + 4 Creative Visual Demos** | — |
 
 ---
 
@@ -36,7 +37,7 @@ Every `.wav` file was listened to directly and transcribed verbatim so its publi
 
 ---
 
-## 2. Cleared & Published Playable Videos (`13` Total)
+## 2. Cleared & Published Playable Videos (`14` Total)
 
 ### 2A. Authorized Client & Portfolio Video Edits (`Client videos/` — `8` of `8` Published)
 
@@ -53,10 +54,11 @@ Original credits, brand outros, and deliverable watermarks (`BrightArc Orthodont
 | `Final Video.mp4` (48.38 MB) | Podcast Hook Short — High-Contrast Monochrome & Motion Cut | 9:16 · 22s · 3.7 MB | `/videos/portfolio/podcast-hook-short-edit.mp4` + `.vtt` + WebP poster |
 | `Final Barber Video.mp4` (40.34 MB) | Local Craft Story Reel — Kinetic Price & Motion Typography | 9:16 · 16s · 750 KB | `/videos/portfolio/barber-craft-story-reel.mp4` + `.vtt` + WebP poster |
 
-### 2B. First-Party Studio Narrative & Motion Demos (`5` Published)
+### 2B. First-Party Studio Introduction, Narrative & Motion Demos (`6` Published)
 
 | Source Origin | Public Display Title | Ratio / Format | Public Asset & Poster |
 | --- | --- | --- | --- |
+| `E:\My-own-Portfolio-2026\video editing\ALI_ARSHAD_PREMIUM_V3_MASTER.mp4` (`243.07 MB` original preserved untouched) | Meet Ali Arshad — Personal Studio Introduction (2:19) | 16:9 · 1920×1080 · 2:19 · 23.6 MB | `/videos/meet-ali-interview.mp4` + `.vtt` + `/images/videos/meet-ali-interview-poster.webp` |
 | Assembled from cleared shots in `F003_PART1a_S01-S08.zip` (`S01, S03, S08`) + `F003_PART1b_S09-S15.zip` (`S09, S10, S12, S13, S15`) + 3 ElevenLabs VO cues | Narrative Short-Film Teaser — “Thirty Copies” (AI Film & Voiceover Cut) | 9:16 · 25s · 5.3 MB | `/videos/portfolio/f003-thirty-copies-narrative-reel.mp4` + `.vtt` + WebP poster |
 | First-party Remotion composition | Studio Capabilities Pipeline — Brand & Systems Motion Reel | 16:9 · 8s · 375 KB | `/videos/capabilities-pipeline.mp4` + WebP poster |
 | First-party Remotion composition | Automated Lead Routing — n8n Workflow Explainer Clip | 16:9 · 8s · 191 KB | `/videos/n8n-workflow.mp4` + WebP poster |
@@ -131,4 +133,5 @@ License restriction: Mixkit permits using templates inside finished original edi
 ## 4. Studio-Created Visual Demonstrations & Product Sourcing Reference
 - **4 Studio-Created Visual Demonstrations** (`public/images/demos/`): Photoshop retouching/compositing, Illustrator vector illustration, Social brand content direction, and NFT/digital collectible concepts — explicitly badged as `"Studio-Created Demonstration"` or `"Studio-Created Concept"`.
 - **Product Sourcing (`E:\My-own-Portfolio-2026\Sourcing`, 24 files):** `1,436` deduplicated OEM models (`3,163` SKU variants, `7` categories, `1,437` privacy-redacted branded PDFs) intact with zero confidential supplier leaks.
-- **Meet Ali 90-second Interview Slot (`/about#meet-ali-interview`):** Configured via `lib/interview-feature.ts` (`status: "placeholder"`) with zero fabricated voice or footage.
+- **Meet Ali Personal Studio Introduction (`/about#meet-ali-interview`):** Live via `lib/interview-feature.ts` (`status: "ready"`) serving the 1080p web-optimized MP4 (`23.6 MB`, `-90.3%` vs. untouched `243.1 MB` master), `1280×720` WebP poster, timecoded verbatim English WebVTT captions, and collapsible verbatim transcript; teased on `/` (`MeetAliTeaser`) and cross-linked from `/creator-library` and `/services/creative-production`.
+- **Creator Resource Library (`/creator-library`):** See `docs/CREATOR-RESOURCE-LIBRARY-MANIFEST.md` for the full 46-package + 508-sound manifest covering all cleared downloadable resources from `E:\My-own-Portfolio-2026\video editing`.

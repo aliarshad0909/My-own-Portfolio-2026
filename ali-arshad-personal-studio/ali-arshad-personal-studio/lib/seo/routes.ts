@@ -17,6 +17,7 @@
  */
 
 import { BLOG_POSTS } from "@/lib/content/blog";
+import { CREATOR_LIBRARY_ITEMS, CREATOR_LIBRARY_PATH } from "@/lib/creator-library";
 import { FICTIONAL_DEMO_PROFILES } from "@/lib/geo/fictional-profiles";
 import { STUDIO_GAMES } from "@/lib/games/catalog";
 import { GPU_COMPUTE_PATH, GPU_TOPIC_PAGES } from "@/lib/gpu-compute";
@@ -53,6 +54,7 @@ export const STATIC_ROUTES = [
   "/privacy",
   "/locations",
   "/resources",
+  "/creator-library",
   "/industries",
   "/tools",
   "/tools/moq-quantity-helper",
@@ -68,6 +70,8 @@ export function knownRoutes(): Set<string> {
   for (const s of SOURCING_SUBPAGES) routes.add(`${PRODUCT_SOURCING_PATH}/${s.slug}`);
   routes.add(SOURCING_CATALOG_PATH);
   for (const item of ALL_SOURCING_PRODUCTS) routes.add(item.pagePath);
+  routes.add(CREATOR_LIBRARY_PATH);
+  for (const res of CREATOR_LIBRARY_ITEMS) routes.add(`${CREATOR_LIBRARY_PATH}/${res.slug}`);
 
   for (const p of PROJECTS) routes.add(`/work/${p.slug}`);
   for (const p of caseStudies()) routes.add(`/case-studies/${p.slug}`);

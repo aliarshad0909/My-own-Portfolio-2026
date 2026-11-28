@@ -4,10 +4,10 @@ import { Icon } from "@/components/ui/Icon";
 import { INTERVIEW_FEATURE } from "@/lib/interview-feature";
 
 /**
- * 90-second personal interview feature on `/about#meet-ali-interview`.
- * Renders an honest, studio-lit placeholder card until Ali provides real footage,
- * captions, and transcript in `lib/interview-feature.ts` — at which point it
- * renders a native lazy-loaded HTML5 video player automatically.
+ * Personal studio introduction feature on `/about#meet-ali-interview`.
+ * Renders native HTML5 playback with WebP poster, WebVTT captions, and a
+ * verbatim collapsible transcript when configured as `ready` in
+ * `lib/interview-feature.ts`.
  */
 export function MeetAliInterviewCard() {
   const isReady = INTERVIEW_FEATURE.status === "ready" && Boolean(INTERVIEW_FEATURE.videoSrc);
@@ -26,7 +26,7 @@ export function MeetAliInterviewCard() {
                 Meet Ali · {INTERVIEW_FEATURE.durationLabel}
               </p>
               <span className={`badge ${isReady ? "badge--verified" : "badge--concept"}`}>
-                {isReady ? "Studio Introduction" : "Video Slot · Footage Pending"}
+                {isReady ? INTERVIEW_FEATURE.aspectLabel : "Video Slot · Footage Pending"}
               </span>
             </div>
 
@@ -35,12 +35,12 @@ export function MeetAliInterviewCard() {
             </h2>
 
             <p className="section-sub" style={{ marginTop: "6px" }}>
-              {INTERVIEW_FEATURE.placeholderDescription}
+              {isReady ? INTERVIEW_FEATURE.description : INTERVIEW_FEATURE.placeholderDescription}
             </p>
 
             <div className="meet-ali-card__topics">
               <p className="label" style={{ marginBottom: "8px" }}>
-                What this 90-second intro covers
+                What this studio introduction covers
               </p>
               <ul className="check-list">
                 {INTERVIEW_FEATURE.plannedTopics.map((topic) => (
@@ -54,7 +54,7 @@ export function MeetAliInterviewCard() {
 
             <div className="hero__actions" style={{ marginTop: "18px" }}>
               <Link href="/contact" className="btn btn--primary btn--sm">
-                <span>Book a quick intro call instead</span>
+                <span>{isReady ? "Book an intro call" : "Book a quick intro call instead"}</span>
                 <Icon name="arrow-up-right" size={15} className="btn__icon" />
               </Link>
               <Link href="/experience" className="btn btn--secondary btn--sm">
@@ -69,18 +69,21 @@ export function MeetAliInterviewCard() {
                 <video
                   controls
                   playsInline
-                  preload="none"
+                  preload="metadata"
                   poster={INTERVIEW_FEATURE.posterSrc}
                   aria-label={INTERVIEW_FEATURE.title}
                 >
                   <source src={INTERVIEW_FEATURE.videoSrc} type="video/mp4" />
                   {INTERVIEW_FEATURE.captionsSrc ? (
-                    <track kind="captions" src={INTERVIEW_FEATURE.captionsSrc} srcLang="en" label="English" default />
+                    <track kind="captions" src={INTERVIEW_FEATURE.captionsSrc} srcLang="en" label="English captions" />
                   ) : null}
                 </video>
+                <p className="fine-print" style={{ marginTop: "8px" }}>
+                  1080p web-optimized MP4 · English WebVTT captions included (toggle CC in the player).
+                </p>
                 {INTERVIEW_FEATURE.transcript ? (
                   <details className="meet-ali-card__transcript">
-                    <summary>Read transcript</summary>
+                    <summary>Read full verbatim transcript ({INTERVIEW_FEATURE.durationLabel})</summary>
                     <p>{INTERVIEW_FEATURE.transcript}</p>
                   </details>
                 ) : null}
@@ -89,13 +92,13 @@ export function MeetAliInterviewCard() {
               <div
                 className="meet-ali-card__placeholder"
                 role="region"
-                aria-label="90-second personal interview video placeholder"
+                aria-label="Personal interview video placeholder"
               >
                 <Image
                   src={INTERVIEW_FEATURE.posterSrc}
                   alt={INTERVIEW_FEATURE.posterAlt}
-                  width={1157}
-                  height={1360}
+                  width={1280}
+                  height={720}
                   sizes="(min-width: 1024px) 480px, 92vw"
                   className="meet-ali-card__poster"
                 />
@@ -109,7 +112,7 @@ export function MeetAliInterviewCard() {
                     <Icon name="play" size={22} />
                   </div>
                   <p className="meet-ali-card__caption">
-                    Reserved for Ali&rsquo;s authentic 90-second recording — video, captions, and transcript coming soon.
+                    Reserved for Ali&rsquo;s authentic recording — video, captions, and transcript coming soon.
                   </p>
                 </div>
               </div>
