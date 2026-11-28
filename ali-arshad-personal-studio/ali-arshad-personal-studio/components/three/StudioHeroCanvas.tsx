@@ -81,7 +81,7 @@ export default function StudioHeroCanvas() {
   return (
     <div className="hero__r3f" aria-hidden="true">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         camera={{ position: [0, 0, 5.4], fov: 40 }}
         gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
       >

@@ -37,14 +37,18 @@ export function ScrollStoryRail({ eyebrow, heading, lead, steps, id }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const el = containerRef.current;
+    if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!window.matchMedia("(min-width: 900px)").matches) return;
 
     let ctx: { revert: () => void } | null = null;
     let cancelled = false;
+    let started = false;
 
-    (async () => {
+    const initGsap = async () => {
+      if (started || cancelled) return;
+      started = true;
       const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
         import("gsap"),
         import("gsap/ScrollTrigger"),
@@ -81,10 +85,23 @@ export function ScrollStoryRail({ eyebrow, heading, lead, steps, id }: Props) {
           });
         });
       }, containerRef);
-    })();
+    };
+
+    // Defer GSAP chunk download until the rail approaches the viewport so initial hero paint stays instant.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void initGsap();
+        }
+      },
+      { rootMargin: "260px 0px" },
+    );
+    observer.observe(el);
 
     return () => {
       cancelled = true;
+      observer.disconnect();
       ctx?.revert();
     };
   }, [steps.length]);

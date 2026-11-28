@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { CreativeDemoShowcase } from "@/components/creative/CreativeDemoShowcase";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
@@ -181,6 +182,15 @@ export default function SocialMediaManagementPage() {
           </div>
         </div>
       </section>
+
+      <CreativeDemoShowcase
+        id="social-brand-demo"
+        eyebrow="Studio-Created Visual Demonstration"
+        heading="Launch-grid cohesion & brand material direction"
+        lead="An original studio demonstration showing how photography crops, color swatch ratios, packaging tones, and lighting stay unified across a launch grid — paired directly with our 9:16 Reels edits on the Creative Production hub."
+        categories={["social-brand"]}
+        compact
+      />
 
       <section className="section section--surface" aria-labelledby="sm-flow-title">
         <div className="container">

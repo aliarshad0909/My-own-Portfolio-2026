@@ -506,8 +506,8 @@ export const SERVICE_HUBS: ServiceHub[] = [
         a: "Yes — rendering from a 3D model lets you generate consistent angles, material colourways and turntables without booking repeat studio shoots. The scene architecture behind it is built as reproducible Blender/Python code (three material presets, six camera angles and a 120-frame turntable, covered by 20 tests); finished renders are produced per engagement on a Blender workstation.",
       },
       {
-        q: "What video and motion examples can I preview on this page?",
-        a: "Three self-initiated Studio Motion Demos are playable right on this page (lazy-loaded with crisp posters), kept cleanly separate from the technical Motion Production: Media Pipeline case study. External client video edits remain private until written client and talent release is confirmed.",
+        q: "What video, motion and visual examples can I preview on this page?",
+        a: "Twelve lazy-loaded playable videos are available directly on this page (8 authorized portfolio and client video edits plus 4 first-party Studio Motion Demos with WebP posters and WebVTT captions), alongside four studio-created visual demonstrations covering Photoshop retouching, Illustrator vector artwork, social brand grids, and digital collectible concepts.",
       },
       {
         q: "What formats and aspect ratios do you deliver?",

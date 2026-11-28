@@ -87,6 +87,7 @@ export function Hero() {
               width={1024}
               height={1536}
               priority
+              fetchPriority="high"
               sizes="(min-width: 1280px) 480px, (min-width: 1024px) 36vw, 80vw"
               className="hero__portrait-img"
             />
