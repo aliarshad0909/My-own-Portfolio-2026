@@ -262,7 +262,7 @@ export default function SocialMediaManagementPage() {
                   <Icon name="arrow-right" size={15} />
                 </Link>
                 <Link href="/services/creative-production" className="arrow-link">
-                  <span>Video Editing &amp; Creative Production</span>
+                  <span>13 Video Edits &amp; 3 Voiceover Samples</span>
                   <Icon name="arrow-right" size={15} />
                 </Link>
                 <Link href="/services/linkedin-outreach" className="arrow-link">

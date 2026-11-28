@@ -14,6 +14,7 @@ import { EditorNote } from "@/components/ui/EditorNote";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
 import { PageHero } from "@/components/ui/PageHero";
+import { AudioShowcasePlayer } from "@/components/media/AudioShowcasePlayer";
 import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { CredentialCard } from "@/components/credentials/CredentialCard";
 import { getBlogPost } from "@/lib/content/blog";
@@ -583,12 +584,21 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
             {architectureSection(false)}
             {problemsSection(true)}
             {demoSection(false)}
-            {decisionSection(true)}
-            {deliverablesSection(false)}
-            {scenariosSection(true)}
-            {integrationsSection(false)}
-            {industriesSection(true)}
-            {processSection(false)}
+            <AudioShowcasePlayer
+              id="ai-voice-samples"
+              section="ai-agents"
+              eyebrow="AI Voiceover & Audio Prototyping · ElevenLabs"
+              heading="Synthesized narration & dialogue cues"
+              lead="Listen to three short ElevenLabs voice samples demonstrating vocal pacing, natural breath cadence, and tone control for AI voice workflows and media production."
+              surface
+              compact
+            />
+            {decisionSection(false)}
+            {deliverablesSection(true)}
+            {scenariosSection(false)}
+            {integrationsSection(true)}
+            {industriesSection(false)}
+            {processSection(true)}
             {spokesSection}
           </>
         );
@@ -672,9 +682,9 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
             <section className="section section--surface" id="motion-examples" aria-labelledby="creative-motion-demos">
               <div className="container">
                 <div className="section-head">
-                  <p className="eyebrow eyebrow--plain">Playable Video Portfolio &amp; Studio Motion Demos · Lazy-Loaded</p>
+                  <p className="eyebrow eyebrow--plain">Playable Video Portfolio &amp; Studio Demos · 13 Clips · Lazy-Loaded</p>
                   <h2 className="section-title" id="creative-motion-demos">
-                    Authorized video edits, short-form social reels &amp; studio motion demos
+                    Authorized video edits, short-form reels &amp; studio narrative/motion demos
                   </h2>
                   <p className="section-sub">
                     Filter by format or work type and click play on any poster to stream the web-optimized H.264 clip on demand — zero video bytes download until you press play.
@@ -683,9 +693,10 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
                 <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} enableFilters notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
               </div>
             </section>
-            <CreativeDemoShowcase id="creative-demonstrations" surface={false} />
-            {architectureSection(true)}
-            {demoSection(false)}
+            <AudioShowcasePlayer id="audio-voiceover-samples" section="all" surface={false} />
+            <CreativeDemoShowcase id="creative-demonstrations" surface />
+            {architectureSection(false)}
+            {demoSection(true)}
             {problemsSection(false)}
             {deliverablesSection(true)}
             {scenariosSection(false)}

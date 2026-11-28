@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
+import { CREATIVE_AUDIO_SAMPLES } from "@/lib/creative-audio";
 import { APPROVED_PUBLIC_VIDEOS, CREATIVE_SHOWCASE_VIDEOS } from "@/lib/creative-videos";
 import { GPU_TOPIC_PAGES } from "@/lib/gpu-compute";
 import { SERVICE_OPTIONS } from "@/lib/inquiry";
@@ -211,8 +212,8 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
     assert.ok(statSync(pdfFull).size < 1_000_000, "lookbook PDF should stay lightweight (<1 MB)");
   });
 
-  it("publishes all 12 authorized portfolio and studio motion videos with posters and VTT captions on disk", () => {
-    assert.equal(APPROVED_PUBLIC_VIDEOS.length, 12, "expected 12 published videos (8 authorized portfolio edits + 4 studio motion demos)");
+  it("publishes all 13 authorized portfolio and studio narrative/motion videos and 3 ElevenLabs audio cues on disk", () => {
+    assert.equal(APPROVED_PUBLIC_VIDEOS.length, 13, "expected 13 published videos (8 authorized portfolio edits + 5 studio narrative/motion demos)");
     assert.equal(
       APPROVED_PUBLIC_VIDEOS.filter((v) => v.workType === "Authorized Portfolio Edit").length,
       8,
@@ -220,8 +221,8 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
     );
     assert.equal(
       APPROVED_PUBLIC_VIDEOS.filter((v) => v.workType === "Studio Motion Demo").length,
-      4,
-      "expected 4 studio-authored motion demos",
+      5,
+      "expected 5 studio-authored narrative and motion demos",
     );
     for (const v of APPROVED_PUBLIC_VIDEOS) {
       assert.ok(existsSync(path.join(process.cwd(), "public", v.src)), `missing video asset: ${v.src}`);
@@ -232,6 +233,14 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
       if (v.captionsSrc) {
         assert.ok(existsSync(path.join(process.cwd(), "public", v.captionsSrc)), `missing captions VTT: ${v.captionsSrc}`);
       }
+    }
+
+    assert.equal(CREATIVE_AUDIO_SAMPLES.length, 3, "expected 3 unique cleared ElevenLabs audio cues");
+    for (const a of CREATIVE_AUDIO_SAMPLES) {
+      assert.ok(existsSync(path.join(process.cwd(), "public", a.src)), `missing audio asset: ${a.src}`);
+      assert.ok(existsSync(path.join(process.cwd(), "public", a.captionsSrc)), `missing audio VTT: ${a.captionsSrc}`);
+      assert.ok(a.transcript.length > 5, `missing verbatim transcript for ${a.id}`);
+      assert.ok(a.sourceFileRecordedInManifest.endsWith(".wav"), `missing source filename record for ${a.id}`);
     }
   });
 
