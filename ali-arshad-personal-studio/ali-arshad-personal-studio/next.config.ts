@@ -43,8 +43,17 @@ const nextConfig: NextConfig = {
       { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
       { key: "Cache-Control", value: "no-store, private" },
     ];
+    const immutableMediaHeaders = [
+      { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+    ];
+    const pdfDownloadHeaders = [
+      { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+    ];
     return [
       { source: "/(.*)", headers: securityHeaders },
+      { source: "/images/:path*", headers: immutableMediaHeaders },
+      { source: "/videos/:path*", headers: immutableMediaHeaders },
+      { source: "/downloads/:path*", headers: pdfDownloadHeaders },
       { source: "/admin", headers: adminNoIndexHeaders },
       { source: "/admin/:path*", headers: adminNoIndexHeaders },
       { source: "/api/admin/:path*", headers: adminNoIndexHeaders },

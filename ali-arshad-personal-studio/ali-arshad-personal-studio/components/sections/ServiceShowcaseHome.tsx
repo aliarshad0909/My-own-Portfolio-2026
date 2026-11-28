@@ -112,6 +112,9 @@ export function ServiceShowcaseHome() {
             <Link href="/services/creative-production#motion-examples" className="location-pill location-pill--all">
               Video Portfolio (12 Clips) →
             </Link>
+            <Link href="/services/creative-production#creative-demonstrations" className="location-pill location-pill--all">
+              Photoshop, Illustrator &amp; NFT Demos →
+            </Link>
             <Link href="/services/gpu-compute" className="location-pill">
               GPU &amp; Compute Hub
             </Link>

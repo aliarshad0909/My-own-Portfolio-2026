@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { CreativeDemoShowcase } from "@/components/creative/CreativeDemoShowcase";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FlowDiagram, type FlowStep } from "@/components/services/FlowDiagram";
 import { ServiceNav } from "@/components/services/ServiceNav";
@@ -87,6 +88,7 @@ const SERVICE_FAMILIES: ServiceFamily[] = [
     hubSlugs: ["creative-production", "branding"],
     extraLinks: [
       { label: "Playable Video Portfolio (12 Clips) →", href: "/services/creative-production#motion-examples" },
+      { label: "Photoshop, Illustrator & NFT Demos →", href: "/services/creative-production#creative-demonstrations" },
       { label: "Social Media Setup & Management →", href: "/services/social-media-management" },
       { label: "LinkedIn Outreach & Sales Dev →", href: "/services/linkedin-outreach" },
     ],
@@ -162,21 +164,21 @@ function ServiceVisual({ service }: { service: Service }) {
     return (
       <div className="visual-stack">
         <div className="panel">
-          <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+          <p className="eyebrow eyebrow--plain">12 Playable Videos &amp; 4 Creative Demonstrations</p>
           <h3 className="card-title" style={{ marginTop: "4px" }}>
-            Preview web-optimized motion clips &amp; verified encoding tooling
+            Preview authorized video edits, motion clips &amp; visual craft demos
           </h3>
           <p className="fine-print" style={{ marginTop: "8px", lineHeight: 1.6 }}>
-            Play studio-authored motion clips directly on the Creative Production hub, kept distinct from the tested ffmpeg media pipeline case study.
-            External client video edits remain private until written public-display permission is confirmed.
+            Stream 8 authorized portfolio/client video edits and 4 first-party Studio Motion Demos on demand, alongside studio-created
+            demonstrations for Photoshop retouching, Illustrator vector work, social brand grids, and digital collectible concepts.
           </p>
           <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "10px" }}>
             <Link href="/services/creative-production#motion-examples" className="btn btn--primary btn--sm">
-              <span>Watch studio motion previews</span>
+              <span>Watch 12 playable clips</span>
               <Icon name="play" size={14} className="btn__icon" />
             </Link>
-            <Link href="/case-studies/motion-production-pipeline" className="btn btn--secondary btn--sm">
-              <span>Media pipeline case study</span>
+            <Link href="/services/creative-production#creative-demonstrations" className="btn btn--secondary btn--sm">
+              <span>Photoshop, Illustrator &amp; NFT demos</span>
             </Link>
           </div>
         </div>
@@ -459,7 +461,16 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="section section--surface section--tight" aria-labelledby="remote-delivery-title">
+      <CreativeDemoShowcase
+        id="creative-demos-overview"
+        eyebrow="Creative Visual Demonstrations · Studio-Authored"
+        heading="Visual proof across Photoshop, Illustrator, social content & collectible concepts"
+        lead="Alongside live software sandboxes, 12 playable videos, and 1,436 sourcing models, these original studio pieces demonstrate retouching, vector geometry, brand grid systems, and 3D collectible art direction."
+        surface
+        compact
+      />
+
+      <section className="section section--tight" aria-labelledby="remote-delivery-title">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow eyebrow--plain">Remote-first collaboration &amp; infrastructure</p>

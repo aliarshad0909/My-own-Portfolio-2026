@@ -94,7 +94,29 @@
 }
 
 .section-head {
-  margin-bottom: clamp(28px, 3.4vw, 52px);
+  margin-bottom: clamp(18px, 2.4vw, 34px);
+}
+
+/* Zero-JS route transition — keeps SSR immediately visible at near-full opacity */
+@keyframes page-enter-fade {
+  from {
+    opacity: 0.96;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter-fade 220ms var(--ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
 }
 
 /* Buttons */

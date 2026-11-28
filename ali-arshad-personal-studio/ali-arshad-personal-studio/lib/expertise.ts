@@ -12,8 +12,8 @@ export type Expertise = {
 export const EXPERTISE: Expertise[] = [
   {
     discipline: "Creative Production",
-    description: "3D visualization, video editing and motion for brand and product content.",
-    tools: ["Blender", "Premiere Pro", "After Effects"],
+    description: "3D visualization, video editing, motion graphics, retouching and vector illustration for brand and product content.",
+    tools: ["Blender", "Photoshop", "Illustrator", "Premiere Pro", "After Effects"],
   },
   {
     discipline: "Software Development",
@@ -65,6 +65,7 @@ export const TOOLS: Tool[] = [
   { name: "Illustrator", mark: "Ai", group: "Creative" },
   { name: "Premiere Pro", mark: "Pr", group: "Creative" },
   { name: "After Effects", mark: "Ae", group: "Creative" },
+  { name: "Digital Collectibles", mark: "Dc", group: "Creative", conceptOnly: true },
   { name: "React", mark: "Re", group: "Development" },
   { name: "Next.js", mark: "Nx", group: "Development" },
   { name: "Python", mark: "Py", group: "Development" },

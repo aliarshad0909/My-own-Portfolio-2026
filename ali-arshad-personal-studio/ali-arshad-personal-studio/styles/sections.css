@@ -175,12 +175,12 @@
 /* Inner page hero */
 .page-hero {
   position: relative;
-  padding-block: clamp(48px, 6.6vw, 104px) clamp(36px, 4.8vw, 72px);
+  padding-block: clamp(30px, 4.2vw, 56px) clamp(24px, 3vw, 42px);
 }
 
 .page-hero__inner {
   display: grid;
-  gap: 32px;
+  gap: 24px;
 }
 
 .page-hero--split {
@@ -190,29 +190,29 @@
 }
 
 .page-hero--split .page-hero__copy {
-  padding-bottom: clamp(8px, 2vw, 24px);
+  padding-bottom: clamp(8px, 2vw, 20px);
 }
 
 .page-hero__aside {
   justify-self: center;
-  width: min(100%, 400px);
+  width: min(100%, 340px);
 }
 
 @media (min-width: 1024px) {
   .page-hero--split .page-hero__inner {
-    grid-template-columns: minmax(0, 56fr) minmax(0, 44fr);
+    grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
     align-items: end;
-    gap: 40px;
+    gap: 32px;
   }
 
   .page-hero--split .page-hero__copy {
-    padding-bottom: clamp(48px, 5vw, 80px);
+    padding-bottom: clamp(32px, 3.8vw, 52px);
   }
 
   .page-hero__aside {
     justify-self: end;
     width: 100%;
-    max-width: 460px;
+    max-width: 360px;
   }
 }
 
@@ -2378,12 +2378,16 @@
   border-color: var(--coral-line);
 }
 
-/* The preview is a button: the certificate opens at full size from it. */
+/* The preview is a button: the certificate opens at full size from it.
+   Explicit height keeps thumbnails sharp and centered without dominating the viewport. */
 .cred__preview {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 0;
+  height: 204px;
+  padding: 10px 14px;
   border: 0;
   border-bottom: 1px solid var(--border-soft);
   background: #f4f1ec;
@@ -2393,8 +2397,10 @@
 
 .cred__thumb {
   display: block;
-  width: 100%;
-  height: auto;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
   transition: transform var(--med) var(--ease);
 }
 
@@ -2584,13 +2590,22 @@
   line-height: 1.5;
 }
 
+.cred--compact .cred__preview {
+  height: 170px;
+  padding: 8px 12px;
+}
+
+.cred--compact .cred__thumb {
+  max-height: 154px;
+}
+
 .cred--compact .cred__body {
-  padding: 16px 18px 18px;
-  gap: 8px;
+  padding: 14px 16px 16px;
+  gap: 7px;
 }
 
 .cred--compact .cred__title {
-  font-size: 1.0625rem;
+  font-size: 1.02rem;
 }
 
 @media (min-width: 760px) {
@@ -3400,7 +3415,11 @@
 
 /* ── Homepage: Selected Work lead + 6-card showcase grid ──────────────── */
 .fw--lead {
-  margin-bottom: clamp(20px, 2.5vw, 32px);
+  margin-bottom: clamp(18px, 2.2vw, 28px);
+}
+
+.fw--lead .fw__media {
+  max-height: 360px;
 }
 
 .fw-grid {
@@ -7933,27 +7952,90 @@ code,
 .hero__portrait-stage {
   position: relative;
   isolation: isolate;
-  width: min(100%, 320px);
+  width: min(100%, 310px);
   overflow: visible;
+}
+
+/* Smooth warm bulb-like atmospheric glow behind Ali's homepage portrait:
+   gently brightens, dims, and brightens again in warm coral & amber without harsh flashes. */
+@keyframes portrait-bulb-glow {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes portrait-bulb-core {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scale(1.08);
+  }
 }
 
 .hero__portrait-stage::before {
   content: "";
   position: absolute;
-  inset: 8% -12% 4% -12%;
+  inset: 2% -16% 6% -16%;
   z-index: 0;
   border-radius: 50%;
-  background: radial-gradient(ellipse 62% 68% at 62% 46%,
-      rgba(255, 122, 92, 0.24) 0%,
-      rgba(196, 76, 48, 0.1) 46%,
-      transparent 74%);
-  filter: blur(26px);
+  background: radial-gradient(
+    ellipse 66% 70% at 54% 42%,
+    rgba(255, 134, 92, 0.46) 0%,
+    rgba(245, 176, 65, 0.24) 38%,
+    rgba(217, 85, 56, 0.1) 62%,
+    transparent 78%
+  );
+  filter: blur(34px);
   pointer-events: none;
+  will-change: opacity, transform;
+  animation: portrait-bulb-glow 7.5s ease-in-out infinite;
+}
+
+.hero__portrait-stage::after {
+  content: "";
+  position: absolute;
+  inset: 14% 4% 24% 8%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 52% 44%,
+    rgba(255, 206, 148, 0.34) 0%,
+    rgba(255, 122, 92, 0.22) 45%,
+    transparent 74%
+  );
+  filter: blur(22px);
+  pointer-events: none;
+  will-change: opacity, transform;
+  animation: portrait-bulb-core 7.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__portrait-stage::before {
+    animation: none;
+    opacity: 0.68;
+    transform: none;
+  }
+
+  .hero__portrait-stage::after {
+    animation: none;
+    opacity: 0.5;
+    transform: none;
+  }
 }
 
 .hero__portrait-img {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: block;
   width: 100%;
   height: auto;
@@ -8721,6 +8803,9 @@ section.container:has(> .notice) + article.section {
 }
 
 .credential-callout__img {
+  width: 100%;
+  max-width: 310px;
+  justify-self: center;
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid var(--border-soft);
@@ -9327,9 +9412,339 @@ section,
   }
 
   .sourcing-item-card:hover .sourcing-item-card__img,
-  .video-card:hover .video-card__poster-img {
-    transform: scale(1.035);
+  .video-card:hover .video-card__poster-img,
+  .creative-demo-card:hover .creative-demo-card__img {
+    transform: scale(1.03);
   }
+}
+
+/* ───────── Meet Ali Teaser (Homepage) & 90s Interview Card (/about) ───────── */
+.meet-ali-teaser {
+  display: grid;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(135deg, rgba(22, 32, 44, 0.96), rgba(14, 19, 27, 0.96));
+}
+
+@media (min-width: 768px) {
+  .meet-ali-teaser {
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    gap: 22px;
+    padding: 18px 24px;
+  }
+}
+
+.meet-ali-teaser__media {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--coral-line);
+  background: var(--surface);
+  flex: none;
+}
+
+@media (min-width: 768px) {
+  .meet-ali-teaser__media {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+.meet-ali-teaser__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.meet-ali-teaser__play {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(9, 12, 17, 0.86);
+  border: 1px solid var(--coral);
+  color: var(--coral);
+}
+
+.meet-ali-teaser__copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.meet-ali-teaser__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.meet-ali-teaser__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+
+.meet-ali-teaser__about {
+  min-height: 40px;
+  font-size: var(--fs-small);
+}
+
+.meet-ali-card {
+  display: grid;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: center;
+  border: 1px solid var(--border-soft);
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
+
+@media (min-width: 960px) {
+  .meet-ali-card {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+}
+
+.meet-ali-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.meet-ali-card__topics {
+  margin-top: 16px;
+}
+
+.meet-ali-card__placeholder,
+.meet-ali-card__player video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.meet-ali-card__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  filter: brightness(0.62) saturate(0.92);
+}
+
+.meet-ali-card__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 122, 92, 0.24), transparent 62%),
+    linear-gradient(to top, rgba(9, 12, 17, 0.92) 0%, rgba(9, 12, 17, 0.35) 55%, rgba(9, 12, 17, 0.52) 100%);
+}
+
+.meet-ali-card__overlay {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding: 16px 20px;
+}
+
+.meet-ali-card__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(9, 12, 17, 0.78);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.meet-ali-card__play-badge {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(9, 12, 17, 0.8);
+  border: 1.5px solid var(--coral);
+  color: var(--coral);
+  box-shadow: 0 0 28px rgba(255, 122, 92, 0.28);
+}
+
+.meet-ali-card__caption {
+  color: #e4e1db;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  max-width: 44ch;
+}
+
+.meet-ali-card__caption code {
+  color: var(--coral);
+  font-size: 0.78rem;
+}
+
+.meet-ali-card__transcript {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  font-size: var(--fs-small);
+}
+
+.meet-ali-card__transcript summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ───────── Studio-Created Creative Demonstrations ───────── */
+.creative-demo-grid {
+  display: grid;
+  gap: clamp(16px, 2vw, 24px);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 780px) {
+  .creative-demo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .creative-demo-grid--single {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 760px;
+  }
+}
+
+.creative-demo-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  transition:
+    transform 260ms var(--ease),
+    border-color 260ms var(--ease),
+    box-shadow 260ms var(--ease);
+}
+
+.creative-demo-card:hover {
+  border-color: var(--coral-line);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+}
+
+.creative-demo-card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.creative-demo-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 420ms var(--ease);
+}
+
+.creative-demo-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(9, 12, 17, 0.86);
+  border: 1px solid rgba(158, 201, 238, 0.42);
+  color: #9ec9ee;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+
+.creative-demo-card__badge--concept {
+  border-color: rgba(245, 196, 81, 0.45);
+  color: var(--amber);
+}
+
+.creative-demo-card__svg-mark {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: rgba(9, 12, 17, 0.84);
+  border: 1px solid var(--border);
+}
+
+.creative-demo-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(16px, 2vw, 22px);
+}
+
+.creative-demo-card__discipline {
+  color: var(--coral);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.creative-demo-card__summary {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.creative-demo-card__list {
+  font-size: 0.85rem;
+  gap: 6px;
+}
+
+.creative-demo-card__deliverables {
+  font-size: 0.82rem;
+}
+
+.creative-demo-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-soft);
 }
 
 

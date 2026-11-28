@@ -5,6 +5,7 @@ import { personSchema, profilePageSchema, type FaqItem } from "@/lib/structured-
 import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { MeetAliInterviewCard } from "@/components/sections/MeetAliInterviewCard";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ArrowLink } from "@/components/ui/Button";
 import { ButtonLink } from "@/components/ui/Button";
@@ -119,6 +120,8 @@ export default function AboutPage() {
           </ButtonLink>
         </div>
       </PageHero>
+
+      <MeetAliInterviewCard />
 
       <section className="section" aria-labelledby="background-title">
         <div className="container split">

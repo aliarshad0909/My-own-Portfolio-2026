@@ -38,11 +38,41 @@ export function StudioHeroCanvasLoader() {
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const wideEnough = window.matchMedia("(min-width: 960px)").matches;
-    if (!reduceMotion && wideEnough && supportsWebGL()) {
-      const id = window.setTimeout(() => setEnabled(true), 120);
-      return () => window.clearTimeout(id);
+    const wideEnough = window.matchMedia("(min-width: 1024px)").matches;
+    if (reduceMotion || !wideEnough || !supportsWebGL()) return;
+
+    let cancelled = false;
+    let activated = false;
+    let timerId: number | undefined;
+
+    const activate = () => {
+      if (cancelled || activated) return;
+      activated = true;
+      window.removeEventListener("pointermove", activate);
+      window.removeEventListener("scroll", activate);
+      setEnabled(true);
+    };
+
+    const arm = () => {
+      // Load Three.js only on first desktop interaction or well after LCP/TBT settles.
+      window.addEventListener("pointermove", activate, { once: true, passive: true });
+      window.addEventListener("scroll", activate, { once: true, passive: true });
+      timerId = window.setTimeout(activate, 3500);
+    };
+
+    if (document.readyState === "complete") {
+      arm();
+    } else {
+      window.addEventListener("load", arm, { once: true });
     }
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", arm);
+      window.removeEventListener("pointermove", activate);
+      window.removeEventListener("scroll", activate);
+      if (timerId !== undefined) window.clearTimeout(timerId);
+    };
   }, []);
 
   if (!enabled) return null;

@@ -4,6 +4,7 @@ import { FeaturedWork } from "@/components/sections/FeaturedWork";
 import { FreelanceConnect } from "@/components/sections/FreelanceConnect";
 import { Hero } from "@/components/sections/Hero";
 import { LiveProductDemos } from "@/components/sections/LiveProductDemos";
+import { MeetAliTeaser } from "@/components/sections/MeetAliTeaser";
 import { ServiceShowcaseHome } from "@/components/sections/ServiceShowcaseHome";
 import { StudioNetworkIntro } from "@/components/sections/StudioNetworkIntro";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -32,9 +33,10 @@ export default function HomePage() {
       <JsonLd data={professionalServiceSchema(PUBLISHED_OFFERS)} />
       <JsonLd data={webSiteSchema()} />
       {/* Focused client conversion flow:
-          1. Hero → 2. Core Services → 3. Selected Work → 4. Studio Network →
-          5. Live Product Demonstrations → 6. Credentials → 7. Direct / Upwork Contact. */}
+          1. Hero → 2. Meet Ali Intro Teaser → 3. Core Services → 4. Selected Work →
+          5. Studio Network → 6. Live Product Demonstrations → 7. Credentials → 8. Direct / Upwork Contact. */}
       <Hero />
+      <MeetAliTeaser />
       <ServiceShowcaseHome />
       <FeaturedWork />
       <StudioNetworkIntro />

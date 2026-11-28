@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArticleSocialBar } from "@/components/blog/ArticleSocialBar";
 import { ContactCTA } from "@/components/sections/ContactCTA";
+import { CreativeDemoShowcase } from "@/components/creative/CreativeDemoShowcase";
 import { ServiceMotion } from "@/components/services/ServiceMotion";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { InteractiveArchitecture } from "@/components/services/InteractiveArchitecture";
@@ -627,6 +628,15 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
           <>
             {factsStrip}
             {demoSection(false)}
+            <CreativeDemoShowcase
+              id="brand-visual-demos"
+              eyebrow="Studio-Created Visual Demonstrations"
+              heading="Vector artwork, launch-grid cohesion & collectible concepts"
+              lead="Studio-authored demonstrations illustrating Illustrator precision, social brand system direction, and sculptural digital collectible lookdev — clearly marked as studio demonstrations rather than client commissions."
+              categories={["illustrator", "social-brand", "nft-concept"]}
+              surface
+              compact
+            />
             {credentialsSection}
             {problemsSection(true)}
             {deliverablesSection(false)}
@@ -673,8 +683,9 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
                 <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} enableFilters notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
               </div>
             </section>
-            {architectureSection(false)}
-            {demoSection(true)}
+            <CreativeDemoShowcase id="creative-demonstrations" surface={false} />
+            {architectureSection(true)}
+            {demoSection(false)}
             {problemsSection(false)}
             {deliverablesSection(true)}
             {scenariosSection(false)}
