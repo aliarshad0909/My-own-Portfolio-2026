@@ -42,18 +42,18 @@
   --glow-coral: radial-gradient(circle, rgba(255, 122, 92, 0.24) 0%, rgba(255, 122, 92, 0.05) 48%, transparent 72%);
   --glow-sky: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
 
-  /* Type — distinctive display + clean geometric sans + crisp mono */
+  /* Type — one distinctive display font + one highly readable body font */
   --font-heading: var(--ff-heading, "Bricolage Grotesque"), "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-body: var(--ff-body, "Plus Jakarta Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: var(--ff-mono, "JetBrains Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --fs-hero: clamp(2.55rem, 1.55rem + 4.4vw, 4.75rem);
   --fs-page: clamp(2.125rem, 1.5rem + 2.9vw, 3.75rem);
   --fs-section: clamp(1.65rem, 1.3rem + 1.45vw, 2.55rem);
   --fs-section-sm: clamp(1.375rem, 1.2rem + 0.72vw, 1.8rem);
   --fs-card: clamp(1.1875rem, 1.07rem + 0.45vw, 1.4375rem);
-  --fs-lead: clamp(1.02rem, 0.96rem + 0.32vw, 1.2rem);
-  --fs-body: 1rem;
+  --fs-lead: clamp(1.04rem, 0.98rem + 0.3vw, 1.2rem);
+  --fs-body: 1.03125rem;
   --fs-small: 0.875rem;
   --fs-tiny: 0.8125rem;
 

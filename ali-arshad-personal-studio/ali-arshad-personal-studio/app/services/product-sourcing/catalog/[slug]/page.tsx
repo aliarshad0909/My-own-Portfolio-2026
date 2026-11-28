@@ -16,6 +16,7 @@ import {
   ALL_SOURCING_PRODUCTS,
   MASTER_CATALOG_PDF_PATH,
   SOURCING_CATALOG_PATH,
+  SOURCING_CATALOG_STATS,
   getSourcingProduct,
   relatedSourcingProducts,
 } from "@/lib/sourcing-catalog";
@@ -266,7 +267,7 @@ export default async function SourcingProductDetailPage({
                     <Icon name="arrow-up-right" size={16} />
                   </span>
                   <span className="hub-link-card__desc">
-                    Download the complete branded directory spanning all 5 reference categories and 841 models/series.
+                    Download the complete branded directory spanning all 7 reference categories and {SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} models/series.
                   </span>
                 </a>
               </li>

@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 const state = getKeyword("net-studio-network")?.state ?? "Researched";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Studio Network — Peer Collaborators & Complementary Specialist Connections",
+  title: "Studio Network — Peer & Specialist Collaboration",
   description:
     "Connect with Ali Arshad Personal Studio as a peer builder for project collaboration or as a complementary specialist for mutual referrals — strictly private by default, zero invented profiles.",
   path: "/studio-network",

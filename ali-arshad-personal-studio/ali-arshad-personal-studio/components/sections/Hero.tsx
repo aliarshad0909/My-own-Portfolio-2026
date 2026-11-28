@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { StudioHeroCanvasLoader } from "@/components/three/StudioHeroCanvasLoader";
 import { ChangingFocus } from "@/components/ui/ChangingFocus";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { TrackedLink } from "@/components/ui/TrackedLink";
@@ -19,6 +20,7 @@ export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero__accent" aria-hidden="true" />
+      <StudioHeroCanvasLoader />
       <div className="container hero__inner hero__inner--portrait">
         <div className="hero__copy enter">
           <p className="eyebrow">

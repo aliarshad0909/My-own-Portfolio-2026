@@ -18,6 +18,8 @@ const CATEGORIES: { id: "all" | SourcingCatalogCategoryId; label: string }[] = [
   { id: "mobile-accessories", label: "Mobile & Power" },
   { id: "lighting-solar", label: "LED & Solar Lighting" },
   { id: "toys", label: "Toys & Play" },
+  { id: "apparel-sportswear", label: "Apparel & Sportswear" },
+  { id: "fashion-jewelry", label: "Fashion Jewelry" },
 ];
 
 type Props = {
@@ -107,7 +109,7 @@ export function SourcingCatalogBrowser({ items, initialCategory = "all" }: Props
                 setQuery(e.target.value);
                 setPage(1);
               }}
-              placeholder="e.g. TS-201, HB001, UPW-COBTH, GaN, 20000 mAh, Magnetic…"
+              placeholder="e.g. TS-201, HB001, PW-SP-001, B0391, N0127, GaN, Magnetic…"
               className="work-finder__input"
               aria-label="Search products by model code, title, or specification"
             />

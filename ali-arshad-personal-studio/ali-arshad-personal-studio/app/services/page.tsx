@@ -86,6 +86,7 @@ const SERVICE_FAMILIES: ServiceFamily[] = [
     pillarIds: ["creative-production", "brand-growth"],
     hubSlugs: ["creative-production", "branding"],
     extraLinks: [
+      { label: "Playable Video Portfolio (12 Clips) →", href: "/services/creative-production#motion-examples" },
       { label: "Social Media Setup & Management →", href: "/services/social-media-management" },
       { label: "LinkedIn Outreach & Sales Dev →", href: "/services/linkedin-outreach" },
     ],

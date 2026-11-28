@@ -116,10 +116,10 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "The trap: two quotes that look identical until the container ships",
         paragraphs: [
           "Almost every first-time importer makes the same understandable mistake: requesting quotes from five factories, sorting the spreadsheet by lowest EXW unit price, and wiring a deposit to row one. Two months later, the surprise arrives—not in the unit price, but in volumetric air/sea freight, missing destination safety documentation, flimsy retail boxes, or unquoted origin port handling charges.",
-          "Across the five product families indexed in our public Product Sourcing Catalogue—kitchen appliances, hard-shell luggage, mobile power accessories, architectural/outdoor LED lighting, and educational toys—headline EXW unit price routinely represents only half the economic picture.",
+          "Across the seven product families indexed in our public Product Sourcing Catalogue—kitchen appliances, hard-shell luggage, mobile power accessories, architectural/outdoor LED lighting, educational toys, custom apparel/sportswear, and fashion jewelry—headline EXW unit price routinely represents only half the economic picture.",
         ],
         links: [
-          { label: "Search the Product Sourcing Catalogue (841 OEM models)", href: "/services/product-sourcing/catalog" },
+          { label: "Search the Product Sourcing Catalogue (1,436 OEM models)", href: "/services/product-sourcing/catalog" },
           { label: "Download Ali Arshad — Product Sourcing Catalogue (PDF)", href: "/downloads/Ali-Arshad-Product-Sourcing-Catalogue.pdf" },
         ],
       },
@@ -172,7 +172,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "single-host-gpu-compute-when-consultation-beats-cloud",
     ],
     relatedLinks: [
-      { label: "Search Product Sourcing Catalogue (841 Models)", href: "/services/product-sourcing/catalog", kind: "Catalogue" },
+      { label: "Search Product Sourcing Catalogue (1,436 Models)", href: "/services/product-sourcing/catalog", kind: "Catalogue" },
       { label: "Product Sourcing Service Hub", href: "/services/product-sourcing", kind: "Service" },
       { label: "Landed Cost Calculator", href: "/tools/landed-cost-calculator", kind: "Calculator" },
       { label: "Shipping & Volumetric Calculator", href: "/tools/shipping-cost-calculator", kind: "Calculator" },

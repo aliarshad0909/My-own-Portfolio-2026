@@ -30,6 +30,8 @@ export type SourcingCategoryId =
   | "mobile-accessories"
   | "lighting-solar"
   | "toys"
+  | "apparel-sportswear"
+  | "fashion-jewelry"
   | "kitchenware-household";
 
 export type SourcingCategory = {
@@ -185,6 +187,32 @@ export const SOURCING_CATEGORIES: SourcingCategory[] = [
       "Window-box, color-box, storage-tub, or e-commerce mailer packing specs and inner/master carton counts",
     ],
     caveat: "Toy import safety rules are strict and non-negotiable; accredited third-party lab testing requirements are confirmed before production.",
+  },
+  {
+    id: "apparel-sportswear",
+    name: "Custom Apparel, Sportswear & Accessories",
+    pathType: "Reference catalog experience",
+    summary:
+      "Custom team uniforms (basketball, baseball, football, rugby, cycling, volleyball, tennis), oversized T-shirts, pullover/zip hoodies, sweatshirts, caps, beanies, socks, bags, belts, and wallets.",
+    typicalChecks: [
+      "Fabric composition, GSM weight, seam reinforcement, and sublimation/embroidery/screen-print durability",
+      "Size grading runs (US/EU sizing charts), custom neck/care labels, hangtags, and Pantone color matching",
+      "Pre-production fit samples and private-label packaging folds before bulk cut-and-sew production",
+    ],
+    caveat: "Fabric GSM, sizing runs, customization minimums, and unit pricing are not printed on visual style sheets and are confirmed fresh on request.",
+  },
+  {
+    id: "fashion-jewelry",
+    name: "Fashion Jewelry & Stainless Steel Accessories",
+    pathType: "Reference catalog experience",
+    summary:
+      "Fashion chain bracelets, cubic zirconia tennis necklaces and bracelets, pendant necklaces, and alphabet initial charms across silver-tone (S), gold-tone (G), and rose-gold-tone (RG) finishes.",
+    typicalChecks: [
+      "Base alloy confirmation (e.g., 316L stainless/titanium steel vs. brass), plating thickness, and nickel/lead compliance (REACH / CA Prop 65)",
+      "Clasp tension, stone setting security, chain/wrist length verification, and tarnish resistance on physical samples",
+      "Anti-tarnish pouches, jewelry gift boxes, SKU barcoding, and high-density air express shipping optimization",
+    ],
+    caveat: "Reference sheets show visual styles and SKU codes only — exact dimensions, gram weight, metal composition, plating thickness, MOQ, and pricing are confirmed on request.",
   },
   {
     id: "kitchenware-household",
@@ -430,6 +458,44 @@ export const SOURCING_CATALOG_EXAMPLES: SourcingCatalogExample[] = [
     packagingAndCompliance: "Retail packaging language, age-grade markings, and barcode placement confirmed prior to print production.",
     calculatorHref: "/tools/supplier-comparison-calculator",
     calculatorLabel: "Compare toy supplier offers",
+  },
+  {
+    id: "apparel-sportswear-collection",
+    categoryId: "apparel-sportswear",
+    categoryLabel: "Custom Apparel, Sportswear & Accessories",
+    title: "Custom Team Uniforms, Streetwear & Headwear (160 Styles)",
+    image: "/images/sourcing-catalog/apparel-sportswear-collection.webp",
+    imageAlt: "Four OEM custom apparel reference visuals showing a basketball uniform, oversized T-shirt, pullover hoodie, and trucker cap",
+    attributionNote: "OEM reference catalog example · Third-party custom apparel factory; sourcing, fit samples & QC coordinated by Ali Arshad",
+    summary:
+      "160 cataloged custom apparel styles spanning team sportswear uniforms, oversized T-shirts, heavyweight hoodies, crewneck sweatshirts, headwear, bags, and everyday accessories.",
+    specs: [
+      "Three collections: Sportswear (48 styles), Fashionwear (40 styles), and Headwear/Bags/Accessories (72 styles)",
+      "Custom branding options: chest, front, side, cuff, bag-panel, and accessory logo placements plus custom colorways",
+      "Missing specs verified fresh: exact GSM fabric weight, size grading charts, MOQ, and unit pricing confirmed on request",
+    ],
+    packagingAndCompliance: "Physical fit and fabric-swatch samples verified prior to bulk cut-and-sew production; fiber-content & care labels confirmed per destination market.",
+    calculatorHref: "/tools/moq-quantity-helper",
+    calculatorLabel: "Plan apparel MOQ & sizes",
+  },
+  {
+    id: "fashion-jewelry-collection",
+    categoryId: "fashion-jewelry",
+    categoryLabel: "Fashion Jewelry & Accessories",
+    title: "Titanium Steel Bracelets, Tennis Chains & Pendant Necklaces",
+    image: "/images/sourcing-catalog/jewelry-titanium-collection.webp",
+    imageAlt: "Four OEM jewelry visual references showing a clover bracelet, tennis chain, pendant necklace, and cubic zirconia medallion",
+    attributionNote: "OEM visual reference catalog · Third-party jewelry manufacturer; sample review & export prep coordinated by Ali Arshad",
+    summary:
+      "435 unique fashion jewelry model series (covering 1,309 colorway and finish SKUs) across chain bracelets, cubic zirconia tennis sets, and women's pendant/initial necklaces.",
+    specs: [
+      "Finish variants indexed across Silver-tone (S), Gold-tone (G), and Rose-Gold-tone (RG) SKU codes",
+      "Visual plates include titanium steel & zircon pendant lines; exact metal grade & plating thickness confirmed per sample",
+      "Compact weight-to-value ratio pairs well with insured air express once physical finish samples are approved",
+    ],
+    packagingAndCompliance: "Dimensions, gram weights, nickel/lead test compliance (REACH/Prop 65), custom jewelry boxes, MOQ, and pricing are confirmed fresh on request.",
+    calculatorHref: "/tools/landed-cost-calculator",
+    calculatorLabel: "Model jewelry landed cost",
   },
 ];
 

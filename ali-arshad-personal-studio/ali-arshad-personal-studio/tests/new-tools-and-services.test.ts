@@ -194,9 +194,9 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
       faqs: SOURCING_OVERVIEW_FAQS,
     });
     assert.equal(SOURCING_SUBPAGES.length, 9, "expected 9 Product Sourcing subpages including quote-comparison");
-    assert.equal(SOURCING_CATALOG_EXAMPLES.length, 12, "expected 12 curated catalog-backed product examples");
+    assert.equal(SOURCING_CATALOG_EXAMPLES.length, 14, "expected 14 curated catalog-backed product examples across 7 categories");
     assert.equal(/whatsapp/i.test(serialized), false, "must never leak supplier WhatsApp info");
-    assert.equal(/yangantoys|wangyang|yangwang|hongbin|senchiva|qingfeng|esonghome/i.test(serialized), false, "must never leak confidential supplier names");
+    assert.equal(/yangantoys|wangyang|yangwang|hongbin|senchiva|qingfeng|esonghome|powerwear|linkyi|sialkot|daska|03120489417/i.test(serialized), false, "must never leak confidential supplier names");
     assert.equal(/\+86|@qq\.com|@163\.com/i.test(serialized), false, "must never leak supplier contact details");
     assert.equal(/\b(lowest price|best quality|guaranteed ddp)\b/i.test(serialized), false, "must avoid absolute guarantees");
 
@@ -211,23 +211,34 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
     assert.ok(statSync(pdfFull).size < 1_000_000, "lookbook PDF should stay lightweight (<1 MB)");
   });
 
-  it("publishes only cleared studio motion videos with posters and prevents unapproved client leaks", () => {
-    assert.equal(APPROVED_PUBLIC_VIDEOS.length, 4, "expected 4 studio-authored motion demos");
-    const serialized = JSON.stringify(CREATIVE_SHOWCASE_VIDEOS);
-    assert.equal(/sans edit|nathan\s*barry|john\s*delony|brightarc/i.test(serialized), false, "unapproved client video names must never leak");
+  it("publishes all 12 authorized portfolio and studio motion videos with posters and VTT captions on disk", () => {
+    assert.equal(APPROVED_PUBLIC_VIDEOS.length, 12, "expected 12 published videos (8 authorized portfolio edits + 4 studio motion demos)");
+    assert.equal(
+      APPROVED_PUBLIC_VIDEOS.filter((v) => v.workType === "Authorized Portfolio Edit").length,
+      8,
+      "expected all 8 authorized client/portfolio video edits published",
+    );
+    assert.equal(
+      APPROVED_PUBLIC_VIDEOS.filter((v) => v.workType === "Studio Motion Demo").length,
+      4,
+      "expected 4 studio-authored motion demos",
+    );
     for (const v of APPROVED_PUBLIC_VIDEOS) {
       assert.ok(existsSync(path.join(process.cwd(), "public", v.src)), `missing video asset: ${v.src}`);
       assert.ok(existsSync(path.join(process.cwd(), "public", v.poster)), `missing video poster: ${v.poster}`);
       if (v.webmSrc) {
         assert.ok(existsSync(path.join(process.cwd(), "public", v.webmSrc)), `missing webm asset: ${v.webmSrc}`);
       }
+      if (v.captionsSrc) {
+        assert.ok(existsSync(path.join(process.cwd(), "public", v.captionsSrc)), `missing captions VTT: ${v.captionsSrc}`);
+      }
     }
   });
 
-  it("ships complete 841-model Product Sourcing Catalogue with Master PDF, individual PDFs, and zero privacy leaks", () => {
-    assert.equal(ALL_SOURCING_PRODUCTS.length, 841, "expected 841 deduplicated sourcing products/series");
-    assert.equal(SOURCING_CATALOG_INDEX.length, 841, "client search index must match full catalog count");
-    assert.ok(INDEXABLE_SOURCING_PRODUCTS.length >= 700, "expected spec-documented catalog pages to be indexable");
+  it("ships complete 1,436-model Product Sourcing Catalogue across 7 categories with Master PDF, individual PDFs, and zero privacy leaks", () => {
+    assert.equal(ALL_SOURCING_PRODUCTS.length, 1436, "expected 1,436 deduplicated sourcing products/series");
+    assert.equal(SOURCING_CATALOG_INDEX.length, 1436, "client search index must match full catalog count");
+    assert.ok(INDEXABLE_SOURCING_PRODUCTS.length >= 900, "expected spec-documented catalog pages (incl. apparel) to be indexable");
     assert.equal(isKnownRoute(SOURCING_CATALOG_PATH), true);
 
     const masterFull = path.join(process.cwd(), "public", MASTER_CATALOG_PDF_PATH);
@@ -236,7 +247,7 @@ describe("New Service Hubs, Routes & Privacy Truthfulness", () => {
 
     const rawCatalog = JSON.stringify(ALL_SOURCING_PRODUCTS);
     assert.equal(
-      /yangantoys|yangwang|wangyang|leowang|hongbin|esong|qingfeng|senchiva|luxmogan|upwardlighting|grace\s*guo|kelly\s*ho|michael\s*liao|whatsapp|wechat|13902721737|13825511247|\$\s*\d+/i.test(
+      /yangantoys|yangwang|wangyang|leowang|hongbin|esong|qingfeng|senchiva|luxmogan|upwardlighting|powerwear|linkyi|sialkot|daska\s*road|dongguan|03120489417|grace\s*guo|kelly\s*ho|michael\s*liao|whatsapp|wechat|13902721737|13825511247|\$\s*\d+/i.test(
         rawCatalog,
       ),
       false,

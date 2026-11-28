@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArticleSocialBar } from "@/components/blog/ArticleSocialBar";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { GpuNodeVisual3D } from "@/components/services/GpuNodeVisual3D";
@@ -30,6 +31,7 @@ import {
 import { getProject, projectHref } from "@/lib/projects";
 import { pageMetadata } from "@/lib/seo";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
+import { activeSocials, siteBaseUrl } from "@/lib/site";
 import { singleServiceSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = pageMetadata({
@@ -463,6 +465,18 @@ export default function GpuComputePage() {
         items={GPU_COMPUTE_FAQS}
         surface
       />
+
+      <section className="section section--tight" aria-label="Follow and share GPU & Compute">
+        <div className="container">
+          <ArticleSocialBar
+            articleUrl={`${siteBaseUrl().origin}${GPU_COMPUTE_PATH}`}
+            articleTitle="GPU & Compute — Ali Arshad Personal Studio"
+            socials={activeSocials()}
+            shareHeading="Share this compute overview"
+            shareCopy="Reviewing rendering or Linux dev/test host options with an engineer? Share this page:"
+          />
+        </div>
+      </section>
 
       <ContactCTA
         standalone

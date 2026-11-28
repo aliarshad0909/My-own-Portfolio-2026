@@ -17,7 +17,9 @@ export type SourcingCatalogCategoryId =
   | "bags-luggage"
   | "mobile-accessories"
   | "lighting-solar"
-  | "toys";
+  | "toys"
+  | "apparel-sportswear"
+  | "fashion-jewelry";
 
 export type SourcingProductSpec = {
   label: string;
@@ -115,5 +117,7 @@ export const SOURCING_CATALOG_STATS = {
     "mobile-accessories": ALL_SOURCING_PRODUCTS.filter((p) => p.categoryId === "mobile-accessories").length,
     "lighting-solar": ALL_SOURCING_PRODUCTS.filter((p) => p.categoryId === "lighting-solar").length,
     toys: ALL_SOURCING_PRODUCTS.filter((p) => p.categoryId === "toys").length,
+    "apparel-sportswear": ALL_SOURCING_PRODUCTS.filter((p) => p.categoryId === "apparel-sportswear").length,
+    "fashion-jewelry": ALL_SOURCING_PRODUCTS.filter((p) => p.categoryId === "fashion-jewelry").length,
   },
 } as const;

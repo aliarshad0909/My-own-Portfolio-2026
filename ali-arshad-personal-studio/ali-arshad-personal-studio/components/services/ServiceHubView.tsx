@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArticleSocialBar } from "@/components/blog/ArticleSocialBar";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { ServiceMotion } from "@/components/services/ServiceMotion";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -24,6 +25,7 @@ import { getProject, projectHref, type Project } from "@/lib/projects";
 import { isIndexable, shouldRender } from "@/lib/seo/publication";
 import { getHubEnrichment, type ServiceHubEnrichment } from "@/lib/seo/service-enrichment";
 import type { ServiceHub } from "@/lib/seo/service-hubs";
+import { activeSocials, siteBaseUrl } from "@/lib/site";
 import { singleServiceSchema } from "@/lib/structured-data";
 
 const HUB_TO_BLOG_SLUGS: Record<string, string[]> = {
@@ -660,15 +662,15 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
             <section className="section section--surface" id="motion-examples" aria-labelledby="creative-motion-demos">
               <div className="container">
                 <div className="section-head">
-                  <p className="eyebrow eyebrow--plain">Playable Studio Motion Demos · Lazy-Loaded</p>
+                  <p className="eyebrow eyebrow--plain">Playable Video Portfolio &amp; Studio Motion Demos · Lazy-Loaded</p>
                   <h2 className="section-title" id="creative-motion-demos">
-                    Studio-authored motion graphics &amp; web-ready video samples
+                    Authorized video edits, short-form social reels &amp; studio motion demos
                   </h2>
                   <p className="section-sub">
-                    Click play on any poster below to load the lightweight H.264 clip on demand — zero video bytes download until you press play.
+                    Filter by format or work type and click play on any poster to stream the web-optimized H.264 clip on demand — zero video bytes download until you press play.
                   </p>
                 </div>
-                <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+                <VideoShowcasePlayer videos={APPROVED_PUBLIC_VIDEOS} enableFilters notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
               </div>
             </section>
             {architectureSection(false)}
@@ -742,6 +744,18 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
       {locationsSection}
 
       {relatedSection}
+
+      <section className="section section--tight" aria-label="Follow and share this service">
+        <div className="container">
+          <ArticleSocialBar
+            articleUrl={`${siteBaseUrl().origin}${path}`}
+            articleTitle={`${hub.h1} — Ali Arshad Personal Studio`}
+            socials={activeSocials()}
+            shareHeading="Share this service overview"
+            shareCopy={`Comparing options for ${hub.h1.toLowerCase()} with your team? Share a direct link:`}
+          />
+        </div>
+      </section>
 
       <ContactCTA
         standalone

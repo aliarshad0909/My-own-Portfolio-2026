@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArticleSocialBar } from "@/components/blog/ArticleSocialBar";
+import { ScrollStoryRail, type ScrollStoryStep } from "@/components/motion/ScrollStoryRail";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SourcingCatalogShowcase } from "@/components/sourcing/SourcingCatalogShowcase";
@@ -23,17 +25,50 @@ import {
   SOURCING_WORKFLOW,
 } from "@/lib/sourcing";
 import { MASTER_CATALOG_PDF_PATH, SOURCING_CATALOG_PATH, SOURCING_CATALOG_STATS } from "@/lib/sourcing-catalog";
+import { activeSocials, siteBaseUrl } from "@/lib/site";
 import { singleServiceSchema } from "@/lib/structured-data";
+
+const SOURCING_STORY_STEPS: ScrollStoryStep[] = [
+  {
+    step: "01",
+    label: "Brief & Normalized Quotes",
+    title: "Side-by-side supplier math before spending a dollar",
+    detail:
+      "Convert your target SKU or reference model into a clean RFQ, compare unit price against carton CBM and Incoterms, and model true landed cost.",
+    href: "/tools/landed-cost-calculator",
+    linkLabel: "Open Landed Cost Calculator",
+  },
+  {
+    step: "02",
+    label: "Golden Sample & AQL Checks",
+    title: "Verify materials, finish, and compliance before bulk PO",
+    detail:
+      "Coordinate paid physical samples, check build tolerances and regional lab requirements, and lock written acceptance thresholds before production.",
+    href: "/services/product-sourcing/quality-inspection",
+    linkLabel: "Read Quality Inspection Guide",
+  },
+  {
+    step: "03",
+    label: "Export Packing & Freight Handoff",
+    title: "Carton marks, packing lists, and licensed Incoterms routing",
+    detail:
+      "Confirm retail packaging, barcodes, and master carton dimensions, then coordinate EXW, FOB, CIF, DAP, or route-dependent DDP with licensed forwarders.",
+    href: "/services/product-sourcing/freight-incoterms",
+    linkLabel: "Compare EXW to DDP",
+  },
+];
 
 export const metadata: Metadata = pageMetadata({
   title: "Product Sourcing & Supply Chain Coordination",
   description:
-    "Catalog-backed product sourcing across kitchen appliances, hard-shell luggage, mobile accessories, LED lighting, and toys — backed by a BBA in Supply Chain Management and 10+ years of sourcing experience.",
+    "Catalog-backed product sourcing across 1,436 models in kitchen appliances, hard-shell luggage, mobile accessories, LED lighting, toys, custom apparel/sportswear, and fashion jewelry — backed by a BBA in Supply Chain Management and 10+ years of sourcing experience.",
   path: PRODUCT_SOURCING_PATH,
 });
 
 export default function ProductSourcingPage() {
   const contactHref = `/contact?service=${encodeURIComponent(PRODUCT_SOURCING_CONTACT_SERVICE)}`;
+  const canonicalUrl = `${siteBaseUrl().origin}${PRODUCT_SOURCING_PATH}`;
+  const socials = activeSocials();
 
   return (
     <>
@@ -67,7 +102,7 @@ export default function ProductSourcingPage() {
             src="/images/sourcing-catalog/luggage-collection.webp"
             alt="Multi-color hard-shell PP and polycarbonate spinner suitcases from curated OEM sourcing reference catalog"
             badge="Catalog reference · OEM product"
-            caption="Curated non-confidential examples across appliances, luggage, mobile accessories, LED lighting, and toys — zero supplier contacts or raw quotes published."
+            caption="Curated non-confidential examples across appliances, luggage, mobile accessories, LED lighting, toys, custom apparel, and fashion jewelry — zero supplier contacts or raw quotes published."
             priority
           />
         }
@@ -133,7 +168,16 @@ export default function ProductSourcingPage() {
             </p>
           </div>
 
-          <InteractiveTiltCard label="Seven-stage sourcing coordination flow">
+          <ScrollStoryRail
+            id="sourcing-decision-gates"
+            eyebrow="Three commercial decision gates"
+            heading="How sourcing risk is eliminated stage by stage"
+            lead="Scroll through the three written approval gates that protect your capital before bulk production or freight booking."
+            steps={SOURCING_STORY_STEPS}
+          />
+
+          <div style={{ marginTop: "24px" }}>
+            <InteractiveTiltCard label="Seven-stage sourcing coordination flow">
             <ol className="sourcing-flow-grid">
               {SOURCING_WORKFLOW.map((stage) => (
                 <li key={stage.step} className="sourcing-flow-step">
@@ -147,6 +191,7 @@ export default function ProductSourcingPage() {
               ))}
             </ol>
           </InteractiveTiltCard>
+          </div>
 
           <div className="split-cards" style={{ marginTop: "24px" }}>
             <div className="panel">
@@ -363,6 +408,18 @@ export default function ProductSourcingPage() {
         title="Product sourcing: practical questions"
         items={SOURCING_OVERVIEW_FAQS}
       />
+
+      <section className="section section--tight" aria-label="Follow and share product sourcing">
+        <div className="container">
+          <ArticleSocialBar
+            articleUrl={canonicalUrl}
+            articleTitle="Product Sourcing & Supply Chain Coordination — Ali Arshad Personal Studio"
+            socials={socials}
+            shareHeading="Share this sourcing overview"
+            shareCopy="Evaluating OEM suppliers with a co-founder or ops partner? Share this guide directly:"
+          />
+        </div>
+      </section>
 
       <ContactCTA
         standalone
