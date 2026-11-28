@@ -1788,7 +1788,7 @@ export const MORE_HUB_ENRICHMENT: Record<string, ServiceHubEnrichment> = {
       darkDiagram: true,
     },
     scopeNotice:
-      "Transparency note: All 13 playable videos (8 authorized portfolio & client video edits with preserved credits plus 5 first-party studio narrative and motion demos) and 3 transcribed ElevenLabs voiceover samples are embedded below (lazy-loaded with WebP posters and WebVTT captions), kept distinct from the verified ffmpeg web-video pipeline (28 tests) and scripted Blender/bpy scene builder (20 tests).",
+      "Transparency note: All 14 playable videos (8 authorized portfolio & client video edits with preserved credits plus 6 first-party studio introduction, narrative, and motion demos) and 3 transcribed ElevenLabs voiceover samples are embedded below (lazy-loaded with WebP posters and WebVTT captions), kept distinct from the verified ffmpeg web-video pipeline (28 tests) and scripted Blender/bpy scene builder (20 tests).",
     facts: [
       { label: "Video & motion", value: "Short-form edits, motion & social ads" },
       { label: "3D pipeline", value: "Reproducible Blender / Python scenes" },

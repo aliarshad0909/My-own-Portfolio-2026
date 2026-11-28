@@ -32,6 +32,26 @@ export default function ResourcesPage() {
         lead="Concise, grounded explainers on the technical and commercial decisions that come up before a project starts — no email walls, no fluff."
       />
 
+      <section className="section section--tight" aria-label="Creator Resource Library">
+        <div className="container">
+          <div className="panel home-directory-strip">
+            <div>
+              <p className="eyebrow eyebrow--plain">Downloadable Assets · Free Creator Hub</p>
+              <h2 className="card-title" style={{ marginTop: "4px" }}>
+                Looking for Blender scenes, After Effects templates, transitions &amp; 508 Oculus SFX?
+              </h2>
+              <p className="fine-print" style={{ marginTop: "4px" }}>
+                Browse 46 curated, attribution-safe downloads in the Ali Arshad Studio Creator Resource Library.
+              </p>
+            </div>
+            <Link href="/creator-library" className="btn btn--primary btn--sm">
+              <span>Open Creator Resource Library</span>
+              <Icon name="arrow-up-right" size={14} className="btn__icon" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {live.length === 0 ? (
         <section className="container section">
           <p className="measure muted">New guides are being written. Check back soon.</p>

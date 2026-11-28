@@ -724,7 +724,7 @@ export function ProjectDetail({ project, variant }: Props) {
               <p className="fine-print detail__gallery-note">
                 Click play on any poster to load lightweight H.264/VP9 clips on demand. Long-form edits, narrative teasers, and studio motion demos are labeled separately from the CLI engineering pipeline above.{" "}
                 <Link href="/services/creative-production#motion-examples" className="text-link">
-                  Browse all 13 videos &amp; 3 ElevenLabs audio cues on Creative Production →
+                  Browse all 14 videos &amp; 3 ElevenLabs audio cues on Creative Production →
                 </Link>
               </p>
               <VideoShowcasePlayer videos={videosForCreativeSection("case-study")} enableFilters notice={CLIENT_VIDEO_RIGHTS_NOTICE} />

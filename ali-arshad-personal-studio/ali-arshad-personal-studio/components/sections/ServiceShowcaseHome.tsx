@@ -13,7 +13,7 @@ const STUDIO_ARC_STEPS: ScrollStoryStep[] = [
     detail:
       "Tight messaging, short-form and long-form video edits, motion graphics, and Blender 3D product visuals built so prospects grasp value immediately.",
     href: "/services/creative-production",
-    linkLabel: "Explore 13 videos & 3 audio cues",
+    linkLabel: "Explore 14 videos & 3 audio cues",
   },
   {
     step: "02",
@@ -110,7 +110,10 @@ export function ServiceShowcaseHome() {
               Product Catalogue ({SOURCING_CATALOG_STATS.totalUniqueProducts.toLocaleString()} Models) →
             </Link>
             <Link href="/services/creative-production#motion-examples" className="location-pill location-pill--all">
-              Video &amp; Audio Portfolio (13 Videos · 3 VO) →
+              Video &amp; Audio Portfolio (14 Videos · 3 VO) →
+            </Link>
+            <Link href="/creator-library" className="location-pill location-pill--all">
+              Creator Resource Library (46 Free Downloads) →
             </Link>
             <Link href="/services/creative-production#creative-demonstrations" className="location-pill location-pill--all">
               Photoshop, Illustrator &amp; NFT Demos →

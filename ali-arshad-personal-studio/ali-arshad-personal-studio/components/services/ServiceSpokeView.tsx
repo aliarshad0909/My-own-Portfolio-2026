@@ -269,12 +269,30 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
       ) : null}
 
       {showStudioVideos ? (
-        <AudioShowcasePlayer
-          id="audio-voiceover-samples"
-          section={spoke.slug as "video-editing" | "social-video" | "motion"}
-          surface
-          compact
-        />
+        <>
+          <AudioShowcasePlayer
+            id="audio-voiceover-samples"
+            section={spoke.slug as "video-editing" | "social-video" | "motion"}
+            surface
+            compact
+          />
+          <section className="section section--tight" aria-label="Creator Resource Library link">
+            <div className="container">
+              <div className="panel home-directory-strip">
+                <div>
+                  <p className="eyebrow eyebrow--plain">Free Creator Downloads</p>
+                  <p className="section-sub" style={{ marginTop: "4px" }}>
+                    Browse 46 curated Blender scenes, After Effects &amp; Premiere templates, transitions, and 508 Oculus sound effects in the Creator Resource Library.
+                  </p>
+                </div>
+                <Link href="/creator-library" className="btn btn--secondary btn--sm">
+                  <span>Browse Creator Library</span>
+                  <Icon name="arrow-up-right" size={14} className="btn__icon" />
+                </Link>
+              </div>
+            </div>
+          </section>
+        </>
       ) : null}
 
       {projects.length > 0 ? (

@@ -4,7 +4,8 @@
  * Publication & attribution governance:
  *  - Every publicly embedded video below is authorized for publication on
  *    aliarshad.co:
- *      (a) 5 first-party Studio Motion & Narrative Demos (Remotion, Blender 3D,
+ *      (a) 6 first-party Studio Introduction, Narrative & Motion Demos (Ali Arshad's
+ *          2:19 Personal Studio Introduction, Remotion explainers, Blender 3D mark,
  *          and the original F003 + ElevenLabs vertical narrative teaser cut)
  *      (b) 8 authorized portfolio / client video edits confirmed by Ali Arshad on
  *          2026-11-28, web-optimized to H.264 +faststart MP4 with WebP posters,
@@ -191,7 +192,26 @@ export const CREATIVE_SHOWCASE_VIDEOS: ShowcaseVideoItem[] = [
     approvedForPublic: true,
   },
 
-  // ── 5 First-Party Studio Narrative & Motion Demos (F003, Remotion & Blender 3D)
+  // ── 6 First-Party Studio Introduction, Narrative & Motion Demos
+  {
+    id: "meet-ali-studio-introduction",
+    title: "Meet Ali Arshad — Personal Studio Introduction (2:19)",
+    workType: "Studio Motion Demo",
+    service: "Motion Graphics",
+    sections: ["all", "video-editing", "motion", "case-study"],
+    src: "/videos/meet-ali-interview.mp4",
+    captionsSrc: "/videos/meet-ali-interview.vtt",
+    poster: "/images/videos/meet-ali-interview-poster.webp",
+    posterAlt: "Ali Arshad smiling on camera in his personal studio introduction video with the ALI ARSHAD title graphic and opening caption",
+    aspectRatio: "16/9",
+    formatMeta: "16:9 · 1920×1080 · 2:19 · H.264 Faststart MP4 (23.6 MB)",
+    objective: "Introduce Ali Arshad and his personal studio directly on camera, pairing founder narration with custom motion graphics across business, software, AI, and creative production.",
+    workPerformed: "Direct on-camera studio introduction, motion-graphic capability callouts, Premiere Pro and After Effects pacing, synced captions, stereo audio polish, and 1080p web +faststart encode.",
+    attributionNote: "First-party personal studio introduction presented and produced by Ali Arshad · Featured on /about#meet-ali-interview.",
+    deliverables: ["16:9 1080p personal studio intro", "Timecoded verbatim WebVTT captions", "1280×720 WebP poster & verbatim transcript"],
+    transcriptSummary: "“I'm Ali Arshad. I work across business, software, AI, and creative production, bringing multiple capabilities together through my personal studio.” Covers business/supply chain background, Next.js/Python/FastAPI/PostgreSQL web builds, n8n/Gemini/Ollama/OpenRouter AI automation & voice workflows, Premiere Pro/After Effects/Blender/Photoshop/Illustrator production, LinkedIn/Sales Navigator/Dripify outreach, and flagship portfolio projects.",
+    approvedForPublic: true,
+  },
   {
     id: "f003-thirty-copies-narrative-reel",
     title: "Narrative Short-Film Teaser — “Thirty Copies” (AI Film & Voiceover Cut)",
@@ -303,4 +323,4 @@ export const VIDEO_CLEARANCE_SUMMARY = {
 } as const;
 
 export const CLIENT_VIDEO_RIGHTS_NOTICE =
-  "All 13 playable clips above (8 authorized portfolio & client video edits plus 5 first-party studio narrative and motion demos) are web-optimized with lazy click-to-play delivery, preserved deliverable credits/branding, and accessible captions/transcripts — kept distinct from the Motion Production: Media Pipeline engineering case study.";
+  "All 14 playable clips above (8 authorized portfolio & client video edits plus 6 first-party studio introduction, narrative, and motion demos) are web-optimized with lazy click-to-play delivery, preserved deliverable credits/branding, and accessible captions/transcripts — kept distinct from the Motion Production: Media Pipeline engineering case study.";

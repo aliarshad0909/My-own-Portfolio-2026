@@ -694,6 +694,27 @@ export function ServiceHubView({ hub }: { hub: ServiceHub }) {
               </div>
             </section>
             <AudioShowcasePlayer id="audio-voiceover-samples" section="all" surface={false} />
+            <section className="section section--tight" aria-labelledby="creative-library-callout">
+              <div className="container">
+                <div className="panel home-directory-strip">
+                  <div>
+                    <p className="eyebrow eyebrow--plain">Free Downloads · Ali Arshad Studio</p>
+                    <h2 className="card-title" id="creative-library-callout" style={{ marginTop: "4px" }}>
+                      Creator Resource Library — 46 Free Downloads &amp; 508 Oculus Sound Effects
+                    </h2>
+                    <p className="fine-print" style={{ marginTop: "4px" }}>
+                      Download curated Blender 3D scenes, After Effects &amp; Premiere templates, transitions, CC BY 4.0 Oculus SFX packs, lossless voiceover WAVs, and starter libraries.
+                    </p>
+                  </div>
+                  <div className="location-pill-list">
+                    <Link href="/creator-library" className="btn btn--primary btn--sm">
+                      <span>Open Creator Library</span>
+                      <Icon name="arrow-up-right" size={14} className="btn__icon" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </section>
             <CreativeDemoShowcase id="creative-demonstrations" surface />
             {architectureSection(false)}
             {demoSection(true)}

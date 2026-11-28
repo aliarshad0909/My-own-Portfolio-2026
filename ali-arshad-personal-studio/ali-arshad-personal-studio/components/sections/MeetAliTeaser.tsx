@@ -5,28 +5,35 @@ import { INTERVIEW_FEATURE } from "@/lib/interview-feature";
 
 /**
  * Compact homepage teaser introducing the person behind the studio and linking
- * cleanly to the 90-second personal interview section on /about#meet-ali-interview.
+ * cleanly to the personal studio introduction video on /about#meet-ali-interview.
  */
 export function MeetAliTeaser() {
   const isReady = INTERVIEW_FEATURE.status === "ready" && Boolean(INTERVIEW_FEATURE.videoSrc);
+  const videoHref = `/about#${INTERVIEW_FEATURE.anchorId}`;
 
   return (
     <section className="section section--tight" aria-labelledby="meet-ali-teaser-title">
       <div className="container">
         <div className="panel meet-ali-teaser">
-          <div className="meet-ali-teaser__media">
+          <Link
+            href={videoHref}
+            className="meet-ali-teaser__media"
+            aria-label={isReady ? `Watch ${INTERVIEW_FEATURE.title} (${INTERVIEW_FEATURE.durationLabel})` : "Preview Meet Ali video slot"}
+          >
             <Image
               src={INTERVIEW_FEATURE.posterSrc}
               alt={INTERVIEW_FEATURE.posterAlt}
-              width={480}
-              height={564}
-              sizes="(min-width: 768px) 160px, 120px"
+              width={1280}
+              height={720}
+              loading="eager"
+              unoptimized
+              sizes="(min-width: 768px) 168px, 148px"
               className="meet-ali-teaser__img"
             />
             <span className="meet-ali-teaser__play" aria-hidden="true">
               <Icon name="play" size={16} />
             </span>
-          </div>
+          </Link>
 
           <div className="meet-ali-teaser__copy">
             <div className="meet-ali-teaser__meta">
@@ -44,9 +51,9 @@ export function MeetAliTeaser() {
           </div>
 
           <div className="meet-ali-teaser__actions">
-            <Link href={`/about#${INTERVIEW_FEATURE.anchorId}`} className="btn btn--secondary btn--sm">
-              <span>{isReady ? "Watch 90s interview" : "Preview interview slot"}</span>
-              <Icon name="arrow-right" size={15} className="btn__icon" />
+            <Link href={videoHref} className="btn btn--primary btn--sm">
+              <span>{isReady ? "Watch studio intro (2:19)" : "Preview interview slot"}</span>
+              <Icon name="play" size={14} className="btn__icon" />
             </Link>
             <Link href="/about" className="arrow-link meet-ali-teaser__about">
               <span>About the studio</span>

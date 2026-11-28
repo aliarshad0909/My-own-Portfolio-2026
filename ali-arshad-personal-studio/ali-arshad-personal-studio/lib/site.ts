@@ -85,6 +85,7 @@ export const MOBILE_SECONDARY_ITEMS: NavItem[] = [
   { label: "Visual Project Planner", href: "/project-planner" },
   { label: "Live Product Directory", href: "/products" },
   { label: "Calculator Centre", href: "/tools" },
+  { label: "Creator Resource Library", href: "/creator-library" },
   { label: "Guides & Resources", href: "/resources" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Studio Network", href: "/studio-network" },
