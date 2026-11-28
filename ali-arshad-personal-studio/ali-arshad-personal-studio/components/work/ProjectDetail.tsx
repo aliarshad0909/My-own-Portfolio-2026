@@ -8,6 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 import { StatusBadge, TypeBadge } from "@/components/ui/StatusBadge";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { GameCoverArt } from "@/components/games/GameCoverArt";
+import { AudioShowcasePlayer } from "@/components/media/AudioShowcasePlayer";
 import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { ConceptCoverArt } from "@/components/work/ConceptCoverArt";
 import { MediaGallery } from "@/components/work/MediaGallery";
@@ -721,12 +722,15 @@ export function ProjectDetail({ project, variant }: Props) {
                 Authorized long-form edits &amp; studio-authored motion clips
               </h2>
               <p className="fine-print detail__gallery-note">
-                Click play on any poster to load lightweight H.264/VP9 clips on demand. Long-form edits and studio motion demos are labeled separately from the CLI engineering pipeline above.{" "}
+                Click play on any poster to load lightweight H.264/VP9 clips on demand. Long-form edits, narrative teasers, and studio motion demos are labeled separately from the CLI engineering pipeline above.{" "}
                 <Link href="/services/creative-production#motion-examples" className="text-link">
-                  Browse all 12 videos on Creative Production →
+                  Browse all 13 videos &amp; 3 ElevenLabs audio cues on Creative Production →
                 </Link>
               </p>
               <VideoShowcasePlayer videos={videosForCreativeSection("case-study")} enableFilters notice={CLIENT_VIDEO_RIGHTS_NOTICE} />
+              <div style={{ marginTop: "2rem" }}>
+                <AudioShowcasePlayer id="case-audio-samples" section="case-study" compact />
+              </div>
             </section>
           ) : null}
 

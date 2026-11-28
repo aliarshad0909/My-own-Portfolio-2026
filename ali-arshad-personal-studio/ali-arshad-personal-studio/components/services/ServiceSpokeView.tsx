@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { AudioShowcasePlayer } from "@/components/media/AudioShowcasePlayer";
 import { VideoShowcasePlayer } from "@/components/media/VideoShowcasePlayer";
 import { FlowDiagram } from "@/components/services/FlowDiagram";
 import { ServiceDemoShowcase } from "@/components/services/ServiceDemoShowcase";
@@ -265,6 +266,15 @@ export function ServiceSpokeView({ hub, spoke }: { hub: ServiceHub; spoke: Servi
             />
           </div>
         </section>
+      ) : null}
+
+      {showStudioVideos ? (
+        <AudioShowcasePlayer
+          id="audio-voiceover-samples"
+          section={spoke.slug as "video-editing" | "social-video" | "motion"}
+          surface
+          compact
+        />
       ) : null}
 
       {projects.length > 0 ? (

@@ -87,7 +87,8 @@ const SERVICE_FAMILIES: ServiceFamily[] = [
     pillarIds: ["creative-production", "brand-growth"],
     hubSlugs: ["creative-production", "branding"],
     extraLinks: [
-      { label: "Playable Video Portfolio (12 Clips) →", href: "/services/creative-production#motion-examples" },
+      { label: "Playable Video Portfolio (13 Clips) →", href: "/services/creative-production#motion-examples" },
+      { label: "ElevenLabs Voiceover Samples (3 Cues) →", href: "/services/creative-production#audio-voiceover-samples" },
       { label: "Photoshop, Illustrator & NFT Demos →", href: "/services/creative-production#creative-demonstrations" },
       { label: "Social Media Setup & Management →", href: "/services/social-media-management" },
       { label: "LinkedIn Outreach & Sales Dev →", href: "/services/linkedin-outreach" },
@@ -164,18 +165,21 @@ function ServiceVisual({ service }: { service: Service }) {
     return (
       <div className="visual-stack">
         <div className="panel">
-          <p className="eyebrow eyebrow--plain">12 Playable Videos &amp; 4 Creative Demonstrations</p>
+          <p className="eyebrow eyebrow--plain">13 Playable Videos, 3 Voiceover Cues &amp; 4 Visual Demos</p>
           <h3 className="card-title" style={{ marginTop: "4px" }}>
-            Preview authorized video edits, motion clips &amp; visual craft demos
+            Preview authorized video edits, ElevenLabs audio cues &amp; visual craft demos
           </h3>
           <p className="fine-print" style={{ marginTop: "8px", lineHeight: 1.6 }}>
-            Stream 8 authorized portfolio/client video edits and 4 first-party Studio Motion Demos on demand, alongside studio-created
-            demonstrations for Photoshop retouching, Illustrator vector work, social brand grids, and digital collectible concepts.
+            Stream 8 authorized portfolio/client edits and 5 first-party studio narrative and motion demos on demand, preview 3 transcribed
+            ElevenLabs voiceover cues, and inspect studio demonstrations for Photoshop retouching, Illustrator vector work, social grids, and NFT concepts.
           </p>
           <div style={{ marginTop: "14px", display: "flex", flexWrap: "wrap", gap: "10px" }}>
             <Link href="/services/creative-production#motion-examples" className="btn btn--primary btn--sm">
-              <span>Watch 12 playable clips</span>
+              <span>Watch 13 playable clips</span>
               <Icon name="play" size={14} className="btn__icon" />
+            </Link>
+            <Link href="/services/creative-production#audio-voiceover-samples" className="btn btn--secondary btn--sm">
+              <span>Hear 3 voiceover cues</span>
             </Link>
             <Link href="/services/creative-production#creative-demonstrations" className="btn btn--secondary btn--sm">
               <span>Photoshop, Illustrator &amp; NFT demos</span>
@@ -465,7 +469,7 @@ export default function ServicesPage() {
         id="creative-demos-overview"
         eyebrow="Creative Visual Demonstrations · Studio-Authored"
         heading="Visual proof across Photoshop, Illustrator, social content & collectible concepts"
-        lead="Alongside live software sandboxes, 12 playable videos, and 1,436 sourcing models, these original studio pieces demonstrate retouching, vector geometry, brand grid systems, and 3D collectible art direction."
+        lead="Alongside live software sandboxes, 13 playable videos, 3 ElevenLabs voiceover samples, and 1,436 sourcing models, these original studio pieces demonstrate retouching, vector geometry, brand grid systems, and 3D collectible art direction."
         surface
         compact
       />

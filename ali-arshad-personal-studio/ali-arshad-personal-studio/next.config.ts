@@ -53,6 +53,7 @@ const nextConfig: NextConfig = {
       { source: "/(.*)", headers: securityHeaders },
       { source: "/images/:path*", headers: immutableMediaHeaders },
       { source: "/videos/:path*", headers: immutableMediaHeaders },
+      { source: "/audio/:path*", headers: immutableMediaHeaders },
       { source: "/downloads/:path*", headers: pdfDownloadHeaders },
       { source: "/admin", headers: adminNoIndexHeaders },
       { source: "/admin/:path*", headers: adminNoIndexHeaders },

@@ -4,14 +4,15 @@
  * Publication & attribution governance:
  *  - Every publicly embedded video below is authorized for publication on
  *    aliarshad.co:
- *      (a) 4 first-party Studio Motion Demos authored directly in Remotion / Blender
+ *      (a) 5 first-party Studio Motion & Narrative Demos (Remotion, Blender 3D,
+ *          and the original F003 + ElevenLabs vertical narrative teaser cut)
  *      (b) 8 authorized portfolio / client video edits confirmed by Ali Arshad on
  *          2026-11-28, web-optimized to H.264 +faststart MP4 with WebP posters,
  *          WebVTT caption/summary tracks, and original credits/watermarks preserved.
  *  - Every clip clearly discloses its work type ("Studio Motion Demo" vs.
  *    "Authorized Portfolio Edit"), original credits/branding where present, and
  *    exact editing/motion scope — never misrepresenting authorship.
- *  - See `docs/VIDEO-CLEARANCE-MANIFEST.md` for the full 12-video inventory.
+ *  - See `docs/MEDIA-ASSETS-AND-DEMOS-INVENTORY.md` for the full file-by-file inventory.
  */
 
 export type ShowcaseVideoItem = {
@@ -190,7 +191,26 @@ export const CREATIVE_SHOWCASE_VIDEOS: ShowcaseVideoItem[] = [
     approvedForPublic: true,
   },
 
-  // ── 4 First-Party Studio Motion Demos (Remotion & Blender 3D) ───────────────
+  // ── 5 First-Party Studio Narrative & Motion Demos (F003, Remotion & Blender 3D)
+  {
+    id: "f003-thirty-copies-narrative-reel",
+    title: "Narrative Short-Film Teaser — “Thirty Copies” (AI Film & Voiceover Cut)",
+    workType: "Studio Motion Demo",
+    service: "Short-Form Social",
+    sections: ["all", "social-video", "video-editing", "motion", "case-study"],
+    src: "/videos/portfolio/f003-thirty-copies-narrative-reel.mp4",
+    captionsSrc: "/videos/portfolio/f003-thirty-copies-narrative-reel.vtt",
+    poster: "/images/videos/f003-thirty-copies-narrative-reel-poster.webp",
+    posterAlt: "Overhead vertical frame of a quiet sunlit birthday party table set with paper hats, balloons, and a glowing cake from the Thirty Copies short-film teaser",
+    aspectRatio: "9/16",
+    formatMeta: "9:16 · 720×1280 · 25s · H.264 Faststart MP4 (5.3 MB)",
+    objective: "Demonstrate cohesive short-form narrative assembly pairing AI-generated vertical cinema shots with timed ElevenLabs voiceover cues and atmospheric audio mixing.",
+    workPerformed: "Eight-shot story assembly from cleared F003 footage, paced visual rhythm, timed placement of all three ElevenLabs voiceover lines, -16 LUFS stereo audio mix, and WebVTT captions.",
+    attributionNote: "Original studio narrative edit assembled from cleared F003 scene shots and ElevenLabs AI narration cues; raw shot archives remain private.",
+    deliverables: ["9:16 narrative short-film teaser", "Synchronized ElevenLabs VO mix", "Timecoded WebVTT captions & WebP poster"],
+    transcriptSummary: "Twenty-five-second vertical narrative teaser tracing a quiet birthday preparation across eight shots with three spoken voiceover lines: “Thirty copies. One under every door.” / “It’s not about you. I promise.” / “Go on. Make a wish.”",
+    approvedForPublic: true,
+  },
   {
     id: "capabilities-pipeline-reel",
     title: "Studio Capabilities Pipeline — Brand & Systems Motion Reel",
@@ -279,8 +299,8 @@ export const VIDEO_CLEARANCE_SUMMARY = {
   approvedClientPortfolioCount: APPROVED_PUBLIC_VIDEOS.filter((v) => v.workType === "Authorized Portfolio Edit").length,
   totalPublishedCount: APPROVED_PUBLIC_VIDEOS.length,
   heldPendingClearanceCount: 0,
-  manifestRepoPath: "docs/VIDEO-CLEARANCE-MANIFEST.md",
+  manifestRepoPath: "docs/MEDIA-ASSETS-AND-DEMOS-INVENTORY.md",
 } as const;
 
 export const CLIENT_VIDEO_RIGHTS_NOTICE =
-  "All 12 playable clips above (8 authorized portfolio & client video edits plus 4 first-party Studio Motion Demos) are web-optimized with lazy click-to-play delivery, preserved deliverable credits/branding, and accessible transcripts — kept distinct from the Motion Production: Media Pipeline engineering case study.";
+  "All 13 playable clips above (8 authorized portfolio & client video edits plus 5 first-party studio narrative and motion demos) are web-optimized with lazy click-to-play delivery, preserved deliverable credits/branding, and accessible captions/transcripts — kept distinct from the Motion Production: Media Pipeline engineering case study.";
